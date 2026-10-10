@@ -1,0 +1,96 @@
+{
+  "name": "@eliware/radar",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Web-based aviation tracking app for ADS-B data from RTL-SDR receivers.",
+  "main": "./bin/radar.mjs",
+  "scripts": {
+    "test": "eliware-test",
+    "lint": "eliware-test --lint",
+    "audit": "eliware-test --audit",
+    "format": "eliware-test --format",
+    "format:check": "eliware-test --format-check",
+    "build": "webpack --entry ./src/client-entry.mjs --output-path ./dist --output-filename client.js --mode production",
+    "prebuild": "webpack-cli --version",
+    "lighthouse": "lighthouse http://127.0.0.1:3000 --only-categories=accessibility --output=json --output-path=artifacts/lighthouse.json --chrome-flags=--headless",
+    "puppeteer": "puppeteer browsers install chrome"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliware/radar.git"
+  },
+  "keywords": [
+    "radar",
+    "aviation",
+    "aircraft-tracking",
+    "ads-b",
+    "rtl-sdr",
+    "web",
+    "nodejs"
+  ],
+  "author": "Eliware <eliware@eliware.org>",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": "26"
+  },
+  "eliware": {
+    "id": "E-1390",
+    "apply": [
+      "general",
+      "application",
+      "web"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/eliware/radar/issues"
+  },
+  "homepage": "https://github.com/eliware/radar#readme",
+  "devDependencies": {
+    "@eliware/test": "^11.0.0",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^7.2.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.mjs"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.mjs"
+    ],
+    "coverageReporters": [
+      "text",
+      "json-summary"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  },
+  "dependencies": {
+    "@eliware/common": "^2.0.0",
+    "dotenv": "^18.0.7",
+    "lighthouse": "^13.5.0",
+    "puppeteer": "^25.13.0"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false,
+    "quoteProps": "as-needed",
+    "jsxSingleQuote": false,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "bracketSameLine": false,
+    "arrowParens": "always",
+    "proseWrap": "preserve",
+    "endOfLine": "lf"
+  }
+}

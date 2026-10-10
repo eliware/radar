@@ -1,0 +1,10 @@
+version: "11.0"
+description: Repository-specific guidance for the Eliware Radar.
+directives:
+  - id: E-1390
+    dos:
+      - Build a web-based aviation tracking app for ADS-B data from RTL-SDR receivers.
+      - Provide browser assets, documented routes, and mirrored tests.
+      - Keep package names and image names consistent with Radar.
+    donts:
+      - Do not claim that the app reads ADS-B data until receiver support exists.
