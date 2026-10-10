@@ -42,6 +42,12 @@ directives:
       - Allow full camera rotation, tilt, pan, zoom, and a reset to the default view.
       - Describe feed altitude as barometric altitude. Do not claim it always equals true MSL altitude.
       - Keep the dashboard focused on the 3D view, flight strips, and aircraft details.
+      - Keep the radar view square and align it to the top left of the page.
+      - Size the radar view to the shorter viewport dimension.
+      - Reserve space to the right of the radar view in landscape layout for flight strips.
+      - Reserve space below the radar view in portrait layout for flight strips.
+      - Remove the page header and footer.
+      - Place the reset control at the top right over the radar view.
       - Show available aircraft data in flight strips and aircraft details. Mark missing values as unknown.
       - Leave radio controls out of the dashboard until requested.
       - Document the RTL1090 background and foreground procedures in `docs/`.

@@ -28,6 +28,8 @@ The API has no authentication. Keep access on a trusted network.
 
 The browser shows a black radar scope without a map or terrain. Range rings mark each 5 nautical miles. Rings at 10-mile steps use a bold line. The default view looks down at your home location, with north at the top. The home marker sits at the center and uses `MY_ELEVATION` as its altitude reference.
 
+The radar scope stays square. Its width and height match the shorter viewport dimension. It sits at the top left. Landscape views leave space on the right for flight strips. Portrait views leave space below the scope for flight strips. The page has no header or footer. The reset button sits over the scope at the top right.
+
 Set `MY_LOCATION` as decimal latitude and longitude in `.env`. Set `MY_ELEVATION` in feet above mean sea level. The default is 300 feet.
 
 Drag to rotate the view. Right-drag to pan. Use the scroll wheel to zoom. Select Reset view to restore the default camera.
