@@ -34,9 +34,14 @@ directives:
       - Do not require authentication for local REST or WebSocket access.
       - Serve the local page, CSS, and built JavaScript from the web server.
       - Build the first web view as a Three.js 3D space without a map or terrain.
+      - Show a 2D Canvas radar when WebGL cannot start. Keep the 3D radar when WebGL works.
       - Place the home marker at the `MY_LOCATION` origin and the `MY_ELEVATION` height.
       - Place aircraft by their coordinates and feed altitude relative to the home height.
       - Set the default camera to a top-down view centered on home. Keep north at the top.
+      - On mobile, keep home centered and disable panning.
+      - Use pinch gestures to zoom on mobile.
+      - Use two-finger twist gestures to rotate the radar on mobile.
+      - Show mobile gesture hints for zoom, rotation, and the centered home point.
       - Use a black background for the page and radar scope.
       - Draw concentric range rings at 5 nautical mile steps. Make each 10-mile ring bolder.
       - Allow full camera rotation, tilt, pan, zoom, and a reset to the default view.

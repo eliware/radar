@@ -8,14 +8,16 @@
   </head>
   <body>
     <main class="dashboard">
-      <section class="scene-panel" aria-label="Three-dimensional aircraft view">
+      <section class="scene-panel" aria-label="Aircraft radar view">
         <button class="reset-view" data-reset type="button">Reset view</button>
         <div class="scene-labels">
-          <p class="scene-title">LOCAL 3D SPACE</p>
+          <p class="scene-title" data-view-title>LOCAL 3D SPACE</p>
           <p data-home>Loading home position.</p>
         </div>
         <div class="scene" data-scene></div>
-        <p class="controls-hint">Drag to rotate · Right-drag to pan · Scroll to zoom</p>
+        <p class="controls-hint" data-controls-hint>
+          Drag to rotate · Right-drag to pan · Scroll to zoom
+        </p>
         <p class="feed-status" data-status role="status">Loading aircraft feed.</p>
       </section>
     </main>

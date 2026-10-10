@@ -29,7 +29,7 @@
 
 Purpose: Radar is an aviation tracking app for ADS-B data from RTL-SDR receivers. The package provides a web app and a CLI feed reader. Package description: Aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers. Author: Eliware <eliware@eliware.org>. License: MIT.
 
-The Fastify web app serves a Three.js local space, aircraft REST API, and WebSocket feed. The CLI reads decoded aircraft records from an SBS/BaseStation TCP feed and shows them as live flight strips. Both apps retry the feed after errors.
+The Fastify web app serves a Three.js local space, a 2D Canvas fallback, an aircraft REST API, and a WebSocket feed. The CLI reads decoded aircraft records from an SBS/BaseStation TCP feed and shows them as live flight strips. Both apps retry the feed after errors.
 
 ## Requirements
 
@@ -43,7 +43,7 @@ After npm publication, install the package with `npm install --global @eliware/r
 
 ## Usage
 
-Run `node bin/radar.mjs` to serve the web app at `http://localhost:3000`. The app reads the feed at `127.0.0.1:30003`. Run `node bin/adsb.mjs` to start the CLI. The CLI shows live flight strips. Add `--debug` to print aircraft JSON lines. Use `--host` and `--port` to select another feed.
+Run `node bin/radar.mjs` to serve the web app on port 3000. The server listens on `0.0.0.0`. Open `http://localhost:3000` on this computer. Use the computer's Wi-Fi IPv4 address on a phone on the same network. The app reads the feed at `127.0.0.1:30003`. Run `node bin/adsb.mjs` to start the CLI. The CLI shows live flight strips. Add `--debug` to print aircraft JSON lines. Use `--host` and `--port` to select another feed.
 
 The package version in `package.json` is the release version. Releases use matching `vMAJOR.MINOR.PATCH` tags. After an authorized release, verify the version with `npm view @eliware/radar@VERSION version`.
 

@@ -21,7 +21,7 @@ export async function startWebApplication(dependencies) {
     return shutdownPromise;
   };
   dependencies.registerSignals({ log, shutdownHook: shutdown });
-  await app.listen({ host: "127.0.0.1", port });
+  await app.listen({ host: "0.0.0.0", port });
   log.info(`Web application listening on port ${port}`);
   return { app, feed, shutdown };
 }

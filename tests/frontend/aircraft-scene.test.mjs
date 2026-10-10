@@ -9,12 +9,15 @@ class Vector {
 class Scene {
   constructor() {
     this.children = [];
+    this.rotation = {};
     Scene.instance = this;
   }
   add(item) {
     this.children.push(item);
   }
 }
+
+let rendererElement;
 
 class Camera {
   constructor() {
@@ -27,7 +30,7 @@ class Camera {
 
 class Renderer {
   constructor() {
-    this.domElement = {};
+    this.domElement = rendererElement ?? { addEventListener() {}, removeEventListener() {} };
     this.render = jest.fn();
     this.setSize = jest.fn();
     this.setPixelRatio = jest.fn();
@@ -60,6 +63,8 @@ class Material {
 class Controls {
   constructor() {
     this.target = new Vector();
+    this.enablePan = true;
+    this.enableRotate = true;
     this.update = jest.fn();
     this.dispose = jest.fn();
     Controls.instance = this;
@@ -170,4 +175,45 @@ test("uses the browser pixel ratio when it exists", () => {
   };
   const scene = createAircraftScene({ container, location: null, elevationFeet: 300 });
   scene.destroy();
+});
+
+test("disables mobile panning and orbiting, then resets radar rotation", () => {
+  const listeners = new Map();
+  const element = {
+    addEventListener: (name, fn) => listeners.set(name, fn),
+    removeEventListener: jest.fn(),
+  };
+  rendererElement = element;
+  const windowRef = {
+    matchMedia: () => ({ matches: true }),
+    requestAnimationFrame: () => 1,
+    cancelAnimationFrame: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+  };
+  const container = {
+    clientWidth: 100,
+    clientHeight: 100,
+    appendChild: jest.fn(),
+    replaceChildren: jest.fn(),
+  };
+  const view = createAircraftScene({ container, location: null, elevationFeet: 300, windowRef });
+  expect(Controls.instance.enablePan).toBe(false);
+  expect(Controls.instance.enableRotate).toBe(false);
+  const touch = (pointerId, clientX, clientY) => ({
+    pointerId,
+    pointerType: "touch",
+    clientX,
+    clientY,
+    preventDefault() {},
+  });
+  listeners.get("pointerdown")(touch(1, 0, 0));
+  listeners.get("pointerdown")(touch(2, 100, 0));
+  listeners.get("pointermove")(touch(2, 0, 100));
+  expect(Scene.instance.rotation.y).toBeCloseTo(Math.PI / 2);
+  view.reset();
+  expect(Scene.instance.rotation.y).toBe(0);
+  view.destroy();
+  expect(element.removeEventListener).toHaveBeenCalledTimes(4);
+  rendererElement = undefined;
 });

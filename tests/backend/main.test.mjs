@@ -52,7 +52,7 @@ test("starts Fastify and closes the feed after a signal", async () => {
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 320,
   });
-  expect(deps.app.listen).toHaveBeenCalledWith({ host: "127.0.0.1", port: 8080 });
+  expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 8080 });
   deps.values.createAircraftFeed.mock.calls[0][0].onError(new Error("offline"));
   expect(deps.log.warn).toHaveBeenCalledWith("ADS-B feed error: offline");
   await deps.signals.shutdownHook();
@@ -68,7 +68,7 @@ test("uses default web and feed settings", async () => {
   expect(deps.values.createAircraftFeed).toHaveBeenCalledWith(
     expect.objectContaining({ host: "127.0.0.1", port: 30003 }),
   );
-  expect(deps.app.listen).toHaveBeenCalledWith({ host: "127.0.0.1", port: 3000 });
+  expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
 });
 

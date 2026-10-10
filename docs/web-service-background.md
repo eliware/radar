@@ -11,7 +11,9 @@ Run the Radar web app as a hidden Windows scheduled task.
 - Account: `SYSTEM` with highest privileges.
 - Program: Node.js with `bin/radar.mjs` as the argument.
 - Start folder: the Radar repository root.
-- Web address: `http://127.0.0.1:3000`.
+- Bind address: `0.0.0.0:3000`.
+- LAN address: `http://<computer-wifi-ip>:3000`.
+- Firewall access: TCP port `3000` from the local subnet.
 
 The task reads `.env` from the repository root. The `SYSTEM` account needs read access to the repository and `.env`.
 
@@ -46,3 +48,5 @@ Check the web health route:
 ```powershell
 curl.exe http://127.0.0.1:3000/health
 ```
+
+Run `ipconfig` to find the computer's Wi-Fi IPv4 address. Open `http://<computer-wifi-ip>:3000` on a phone on the same network.
