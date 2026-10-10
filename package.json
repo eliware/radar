@@ -1,7 +1,7 @@
 {
   "name": "@eliware/radar",
   "type": "module",
-  "version": "1.0.0",
+  "version": "11.0.0",
   "description": "Web-based aviation tracking app for ADS-B data from RTL-SDR receivers.",
   "main": "./bin/radar.mjs",
   "scripts": {

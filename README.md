@@ -33,7 +33,7 @@ The initial version serves a page and a compiled browser client. It does not rea
 
 Purpose: serve the Eliware Radar web application.
 
-The app currently serves its page and browser client. Receiver support is not available in version 1.0.0.
+The app currently serves its page and browser client. Receiver support is not available in version 11.0.0.
 
 ## Requirements
 
