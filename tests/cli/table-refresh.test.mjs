@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { startTableRefresh } from "../src/table-refresh.mjs";
+import { startTableRefresh } from "../../src/cli/table-refresh.mjs";
 
 test("refreshes the table each second and stops the timer", () => {
   const refresh = jest.fn();

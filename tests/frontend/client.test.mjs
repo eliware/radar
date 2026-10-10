@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderHome } from "../src/client.mjs";
+import { renderHome } from "../../src/frontend/client.mjs";
 
 test("updates the page status when its element exists", () => {
   const status = {};

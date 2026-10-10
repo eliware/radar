@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { calculateAircraftRange } from "../src/aircraft-range.mjs";
+import { calculateAircraftRange } from "../../src/shared/aircraft-range.mjs";
 
 const origin = { latitude: 43.857616503999, longitude: -70.41360202151915 };
 

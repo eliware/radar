@@ -6,7 +6,7 @@ import {
   tableBorder,
   tableRow,
   wideTableWidth,
-} from "../src/flight-strip-layout.mjs";
+} from "../../src/cli/flight-strip-layout.mjs";
 
 const renderedWidth = (layout) =>
   layout[0].widths.reduce((sum, width) => sum + width, 3 * layout[0].widths.length + 1);

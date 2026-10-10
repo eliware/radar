@@ -29,7 +29,7 @@
 
 Purpose: Radar is an aviation tracking app for ADS-B data from RTL-SDR receivers. The package provides a web app and a CLI feed reader. Package description: Aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers. Author: Eliware <eliware@eliware.org>. License: MIT.
 
-The web app serves its page and browser client. The CLI reads decoded aircraft records from an SBS/BaseStation TCP feed and shows them as live flight strips. It retries the connection two seconds after a feed error.
+The Fastify web app serves a Three.js local space, aircraft REST API, and WebSocket feed. The CLI reads decoded aircraft records from an SBS/BaseStation TCP feed and shows them as live flight strips. Both apps retry the feed after errors.
 
 ## Requirements
 
@@ -43,13 +43,13 @@ After npm publication, install the package with `npm install --global @eliware/r
 
 ## Usage
 
-Run `node bin/radar.mjs` to serve the web app at `http://localhost:3000`. Run `node bin/adsb.mjs` to read an SBS/BaseStation feed at `127.0.0.1:30003`. The CLI shows a live flight strip table. Add `--debug` to print aircraft JSON lines. Use `--host` and `--port` to select another feed.
+Run `node bin/radar.mjs` to serve the web app at `http://localhost:3000`. The app reads the feed at `127.0.0.1:30003`. Run `node bin/adsb.mjs` to start the CLI. The CLI shows live flight strips. Add `--debug` to print aircraft JSON lines. Use `--host` and `--port` to select another feed.
 
 The package version in `package.json` is the release version. Releases use matching `vMAJOR.MINOR.PATCH` tags. After an authorized release, verify the version with `npm view @eliware/radar@VERSION version`.
 
 ## Development
 
-Read [AGENTS.md](AGENTS.md), [specs/README.md](specs/README.md), and [RELEASE_NOTES.md](RELEASE_NOTES.md) before changes. Each `src/*.mjs` module has one matching test in `tests/`. Documentation: [docs](docs/README.md) · [specifications](specs/README.md)
+Read [AGENTS.md](AGENTS.md), [specs/README.md](specs/README.md), and [RELEASE_NOTES.md](RELEASE_NOTES.md) before changes. Each source module has one matching test in the same folder tree. Documentation: [docs](docs/README.md) · [specifications](specs/README.md)
 
 ## Testing
 
@@ -57,19 +57,19 @@ Run `npm test` for Jest, lint, format checks, audit, package checks, and the web
 
 ## Troubleshooting
 
-If the web app does not start, check that Node.js 26 is installed and `PORT` is an integer from 1 through 65535. If the CLI cannot connect, check `ADSB_HOST`, `ADSB_PORT`, and the receiver feed. The CLI retries every two seconds. RTL1090 must enable its SBS/BaseStation TCP output on port 30003.
+If the web app does not start, check that Node.js 26 is installed and `PORT` is an integer from 1 through 65535. If the app or CLI cannot connect, check `ADSB_HOST`, `ADSB_PORT`, and the receiver feed. Both clients retry after two seconds. RTL1090 must enable SBS/BaseStation TCP output on port 30003.
 
 ## Security
 
-The web app serves local assets. The CLI opens a TCP connection to the configured receiver feed. Radar does not need external services or persistent storage. Keep `.env`, credentials, tokens, and private keys out of version control and package files.
+The web app serves local assets and a local aircraft API. The API has no authentication. Keep access to the local network controlled. The server and CLI read the configured receiver feed. Radar does not write persistent data. Keep `.env`, credentials, tokens, and private keys out of version control and package files.
 
 ## Configuration
 
-Runtime settings come from environment variables or an untracked `.env` file. `PORT` defaults to 3000 and accepts integers from 1 through 65535. `LOG_LEVEL` defaults to `info`. `ADSB_HOST` defaults to `127.0.0.1`. `ADSB_PORT` defaults to 30003 and accepts integers from 1 through 65535. Set optional `MY_LOCATION` as decimal latitude and longitude, separated by a comma. CLI flags `--host` and `--port` override feed environment settings. Start the web app with `node bin/radar.mjs`; shutdown uses a process signal. Start the CLI with `node bin/adsb.mjs`; shutdown uses Ctrl+C. These are the externally observable workflows. Their operational boundaries are local web files and the configured TCP feed. Package metadata and workflow files do not configure runtime behavior.
+Runtime settings come from environment variables or an untracked `.env` file. `PORT` defaults to 3000 and accepts integers from 1 through 65535. `LOG_LEVEL` defaults to `info`. `ADSB_HOST` defaults to `127.0.0.1`. `ADSB_PORT` defaults to 30003 and accepts integers from 1 through 65535. Set optional `MY_LOCATION` as decimal latitude and longitude, separated by a comma. Set `MY_ELEVATION` in feet above mean sea level; it defaults to 300. CLI flags `--host` and `--port` override feed settings. Start the web app with `node bin/radar.mjs`; stop it with a process signal. Start the CLI with `node bin/adsb.mjs`; stop it with Ctrl+C. The web API provides `GET /health`, `GET /api/config`, `GET /api/aircraft`, and WebSocket `/ws`. The WebSocket sends one aircraft JSON object for each feed update.
 
 ## Operations
 
-Build the web app with `npm run build`, then start it with `node bin/radar.mjs`. Shutdown uses a process signal. Start the CLI with `node bin/adsb.mjs`; shutdown uses Ctrl+C. The CLI reads feed data and draws live flight strips in the terminal. It does not write files. These are the externally observable workflows and operational boundaries. For browser checks, run `npm run puppeteer`, start the web app, then run `npm run lighthouse`. Build a local container with `docker build -t radar .`. This repository does not deploy the app.
+Build the web app with `npm run build`, then start it with `node bin/radar.mjs`. Use signal shutdown to stop it. Start the CLI with `node bin/adsb.mjs`; use Ctrl+C to stop it. User workflows include REST health checks, aircraft list reads, WebSocket updates, and CLI flight strips. The operational boundary is the configured local feed and local web assets. The CLI does not write files. For browser checks, run `npm run puppeteer`, start the web app, then run `npm run screenshots` or `npm run lighthouse`. Build a local container with `docker build -t radar .`. This repository does not deploy the app.
 
 ## Commands
 
@@ -90,12 +90,16 @@ The CLI uses exit code 0 after `--help`, `--version`, or a normal signal shutdow
 
 ## Routes
 
-| Method        | Path         | Result                             |
-| ------------- | ------------ | ---------------------------------- |
-| `GET`         | `/`          | Serves `public/index.html`.        |
-| `GET`         | `/client.js` | Serves generated `dist/client.js`. |
-| Other methods | Any path     | Returns HTTP 405.                  |
-| `GET`         | Other paths  | Returns HTTP 404.                  |
+| Method      | Path            | Result                                          |
+| ----------- | --------------- | ----------------------------------------------- |
+| `GET`       | `/`             | Serves `public/index.html`.                     |
+| `GET`       | `/client.js`    | Serves generated `dist/client.js`.              |
+| `GET`       | `/style.css`    | Serves the local dashboard style.               |
+| `GET`       | `/health`       | Returns server status.                          |
+| `GET`       | `/api/config`   | Returns home coordinates and elevation.         |
+| `GET`       | `/api/aircraft` | Returns recent aircraft data.                   |
+| WebSocket   | `/ws`           | Sends one JSON object for each aircraft update. |
+| Other paths | Any path        | Returns HTTP 404.                               |
 
 ## Assets
 
@@ -103,11 +107,11 @@ The CLI uses exit code 0 after `--help`, `--version`, or a normal signal shutdow
 
 ## Development server
 
-Run `npm run build`, then run `node bin/radar.mjs`. The default port is 3000. Set `PORT` to use another valid port. Run `npm run puppeteer` to install Chrome, then run `npm run lighthouse` while the app runs at `http://127.0.0.1:3000`.
+Run `npm run build`, then run `node bin/radar.mjs`. The default port is 3000. Set `PORT` to use another valid port. Run `npm run puppeteer` to install Chrome, then run `npm run screenshots` or `npm run lighthouse` while the app runs at `http://127.0.0.1:3000`.
 
 ## Build
 
-`npm run build` creates `dist/client.js` from `src/client-entry.mjs`. The aggregate `npm test` command runs this build.
+`npm run build` creates `dist/client.js` from `src/frontend/client-entry.mjs`. The aggregate `npm test` command runs this build.
 
 ## Deployment
 

@@ -23,8 +23,9 @@
     "audit": "eliware-test --audit",
     "format": "eliware-test --format",
     "format:check": "eliware-test --format-check",
-    "build": "webpack --entry ./src/client-entry.mjs --output-path ./dist --output-filename client.js --mode production",
+    "build": "webpack --entry ./src/frontend/client-entry.mjs --output-path ./dist --output-filename client.js --mode production",
     "prebuild": "webpack-cli --version",
+    "screenshots": "node bin/screenshots.mjs",
     "lighthouse": "lighthouse http://127.0.0.1:3000 --only-categories=accessibility --output=json --output-path=artifacts/lighthouse.json --chrome-flags=--headless",
     "puppeteer": "puppeteer browsers install chrome"
   },
@@ -97,9 +98,12 @@
   },
   "dependencies": {
     "@eliware/common": "^2.0.0",
+    "@fastify/websocket": "^11.3.4",
     "dotenv": "^18.0.7",
+    "fastify": "^5.12.5",
     "lighthouse": "^13.5.0",
-    "puppeteer": "^25.13.0"
+    "puppeteer": "^25.13.0",
+    "three": "^0.186.1"
   },
   "prettier": {
     "printWidth": 100,

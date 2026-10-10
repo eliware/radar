@@ -4,11 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Eliware Radar</title>
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <main>
-      <h1>Eliware Radar</h1>
-      <p data-status>Loading browser assets.</p>
+    <main class="dashboard">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">LOCAL ADS-B VIEWER</p>
+          <h1>Radar Space</h1>
+        </div>
+        <button data-reset type="button">Reset view</button>
+      </header>
+      <section class="scene-panel" aria-label="Three-dimensional aircraft view">
+        <div class="scene-labels">
+          <p class="scene-title">LOCAL 3D SPACE</p>
+          <p data-home>Loading home position.</p>
+        </div>
+        <div class="scene" data-scene></div>
+        <p class="controls-hint">Drag to rotate · Right-drag to pan · Scroll to zoom</p>
+      </section>
+      <footer>
+        <p data-status role="status">Loading aircraft feed.</p>
+        <p>Height uses received ADS-B altitude relative to your home elevation.</p>
+      </footer>
     </main>
     <script type="module" src="/client.js"></script>
   </body>

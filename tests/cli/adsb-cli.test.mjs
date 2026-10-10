@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { startAdsbCli } from "../src/adsb-cli.mjs";
+import { startAdsbCli } from "../../src/cli/adsb-cli.mjs";
 
 function dependencies() {
   const values = {

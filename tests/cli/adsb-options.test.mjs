@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "@jest/globals";
-import { parseAdsbOptions } from "../src/adsb-options.mjs";
+import { parseAdsbOptions } from "../../src/cli/adsb-options.mjs";
 
 afterEach(() => {
   delete process.env.ADSB_HOST;

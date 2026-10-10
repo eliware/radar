@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
 import { expect, jest, test } from "@jest/globals";
-import { connectSbsFeed } from "../src/tcp-feed.mjs";
+import { connectSbsFeed } from "../../src/shared/tcp-feed.mjs";
 
 test("forwards lines and reconnects after a reader reset", () => {
   const socket = new EventEmitter();

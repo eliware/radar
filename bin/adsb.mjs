@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { adsbCliDependencies, startAdsbCli } from "../src/adsb-cli.mjs";
-import { startTableRefresh } from "../src/table-refresh.mjs";
+import { adsbCliDependencies, startAdsbCli } from "../src/cli/adsb-cli.mjs";
+import { startTableRefresh } from "../src/cli/table-refresh.mjs";
 import { config } from "dotenv";
 
 config({ quiet: true });

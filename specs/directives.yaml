@@ -3,8 +3,53 @@ description: Repository-specific guidance for the Eliware Radar.
 directives:
   - id: E-1390
     dos:
-      - Build a CLI and web aviation tracking app for ADS-B data from RTL-SDR receivers.
+      - Build an aviation app that reads decoded ADS-B records from one RTL1090 TCP feed.
+      - Keep the second SDR available to other apps.
+      - Keep recent aircraft data in memory. Do not write aircraft data to files.
+      - Parse all available feed fields into named values. Do not keep a rawLine field.
+      - Keep the CLI table as the default output. Redraw it every second.
+      - Print one aircraft JSON object per feed update with `--debug`.
+      - Retry feed errors after two seconds. Write errors to standard error.
+      - Sort aircraft by distance from `MY_LOCATION`, with the closest aircraft first.
+      - Calculate distance and bearing from decimal coordinates in `MY_LOCATION`.
+      - Read `MY_LOCATION` and `MY_ELEVATION` from `.env`. Default elevation to 300 feet.
+      - Load `.env` settings with `dotenv`.
+      - Use the full terminal width for the CLI table. Space each field evenly.
+      - Use full field names on wide terminals. Use short names when the width is limited.
+      - Use short headers to keep data on one line before wrapping fields.
+      - Use two lines when short headers do not fit. Use three only when two lines do not fit.
+      - Allow no more than three lines for each header or aircraft row.
+      - Show table headers once. Do not repeat headers in aircraft rows.
+      - Keep all table borders and column dividers aligned at each terminal width.
+      - Align the aircraft count divider with the last column divider below it.
+      - Use a double outer border and a double divider below the title row.
+      - Use Unicode box drawing lines.
+      - Show the aircraft count at the right side of the title row.
+      - Use single horizontal dividers between aircraft rows and single column dividers in aircraft rows.
+      - Put CLI code in `src/cli/`, browser code in `src/frontend/`, server code in `src/backend/`, and shared code in `src/shared/`.
+      - Add one matching test for each source module.
+      - Use Fastify for the web server. Provide REST routes and a WebSocket feed.
+      - Provide `GET /health`, `GET /api/config`, and `GET /api/aircraft`.
+      - Send the same aircraft JSON schema over `/ws` that `--debug` prints.
+      - Do not require authentication for local REST or WebSocket access.
+      - Serve the local page, CSS, and built JavaScript from the web server.
+      - Build the first web view as a Three.js 3D space without a map or terrain.
+      - Place the home marker at the `MY_LOCATION` origin and the `MY_ELEVATION` height.
+      - Place aircraft by their coordinates and feed altitude relative to the home height.
+      - Set the default camera to a top-down view centered on home. Keep north at the top.
+      - Use a black background for the page and radar scope.
+      - Draw concentric range rings at 5 nautical mile steps. Make each 10-mile ring bolder.
+      - Allow full camera rotation, tilt, pan, zoom, and a reset to the default view.
+      - Describe feed altitude as barometric altitude. Do not claim it always equals true MSL altitude.
+      - Keep the dashboard focused on the 3D view, flight strips, and aircraft details.
+      - Show available aircraft data in flight strips and aircraft details. Mark missing values as unknown.
+      - Leave radio controls out of the dashboard until requested.
+      - Document the RTL1090 background and foreground procedures in `docs/`.
       - Provide browser assets, documented routes, and mirrored tests.
       - Keep package names and image names consistent with Radar.
     donts:
       - Read or decode raw SDR samples in the Radar app.
+      - Write an aircraft JSON file for another app to watch.
+      - Print the flight table in `--debug` mode.
+      - Use more than three display lines for a table header or aircraft row.
+      - Add a map, terrain, or radio panel to the first 3D view.

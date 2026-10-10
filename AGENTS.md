@@ -6,15 +6,15 @@ Repository: `eliware/radar`. Purpose: provide a web app and a CLI for ADS-B airc
 
 ## Scope and boundaries
 
-Scope: this repository owns Radar code, tests, package metadata, documentation, and local build files. It does not own production credentials, publication decisions, or deployment execution. These instructions apply repository-wide. A subdirectory AGENTS.md can add narrower rules for its subdirectory.
+Scope: this repository owns Radar code, tests, package metadata, documentation, and local build files. It does not own production credentials, publication decisions, or deployment execution. These instructions apply repository-wide. Subdirectory instructions apply only within their subdirectories. A subdirectory AGENTS.md can add narrower rules.
 
 ## Layout
 
-Required structure: `bin/radar.mjs` starts the web app. `bin/adsb.mjs` starts the ADS-B CLI. `src/` contains implementation modules. `tests/` mirrors each source module. `docs/` contains user documentation. `public/` contains source web assets. `dist/` contains generated web output.
+Required structure: `bin/radar.mjs` starts the Fastify web app. `bin/adsb.mjs` starts the ADS-B CLI. Put source modules in `src/cli/`, `src/frontend/`, `src/backend/`, or `src/shared/`. Put tests in matching folders under `tests/`.
 
 ## Development
 
-Use Node.js 26, npm, and native ESM `.mjs` modules. Before changes, read the root README.md, applicable AGENTS.md instructions, and applicable documentation relevant to the change. These Development rules apply repository-wide. A subdirectory AGENTS.md can add stricter rules. Required repository structure: executable entrypoints under `bin/`, implementation under `src/`, documentation under `docs/`, and one matching test under `tests/`. Apply single responsibility: give each module one cohesive purpose and one reason to change. Business-logic modules and coordinators are valid, including coordinators of coordinators, when each module does only its own responsibility. Wire each distinct responsibility through a focused submodule and its mirrored test; do not add the new responsibility to an existing module. Refactor them during ordinary review when modules mix responsibilities. Line maxima are blocking, but passing them does not prove single responsibility or permit mixed responsibilities. Keep every `src/*.mjs` file under 100 lines and add exactly one matching `tests/*.test.mjs` file. Keep each test file under 200 lines.
+These Development instructions apply repository-wide. Subdirectory AGENTS.md instructions apply within their subdirectories. Use Node.js 26, npm, and native ESM `.mjs` modules. Before edits, read the root README.md, applicable AGENTS.md instructions, and applicable documentation relevant to the change. Keep executable entrypoints under `bin/`, source under `src/`, docs under `docs/`, and one mirrored test under `tests/`. Put CLI modules in `src/cli/`, browser modules in `src/frontend/`, server modules in `src/backend/`, and shared CLI/server modules in `src/shared/`. Apply single responsibility: give each module one cohesive purpose and one reason to change. Business-logic modules and coordinators are valid, including coordinators of coordinators, when each module does only its own responsibility. Wire each distinct responsibility through a focused submodule and mirrored test. Do not add the new responsibility to an existing module. Refactor them during ordinary review when mixed responsibilities appear. Line maxima are blocking. Passing them does not prove single responsibility or permit mixed responsibilities below applicable maxima. Keep each source module under 100 lines and each test under 200 lines.
 
 ## Validation
 
@@ -30,7 +30,7 @@ Keep changes actionable, current, and concise. Project-specific instructions can
 
 ## Application
 
-The web entrypoint is `bin/radar.mjs`. It loads `.env`, validates `PORT`, starts the HTTP server, and supports repeatable signal shutdown. The CLI loads `.env` and validates feed configuration before it opens a TCP connection. Environment settings are `PORT`, `LOG_LEVEL`, `ADSB_HOST`, `ADSB_PORT`, and optional `MY_LOCATION`. Optional defaults are port 3000, log level info, host 127.0.0.1, and feed port 30003. `MY_LOCATION` uses decimal latitude and longitude. `.env.example` lists optional settings. The web app serves local assets. The CLI reads decoded SBS/BaseStation records. Its operational boundary is the configured local feed. Neither app writes persistent data. Tests must cover documented user workflows.
+The web entrypoint is `bin/radar.mjs`. It is the executable entrypoint for the web app. The CLI entrypoint is `bin/adsb.mjs`. Both use Node.js 26 and native ESM. Runtime commands are `node bin/radar.mjs` and `node bin/adsb.mjs`. Runtime settings come from `.env` or process environment. Defaults are web port 3000, log level info, feed host 127.0.0.1, feed port 30003, and `MY_ELEVATION` at 300 feet above mean sea level. `MY_LOCATION` uses decimal latitude and longitude. CLI arguments override feed settings only for the CLI. Package metadata does not configure runtime behavior. Validate configuration before opening connections. Make shutdown repeatable. Fastify lifecycle shutdown closes the feed and server after a signal. Use a safe boundary: read the local feed and do not write persistent data. Tests must cover public inputs and externally observable results of every documented workflow. Human review must identify supported workflows that docs or tests omit. Passing tests alone do not prove workflow inventory completeness. Keep the root README, runtime settings docs, and `.env.example` current. Neither app writes persistent data.
 
 ## CLI
 
@@ -38,7 +38,7 @@ CLI entrypoint: supported commands are `radar-adsb` and `node bin/adsb.mjs`. The
 
 ## Web
 
-Web configuration uses `PORT`, which defaults to 3000. Routes: `GET /` serves `public/index.html`; `GET /client.js` serves `dist/client.js`. Other paths return 404; other methods return 405. Keep source assets in the public root `public/`; build output goes to `dist/client.js`. Run `npm run build` to build. Run `npm run puppeteer`, start the app, then run `npm run lighthouse` for browser validation. Docker supports local use; this repository does not deploy the app.
+Web configuration uses `PORT`, which defaults to 3000. `MY_ELEVATION` defaults to 300 feet above mean sea level. Routes: `GET /` serves `public/index.html`; `GET /style.css` serves `public/style.css`; `GET /client.js` serves `dist/client.js`; `GET /health` reports server status; `GET /api/config` returns location and elevation; `GET /api/aircraft` returns recent aircraft; `/ws` relays aircraft JSON updates. The API has no authentication. Unknown paths return 404. Keep source assets in `public/`; build output goes to `dist/client.js`. Run `npm run build` to build. Run `npm run puppeteer`, start the app, then run `npm run lighthouse` for browser checks. Docker supports local use; this repository does not deploy the app.
 
 ## npm publication
 

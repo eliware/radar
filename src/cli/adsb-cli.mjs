@@ -1,11 +1,11 @@
-import { createAircraftList } from "./aircraft-list.mjs";
+import { createAircraftList } from "../shared/aircraft-list.mjs";
 import { parseAdsbOptions } from "./adsb-options.mjs";
-import { parseSbsMessage } from "./sbs-message.mjs";
-import { connectSbsFeed } from "./tcp-feed.mjs";
+import { parseSbsMessage } from "../shared/sbs-message.mjs";
+import { connectSbsFeed } from "../shared/tcp-feed.mjs";
 import { renderFlightStrips } from "./flight-strips.mjs";
-import { parseAdsbLocation } from "./adsb-location.mjs";
-import { calculateAircraftRange } from "./aircraft-range.mjs";
-import packageJson from "../package.json" with { type: "json" };
+import { parseAdsbLocation } from "../shared/adsb-location.mjs";
+import { calculateAircraftRange } from "../shared/aircraft-range.mjs";
+import packageJson from "../../package.json" with { type: "json" };
 
 export const adsbCliDependencies = {
   createAircraftList,

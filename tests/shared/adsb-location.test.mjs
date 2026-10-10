@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseAdsbLocation } from "../src/adsb-location.mjs";
+import { parseAdsbLocation } from "../../src/shared/adsb-location.mjs";
 
 test("parses decimal latitude and longitude", () => {
   expect(parseAdsbLocation("43.857616503999, -70.41360202151915")).toEqual({

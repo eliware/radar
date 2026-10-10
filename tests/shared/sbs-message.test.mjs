@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseSbsMessage } from "../src/sbs-message.mjs";
+import { parseSbsMessage } from "../../src/shared/sbs-message.mjs";
 
 test("maps all 22 SBS fields to named values", () => {
   const line =

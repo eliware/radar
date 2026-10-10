@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderFlightStrips } from "../src/flight-strips.mjs";
+import { renderFlightStrips } from "../../src/cli/flight-strips.mjs";
 
 const aircraft = {
   callsign: "TEST123",
