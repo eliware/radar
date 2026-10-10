@@ -5,4 +5,4 @@
 ### Changed
 
 - Create the initial Radar web application shell.
-- Record ADS-B receiver support as the application purpose. The first version does not read receiver data.
+- Add a CLI that reads decoded aircraft data from an SBS/BaseStation TCP feed.

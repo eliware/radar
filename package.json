@@ -2,10 +2,23 @@
   "name": "@eliware/radar",
   "type": "module",
   "version": "11.0.0",
-  "description": "Web-based aviation tracking app for ADS-B data from RTL-SDR receivers.",
+  "description": "Aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
   "main": "./bin/radar.mjs",
+  "files": [
+    "src/",
+    "docs/",
+    "README.md",
+    "AGENTS.md",
+    "LICENSE",
+    "RELEASE_NOTES.md",
+    "bin/"
+  ],
+  "bin": {
+    "radar-adsb": "./bin/adsb.mjs"
+  },
   "scripts": {
     "test": "eliware-test",
+    "pack": "eliware-test --pack",
     "lint": "eliware-test --lint",
     "audit": "eliware-test --audit",
     "format": "eliware-test --format",
@@ -24,13 +37,21 @@
     "aviation",
     "aircraft-tracking",
     "ads-b",
+    "cli",
     "rtl-sdr",
+    "sbs",
+    "basestation",
+    "tcp",
     "web",
     "nodejs"
   ],
   "author": "Eliware <eliware@eliware.org>",
   "license": "MIT",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "engines": {
     "node": "26"
   },
@@ -39,7 +60,9 @@
     "apply": [
       "general",
       "application",
-      "web"
+      "cli",
+      "web",
+      "npm-published"
     ]
   },
   "bugs": {
