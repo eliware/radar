@@ -43,7 +43,7 @@ After npm publication, install the package with `npm install --global @eliware/r
 
 ## Usage
 
-Run `node bin/radar.mjs` to serve the web app at `http://localhost:3000`. Run `node bin/adsb.mjs` to read an SBS/BaseStation feed at `127.0.0.1:30003`. The CLI shows a live flight strip table. Use `--host` and `--port` to select another feed.
+Run `node bin/radar.mjs` to serve the web app at `http://localhost:3000`. Run `node bin/adsb.mjs` to read an SBS/BaseStation feed at `127.0.0.1:30003`. The CLI shows a live flight strip table. Add `--debug` to print aircraft JSON lines. Use `--host` and `--port` to select another feed.
 
 The package version in `package.json` is the release version. Releases use matching `vMAJOR.MINOR.PATCH` tags. After an authorized release, verify the version with `npm view @eliware/radar@VERSION version`.
 
@@ -79,6 +79,7 @@ Install from npm after release with `npm install --global @eliware/radar`. From 
 - `radar-adsb --host HOST --port PORT` selects a feed host and port.
 - `radar-adsb --help` prints usage.
 - `radar-adsb --version` prints the package version.
+- `radar-adsb --debug` prints aircraft JSON lines.
 - `node bin/radar.mjs` starts the web app.
 
 Set `ADSB_HOST` and `ADSB_PORT` to set feed defaults. CLI flags override these settings. The CLI does not change or delete data, so it does not need a dry-run option or confirmation. Supported platforms: Windows and Linux with Node.js 26. Validation evidence: this change runs tests on Windows, and CI targets Ubuntu. We infer macOS compatibility from Node.js TCP APIs; we have not directly validated it.

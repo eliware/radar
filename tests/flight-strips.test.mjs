@@ -22,11 +22,11 @@ const render = (planes, width) =>
 test("renders full headers in a full-width table", () => {
   const rows = render([aircraft], 180);
   expect(rows[0]).toContain("╔");
-  expect(rows[0]).toContain("╔");
   expect(rows[1]).toContain("RADAR CLI");
   expect(rows[1]).toContain("1 AIRCRAFT");
   expect(rows[1].endsWith("║")).toBe(true);
   expect(rows[2]).toContain("╤");
+  expect(rows[1].indexOf("│")).toBe(rows[2].indexOf("╪"));
   expect(rows[3]).toContain("CALLSIGN");
   expect(rows[3]).toContain("VERTICAL RATE");
   expect(rows[3]).toContain("│");
@@ -63,7 +63,9 @@ test("uses a single-line divider between full-width aircraft rows", () => {
 test("wraps headers and each aircraft into two value-only rows", () => {
   const rows = render([aircraft], 80);
   const plane = rows.findIndex((row) => row.includes("TEST123"));
-  expect(rows.slice(3, 5).every((row) => row.includes("║"))).toBe(true);
+  expect(rows.filter((row) => row.startsWith("╟"))).toHaveLength(1);
+  expect(rows.filter((row) => row.startsWith("║") && row.includes("│"))).toHaveLength(5);
+  expect(rows[plane - 1].startsWith("╠")).toBe(true);
   expect(rows[plane + 1]).toContain("1200");
   expect(rows[plane]).not.toContain("ALT ");
   expect(rows[plane + 1]).not.toContain("SQ ");
@@ -73,6 +75,8 @@ test("wraps headers and each aircraft into two value-only rows", () => {
 test("wraps headers and each aircraft into three value-only rows", () => {
   const rows = render([aircraft], 40);
   const plane = rows.findIndex((row) => row.includes("TEST123"));
+  expect(rows.filter((row) => row.startsWith("╟"))).toHaveLength(2);
+  expect(rows[plane - 1]).toBe(`╠${"═".repeat(38)}╣`);
   expect(rows[plane + 1]).toContain("031°");
   expect(rows[plane + 2]).toContain("1.5 nm");
   expect(rows.slice(plane, plane + 3).every((row) => !row.includes("ALT "))).toBe(true);

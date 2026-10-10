@@ -31,6 +31,14 @@ test("accepts the version option", () => {
   expect(parseAdsbOptions(["--version"]).version).toBe(true);
 });
 
+test("accepts the debug option", () => {
+  expect(parseAdsbOptions(["--debug"])).toEqual({
+    host: "127.0.0.1",
+    port: 30003,
+    debug: true,
+  });
+});
+
 test.each([["--other"], ["--host"], ["--port"], ["--host", "--help"]])(
   "rejects invalid option input %s",
   (...args) => {

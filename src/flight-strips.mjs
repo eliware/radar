@@ -1,9 +1,5 @@
-import {
-  createFlightStripLayout,
-  tableBorder,
-  tableRow,
-  wideTableWidth,
-} from "./flight-strip-layout.mjs";
+import { createFlightStripLayout, tableRow, wideTableWidth } from "./flight-strip-layout.mjs";
+import { aircraftDivider, flightStripFooter, flightStripHeader } from "./flight-strip-frame.mjs";
 
 function positionOf(aircraft) {
   if (!Number.isFinite(aircraft.latitude) || !Number.isFinite(aircraft.longitude)) return null;
@@ -31,7 +27,7 @@ function valuesOf(aircraft, now) {
   ];
 }
 
-function renderAircraft(rows, layout, lines) {
+function renderAircraft(rows, layout, lines, width) {
   for (const [index, values] of rows.entries()) {
     for (const group of layout) {
       lines.push(
@@ -45,39 +41,22 @@ function renderAircraft(rows, layout, lines) {
       );
     }
     if (index < rows.length - 1) {
-      lines.push(tableBorder(layout[0].widths, "├", "┼", "┤", "─"));
+      lines.push(aircraftDivider(layout, width));
     }
   }
-}
-
-function titleLines(widths, aircraftCount) {
-  const total = widths.reduce((sum, width) => sum + width, 3 * widths.length + 1);
-  const count = ` ${aircraftCount} AIRCRAFT `;
-  const countWidth = count.length;
-  const titleWidth = total - countWidth - 7;
-  const title = " RADAR CLI";
-  const top = `╔${"═".repeat(titleWidth + 2)}╤${"═".repeat(countWidth + 2)}╗`;
-  const titleCell = title.slice(0, titleWidth + 2).padEnd(titleWidth + 2);
-  const row = `║${titleCell}│${count.padStart(countWidth + 2)}║`;
-  return [top, row];
 }
 
 function renderTable(aircraft, width, now) {
   const rows = aircraft.map((item) => valuesOf(item, now()));
   const layout = createFlightStripLayout(width, rows);
   const widths = layout[0].widths;
-  const lines = titleLines(widths, aircraft.length);
-  lines.push(tableBorder(widths, "╠", "╤", "╣", "═"));
-  for (const group of layout) {
-    lines.push(tableRow(group.labels, group.widths, "║", "│", "║"));
-  }
-  lines.push(tableBorder(widths, "╠", "╪", "╣", "═"));
-  if (rows.length) renderAircraft(rows, layout, lines);
+  const lines = flightStripHeader(layout, aircraft.length, width);
+  if (rows.length) renderAircraft(rows, layout, lines, width);
   else {
     const titleWidth = widths.reduce((sum, width) => sum + width, 3 * widths.length - 3);
     lines.push(tableRow(["Waiting for aircraft..."], [titleWidth]));
   }
-  lines.push(tableBorder(widths, "╚", "╧", "╝", "═"));
+  lines.push(flightStripFooter(layout, width));
   return lines;
 }
 

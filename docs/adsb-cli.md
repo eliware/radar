@@ -12,7 +12,9 @@ Set `MY_LOCATION` in `.env` as decimal latitude, then longitude. The CLI uses th
 
 ## Output
 
-The table fills the terminal width. It shows callsign, ICAO address, altitude, speed, heading, vertical rate, squawk, position, distance, bearing, and age. The CLI keeps all 22 SBS fields in memory. It sorts aircraft by distance, closest first. Resize the terminal to redraw the table. The table uses short headers, then two or three value rows, as the terminal gets narrow. Aircraft rows show values only.
+The table fills the terminal width. It shows callsign, ICAO address, altitude, speed, heading, vertical rate, squawk, position, distance, bearing, and age. The CLI keeps all 22 SBS fields in memory. It sorts aircraft by distance, closest first. The table redraws every second to update aircraft age. Resize the terminal to redraw the table. The table uses short headers, then two or three value rows, as the terminal gets narrow. Aircraft rows show values only.
+
+Run `radar-adsb --debug` to print one JSON object per aircraft update. This mode does not draw the table.
 
 Distance uses nautical miles. Bearing uses degrees clockwise from north. The feed does not provide aircraft type or destination.
 
@@ -22,6 +24,6 @@ RTL1090 sends changed aircraft messages in Flight Table mode, at up to one updat
 
 ## Help and errors
 
-Run `radar-adsb --help` for usage. Run `radar-adsb --version` for the package version. The command retries TCP feed errors after two seconds and writes each error to standard error. It uses exit code 0 after help, version, or signal shutdown; 1 for a fatal runtime error; and 2 for invalid options.
+Run `radar-adsb --help` for usage. Run `radar-adsb --version` for the package version. Run `radar-adsb --debug` for JSON output. The command retries TCP feed errors after two seconds and writes each error to standard error. It uses exit code 0 after help, version, or signal shutdown; 1 for a fatal runtime error; and 2 for invalid options.
 
 RTL1090 must enable SBS/BaseStation TCP output. The command does not read raw SDR samples or change receiver settings.

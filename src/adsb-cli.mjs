@@ -36,7 +36,7 @@ export function startAdsbCli({
   }
 
   if (options.help) {
-    write("Usage: radar-adsb [--host HOST] [--port PORT]");
+    write("Usage: radar-adsb [--host HOST] [--port PORT] [--debug]");
     return { close: () => undefined };
   }
   if (options.version) {
@@ -69,9 +69,13 @@ export function startAdsbCli({
     onLine(line) {
       const message = dependencies.parseSbsMessage(line);
       if (!message?.icao) return;
-      const aircraft = aircraftList.update(message);
+      let aircraft = aircraftList.update(message);
       const range = dependencies.calculateAircraftRange(location, aircraft);
-      if (range) aircraftList.update({ icao: message.icao, ...range });
+      if (range) aircraft = aircraftList.update({ icao: message.icao, ...range });
+      if (options.debug) {
+        write(JSON.stringify(aircraft));
+        return;
+      }
       hasAircraft = true;
       refresh();
     },
@@ -79,5 +83,5 @@ export function startAdsbCli({
       writeError(`ADS-B feed error: ${error.message}. Retrying in 2 seconds.`);
     },
   });
-  return { close: () => feed.close(), refresh };
+  return { close: () => feed.close(), refresh, table: !options.debug };
 }

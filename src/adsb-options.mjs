@@ -13,6 +13,10 @@ export function parseAdsbOptions(args) {
       options.version = true;
       continue;
     }
+    if (argument === "--debug") {
+      options.debug = true;
+      continue;
+    }
     if (argument !== "--host" && argument !== "--port") {
       throw new Error(`Unknown option: ${argument}`);
     }

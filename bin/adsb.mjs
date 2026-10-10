@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { adsbCliDependencies, startAdsbCli } from "../src/adsb-cli.mjs";
+import { startTableRefresh } from "../src/table-refresh.mjs";
 import { config } from "dotenv";
 
 config({ quiet: true });
@@ -13,10 +14,14 @@ const cli = startAdsbCli({
     process.exitCode = code;
   },
 });
+const stopTableRefresh = cli.table
+  ? startTableRefresh(() => cli.refresh(), setInterval, clearInterval)
+  : () => undefined;
 
 const onResize = () => cli.refresh?.();
 if (process.stdout.isTTY) process.stdout.on("resize", onResize);
 const close = () => {
+  stopTableRefresh();
   process.stdout.off("resize", onResize);
   cli.close();
 };

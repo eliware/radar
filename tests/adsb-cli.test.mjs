@@ -31,6 +31,7 @@ test("renders the current aircraft list after each aircraft update", () => {
     getTerminalWidth: () => width,
     dependencies: deps.values,
   });
+  expect(cli.table).toBe(true);
   const feedOptions = deps.values.connectSbsFeed.mock.calls[0][0];
   cli.refresh();
   feedOptions.onLine("ignored");
@@ -52,6 +53,22 @@ test("renders the current aircraft list after each aircraft update", () => {
   expect(deps.writeError).toHaveBeenCalledWith("ADS-B feed error: offline. Retrying in 2 seconds.");
   expect(deps.setExitCode).not.toHaveBeenCalled();
   cli.close();
+});
+
+test("writes aircraft JSON instead of drawing the table in debug mode", () => {
+  const deps = dependencies();
+  deps.values.parseAdsbOptions.mockReturnValue({ host: "127.0.0.1", port: 30003, debug: true });
+  const cli = startAdsbCli({
+    args: ["--debug"],
+    write: deps.write,
+    writeError: deps.writeError,
+    setExitCode: deps.setExitCode,
+    dependencies: deps.values,
+  });
+  expect(cli.table).toBe(false);
+  deps.values.connectSbsFeed.mock.calls[0][0].onLine("valid");
+  expect(JSON.parse(deps.write.mock.calls[0][0])).toEqual({ icao: "ABC123", lastSeen: 10 });
+  expect(deps.values.renderFlightStrips).not.toHaveBeenCalled();
 });
 
 test("adds calculated range data to the in-memory aircraft record", () => {
@@ -134,20 +151,7 @@ test("does not render records without an aircraft address", () => {
   expect(deps.write).not.toHaveBeenCalled();
 });
 
-test("prints help and invalid option errors without opening the feed", () => {
-  const help = dependencies();
-  help.values.parseAdsbOptions.mockReturnValue({ help: true });
-  const helpCli = startAdsbCli({
-    args: ["--help"],
-    write: help.write,
-    writeError: help.writeError,
-    setExitCode: help.setExitCode,
-    dependencies: help.values,
-  });
-  helpCli.close();
-  expect(help.write).toHaveBeenCalledWith("Usage: radar-adsb [--host HOST] [--port PORT]");
-  expect(help.values.connectSbsFeed).not.toHaveBeenCalled();
-
+test("prints version and invalid option errors without opening the feed", () => {
   const version = dependencies();
   version.values.parseAdsbOptions.mockReturnValue({ version: true });
   const versionCli = startAdsbCli({
@@ -187,5 +191,5 @@ test("uses the default CLI dependencies", () => {
     setExitCode: jest.fn(),
   });
   cli.close();
-  expect(write).toHaveBeenCalledWith("Usage: radar-adsb [--host HOST] [--port PORT]");
+  expect(write).toHaveBeenCalledWith("Usage: radar-adsb [--host HOST] [--port PORT] [--debug]");
 });
