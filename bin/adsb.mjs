@@ -24,8 +24,11 @@ const writeOutput = (text) => {
   }
   const synchronizedOutput = process.env.WT_SESSION ? "\u001b[?2026h" : "";
   const endSynchronizedOutput = synchronizedOutput ? "\u001b[?2026l" : "";
+  const hasRoomBelowFrame =
+    frame.split("\n").length < (process.stdout.rows ?? Number.MAX_SAFE_INTEGER);
+  const clearBelowFrame = hasRoomBelowFrame ? "\r\n\u001b[J" : "";
   process.stdout.write(
-    `${enterAlternateScreen}${synchronizedOutput}\u001b[H${frame}\u001b[J${endSynchronizedOutput}`,
+    `${enterAlternateScreen}${synchronizedOutput}\u001b[H${frame}${clearBelowFrame}${endSynchronizedOutput}`,
   );
 };
 const restoreTerminal = () => {
