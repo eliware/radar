@@ -5,7 +5,8 @@ import { attachMobileRadarGestures } from "./mobile-radar-gestures.mjs";
 import { DEFAULT_RADAR_RANGE, clampRadarRange, selectDefaultRadarRange } from "./radar-range.mjs";
 import { createRadarTargets } from "./radar-targets.mjs";
 import { watchRadarTargets } from "./watch-radar-targets.mjs";
-
+import { createAircraftTrails } from "./aircraft-trails.mjs";
+import { attachCanvasRefresh } from "./attach-canvas-refresh.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -16,6 +17,7 @@ export function createCanvasRadarView({
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
   const targets = createRadarTargets();
+  const trails = createAircraftTrails();
   let range = DEFAULT_RADAR_RANGE;
   let autoZoom = true;
   let offsetX = 0;
@@ -35,6 +37,7 @@ export function createCanvasRadarView({
       offsetY,
       windowRef,
       rotation,
+      trails,
     );
   const detachGestures = attachMobileRadarGestures(canvas, {
     onZoom: (factor) => {
@@ -56,26 +59,25 @@ export function createCanvasRadarView({
   const stopTargetWatch = watchRadarTargets({
     targets,
     windowRef,
-    onExpire: () => {
+    onExpire: (expired) => {
+      trails.remove(expired);
       if (autoZoom) range = selectDefaultRadarRange(targets.distances());
       draw();
     },
   });
-  const onWheel = (event) => {
-    event.preventDefault();
+  const detachRefresh = attachCanvasRefresh(canvas, windowRef, draw, (event) => {
     autoZoom = false;
     range = clampRadarRange(range * (event.deltaY > 0 ? 1.2 : 1 / 1.2));
-    draw();
-  };
-  canvas.addEventListener("wheel", onWheel, { passive: false });
-  windowRef.addEventListener("resize", draw);
+  });
   draw();
   return {
     mode: "2D",
     update(item) {
       const position = projectAircraftPosition(item, location, 0);
       if (!position) return;
-      targets.update(item, Math.hypot(position.x, position.z));
+      const expired = targets.update(item, Math.hypot(position.x, position.z));
+      trails.remove(expired);
+      trails.add(item.icao, position);
       if (autoZoom) range = selectDefaultRadarRange(targets.distances());
       draw();
     },
@@ -88,11 +90,10 @@ export function createCanvasRadarView({
       draw();
     },
     destroy() {
-      windowRef.removeEventListener("resize", draw);
+      detachRefresh();
       stopTargetWatch();
       detachGestures();
       detachPan();
-      canvas.removeEventListener("wheel", onWheel);
       container.replaceChildren();
     },
   };

@@ -5,6 +5,8 @@ test("draws north-up range rings, home, and valid aircraft", () => {
   const context = Object.fromEntries(
     [
       "setTransform",
+      "measureText",
+      "clearRect",
       "fillRect",
       "beginPath",
       "arc",
@@ -20,6 +22,11 @@ test("draws north-up range rings, home, and valid aircraft", () => {
       "restore",
     ].map((name) => [name, jest.fn()]),
   );
+  const measuredFonts = [];
+  context.measureText = jest.fn((text) => {
+    measuredFonts.push(context.font);
+    return { width: text.length * 8 };
+  });
   const canvas = { clientWidth: 0, clientHeight: 0, width: 0, height: 0 };
   const aircraft = new Map([
     ["A", { icao: "A", latitude: 43.1, longitude: -70, callsign: "NORTH", trackDegrees: 0 }],
@@ -34,12 +41,14 @@ test("draws north-up range rings, home, and valid aircraft", () => {
   expect(context.arc).toHaveBeenCalledTimes(13);
   expect(context.rotate).toHaveBeenCalledWith(0);
   expect(context.fillText).toHaveBeenCalledWith("NORTH", expect.any(Number), expect.any(Number));
+  expect(measuredFonts).toContain("9px monospace");
 });
 
 test("draws close range rings below five nautical miles", () => {
   const context = Object.fromEntries(
     [
       "setTransform",
+      "clearRect",
       "fillRect",
       "beginPath",
       "arc",
@@ -55,8 +64,9 @@ test("draws close range rings below five nautical miles", () => {
       "restore",
     ].map((name) => [name, jest.fn()]),
   );
+  context.measureText = jest.fn((text) => ({ width: text.length * 8 }));
   const canvas = { clientWidth: 100, clientHeight: 100 };
   drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 1 });
   expect(context.arc).toHaveBeenCalledTimes(4);
-  expect(context.fillText).toHaveBeenCalledWith("3 nm", expect.any(Number), expect.any(Number));
+  expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
 });

@@ -40,9 +40,10 @@ function setup(context = makeContext()) {
 }
 
 function makeContext() {
-  return Object.fromEntries(
+  const context = Object.fromEntries(
     [
       "setTransform",
+      "clearRect",
       "fillRect",
       "beginPath",
       "arc",
@@ -58,6 +59,8 @@ function makeContext() {
       "restore",
     ].map((name) => [name, jest.fn()]),
   );
+  context.measureText = jest.fn((text) => ({ width: text.length * 8 }));
+  return context;
 }
 
 test("draws the 2D radar, updates aircraft, handles input, and cleans up", () => {
@@ -79,6 +82,7 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
     latitude: 43.1,
     longitude: -70,
     trackDegrees: 90,
+    groundSpeedKnots: 100,
   });
   now += 120_001;
   state.tick();
@@ -88,8 +92,9 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
     latitude: 43.1,
     longitude: -70,
     trackDegrees: 90,
+    groundSpeedKnots: 100,
   });
-  expect(state.context.rotate).toHaveBeenCalledWith(Math.PI / 2);
+  expect(state.context.rotate).toHaveBeenCalledWith(0);
   expect(state.context.fillText).toHaveBeenCalledWith(
     "TEST1",
     expect.any(Number),
@@ -121,6 +126,7 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
   state.send("pointerdown", touch(3, 0, 0));
   state.send("pointerdown", touch(4, 100, 0));
   state.send("pointermove", touch(4, 0, 100));
+  expect(state.context.rotate).toHaveBeenCalledWith(Math.PI / 2);
   state.send("pointerup", touch(3, 0, 0));
   state.send("pointerup", touch(4, 0, 100));
   const secondState = setup();

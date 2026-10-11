@@ -15,6 +15,7 @@ test("shows matching rings and center axes for the selected range", () => {
       this.rotation = {};
       this.position = { set: jest.fn() };
       this.scale = { set: jest.fn() };
+      this.userData = {};
     }
   }
   class TorusGeometry {
@@ -32,9 +33,38 @@ test("shows matching rings and center axes for the selected range", () => {
       this.options = options;
     }
   }
+  class Sprite {
+    constructor(material) {
+      this.material = material;
+      this.position = { set: jest.fn() };
+      this.scale = { set: jest.fn() };
+      this.userData = {};
+    }
+  }
+  class CanvasTexture {
+    constructor() {
+      this.dispose = jest.fn();
+    }
+  }
+  class SpriteMaterial {
+    constructor(options) {
+      this.map = options.map;
+      this.dispose = jest.fn();
+    }
+  }
+  const documentRef = { createElement: () => ({ getContext: () => ({ fillText() {} }) }) };
   const update = createRadarSceneOverlays(
-    { Mesh, TorusGeometry, CylinderGeometry, MeshBasicMaterial },
+    {
+      Mesh,
+      TorusGeometry,
+      CylinderGeometry,
+      MeshBasicMaterial,
+      Sprite,
+      CanvasTexture,
+      SpriteMaterial,
+    },
     scene,
+    documentRef,
   );
   const rings = scene.children.filter((item) => item.geometry instanceof TorusGeometry);
   expect(rings).toHaveLength(68);
@@ -49,6 +79,11 @@ test("shows matching rings and center axes for the selected range", () => {
   expect(rings.filter((ring) => ring.visible).map((ring) => ring.geometry.values[0])).toEqual([
     1, 2, 3,
   ]);
+  update(8);
+  expect(rings.filter((ring) => ring.visible)).toHaveLength(8);
   update(300);
   expect(rings.filter((ring) => ring.visible)).toHaveLength(60);
+  expect(rings.find((ring) => ring.geometry.values[0] === 10).geometry.values[1]).toBeCloseTo(
+    0.825,
+  );
 });

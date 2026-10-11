@@ -6,8 +6,10 @@ import { createRadarCamera } from "./radar-camera.mjs";
 import { DEFAULT_RADAR_RANGE, selectDefaultRadarRange } from "./radar-range.mjs";
 import { createRadarTargets } from "./radar-targets.mjs";
 import { createRadarSceneOverlays } from "./radar-scene-overlays.mjs";
-import { createAircraftMarker, removeAircraftMarkers } from "./aircraft-marker.mjs";
+import { createAircraftTrails } from "./aircraft-trails.mjs";
+import { createAircraftDisplayOverlay } from "./aircraft-display-overlay.mjs";
 import { watchRadarTargets } from "./watch-radar-targets.mjs";
+import { createRadarRenderLoop } from "./radar-render-loop.mjs";
 
 export function createAircraftScene({ container, location, elevationFeet, windowRef = window }) {
   const scene = new THREE.Scene();
@@ -19,14 +21,20 @@ export function createAircraftScene({ container, location, elevationFeet, window
   const updateRings = createRadarSceneOverlays(THREE, scene);
   const home = new THREE.Mesh(
     new THREE.SphereGeometry(0.18, 16, 12),
-    new THREE.MeshBasicMaterial({ color: 0x35d5a0 }),
+    new THREE.MeshBasicMaterial({ color: 0x00ff41 }),
   );
   scene.add(home);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
   controls.update();
-  const markers = new Map();
   const targets = createRadarTargets();
+  const trails = createAircraftTrails();
+  const overlay = createAircraftDisplayOverlay({
+    THREE,
+    container,
+    windowRef,
+    documentRef: windowRef.document ?? globalThis.document,
+  });
   let autoZoom = true;
   const radarCamera = createRadarCamera({
     camera,
@@ -35,46 +43,34 @@ export function createAircraftScene({ container, location, elevationFeet, window
     element: renderer.domElement,
     windowRef,
     onManualZoom: () => (autoZoom = false),
-    onRangeChange: updateRings,
+    onRangeChange: (range) => {
+      updateRings(range);
+    },
   });
   radarCamera.setRange(DEFAULT_RADAR_RANGE);
   const stopTargetWatch = watchRadarTargets({
     targets,
     windowRef,
     onExpire: (expired) => {
-      removeAircraftMarkers(scene, markers, expired);
+      trails.remove(expired);
       if (autoZoom) radarCamera.setRange(selectDefaultRadarRange(targets.distances()));
     },
   });
-  const resize = () => {
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-    if (!width || !height) return;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
-  };
-  const animate = () => {
-    renderer.render(scene, camera);
-    frame = windowRef.requestAnimationFrame(animate);
-  };
-  let frame = windowRef.requestAnimationFrame(animate);
-  windowRef.addEventListener("resize", resize);
-  resize();
+  const stopRenderLoop = createRadarRenderLoop({
+    renderer,
+    scene,
+    camera,
+    container,
+    windowRef,
+    onFrame: () => overlay.draw(targets.items(), trails, location, elevationFeet, camera),
+  });
   return {
     update(aircraft) {
       const position = projectAircraftPosition(aircraft, location, elevationFeet);
       if (!position) return;
       const expired = targets.update(aircraft, Math.hypot(position.x, position.z));
-      removeAircraftMarkers(scene, markers, expired);
-      let marker = markers.get(aircraft.icao);
-      if (!marker) {
-        marker = createAircraftMarker(THREE);
-        markers.set(aircraft.icao, marker);
-        scene.add(marker);
-      }
-      marker.position.set(position.x, position.y, position.z);
-      marker.rotation.y = Math.PI - ((aircraft.trackDegrees ?? 0) * Math.PI) / 180;
+      trails.remove(expired);
+      trails.add(aircraft.icao, position);
       if (autoZoom) {
         const nextRange = selectDefaultRadarRange(targets.distances());
         if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
@@ -86,9 +82,9 @@ export function createAircraftScene({ container, location, elevationFeet, window
       radarCamera.setRange(selectDefaultRadarRange(targets.distances()));
     },
     destroy() {
-      windowRef.cancelAnimationFrame(frame);
-      windowRef.removeEventListener("resize", resize);
+      stopRenderLoop();
       stopTargetWatch();
+      overlay.destroy();
       radarCamera.dispose();
       controls.dispose();
       renderer.dispose();

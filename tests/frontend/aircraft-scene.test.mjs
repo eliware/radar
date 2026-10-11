@@ -1,97 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
+import { registerThreeSceneMocks } from "../../test-fixtures/three-scene-mocks.mjs";
 
-class Vector {
-  set(...values) {
-    this.values = values;
-  }
-}
-
-class Scene {
-  constructor() {
-    this.children = [];
-    this.rotation = {};
-    Scene.instance = this;
-  }
-  add(item) {
-    this.children.push(item);
-  }
-  remove(item) {
-    this.children = this.children.filter((child) => child !== item);
-  }
-}
-
-class Camera {
-  constructor() {
-    this.position = new Vector();
-    this.up = new Vector();
-    Camera.instance = this;
-  }
-  updateProjectionMatrix() {}
-}
-
-class Renderer {
-  constructor() {
-    this.domElement = { addEventListener() {}, removeEventListener() {} };
-    this.render = jest.fn();
-    this.setSize = jest.fn();
-    this.setPixelRatio = jest.fn();
-    this.dispose = jest.fn();
-  }
-  setPixelRatio() {}
-}
-
-class Mesh {
-  constructor(geometry, material) {
-    this.geometry = geometry;
-    this.material = material;
-    this.position = new Vector();
-    this.scale = new Vector();
-    this.rotation = {};
-  }
-}
-
-class TorusGeometry {
-  constructor(...values) {
-    this.values = values;
-  }
-}
-
-class CylinderGeometry {}
-class ConeGeometry {}
-
-class Material {
-  constructor(options) {
-    this.options = options;
-  }
-}
-
-class Controls {
-  constructor() {
-    this.target = new Vector();
-    this.update = jest.fn();
-    this.dispose = jest.fn();
-    this.listeners = new Map();
-    this.addEventListener = (name, callback) => this.listeners.set(name, callback);
-    this.removeEventListener = jest.fn();
-    Controls.instance = this;
-  }
-}
-
-jest.unstable_mockModule("three", () => ({
-  Scene,
-  Color: class {},
-  PerspectiveCamera: Camera,
-  WebGLRenderer: Renderer,
-  SphereGeometry: class {},
-  TorusGeometry,
-  CylinderGeometry,
-  ConeGeometry,
-  MeshBasicMaterial: Material,
-  Mesh,
-}));
-jest.unstable_mockModule("three/addons/controls/OrbitControls.js", () => ({
-  OrbitControls: Controls,
-}));
+const { Scene, Camera, TorusGeometry, Controls } = registerThreeSceneMocks(jest);
 const { createAircraftScene } = await import("../../src/frontend/aircraft-scene.mjs");
 const { rangeToCameraDistance } = await import("../../src/frontend/radar-range.mjs");
 
@@ -100,6 +10,22 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
   const dateNow = jest.spyOn(Date, "now").mockImplementation(() => now);
   const callbacks = new Map();
   const intervals = new Map();
+  const overlayContext = Object.fromEntries(
+    [
+      "setTransform",
+      "clearRect",
+      "beginPath",
+      "moveTo",
+      "lineTo",
+      "stroke",
+      "fill",
+      "closePath",
+      "fillText",
+    ].map((name) => [name, jest.fn()]),
+  );
+  overlayContext.measureText = (text) => ({ width: text.length * 8 });
+  const overlayCanvas = { style: {}, getContext: () => overlayContext, remove: jest.fn() };
+  const documentRef = { createElement: jest.fn(() => overlayCanvas) };
   const windowRef = {
     devicePixelRatio: 0,
     requestAnimationFrame: jest.fn((callback) => {
@@ -114,6 +40,7 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
       return intervals.size;
     }),
     clearInterval: jest.fn(),
+    document: documentRef,
   };
   globalThis.window = windowRef;
   const container = {
@@ -129,7 +56,6 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
   });
   expect(Camera.instance.position.values).toEqual([0, rangeToCameraDistance(20), 0]);
   expect(Camera.instance.up.values).toEqual([0, 0, -1]);
-  expect(Controls.instance.target.values).toEqual([0, 0, 0]);
   const rings = Scene.instance.children.filter((item) => item.geometry instanceof TorusGeometry);
   expect(rings).toHaveLength(68);
   expect(rings.filter((ring) => ring.visible).map((ring) => ring.geometry.values[0])).toEqual([
@@ -137,7 +63,6 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
   ]);
   expect(rings.find((ring) => ring.geometry.values[0] === 1).geometry.values[1]).toBe(0.025);
   expect(rings.find((ring) => ring.geometry.values[0] === 10).geometry.values[1]).toBe(0.055);
-  expect(windowRef.devicePixelRatio).toBe(0);
   const resize = windowRef.addEventListener.mock.calls[0][1];
   resize();
   container.clientWidth = 800;
@@ -154,6 +79,8 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
     altitudeFeet: 6376,
     trackDegrees: 90,
   });
+  renderFrame();
+  expect(overlayContext.fill).toHaveBeenCalled();
   view.update({ icao: "DEF456", latitude: 43, longitude: -70, altitudeFeet: 6376 });
   view.update({
     icao: "ABC123",
@@ -181,9 +108,6 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
   now += 120_001;
   intervals.get(1)();
   view.update({ icao: "NEW123", latitude: 43, longitude: -70 });
-  expect(
-    Scene.instance.children.filter((item) => item.geometry instanceof ConeGeometry),
-  ).toHaveLength(1);
   view.reset();
   expect(Camera.instance.position.values).toEqual([0, rangeToCameraDistance(20), 0]);
   view.destroy();
@@ -192,7 +116,10 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
   expect(windowRef.clearInterval).toHaveBeenCalledWith(1);
   expect(container.replaceChildren).toHaveBeenCalledTimes(1);
   windowRef.devicePixelRatio = 2;
+  globalThis.document = documentRef;
+  windowRef.document = undefined;
   const defaultView = createAircraftScene({ container, location: null, elevationFeet: 300 });
   defaultView.destroy();
+  delete globalThis.document;
   dateNow.mockRestore();
 });

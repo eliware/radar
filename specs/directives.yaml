@@ -43,11 +43,30 @@ directives:
       - Use two-finger twist gestures to rotate the radar on mobile.
       - Show mobile gesture hints for zoom, rotation, and the centered home point.
       - Use a black background for the page and radar scope.
+      - Use green radar text, markers, paths, and axes on black.
+      - Use darker green for minor rings and aircraft history marks.
+      - Keep the radar scope borderless.
       - Set radar range from 1 through 300 nautical miles in both views.
       - Set the default range to 20 nautical miles or 5 miles past the furthest live target, whichever is larger.
       - Keep auto-zoom active until the user changes the view. Resume auto-zoom after reset.
       - Remove aircraft targets after 120 seconds without an update.
       - Keep range limits, auto-zoom, and ring spacing the same in 3D and Canvas views.
+      - "Show each aircraft label as three lines: callsign, altitude, and speed, without units."
+      - Show the ICAO code when callsign is blank or unknown, or equals `AD`, `OK`, or `RM`.
+      - Show altitude in hundreds of feet.
+      - Add C when vertical rate stays within ±100 feet per minute.
+      - Otherwise, add the signed vertical rate in hundreds of feet per minute.
+      - Spread labels to reduce overlap. Draw a leader line from each label to its aircraft.
+      - Draw upright green diamond aircraft markers in both radar views.
+      - Draw a forward path to each aircraft's estimated position 60 seconds later.
+      - Show aircraft history as dark-green backslash marks at earlier positions.
+      - Show no more than 60 seconds of aircraft history marks.
+      - Draw aircraft history marks at half the size of the aircraft labels.
+      - Leave a small gap between each aircraft diamond and its label pointer.
+      - Show range values without unit text on rings in both radar views.
+      - Use 18-pixel aircraft labels in 3D and 9-pixel labels in Canvas.
+      - Keep 3D aircraft labels twice the size of Canvas labels.
+      - Scale 3D range ring thickness with zoom range to keep its screen thickness steady.
       - Draw rings at 5 nautical mile steps above 10 miles. Draw rings at 1 mile steps below 10 miles.
       - Draw range rings through 300 nautical miles. Make each 10-mile ring bolder.
       - Allow full camera rotation, tilt, pan, zoom, and a reset to the default view.
