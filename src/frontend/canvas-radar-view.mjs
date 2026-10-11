@@ -2,6 +2,9 @@ import { projectAircraftPosition } from "./aircraft-space-position.mjs";
 import { drawCanvasRadar } from "./draw-canvas-radar.mjs";
 import { attachCanvasPan } from "./canvas-radar-pan.mjs";
 import { attachMobileRadarGestures } from "./mobile-radar-gestures.mjs";
+import { DEFAULT_RADAR_RANGE, clampRadarRange, selectDefaultRadarRange } from "./radar-range.mjs";
+import { createRadarTargets } from "./radar-targets.mjs";
+import { watchRadarTargets } from "./watch-radar-targets.mjs";
 
 export function createCanvasRadarView({
   container,
@@ -12,8 +15,9 @@ export function createCanvasRadarView({
   const canvas = documentRef.createElement("canvas");
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
-  const aircraft = new Map();
-  let range = 60;
+  const targets = createRadarTargets();
+  let range = DEFAULT_RADAR_RANGE;
+  let autoZoom = true;
   let offsetX = 0;
   let offsetY = 0;
   let rotation = 0;
@@ -24,7 +28,7 @@ export function createCanvasRadarView({
     drawCanvasRadar(
       context,
       canvas,
-      aircraft,
+      targets.items(),
       location,
       range,
       offsetX,
@@ -32,10 +36,10 @@ export function createCanvasRadarView({
       windowRef,
       rotation,
     );
-  const resize = () => draw();
   const detachGestures = attachMobileRadarGestures(canvas, {
     onZoom: (factor) => {
-      range = clampRange(range * factor);
+      autoZoom = false;
+      range = clampRadarRange(range * factor);
       draw();
     },
     onRotate: (angle) => {
@@ -44,34 +48,48 @@ export function createCanvasRadarView({
     },
   });
   const detachPan = attachCanvasPan(canvas, (x, y) => {
+    autoZoom = false;
     offsetX += x;
     offsetY += y;
     draw();
   });
+  const stopTargetWatch = watchRadarTargets({
+    targets,
+    windowRef,
+    onExpire: () => {
+      if (autoZoom) range = selectDefaultRadarRange(targets.distances());
+      draw();
+    },
+  });
   const onWheel = (event) => {
     event.preventDefault();
-    range = clampRange(range * (event.deltaY > 0 ? 1.2 : 1 / 1.2));
+    autoZoom = false;
+    range = clampRadarRange(range * (event.deltaY > 0 ? 1.2 : 1 / 1.2));
     draw();
   };
   canvas.addEventListener("wheel", onWheel, { passive: false });
-  windowRef.addEventListener("resize", resize);
+  windowRef.addEventListener("resize", draw);
   draw();
   return {
     mode: "2D",
     update(item) {
-      if (!projectAircraftPosition(item, location, 0)) return;
-      aircraft.set(item.icao, item);
+      const position = projectAircraftPosition(item, location, 0);
+      if (!position) return;
+      targets.update(item, Math.hypot(position.x, position.z));
+      if (autoZoom) range = selectDefaultRadarRange(targets.distances());
       draw();
     },
     reset() {
-      range = 60;
+      autoZoom = true;
+      range = selectDefaultRadarRange(targets.distances());
       offsetX = 0;
       offsetY = 0;
       rotation = 0;
       draw();
     },
     destroy() {
-      windowRef.removeEventListener("resize", resize);
+      windowRef.removeEventListener("resize", draw);
+      stopTargetWatch();
       detachGestures();
       detachPan();
       canvas.removeEventListener("wheel", onWheel);
@@ -79,5 +97,3 @@ export function createCanvasRadarView({
     },
   };
 }
-
-const clampRange = (range) => Math.max(1, Math.min(300, range));

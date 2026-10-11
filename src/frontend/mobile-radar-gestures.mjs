@@ -2,12 +2,19 @@ export function hasCoarsePointer(windowRef) {
   return Boolean(windowRef.matchMedia?.("(pointer: coarse)")?.matches);
 }
 
-export function configureMobileRadarControls(controls, scene, element, windowRef) {
+export function configureMobileRadarControls(
+  controls,
+  scene,
+  element,
+  windowRef,
+  onZoom = () => {},
+) {
   if (!hasCoarsePointer(windowRef)) return () => {};
   controls.enablePan = false;
   controls.enableRotate = false;
+  controls.enableZoom = false;
   return attachMobileRadarGestures(element, {
-    onZoom: () => {},
+    onZoom,
     onRotate: (angle) => {
       scene.rotation.y += angle;
     },

@@ -40,6 +40,6 @@ test("uses column joints for one-line aircraft dividers and the footer", () => {
 
 test("uses plain rules for wrapped aircraft dividers and the footer", () => {
   const layout = createFlightStripLayout(40);
-  expect(aircraftDivider(layout, 40)).toBe(horizontalRule(40, "├", "┤", "─"));
+  expect(aircraftDivider(layout, 40)).toBe(horizontalRule(40, "╟", "╢", "─"));
   expect(flightStripFooter(layout, 40)).toBe(horizontalRule(40, "╚", "╝", "═"));
 });

@@ -51,13 +51,13 @@ test("uses short headers on one aircraft row when the full headers do not fit", 
   expect(rows.every((row) => row.length === 120)).toBe(true);
 });
 
-test("uses a single-line divider between full-width aircraft rows", () => {
+test("uses single horizontal dividers with double outer edges between aircraft rows", () => {
   const rows = render([aircraft, { ...aircraft, icao: "DEF456" }], 180);
-  const divider = rows.find((row) => row.startsWith("├"));
+  const divider = rows.find((row) => row.startsWith("╟"));
   expect(divider).toContain("┼");
   expect(divider).toContain("─");
   expect(divider).not.toContain("═");
-  expect(divider).not.toContain("╟");
+  expect(divider.endsWith("╢")).toBe(true);
 });
 
 test("wraps headers and each aircraft into two value-only rows", () => {

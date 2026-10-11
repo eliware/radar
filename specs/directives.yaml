@@ -43,7 +43,13 @@ directives:
       - Use two-finger twist gestures to rotate the radar on mobile.
       - Show mobile gesture hints for zoom, rotation, and the centered home point.
       - Use a black background for the page and radar scope.
-      - Draw concentric range rings at 5 nautical mile steps. Make each 10-mile ring bolder.
+      - Set radar range from 1 through 300 nautical miles in both views.
+      - Set the default range to 20 nautical miles or 5 miles past the furthest live target, whichever is larger.
+      - Keep auto-zoom active until the user changes the view. Resume auto-zoom after reset.
+      - Remove aircraft targets after 120 seconds without an update.
+      - Keep range limits, auto-zoom, and ring spacing the same in 3D and Canvas views.
+      - Draw rings at 5 nautical mile steps above 10 miles. Draw rings at 1 mile steps below 10 miles.
+      - Draw range rings through 300 nautical miles. Make each 10-mile ring bolder.
       - Allow full camera rotation, tilt, pan, zoom, and a reset to the default view.
       - Describe feed altitude as barometric altitude. Do not claim it always equals true MSL altitude.
       - Keep the dashboard focused on the 3D view, flight strips, and aircraft details.

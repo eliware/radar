@@ -17,30 +17,18 @@ Run the Radar web app as a hidden Windows scheduled task.
 
 The task reads `.env` from the repository root. The `SYSTEM` account needs read access to the repository and `.env`.
 
-## Restart from the desktop
+## Start and stop from the desktop
 
-Run `Restart Radar Web.bat` on the desktop. The batch file uses SSH to stop and start the task.
+Run `Start Radar Services.bat` on the desktop. It starts RTL1090, then Radar Web.
+
+Run `Stop Radar Services.bat` to stop Radar Web, then RTL1090. Both files disable the tasks after each action. This prevents startup at reboot.
 
 ## Start, stop, and check
 
-Run these commands through the local SSH connection.
-
-Start the task:
+Use the desktop files to start or stop both tasks. Check the task status through an elevated PowerShell session.
 
 ```powershell
-ssh mir4@localhost 'Start-ScheduledTask -TaskName "Radar Web"'
-```
-
-Stop the task:
-
-```powershell
-ssh mir4@localhost 'Stop-ScheduledTask -TaskName "Radar Web"'
-```
-
-Check the task state:
-
-```powershell
-ssh mir4@localhost 'Get-ScheduledTask -TaskName "Radar Web" | Select-Object TaskName,State'
+Get-ScheduledTask -TaskName 'Radar Web' | Select-Object TaskName,State
 ```
 
 Check the web health route:

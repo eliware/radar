@@ -3,6 +3,7 @@ import { createCanvasRadarView } from "../../src/frontend/canvas-radar-view.mjs"
 
 function setup(context = makeContext()) {
   const listeners = new Map();
+  const intervals = [];
   const canvas = {
     clientWidth: 200,
     clientHeight: 200,
@@ -20,6 +21,11 @@ function setup(context = makeContext()) {
     devicePixelRatio: 3,
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
+    setInterval: jest.fn((callback) => {
+      intervals.push(callback);
+      return intervals.length;
+    }),
+    clearInterval: jest.fn(),
   };
   const documentRef = { createElement: jest.fn(() => canvas) };
   return {
@@ -29,6 +35,7 @@ function setup(context = makeContext()) {
     windowRef,
     documentRef,
     send: (name, event) => listeners.get(name).forEach((listener) => listener(event)),
+    tick: () => intervals.forEach((callback) => callback()),
   };
 }
 
@@ -54,16 +61,27 @@ function makeContext() {
 }
 
 test("draws the 2D radar, updates aircraft, handles input, and cleans up", () => {
+  let now = Date.now();
+  const dateNow = jest.spyOn(Date, "now").mockImplementation(() => now);
   const state = setup();
   const location = { latitude: 43, longitude: -70 };
   const view = createCanvasRadarView({ ...state, location });
   expect(view.mode).toBe("2D");
   expect(state.canvas.width).toBe(400);
   state.windowRef.addEventListener.mock.calls[0][1]();
-  expect(state.context.arc).toHaveBeenCalledTimes(26);
+  expect(state.context.arc).toHaveBeenCalledTimes(10);
   const fills = state.context.fillRect.mock.calls.length;
   expect(view.update({ icao: "BAD", latitude: undefined, longitude: 0 })).toBeUndefined();
   expect(state.context.fillRect).toHaveBeenCalledTimes(fills);
+  view.update({
+    icao: "ABC123",
+    callsign: "TEST1",
+    latitude: 43.1,
+    longitude: -70,
+    trackDegrees: 90,
+  });
+  now += 120_001;
+  state.tick();
   view.update({
     icao: "ABC123",
     callsign: "TEST1",
@@ -86,6 +104,9 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
   state.send("wheel", { deltaY: -1, preventDefault });
   state.send("wheel", { deltaY: 1, preventDefault });
   expect(preventDefault).toHaveBeenCalled();
+  view.update({ icao: "ABC123", latitude: 43.1, longitude: -70 });
+  now += 120_001;
+  state.tick();
   const touch = (pointerId, clientX, clientY) => ({
     pointerId,
     pointerType: "touch",
@@ -116,7 +137,9 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
   view.destroy();
   expect(state.canvas.removeEventListener).toHaveBeenCalledTimes(9);
   expect(state.windowRef.removeEventListener).toHaveBeenCalledWith("resize", expect.any(Function));
+  expect(state.windowRef.clearInterval).toHaveBeenCalledWith(1);
   expect(state.container.replaceChildren).toHaveBeenLastCalledWith();
+  dateNow.mockRestore();
 });
 
 test("reports an error when the browser has no 2D canvas", () => {

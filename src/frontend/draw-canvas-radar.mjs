@@ -1,4 +1,5 @@
 import { projectAircraftPosition } from "./aircraft-space-position.mjs";
+import { getRadarRingRanges } from "./radar-range.mjs";
 
 export function drawCanvasRadar(
   ctx,
@@ -42,15 +43,16 @@ export function drawCanvasRadar(
 function drawRings(ctx, x, y, radius, range) {
   ctx.textAlign = "left";
   ctx.font = "11px sans-serif";
-  const step = range <= 10 ? 1 : 5;
-  for (let nm = step; nm <= range; nm += step) {
-    const major = nm % 10 === 0 || (range <= 10 && (nm % 5 === 0 || nm === Math.floor(range)));
+  for (const nm of getRadarRingRanges(range)) {
+    const major = nm % 10 === 0;
     ctx.strokeStyle = major ? "#18516b" : "#103548";
     ctx.lineWidth = major ? 1.5 : 1;
     ctx.beginPath();
     ctx.arc(x, y, (nm / range) * radius, 0, Math.PI * 2);
     ctx.stroke();
-    if (major) drawRingLabel(ctx, x, y, radius, nm, range);
+    if (major || (range < 10 && nm === Math.floor(range))) {
+      drawRingLabel(ctx, x, y, radius, nm, range);
+    }
   }
   ctx.strokeStyle = "#176b9e";
   ctx.lineWidth = 1;

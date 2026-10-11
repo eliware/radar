@@ -48,8 +48,8 @@ export function flightStripHeader(layout, aircraftCount, width) {
 
 export function aircraftDivider(layout, width) {
   return layout.length === 1
-    ? tableBorder(layout[0].widths, "├", "┼", "┤", "─")
-    : horizontalRule(width, "├", "┤", "─");
+    ? tableBorder(layout[0].widths, "╟", "┼", "╢", "─")
+    : horizontalRule(width, "╟", "╢", "─");
 }
 
 export function flightStripFooter(layout, width) {

@@ -29,9 +29,10 @@ const threeLineGroups = [
   [8, 9, 10],
 ];
 
-export function fitCell(value, width, suffix = "") {
+export function fitCell(value, width, suffix = "", align = "left") {
   const text = value === null || value === undefined ? "-" : `${value}${suffix}`;
-  return text.length > width ? `${text.slice(0, width - 1)}…` : text.padEnd(width);
+  if (text.length > width) return `${text.slice(0, width - 1)}…`;
+  return align === "right" ? text.padStart(width) : text.padEnd(width);
 }
 
 function widthsFor(indices, minimums, tableWidth) {
@@ -75,5 +76,7 @@ export function tableBorder(widths, left, joint, right, line, specialJointIndex 
 }
 
 export function tableRow(values, widths, left = "║", joint = "║", right = "║") {
-  return `${left} ${values.map((value, index) => fitCell(value, widths[index])).join(` ${joint} `)} ${right}`;
+  return `${left} ${values
+    .map((value, index) => fitCell(value, widths[index], "", index === 0 ? "left" : "right"))
+    .join(` ${joint} `)} ${right}`;
 }

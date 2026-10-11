@@ -66,6 +66,6 @@ test("keeps a three-row table inside a very narrow terminal", () => {
 
 test("draws matching borders and rows", () => {
   expect(tableBorder([2, 3], "╔", "╦", "╗", "═")).toBe("╔════╦═════╗");
-  expect(tableRow(["A", "B"], [2, 2])).toBe("║ A  ║ B  ║");
+  expect(tableRow(["A", "B"], [2, 2])).toBe("║ A  ║  B ║");
   expect(tableRow(["A"], [2], "│", "┼", "│")).toBe("│ A  │");
 });
