@@ -1,5 +1,6 @@
 import { projectAircraftPosition } from "./aircraft-space-position.mjs";
 import { drawCanvasRadar } from "./draw-canvas-radar.mjs";
+import { attachCanvasPan } from "./canvas-radar-pan.mjs";
 import { attachMobileRadarGestures } from "./mobile-radar-gestures.mjs";
 
 export function createCanvasRadarView({
@@ -16,7 +17,6 @@ export function createCanvasRadarView({
   let offsetX = 0;
   let offsetY = 0;
   let rotation = 0;
-  let drag = null;
   canvas.setAttribute("aria-label", "Top-down 2D radar view");
   canvas.style.touchAction = "none";
   container.replaceChildren(canvas);
@@ -43,31 +43,16 @@ export function createCanvasRadarView({
       draw();
     },
   });
-  const onPointerDown = (event) => {
-    if (event.pointerType === "touch") return;
-    drag = { x: event.clientX, y: event.clientY };
-    canvas.setPointerCapture?.(event.pointerId);
-  };
-  const onPointerMove = (event) => {
-    if (event.pointerType === "touch") return;
-    if (!drag) return;
-    offsetX += event.clientX - drag.x;
-    offsetY += event.clientY - drag.y;
-    drag = { x: event.clientX, y: event.clientY };
+  const detachPan = attachCanvasPan(canvas, (x, y) => {
+    offsetX += x;
+    offsetY += y;
     draw();
-  };
-  const onPointerEnd = (event) => {
-    if (event.pointerType !== "touch") drag = null;
-  };
+  });
   const onWheel = (event) => {
     event.preventDefault();
     range = clampRange(range * (event.deltaY > 0 ? 1.2 : 1 / 1.2));
     draw();
   };
-  canvas.addEventListener("pointerdown", onPointerDown);
-  canvas.addEventListener("pointermove", onPointerMove);
-  canvas.addEventListener("pointerup", onPointerEnd);
-  canvas.addEventListener("pointercancel", onPointerEnd);
   canvas.addEventListener("wheel", onWheel, { passive: false });
   windowRef.addEventListener("resize", resize);
   draw();
@@ -88,16 +73,11 @@ export function createCanvasRadarView({
     destroy() {
       windowRef.removeEventListener("resize", resize);
       detachGestures();
-      canvas.removeEventListener("pointerdown", onPointerDown);
-      canvas.removeEventListener("pointermove", onPointerMove);
-      canvas.removeEventListener("pointerup", onPointerEnd);
-      canvas.removeEventListener("pointercancel", onPointerEnd);
+      detachPan();
       canvas.removeEventListener("wheel", onWheel);
       container.replaceChildren();
     },
   };
 }
 
-function clampRange(range) {
-  return Math.max(1, Math.min(300, range));
-}
+const clampRange = (range) => Math.max(1, Math.min(300, range));

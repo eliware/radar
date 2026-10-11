@@ -10,7 +10,9 @@ function setup(context = makeContext()) {
     setAttribute: jest.fn(),
     getContext: jest.fn(() => context),
     setPointerCapture: jest.fn(),
-    addEventListener: jest.fn((name, fn) => listeners.set(name, fn)),
+    addEventListener: jest.fn((name, fn) =>
+      listeners.set(name, [...(listeners.get(name) ?? []), fn]),
+    ),
     removeEventListener: jest.fn(),
   };
   const container = { replaceChildren: jest.fn() };
@@ -20,7 +22,14 @@ function setup(context = makeContext()) {
     removeEventListener: jest.fn(),
   };
   const documentRef = { createElement: jest.fn(() => canvas) };
-  return { context, canvas, container, windowRef, documentRef, listeners };
+  return {
+    context,
+    canvas,
+    container,
+    windowRef,
+    documentRef,
+    send: (name, event) => listeners.get(name).forEach((listener) => listener(event)),
+  };
 }
 
 function makeContext() {
@@ -68,14 +77,14 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
     expect.any(Number),
     expect.any(Number),
   );
-  state.listeners.get("pointerdown")({ clientX: 10, clientY: 10, pointerId: 1 });
-  state.listeners.get("pointermove")({ clientX: 20, clientY: 30 });
+  state.send("pointerdown", { clientX: 10, clientY: 10, pointerId: 1, pointerType: "mouse" });
+  state.send("pointermove", { clientX: 20, clientY: 30, pointerType: "mouse" });
   expect(state.canvas.setPointerCapture).toHaveBeenCalledWith(1);
-  state.listeners.get("pointerup")({ pointerId: 1 });
-  state.listeners.get("pointermove")({ clientX: 30, clientY: 40 });
+  state.send("pointerup", { pointerId: 1, pointerType: "mouse" });
+  state.send("pointermove", { clientX: 30, clientY: 40, pointerType: "mouse" });
   const preventDefault = jest.fn();
-  state.listeners.get("wheel")({ deltaY: -1, preventDefault });
-  state.listeners.get("wheel")({ deltaY: 1, preventDefault });
+  state.send("wheel", { deltaY: -1, preventDefault });
+  state.send("wheel", { deltaY: 1, preventDefault });
   expect(preventDefault).toHaveBeenCalled();
   const touch = (pointerId, clientX, clientY) => ({
     pointerId,
@@ -84,13 +93,19 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
     clientY,
     preventDefault: jest.fn(),
   });
-  state.listeners.get("pointerdown")(touch(2, 0, 0));
-  state.listeners.get("pointermove")(touch(2, 30, 0));
+  state.send("pointerdown", touch(2, 0, 0));
+  state.send("pointermove", touch(2, 30, 0));
   expect(state.context.translate).not.toHaveBeenCalledWith(30, 0);
+  state.send("pointerup", touch(2, 30, 0));
+  state.send("pointerdown", touch(3, 0, 0));
+  state.send("pointerdown", touch(4, 100, 0));
+  state.send("pointermove", touch(4, 0, 100));
+  state.send("pointerup", touch(3, 0, 0));
+  state.send("pointerup", touch(4, 0, 100));
   const secondState = setup();
   secondState.canvas.setPointerCapture = undefined;
   const secondView = createCanvasRadarView({ ...secondState, location });
-  secondState.listeners.get("pointerdown")({
+  secondState.send("pointerdown", {
     clientX: 1,
     clientY: 1,
     pointerId: 4,

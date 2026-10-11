@@ -27,7 +27,7 @@
 
 ## Features
 
-Purpose: Radar is an aviation tracking app for ADS-B data from RTL-SDR receivers. The package provides a web app and a CLI feed reader. Package description: Aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers. Author: Eliware <eliware@eliware.org>. License: MIT.
+Purpose: Radar is an aviation tracking app for ADS-B data from RTL-SDR receivers. The package provides a web app and a CLI feed reader. Package description: Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers. Author: Eliware <eliware@eliware.org>. License: MIT.
 
 The Fastify web app serves a Three.js local space, a 2D Canvas fallback, an aircraft REST API, and a WebSocket feed. The CLI reads decoded aircraft records from an SBS/BaseStation TCP feed and shows them as live flight strips. Both apps retry the feed after errors.
 

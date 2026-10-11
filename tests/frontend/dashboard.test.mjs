@@ -43,7 +43,8 @@ test("starts the secure live view and handles feed messages", async () => {
   const scene = { mode: "2D", update: jest.fn(), reset: jest.fn() };
   const createScene = jest.fn(({ onMode }) => {
     onMode("3D");
-    onMode("2D");
+    onMode("2D", false);
+    onMode("2D", true);
     return scene;
   });
   let socket;

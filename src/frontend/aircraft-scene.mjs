@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { projectAircraftPosition } from "./aircraft-space-position.mjs";
 import { createRadarRenderer } from "./create-radar-renderer.mjs";
-import { attachMobileRadarGestures, hasCoarsePointer } from "./mobile-radar-gestures.mjs";
+import { configureMobileRadarControls } from "./mobile-radar-gestures.mjs";
 
 export function createAircraftScene({ container, location, elevationFeet, windowRef = window }) {
   const scene = new THREE.Scene();
@@ -19,18 +19,12 @@ export function createAircraftScene({ container, location, elevationFeet, window
   );
   scene.add(home);
   const controls = new OrbitControls(camera, renderer.domElement);
-  const isMobile = hasCoarsePointer(windowRef);
-  let detachGestures = () => {};
-  if (isMobile) {
-    controls.enablePan = false;
-    controls.enableRotate = false;
-    detachGestures = attachMobileRadarGestures(renderer.domElement, {
-      onZoom: () => {},
-      onRotate: (angle) => {
-        scene.rotation.y += angle;
-      },
-    });
-  }
+  const detachGestures = configureMobileRadarControls(
+    controls,
+    scene,
+    renderer.domElement,
+    windowRef,
+  );
   controls.target.set(0, 0, 0);
   controls.update();
   const markers = new Map();
