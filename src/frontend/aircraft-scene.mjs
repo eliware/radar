@@ -62,7 +62,8 @@ export function createAircraftScene({ container, location, elevationFeet, window
     camera,
     container,
     windowRef,
-    onFrame: () => overlay.draw(targets.items(), trails, location, elevationFeet, camera),
+    onFrame: () =>
+      overlay.draw(targets.items(), trails, location, elevationFeet, camera, radarCamera.range()),
   });
   return {
     update(aircraft) {

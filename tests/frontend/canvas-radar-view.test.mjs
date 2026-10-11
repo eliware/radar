@@ -72,7 +72,7 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
   expect(view.mode).toBe("2D");
   expect(state.canvas.width).toBe(400);
   state.windowRef.addEventListener.mock.calls[0][1]();
-  expect(state.context.arc).toHaveBeenCalledTimes(10);
+  expect(state.context.arc).toHaveBeenCalledTimes(12);
   const fills = state.context.fillRect.mock.calls.length;
   expect(view.update({ icao: "BAD", latitude: undefined, longitude: 0 })).toBeUndefined();
   expect(state.context.fillRect).toHaveBeenCalledTimes(fills);

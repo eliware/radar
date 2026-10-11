@@ -3,6 +3,7 @@ import { getRadarRingRanges } from "./radar-range.mjs";
 import { predictAircraftPosition } from "./predict-aircraft-position.mjs";
 import { formatAircraftTag } from "./aircraft-tag-data.mjs";
 import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
+import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 
 export function drawCanvasRadar(
   ctx,
@@ -58,6 +59,7 @@ export function drawCanvasRadar(
   ctx.beginPath();
   ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
   ctx.fill();
+  drawRadarScaleLegend(ctx, width, height, range, radius);
 }
 
 function drawRings(ctx, x, y, radius, range) {

@@ -14,11 +14,13 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
     [
       "setTransform",
       "clearRect",
+      "fillRect",
       "beginPath",
       "moveTo",
       "lineTo",
       "stroke",
       "fill",
+      "arc",
       "closePath",
       "fillText",
     ].map((name) => [name, jest.fn()]),
@@ -80,7 +82,7 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
     trackDegrees: 90,
   });
   renderFrame();
-  expect(overlayContext.fill).toHaveBeenCalled();
+  expect(overlayContext.stroke).toHaveBeenCalled();
   view.update({ icao: "DEF456", latitude: 43, longitude: -70, altitudeFeet: 6376 });
   view.update({
     icao: "ABC123",

@@ -6,6 +6,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
   const context = {
     setTransform: jest.fn(),
     clearRect: jest.fn(),
+    fillRect: jest.fn(),
     measureText: () => {
       measuredFonts.push(context.font);
       return { width: 20 };
@@ -16,6 +17,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
     stroke: jest.fn(),
     closePath: jest.fn(),
     fill: jest.fn(),
+    arc: jest.fn(),
     fillText: jest.fn(),
   };
   const canvas = { style: {}, getContext: () => context, remove: jest.fn() };
@@ -53,6 +55,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
     { latitude: 43, longitude: -70 },
     300,
     {},
+    20,
   );
   expect(container.appendChild).toHaveBeenCalledWith(canvas);
   expect(context.setTransform).toHaveBeenCalledWith(1, 0, 0, 1, 0, 0);
@@ -66,6 +69,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
     { latitude: 43, longitude: -70 },
     300,
     {},
+    20,
   );
   expect(canvas.width).toBe(1);
   overlay.destroy();

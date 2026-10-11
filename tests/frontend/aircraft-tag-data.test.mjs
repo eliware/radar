@@ -22,6 +22,10 @@ test("formats the name, flight level, and speed without units", () => {
   expect(formatAircraftTag({ callsign: "rm", icao: "DEF456" })[0]).toBe("DEF456");
   expect(formatAircraftTag({ callsign: "AD", icao: "A1B2C3" })[0]).toBe("A1B2C3");
   expect(formatAircraftTag({ callsign: "Unknown", icao: "FEDCBA" })[0]).toBe("FEDCBA");
+  expect(formatAircraftTag({ altitudeFeet: 9500 })[1]).toBe("095");
+  expect(formatAircraftTag({ altitudeFeet: 5000, verticalRateFeetPerMinute: 100 })[1]).toBe("050C");
+  expect(formatAircraftTag({ altitudeFeet: 10000 })[1]).toBe("100");
+  expect(formatAircraftTag({ altitudeFeet: -500 })[1]).toBe("-05");
   expect(
     formatAircraftTag({ altitudeFeet: Number.NaN, verticalRateFeetPerMinute: Number.NaN }),
   ).toEqual(["-", "-", "-"]);

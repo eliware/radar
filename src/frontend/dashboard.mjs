@@ -42,7 +42,7 @@ function updateViewLabels(document, mode, isMobile) {
   const hint = document.querySelector("[data-controls-hint]");
   if (title) title.textContent = mode === "2D" ? "LOCAL 2D RADAR" : "LOCAL 3D SPACE";
   if (hint && isMobile)
-    hint.textContent = "Pinch to zoom · Twist with two fingers to rotate · Home stays centered";
+    hint.textContent = "Pinch to zoom · Two-finger twist to rotate · Home stays centered";
   else if (hint && mode === "2D") hint.textContent = "Drag to pan · Scroll to zoom · North is up";
 }
 

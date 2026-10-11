@@ -85,10 +85,11 @@ p {
 }
 .controls-hint {
   position: absolute;
-  bottom: 12px;
-  left: 16px;
+  right: 16px;
+  bottom: 34px;
   color: #006b26;
   font-size: 0.78rem;
+  text-align: right;
   pointer-events: none;
 }
 .feed-status {
@@ -103,11 +104,13 @@ p {
 @media (max-width: 620px), (max-height: 620px) {
   .controls-hint {
     font-size: 0.68rem;
+    max-width: 45%;
   }
   .feed-status {
-    right: auto;
-    bottom: 32px;
-    left: 16px;
-    text-align: left;
+    right: 16px;
+    bottom: 90px;
+    left: auto;
+    max-width: 45%;
+    text-align: right;
   }
 }

@@ -40,7 +40,7 @@ function drawTrack(context, item) {
   context.lineTo(item.x, item.y + size);
   context.lineTo(item.x - size, item.y);
   context.closePath();
-  context.fill();
+  context.stroke();
 }
 
 function drawTag(context, tag, fontSize) {

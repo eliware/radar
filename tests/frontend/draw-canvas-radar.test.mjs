@@ -38,7 +38,7 @@ test("draws north-up range rings, home, and valid aircraft", () => {
   });
   expect(canvas.width).toBe(1);
   expect(canvas.height).toBe(1);
-  expect(context.arc).toHaveBeenCalledTimes(13);
+  expect(context.arc).toHaveBeenCalledTimes(14);
   expect(context.rotate).toHaveBeenCalledWith(0);
   expect(context.fillText).toHaveBeenCalledWith("NORTH", expect.any(Number), expect.any(Number));
   expect(measuredFonts).toContain("9px monospace");
@@ -67,6 +67,6 @@ test("draws close range rings below five nautical miles", () => {
   context.measureText = jest.fn((text) => ({ width: text.length * 8 }));
   const canvas = { clientWidth: 100, clientHeight: 100 };
   drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 1 });
-  expect(context.arc).toHaveBeenCalledTimes(4);
+  expect(context.arc).toHaveBeenCalledTimes(5);
   expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
 });

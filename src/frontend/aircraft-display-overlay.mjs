@@ -2,6 +2,8 @@ import { projectAircraftPosition } from "./aircraft-space-position.mjs";
 import { formatAircraftTag } from "./aircraft-tag-data.mjs";
 import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
 import { predictAircraftPosition } from "./predict-aircraft-position.mjs";
+import { RADAR_SCOPE_RADIUS_RATIO } from "./radar-range.mjs";
+import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
@@ -15,7 +17,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
   });
   container.appendChild(canvas);
 
-  function draw(aircraft, trails, location, elevationFeet, camera) {
+  function draw(aircraft, trails, location, elevationFeet, camera, range) {
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
     const ratio = Math.min(windowRef.devicePixelRatio || 1, 2);
@@ -26,6 +28,13 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     const items = [];
     for (const item of aircraft.values()) items.push(projectItem(item));
     drawAircraftDisplay(context, items.filter(Boolean), 18, width, height);
+    drawRadarScaleLegend(
+      context,
+      width,
+      height,
+      range,
+      Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO,
+    );
 
     function projectItem(item) {
       const position = projectAircraftPosition(item, location, elevationFeet);

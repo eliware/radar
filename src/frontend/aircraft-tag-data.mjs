@@ -16,8 +16,12 @@ export function formatAircraftTag(aircraft) {
 }
 
 function formatAltitude(altitude, rate) {
-  if (!Number.isFinite(rate)) return String(altitude);
-  if (Math.abs(rate) <= 100) return `${altitude}C`;
+  const value =
+    altitude < 0
+      ? `-${String(Math.abs(altitude)).padStart(2, "0")}`
+      : String(altitude).padStart(3, "0");
+  if (!Number.isFinite(rate)) return value;
+  if (Math.abs(rate) <= 100) return `${value}C`;
   const change = String(Math.round(Math.abs(rate) / 100)).padStart(2, "0");
-  return `${altitude}${rate > 0 ? "+" : "-"}${change}`;
+  return `${value}${rate > 0 ? "+" : "-"}${change}`;
 }

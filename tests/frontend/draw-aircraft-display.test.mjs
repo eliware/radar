@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { drawAircraftDisplay } from "../../src/frontend/draw-aircraft-display.mjs";
 
-test("draws history marks, prediction diamonds, and connected three-line tags", () => {
+test("draws history marks, hollow prediction diamonds, and connected three-line tags", () => {
   const context = Object.fromEntries(
     ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fill", "fillText"].map((name) => [
       name,
@@ -32,5 +32,6 @@ test("draws history marks, prediction diamonds, and connected three-line tags", 
   expect(context.fillText).toHaveBeenCalledWith("123C", expect.any(Number), expect.any(Number));
   expect(context.lineTo).toHaveBeenCalledWith(80, 30);
   expect(context.closePath).toHaveBeenCalled();
+  expect(context.fill).not.toHaveBeenCalled();
   drawAircraftDisplay(context, [{ x: 0, y: 0, lines: ["-", "-", "-"] }], 12, 10, 10);
 });

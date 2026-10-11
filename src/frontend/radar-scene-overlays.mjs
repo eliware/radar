@@ -24,8 +24,9 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
         visible.has(distance) &&
         (distance % 10 === 0 || (range < 10 && distance === Math.floor(range)));
       const offset = (distance / range) * range * Math.SQRT1_2;
-      label.position.set(-offset, 0.08, -offset);
-      label.scale.set(6.4 * (range / 20), range / 20, 1);
+      const labelWidth = 6.4 * (range / 20);
+      label.position.set(-offset + labelWidth / 2, 0.08, -offset);
+      label.scale.set(labelWidth, range / 20, 1);
     }
     for (const axis of axes) axis.scale.set(1, range / 300, 1);
   };
