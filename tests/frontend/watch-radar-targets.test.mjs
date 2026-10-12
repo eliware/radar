@@ -8,6 +8,7 @@ test("expires stale targets once per second and stops its timer", () => {
   const targets = createRadarTargets({ clock: () => now, staleAfterMs: 100 });
   targets.update({ icao: "OLD" }, 30);
   const onExpire = jest.fn();
+  const onTick = jest.fn();
   const clearInterval = jest.fn();
   const stop = watchRadarTargets({
     targets,
@@ -20,12 +21,15 @@ test("expires stale targets once per second and stops its timer", () => {
       clearInterval,
     },
     onExpire,
+    onTick,
   });
   tick();
   expect(onExpire).not.toHaveBeenCalled();
+  expect(onTick).toHaveBeenCalledTimes(1);
   now += 101;
   tick();
   expect(onExpire).toHaveBeenCalledWith(["OLD"]);
+  expect(onTick).toHaveBeenCalledTimes(2);
   stop();
   expect(clearInterval).toHaveBeenCalledWith(42);
 });

@@ -16,6 +16,7 @@ export function attachCanvasRadarEvents(canvas, state, draw, targets, trails, wi
   const watch = watchRadarTargets({
     targets,
     windowRef,
+    onTick: draw,
     onExpire: (expired) => {
       trails.remove(expired);
       if (state.autoZoom) state.range = selectDefaultRadarRange(targets.distances());

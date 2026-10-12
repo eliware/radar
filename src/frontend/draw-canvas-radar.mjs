@@ -79,6 +79,7 @@ export function drawCanvasRadar(
     const history = trails.get(item.icao) ?? [];
     display.push({
       ...marker,
+      receivedAt: item.receivedAt,
       futureX: future ? project(future).x : null,
       futureY: future ? project(future).y : null,
       lines: formatAircraftTag(item),

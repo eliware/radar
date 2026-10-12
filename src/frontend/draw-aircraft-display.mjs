@@ -1,5 +1,5 @@
 import { layoutAircraftTags } from "./layout-aircraft-tags.mjs";
-
+import { getAircraftAgeBrightness } from "./aircraft-age-brightness.mjs";
 import { getRadarPalette } from "./radar-palette.mjs";
 
 export function drawAircraftDisplay(context, aircraft, fontSize, width, height, connected = true) {
@@ -7,13 +7,19 @@ export function drawAircraftDisplay(context, aircraft, fontSize, width, height, 
   drawTrails(context, aircraft, fontSize, palette.trail);
   context.fillStyle = palette.bright;
   context.strokeStyle = palette.bright;
-  for (const item of aircraft) drawTrack(context, item);
+  const previousAlpha = context.globalAlpha ?? 1;
+  for (const item of aircraft) {
+    context.globalAlpha = previousAlpha * getAircraftAgeBrightness(item.receivedAt);
+    drawTrack(context, item);
+  }
   context.font = `${fontSize}px monospace`;
   context.fillStyle = palette.bright;
   context.strokeStyle = palette.bright;
   for (const tag of layoutAircraftTags(context, aircraft, fontSize, width, height)) {
+    context.globalAlpha = previousAlpha * getAircraftAgeBrightness(tag.item.receivedAt);
     drawTag(context, tag, fontSize);
   }
+  context.globalAlpha = previousAlpha;
 }
 
 function drawTrails(context, aircraft, fontSize, trailColor) {

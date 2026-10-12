@@ -38,3 +38,42 @@ test("draws history marks, hollow prediction diamonds, and connected three-line 
   expect(context.fillText.mock.calls.some(([, x]) => x >= 57)).toBe(true);
   drawAircraftDisplay(context, [{ x: 0, y: 0, lines: ["-", "-", "-"] }], 12, 10, 10);
 });
+
+test("fades aircraft markers and labels as their receive age increases", () => {
+  const context = Object.fromEntries(
+    ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fillText"].map((name) => [
+      name,
+      jest.fn(),
+    ]),
+  );
+  context.measureText = (text) => ({ width: text.length * 8 });
+  const alphaValues = [];
+  let alpha = 1;
+  Object.defineProperty(context, "globalAlpha", {
+    get: () => alpha,
+    set: (value) => {
+      alpha = value;
+      alphaValues.push(value);
+    },
+  });
+  const now = Date.now();
+  const dateNow = jest.spyOn(Date, "now").mockReturnValue(now);
+  try {
+    drawAircraftDisplay(
+      context,
+      [
+        { x: 20, y: 20, receivedAt: now, lines: ["FRESH", "", ""] },
+        { x: 80, y: 80, receivedAt: now - 60_000, lines: ["OLD", "", ""] },
+      ],
+      12,
+      100,
+      100,
+    );
+  } finally {
+    dateNow.mockRestore();
+  }
+
+  expect(alphaValues).toContain(1);
+  expect(alphaValues).toContain(0.5);
+  expect(alpha).toBe(1);
+});

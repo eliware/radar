@@ -63,6 +63,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       const history = (trails.get(item.icao) ?? []).map(project);
       return {
         ...marker,
+        receivedAt: item.receivedAt,
         futureX: future?.x,
         futureY: future?.y,
         lines: formatAircraftTag(item),
