@@ -1,9 +1,20 @@
 import { expect, jest, test } from "@jest/globals";
-import {
-  captureResponsiveScreenshots,
-  selectScreenshotModes,
-  selectScreenshotViewports,
-} from "../../src/frontend/responsive-screenshots.mjs";
+jest.unstable_mockModule("puppeteer", () => ({
+  KnownDevices: {
+    "iPhone 12": {
+      viewport: {
+        width: 390,
+        height: 844,
+        deviceScaleFactor: 3,
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
+  },
+}));
+
+const { captureResponsiveScreenshots, selectScreenshotModes, selectScreenshotViewports } =
+  await import("../../src/frontend/responsive-screenshots.mjs");
 
 function makeCaptureTools({ size = 1000, pageError = false } = {}) {
   const page = {
