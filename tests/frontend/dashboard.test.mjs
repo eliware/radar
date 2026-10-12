@@ -3,16 +3,19 @@ import { startDashboard } from "../../src/frontend/dashboard.mjs";
 
 function makeDocument(protocol = "https:", includeReset = true) {
   const home = {};
+  const strips = { clientWidth: 800 };
   const reset = { addEventListener: jest.fn((event, callback) => (reset.callback = callback)) };
   return {
     home,
     reset,
+    strips,
     location: { protocol, host: "localhost:3000" },
     querySelector(selector) {
       return {
         "[data-scene]": {},
         "[data-home]": home,
         "[data-reset]": includeReset ? reset : null,
+        "[data-flight-strips]": strips,
       }[selector];
     },
     querySelectorAll() {
@@ -56,7 +59,12 @@ test("starts the secure live view and handles feed messages", async () => {
     WebSocketClass: MockSocket,
     createScene,
   });
-  expect(result).toEqual({ scene, socket, feed: expect.any(Object) });
+  expect(result).toEqual({
+    scene,
+    socket,
+    feed: expect.any(Object),
+    flightStrips: expect.any(Object),
+  });
   expect(socket.url).toBe("wss://localhost:3000/ws");
   expect(document.home.textContent).toContain("43.0000°, -70.0000°");
   expect(createScene).toHaveBeenCalledWith(
@@ -67,6 +75,7 @@ test("starts the secure live view and handles feed messages", async () => {
     }),
   );
   expect(scene.update).toHaveBeenCalledWith(aircraft);
+  expect(document.strips.innerHTML).toContain("1 AIRCRAFT");
   document.reset.callback();
   expect(scene.reset).toHaveBeenCalledTimes(1);
   await socket.onopen();
@@ -75,9 +84,11 @@ test("starts the secure live view and handles feed messages", async () => {
   socket.onmessage({ data: "not-json" });
   socket.onmessage({ data: '{"icao":"DEF456"}' });
   expect(scene.update).toHaveBeenLastCalledWith({ icao: "DEF456" });
+  expect(document.strips.innerHTML).toContain("3 AIRCRAFT");
   socket.onclose();
   expect(scene.setConnected).toHaveBeenLastCalledWith(false);
   result.feed.close();
+  result.flightStrips.destroy();
 });
 
 test("uses an insecure socket when the page uses HTTP", async () => {

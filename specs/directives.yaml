@@ -114,6 +114,13 @@ directives:
       - Size the radar view to the shorter viewport dimension.
       - Reserve space to the right of the radar view in landscape layout for flight strips.
       - Reserve space below the radar view in portrait layout for flight strips.
+      - Show aircraft flight strips beside the radar in landscape layout and below it in portrait layout.
+      - Sort web flight strips by distance from home, with the closest aircraft first.
+      - Show all available aircraft fields in flight strips. Mark missing values with a dash.
+      - Use full flight strip headers when all fields fit on one line. Use short headers at the next width.
+      - Wrap flight strip headers and aircraft into two rows, then three rows as width decreases.
+      - Show flight strip headers once. Do not repeat headers in aircraft rows.
+      - Use even field spacing, a black background, white text, double outer and header borders, and single aircraft dividers.
       - Remove the page header and footer.
       - Place the reset control at the top right over the radar view.
         - Use Google Earth-style controls at the lower right. Group rotate and tilt around a compass. Put plus and minus zoom buttons beside the compass.

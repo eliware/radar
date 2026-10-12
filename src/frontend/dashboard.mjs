@@ -1,10 +1,21 @@
 import { attachRadarControls } from "./attach-radar-controls.mjs";
 import { connectWebSocketFeed } from "./websocket-feed.mjs";
 import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
+import { createFlightStripView } from "./flight-strips.mjs";
 
-export async function startDashboard({ document, fetchData, WebSocketClass, createScene }) {
+export async function startDashboard({
+  document,
+  fetchData,
+  WebSocketClass,
+  createScene,
+  windowRef = globalThis.window,
+}) {
   const container = document.querySelector("[data-scene]");
   if (!container) return null;
+  const flightStrips = createFlightStripView(
+    document.querySelector("[data-flight-strips]"),
+    windowRef,
+  );
   try {
     const config = await readJson(fetchData, "/api/config");
     const home = document.querySelector("[data-home]");
@@ -25,15 +36,18 @@ export async function startDashboard({ document, fetchData, WebSocketClass, crea
       scene.onViewChange((range) => referenceLoader.load(range ?? scene.range()));
     if (referenceLoader) referenceLoader.load(scene.range());
     const aircraft = await readJson(fetchData, "/api/aircraft");
+    flightStrips.update(aircraft);
     aircraft.forEach((item) => scene.update(item));
     const feed = connectWebSocketFeed({
       WebSocketClass,
       url: webSocketUrl(document.location),
       onState: (connected) => scene.setConnected?.(connected),
-      onMessage: (data) => updateScene(scene, data),
+      onMessage: (data) => updateScene(scene, data, flightStrips),
       onOpen: async () => {
         try {
-          (await readJson(fetchData, "/api/aircraft")).forEach((item) => scene.update(item));
+          const latest = await readJson(fetchData, "/api/aircraft");
+          flightStrips.update(latest);
+          latest.forEach((item) => scene.update(item));
         } catch {
           // Keep the WebSocket active. The next connection will request a fresh snapshot.
         }
@@ -41,8 +55,9 @@ export async function startDashboard({ document, fetchData, WebSocketClass, crea
     });
     const reset = document.querySelector("[data-reset]");
     reset?.addEventListener("click", () => scene.reset());
-    return { scene, socket: feed.socket, feed };
+    return { scene, socket: feed.socket, feed, flightStrips };
   } catch {
+    flightStrips.destroy();
     return null;
   }
 }
@@ -58,7 +73,7 @@ function webSocketUrl(location) {
   return `${protocol}//${location.host}/ws`;
 }
 
-function updateScene(scene, data) {
+function updateScene(scene, data, flightStrips) {
   let aircraft;
   try {
     aircraft = JSON.parse(data);
@@ -66,4 +81,5 @@ function updateScene(scene, data) {
     return;
   }
   scene.update(aircraft);
+  flightStrips.update(aircraft);
 }

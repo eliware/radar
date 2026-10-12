@@ -41,7 +41,9 @@ Both views show a nautical mile scale and a symbol legend at the lower left. The
 
 Keep a known callsign when a later SBS update has a blank value or a placeholder (`AD`, `OK`, `RM`, `UNKNOWN`, or `-`). Show the ICAO code until a known callsign arrives.
 
-The radar scope stays square. Its width and height match the shorter viewport dimension. It sits at the top left. Landscape views leave space on the right for flight strips. Portrait views leave space below the scope for flight strips. The page has no header or footer. The reset button sits over the scope at the top right.
+The radar scope stays square. Its width and height match the shorter viewport dimension. It sits at the top left. Landscape views show flight strips on the right. Portrait views show flight strips below the scope. The page has no header or footer. The reset button sits over the scope at the top right.
+
+Flight strips sort aircraft by distance from home, with the closest aircraft first. They show available callsign, ICAO, altitude, speed, heading, vertical rate, squawk, position, range, bearing, and age data. Missing values show a dash. The strips use full headers when all fields fit on one line, then use short headers. Narrow views wrap the header and each aircraft into two or three rows. They show headers once. The black panel uses white text, double outer and header borders, and single dividers between aircraft.
 
 Set `MY_LOCATION` as decimal latitude and longitude in `.env`. Set `MY_ELEVATION` in feet above mean sea level. The default is 300 feet.
 
