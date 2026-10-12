@@ -12,7 +12,7 @@ test("shows matching rings and center axes for the selected range", () => {
     constructor(geometry, material) {
       this.geometry = geometry;
       this.material = material;
-      this.rotation = {};
+      this.rotation = { x: 0, y: 0, z: 0 };
       this.position = { set: jest.fn() };
       this.scale = { set: jest.fn() };
       this.userData = {};
@@ -21,6 +21,9 @@ test("shows matching rings and center axes for the selected range", () => {
   class TorusGeometry {
     constructor(...values) {
       this.values = values;
+      this.rotateZ = jest.fn((angle) => {
+        this.startAngle = angle;
+      });
     }
   }
   class CylinderGeometry {
@@ -78,8 +81,12 @@ test("shows matching rings and center axes for the selected range", () => {
   update(20);
   expect(labels[9].position.set).toHaveBeenCalledWith(0, 0.08, -10);
   expect(labels[11].position.set).toHaveBeenCalledWith(0, 0.08, -20);
-  expect(rings.find((ring) => ring.geometry.values[0] === 10).geometry.values[4]).toBeLessThan(
-    2 * Math.PI,
+  const labeledRing = rings.find((ring) => ring.geometry.values[0] === 10);
+  expect(labeledRing.rotation.x).toBe(Math.PI / 2);
+  expect(labeledRing.rotation.z).toBe(0);
+  expect(labeledRing.geometry.values[4]).toBeLessThan(2 * Math.PI);
+  expect(labeledRing.geometry.startAngle).toBeCloseTo(
+    -Math.PI / 2 + (2 * Math.PI - labeledRing.geometry.values[4]) / 2,
   );
   expect(rings.filter((ring) => ring.visible).map((ring) => ring.geometry.values[0])).toEqual([
     5, 10, 15, 20,

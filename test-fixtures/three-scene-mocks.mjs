@@ -47,6 +47,9 @@ export function registerThreeSceneMocks(jest) {
     constructor(...values) {
       this.values = values;
     }
+    rotateZ(angle) {
+      this.startAngle = angle;
+    }
     dispose() {}
   }
   class BufferGeometry {

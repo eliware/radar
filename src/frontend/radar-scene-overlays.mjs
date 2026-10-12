@@ -22,15 +22,16 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
       ring.material.color.setHex(getRadarRingColor(connected, major));
       const tube = ring.userData.baseTube * (range / 20);
       const labelVisible = major || (range < 10 && distance === Math.floor(range));
-      const labelWidth = 6.4 * (range / 20);
+      const labelWidth = 6.4 * (range / 20) * (labels.get(distance)?.userData.textWidthRatio ?? 0);
       const gap = labelVisible
-        ? getRadarLabelGapAngle(distance, labelWidth, 0.6 * (range / 20))
+        ? getRadarLabelGapAngle(distance, labelWidth, 0.12 * (range / 20))
         : 0;
       const arc = 2 * Math.PI - gap;
-      ring.rotation.y = labelVisible ? Math.PI / 2 - gap / 2 : 0;
+      ring.rotation.x = Math.PI / 2;
       if (ring.userData.tube !== tube || ring.userData.arc !== arc) {
         ring.geometry.dispose?.();
         ring.geometry = new THREE.TorusGeometry(distance, tube, 6, 192, arc);
+        if (labelVisible) ring.geometry.rotateZ(-Math.PI / 2 + gap / 2);
         ring.userData.tube = tube;
         ring.userData.arc = arc;
       }

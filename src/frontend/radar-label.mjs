@@ -10,6 +10,10 @@ export function createRadarLabel(
   canvas.height = 80;
   const context = canvas.getContext("2d");
   context.font = "48px sans-serif";
+  const textWidthRatio = Math.min(
+    1,
+    (context.measureText?.(text).width ?? text.length * 28) / canvas.width,
+  );
   context.shadowColor = "#000";
   context.shadowBlur = 4;
   const draw = (color) => {
@@ -25,6 +29,7 @@ export function createRadarLabel(
   const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
   label.scale.set(6.4, 1, 1);
   label.userData.texture = texture;
+  label.userData.textWidthRatio = textWidthRatio;
   label.userData.setColor = (color) => {
     draw(color);
     texture.needsUpdate = true;
