@@ -8,6 +8,7 @@ afterEach(() => {
     "ADSB_HOST",
     "MY_LOCATION",
     "MY_ELEVATION",
+    "NASR_DATABASE_PATH",
     "LOG_LEVEL",
   ]) {
     delete process.env[key];
@@ -30,6 +31,7 @@ function dependencies() {
       registerHandlers: jest.fn(),
       registerSignals: jest.fn((value) => Object.assign(signals, value)),
       createAircraftFeed: jest.fn(() => feed),
+      createAirportDatabase: jest.fn(() => null),
       createRadarServer: jest.fn(async () => app),
       parseAdsbLocation: (value) => (value ? { latitude: 43, longitude: -70 } : null),
     },
@@ -51,6 +53,7 @@ test("starts Fastify and closes the feed after a signal", async () => {
     feed: deps.feed,
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 320,
+    airportDatabase: null,
   });
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 8080 });
   deps.values.createAircraftFeed.mock.calls[0][0].onError(new Error("offline"));
@@ -68,6 +71,7 @@ test("uses default web and feed settings", async () => {
   expect(deps.values.createAircraftFeed).toHaveBeenCalledWith(
     expect.objectContaining({ host: "127.0.0.1", port: 30003 }),
   );
+  expect(deps.values.createAirportDatabase).toHaveBeenCalledWith(undefined);
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
 });

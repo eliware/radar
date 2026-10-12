@@ -17,6 +17,7 @@ test("provides server and feed runtime dependencies", () => {
     "registerSignals",
     "createAircraftFeed",
     "createRadarServer",
+    "createAirportDatabase",
     "parseAdsbLocation",
   ]);
   expect(

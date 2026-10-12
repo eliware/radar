@@ -20,12 +20,14 @@ test("serves health and aircraft data and relays updates over WebSocket", async 
   const health = await app.inject({ url: "/health" });
   const config = await app.inject({ url: "/api/config" });
   const list = await app.inject({ url: "/api/aircraft" });
+  const airports = await app.inject({ url: "/api/airports?maxRangeNm=20" });
   expect(health.json()).toEqual({ status: "ok" });
   expect(config.json()).toEqual({
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
   });
   expect(list.json()).toEqual([aircraft]);
+  expect(airports.statusCode).toBe(503);
   const socket = await app.injectWS("/ws");
   const received = new Promise((resolve) =>
     socket.once("message", (data) => resolve(data.toString())),
@@ -41,4 +43,22 @@ test("uses the default elevation when no location config is set", async () => {
   const response = await app.inject({ url: "/api/config" });
   expect(response.json()).toEqual({ location: null, elevationFeet: 300 });
   await app.close();
+});
+
+test("closes the read-only airport database with the server", async () => {
+  const airportDatabase = {
+    close: jest.fn(),
+    findBetween: jest.fn(() => []),
+    findNavaidsBetween: jest.fn(() => []),
+    findBoundariesBetween: jest.fn(() => []),
+  };
+  const app = await createRadarServer({
+    feed: { list: () => [] },
+    airportDatabase,
+    fastifyFactory: Fastify,
+  });
+
+  await app.close();
+
+  expect(airportDatabase.close).toHaveBeenCalledTimes(1);
 });

@@ -1,15 +1,15 @@
-const GREEN = "#00ff41";
-const TRAIL_GREEN = "#006b26";
+import { getRadarPalette } from "./radar-palette.mjs";
 
-export function drawRadarScaleLegend(context, width, height, range, radius) {
+export function drawRadarScaleLegend(context, width, height, range, radius, connected = true) {
+  const palette = getRadarPalette(connected);
   const firstRow = height - 78;
   const secondRow = height - 60;
   context.fillStyle = "#000";
   context.fillRect(8, height - 90, 212, 80);
   context.font = "12px monospace";
   context.textAlign = "left";
-  context.fillStyle = GREEN;
-  context.strokeStyle = GREEN;
+  context.fillStyle = palette.bright;
+  context.strokeStyle = palette.bright;
   drawAircraftKey(context, 14, firstRow);
   context.fillText("AIRCRAFT", 24, firstRow);
   context.beginPath();
@@ -17,10 +17,10 @@ export function drawRadarScaleLegend(context, width, height, range, radius) {
   context.lineTo(126, firstRow - 4);
   context.stroke();
   context.fillText("60s VECTOR", 132, firstRow);
-  context.fillStyle = TRAIL_GREEN;
+  context.fillStyle = palette.trail;
   context.fillText(String.fromCharCode(92), 14, secondRow);
   context.fillText("HISTORY", 24, secondRow);
-  context.fillStyle = GREEN;
+  context.fillStyle = palette.bright;
   context.beginPath();
   context.arc(105, secondRow - 4, 2, 0, Math.PI * 2);
   context.fill();

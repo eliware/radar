@@ -33,5 +33,8 @@ test("draws history marks, hollow prediction diamonds, and connected three-line 
   expect(context.lineTo).toHaveBeenCalledWith(80, 30);
   expect(context.closePath).toHaveBeenCalled();
   expect(context.fill).not.toHaveBeenCalled();
+  const leaderStart = context.moveTo.mock.calls.at(-1);
+  expect(Math.hypot(leaderStart[0] - 50, leaderStart[1] - 50)).toBeCloseTo(9);
+  expect(context.fillText.mock.calls.some(([, x]) => x >= 57)).toBe(true);
   drawAircraftDisplay(context, [{ x: 0, y: 0, lines: ["-", "-", "-"] }], 12, 10, 10);
 });

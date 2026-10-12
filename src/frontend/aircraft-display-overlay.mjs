@@ -4,6 +4,9 @@ import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
 import { predictAircraftPosition } from "./predict-aircraft-position.mjs";
 import { RADAR_SCOPE_RADIUS_RATIO } from "./radar-range.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
+import { drawAirportMarkers } from "./draw-airport-markers.mjs";
+import { drawNavaidMarkers } from "./draw-navaid-markers.mjs";
+import { drawArtccBoundaries } from "./draw-artcc-boundaries.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
@@ -17,7 +20,18 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
   });
   container.appendChild(canvas);
 
-  function draw(aircraft, trails, location, elevationFeet, camera, range) {
+  function draw(
+    aircraft,
+    trails,
+    location,
+    elevationFeet,
+    camera,
+    range,
+    connected = true,
+    airports = new Map(),
+    navaids = new Map(),
+    boundaries = new Map(),
+  ) {
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
     const ratio = Math.min(windowRef.devicePixelRatio || 1, 2);
@@ -25,15 +39,19 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     canvas.height = Math.round(height * ratio);
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
     context.clearRect(0, 0, width, height);
+    drawAirportMarkers(context, airports, (airport) => projectAirport(airport), range);
+    drawNavaidMarkers(context, navaids, (navaid) => projectAirport(navaid), range);
+    drawArtccBoundaries(context, boundaries, (point) => projectAirport(point));
     const items = [];
     for (const item of aircraft.values()) items.push(projectItem(item));
-    drawAircraftDisplay(context, items.filter(Boolean), 18, width, height);
+    drawAircraftDisplay(context, items.filter(Boolean), 18, width, height, connected);
     drawRadarScaleLegend(
       context,
       width,
       height,
       range,
       Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO,
+      connected,
     );
 
     function projectItem(item) {
@@ -42,7 +60,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       const marker = project(position);
       const prediction = predictAircraftPosition(position, item);
       const future = prediction ? project(prediction) : null;
-      const history = trails.get(item.icao).map(project);
+      const history = (trails.get(item.icao) ?? []).map(project);
       return {
         ...marker,
         futureX: future?.x,
@@ -55,6 +73,15 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     function project(position) {
       const point = new THREE.Vector3(position.x, position.y, position.z).project(camera);
       return { x: ((point.x + 1) * width) / 2, y: ((1 - point.y) * height) / 2 };
+    }
+
+    function projectAirport(airport) {
+      const position = projectAircraftPosition(
+        { ...airport, altitudeFeet: airport.elevationFeet },
+        location,
+        elevationFeet,
+      );
+      return position ? project(position) : null;
     }
   }
 

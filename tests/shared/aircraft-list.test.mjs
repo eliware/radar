@@ -27,6 +27,21 @@ test("keeps earlier values when a later SBS record has empty fields", () => {
   });
 });
 
+test.each(["OK", "RM", "AD", "", null, undefined, "UNKNOWN", "-"])(
+  "keeps a useful callsign when a later record has callsign %s",
+  (callsign) => {
+    const list = createAircraftList({ clock: () => 1000 });
+    list.update({ icao: "406948", callsign: "BAW15K" });
+    expect(list.update({ icao: "406948", callsign })).toMatchObject({ callsign: "BAW15K" });
+  },
+);
+
+test("replaces an earlier callsign when a new useful callsign arrives", () => {
+  const list = createAircraftList({ clock: () => 1000 });
+  list.update({ icao: "406948", callsign: "BAW15K" });
+  expect(list.update({ icao: "406948", callsign: "BAW152" }).callsign).toBe("BAW152");
+});
+
 test("sorts aircraft by distance before update time", () => {
   let now = 1000;
   const list = createAircraftList({ clock: () => now });

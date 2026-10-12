@@ -1,3 +1,5 @@
+import { retainUsefulCallsign } from "./aircraft-callsign.mjs";
+
 export function createAircraftList({ clock = Date.now, staleAfterMs = 120000 } = {}) {
   const aircraftByIcao = new Map();
 
@@ -10,6 +12,9 @@ export function createAircraftList({ clock = Date.now, staleAfterMs = 120000 } =
         ),
       );
       const aircraft = { ...message, ...omitted, lastSeen: clock() };
+      const callsign = retainUsefulCallsign(previous.callsign, message.callsign);
+      if (callsign === null || callsign === undefined) delete aircraft.callsign;
+      else aircraft.callsign = callsign;
       aircraftByIcao.set(message.icao, aircraft);
       return aircraft;
     },

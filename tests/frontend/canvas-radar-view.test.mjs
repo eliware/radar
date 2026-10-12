@@ -43,6 +43,7 @@ function makeContext() {
   const context = Object.fromEntries(
     [
       "setTransform",
+      "setLineDash",
       "clearRect",
       "fillRect",
       "beginPath",
@@ -70,9 +71,22 @@ test("draws the 2D radar, updates aircraft, handles input, and cleans up", () =>
   const location = { latitude: 43, longitude: -70 };
   const view = createCanvasRadarView({ ...state, location });
   expect(view.mode).toBe("2D");
+  expect(view.northAngle()).toBe(0);
+  const compassUpdate = jest.fn();
+  const detachCompass = view.onViewChange(compassUpdate);
+  expect(compassUpdate).toHaveBeenCalledTimes(1);
+  expect(view.range()).toBeGreaterThan(0);
+  view.updateAirports([{ faaId: "PWM", icao: "KPWM", rangeNm: 4, latitude: 43.1, longitude: -70 }]);
+  view.updateNavaids([{ identifier: "ENE", rangeNm: 5, latitude: 43.2, longitude: -70 }]);
+  view.updateBoundaries([{ id: "ZBW", type: "ARTCC", points: [{ latitude: 43, longitude: -70 }] }]);
+  view.setConnected(true);
+  expect(compassUpdate).toHaveBeenCalledTimes(5);
+  detachCompass();
+  view.setConnected(false);
+  expect(view.tilt).toBeUndefined();
   expect(state.canvas.width).toBe(400);
   state.windowRef.addEventListener.mock.calls[0][1]();
-  expect(state.context.arc).toHaveBeenCalledTimes(12);
+  expect(state.context.arc.mock.calls.length).toBeGreaterThan(24);
   const fills = state.context.fillRect.mock.calls.length;
   expect(view.update({ icao: "BAD", latitude: undefined, longitude: 0 })).toBeUndefined();
   expect(state.context.fillRect).toHaveBeenCalledTimes(fills);

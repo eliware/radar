@@ -32,3 +32,29 @@ test("returns not found when a local asset does not exist", async () => {
   expect(response.body).toBe("Not found");
   await app.close();
 });
+
+test("serves safe JavaScript chunks and rejects invalid chunk names", async () => {
+  const app = Fastify();
+  const read = jest.fn(async (file) => file);
+  registerStaticRoutes(app, { publicRoot: "public", buildRoot: "dist", read });
+  const chunk = await app.inject({ url: "/chunks/vendor-1.js" });
+  const invalid = await app.inject({ url: "/chunks/secret.css" });
+  expect(chunk.statusCode).toBe(200);
+  expect(chunk.headers["content-type"]).toContain("text/javascript");
+  expect(read).toHaveBeenCalledWith("dist/chunks/vendor-1.js");
+  expect(invalid.statusCode).toBe(404);
+  await app.close();
+});
+
+test("returns not found when a requested chunk does not exist", async () => {
+  const app = Fastify();
+  registerStaticRoutes(app, {
+    publicRoot: "public",
+    buildRoot: "dist",
+    read: () => Promise.reject(new Error("missing")),
+  });
+  const response = await app.inject({ url: "/chunks/missing.js" });
+  expect(response.statusCode).toBe(404);
+  expect(response.body).toBe("Not found");
+  await app.close();
+});

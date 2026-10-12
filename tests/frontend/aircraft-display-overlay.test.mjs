@@ -6,6 +6,9 @@ test("draws projected aircraft and history over the scene, then removes its canv
   const context = {
     setTransform: jest.fn(),
     clearRect: jest.fn(),
+    save: jest.fn(),
+    restore: jest.fn(),
+    setLineDash: jest.fn(),
     fillRect: jest.fn(),
     measureText: () => {
       measuredFonts.push(context.font);
@@ -22,6 +25,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
   };
   const canvas = { style: {}, getContext: () => context, remove: jest.fn() };
   const container = { clientWidth: 200, clientHeight: 100, appendChild: jest.fn() };
+  const windowRef = { devicePixelRatio: 3 };
   class Vector3 {
     constructor(x, y, z) {
       Object.assign(this, { x, y, z });
@@ -33,7 +37,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
   const overlay = createAircraftDisplayOverlay({
     THREE: { Vector3 },
     container,
-    windowRef: { devicePixelRatio: 1 },
+    windowRef,
     documentRef: { createElement: () => canvas },
   });
   overlay.draw(
@@ -56,16 +60,42 @@ test("draws projected aircraft and history over the scene, then removes its canv
     300,
     {},
     20,
+    true,
+    new Map([
+      ["PWM", { faaId: "PWM", icao: "KPWM", rangeNm: 2, latitude: 43.1, longitude: -70.1 }],
+      ["BAD", { faaId: "BAD", rangeNm: 3, latitude: Number.NaN, longitude: -70 }],
+    ]),
+    new Map([
+      ["ENE", { identifier: "ENE", rangeNm: 3, latitude: 43.2, longitude: -70.2 }],
+      ["BAD", { identifier: "BAD", rangeNm: 4, latitude: Number.NaN, longitude: -70 }],
+    ]),
+    new Map([
+      [
+        "ZBW",
+        {
+          type: "ARTCC",
+          points: [
+            { latitude: 43.3, longitude: -70.3 },
+            { latitude: 43.4, longitude: -70.4 },
+          ],
+        },
+      ],
+    ]),
   );
+  expect(canvas.width).toBe(400);
   expect(container.appendChild).toHaveBeenCalledWith(canvas);
-  expect(context.setTransform).toHaveBeenCalledWith(1, 0, 0, 1, 0, 0);
+  expect(context.setTransform).toHaveBeenCalledWith(2, 0, 0, 2, 0, 0);
   expect(context.fillText).toHaveBeenCalled();
   expect(measuredFonts).toContain("18px monospace");
   container.clientWidth = 0;
   container.clientHeight = 0;
+  windowRef.devicePixelRatio = 0;
   overlay.draw(
-    new Map([["BAD", { icao: "BAD", latitude: Number.NaN, longitude: 0 }]]),
-    { get: () => [] },
+    new Map([
+      ["BAD", { icao: "BAD", latitude: Number.NaN, longitude: 0 }],
+      ["NO-TRAIL", { icao: "NO-TRAIL", latitude: 43.1, longitude: -70.1 }],
+    ]),
+    { get: (icao) => (icao === "NO-TRAIL" ? undefined : []) },
     { latitude: 43, longitude: -70 },
     300,
     {},

@@ -1,12 +1,12 @@
 import { projectAircraftPosition } from "./aircraft-space-position.mjs";
-import { drawCanvasRadar } from "./draw-canvas-radar.mjs";
-import { attachCanvasPan } from "./canvas-radar-pan.mjs";
-import { attachMobileRadarGestures } from "./mobile-radar-gestures.mjs";
-import { DEFAULT_RADAR_RANGE, clampRadarRange, selectDefaultRadarRange } from "./radar-range.mjs";
+import { createCanvasRadarDraw } from "./create-canvas-radar-draw.mjs";
+import { DEFAULT_RADAR_RANGE, selectDefaultRadarRange } from "./radar-range.mjs";
 import { createRadarTargets } from "./radar-targets.mjs";
-import { watchRadarTargets } from "./watch-radar-targets.mjs";
 import { createAircraftTrails } from "./aircraft-trails.mjs";
-import { attachCanvasRefresh } from "./attach-canvas-refresh.mjs";
+import { createCanvasRadarControls } from "./create-canvas-radar-controls.mjs";
+import { createViewChangeListeners } from "./create-view-change-listeners.mjs";
+import { createRadarReferenceStore } from "./radar-reference-store.mjs";
+import { attachCanvasRadarEvents } from "./attach-canvas-radar-events.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -18,82 +18,72 @@ export function createCanvasRadarView({
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
-  let range = DEFAULT_RADAR_RANGE;
-  let autoZoom = true;
-  let offsetX = 0;
-  let offsetY = 0;
-  let rotation = 0;
+  const references = createRadarReferenceStore();
+  const state = {
+    range: DEFAULT_RADAR_RANGE,
+    autoZoom: true,
+    offsetX: 0,
+    offsetY: 0,
+    rotation: 0,
+    connected: false,
+  };
+  const viewChanges = createViewChangeListeners();
   canvas.setAttribute("aria-label", "Top-down 2D radar view");
   canvas.style.touchAction = "none";
   container.replaceChildren(canvas);
-  const draw = () =>
-    drawCanvasRadar(
-      context,
-      canvas,
-      targets.items(),
-      location,
-      range,
-      offsetX,
-      offsetY,
-      windowRef,
-      rotation,
-      trails,
-    );
-  const detachGestures = attachMobileRadarGestures(canvas, {
-    onZoom: (factor) => {
-      autoZoom = false;
-      range = clampRadarRange(range * factor);
-      draw();
-    },
-    onRotate: (angle) => {
-      rotation += angle;
-      draw();
-    },
-  });
-  const detachPan = attachCanvasPan(canvas, (x, y) => {
-    autoZoom = false;
-    offsetX += x;
-    offsetY += y;
-    draw();
-  });
-  const stopTargetWatch = watchRadarTargets({
+  const drawRadar = createCanvasRadarDraw({
+    context,
+    canvas,
     targets,
+    location,
+    state,
     windowRef,
-    onExpire: (expired) => {
-      trails.remove(expired);
-      if (autoZoom) range = selectDefaultRadarRange(targets.distances());
-      draw();
-    },
+    trails,
+    airports: references.airports,
+    navaids: references.navaids,
+    boundaries: references.boundaries,
   });
-  const detachRefresh = attachCanvasRefresh(canvas, windowRef, draw, (event) => {
-    autoZoom = false;
-    range = clampRadarRange(range * (event.deltaY > 0 ? 1.2 : 1 / 1.2));
-  });
+  const draw = () => {
+    drawRadar();
+    viewChanges.emit(state.range);
+  };
+  const detachEvents = attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef);
   draw();
+  const controls = createCanvasRadarControls(state, draw, () => targets.distances());
   return {
     mode: "2D",
+    setConnected(connected) {
+      state.connected = connected;
+      draw();
+    },
     update(item) {
       const position = projectAircraftPosition(item, location, 0);
       if (!position) return;
       const expired = targets.update(item, Math.hypot(position.x, position.z));
       trails.remove(expired);
       trails.add(item.icao, position);
-      if (autoZoom) range = selectDefaultRadarRange(targets.distances());
+      if (state.autoZoom) state.range = selectDefaultRadarRange(targets.distances());
       draw();
     },
-    reset() {
-      autoZoom = true;
-      range = selectDefaultRadarRange(targets.distances());
-      offsetX = 0;
-      offsetY = 0;
-      rotation = 0;
+    updateAirports(items) {
+      references.updateAirports(items);
       draw();
     },
+    updateNavaids(items) {
+      references.updateNavaids(items);
+      draw();
+    },
+    updateBoundaries(items) {
+      references.updateBoundaries(items);
+      draw();
+    },
+    ...controls,
+    northAngle: () => state.rotation,
+    range: () => state.range,
+    onViewChange: (listener) => viewChanges.subscribe(listener),
     destroy() {
-      detachRefresh();
-      stopTargetWatch();
-      detachGestures();
-      detachPan();
+      detachEvents();
+      viewChanges.clear();
       container.replaceChildren();
     },
   };

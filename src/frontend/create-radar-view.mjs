@@ -1,8 +1,7 @@
-import { createAircraftScene } from "./aircraft-scene.mjs";
 import { createCanvasRadarView } from "./canvas-radar-view.mjs";
 import { hasCoarsePointer } from "./mobile-radar-gestures.mjs";
 
-export function createRadarView({
+export async function createRadarView({
   container,
   location,
   elevationFeet,
@@ -11,6 +10,7 @@ export function createRadarView({
 }) {
   const isMobile = hasCoarsePointer(windowRef);
   try {
+    const { createAircraftScene } = await import("./aircraft-scene.mjs");
     const view = createAircraftScene({ container, location, elevationFeet, windowRef });
     onMode?.("3D", isMobile);
     return view;

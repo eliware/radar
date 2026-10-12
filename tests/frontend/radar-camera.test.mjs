@@ -17,6 +17,7 @@ function setup(coarse = false) {
     addEventListener: (name, fn) => events.set(name, fn),
     removeEventListener: removed,
     update: jest.fn(),
+    rotateLeft: jest.fn(),
     enablePan: true,
     enableRotate: true,
     enableZoom: true,
@@ -44,13 +45,20 @@ test("sets bounded camera distance and reports manual range changes", () => {
   state.view.setRange(300);
   expect(state.view.range()).toBe(300);
   expect(state.onRangeChange).toHaveBeenLastCalledWith(300);
+  state.camera.position.set(3, 4, 5);
+  state.view.zoomBy(0.5);
+  expect(state.view.range()).toBe(150);
+  expect(state.camera.position.x / 3).toBeCloseTo(state.camera.position.y / 4);
+  expect(state.camera.position.y / 4).toBeCloseTo(state.camera.position.z / 5);
+  state.view.zoomBy(0.001);
+  expect(state.view.range()).toBe(1);
   state.camera.position.y = 100;
   state.events.get("change")();
   expect(state.view.range()).toBeGreaterThan(1);
   state.camera.position.x = Number.NaN;
   state.events.get("change")();
   state.events.get("start")();
-  expect(state.onManualZoom).toHaveBeenCalledTimes(1);
+  expect(state.onManualZoom).toHaveBeenCalledTimes(3);
   state.view.dispose();
   expect(state.removed).toHaveBeenCalledTimes(2);
 });

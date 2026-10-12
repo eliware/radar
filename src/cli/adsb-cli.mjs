@@ -5,6 +5,7 @@ import { connectSbsFeed } from "../shared/tcp-feed.mjs";
 import { renderFlightStrips } from "./flight-strips.mjs";
 import { parseAdsbLocation } from "../shared/adsb-location.mjs";
 import { calculateAircraftRange } from "../shared/aircraft-range.mjs";
+import { createCliAircraftUpdater } from "./update-cli-aircraft.mjs";
 import packageJson from "../../package.json" with { type: "json" };
 
 export const adsbCliDependencies = {
@@ -54,6 +55,12 @@ export function startAdsbCli({
   }
 
   const aircraftList = dependencies.createAircraftList();
+  const updateAircraft = createCliAircraftUpdater({
+    parseSbsMessage: dependencies.parseSbsMessage,
+    aircraftList,
+    location,
+    calculateRange: dependencies.calculateAircraftRange,
+  });
   let hasAircraft = false;
   const refresh = () => {
     if (!hasAircraft) return;
@@ -67,11 +74,8 @@ export function startAdsbCli({
     host: options.host,
     port: options.port,
     onLine(line) {
-      const message = dependencies.parseSbsMessage(line);
-      if (!message?.icao) return;
-      let aircraft = aircraftList.update(message);
-      const range = dependencies.calculateAircraftRange(location, aircraft);
-      if (range) aircraft = aircraftList.update({ icao: message.icao, ...range });
+      const aircraft = updateAircraft(line);
+      if (!aircraft) return;
       if (options.debug) {
         write(JSON.stringify(aircraft));
         return;

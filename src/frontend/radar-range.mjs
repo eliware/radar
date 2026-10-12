@@ -16,9 +16,21 @@ export function selectDefaultRadarRange(targetDistances) {
 }
 
 export function getRadarRingRanges(range) {
-  const step = range < 10 ? 1 : 5;
-  const end = Math.floor(range / step) * step;
-  return Array.from({ length: end / step }, (_, index) => (index + 1) * step);
+  const step = getRadarRingSpacing(range) / 2;
+  const count = Math.floor(range / step);
+  return Array.from({ length: count }, (_, index) => (index + 1) * step);
+}
+
+export function getRadarRingSpacing(range) {
+  if (range < 10) return 2;
+  if (range < 60) return 10;
+  if (range < 150) return 20;
+  return 50;
+}
+
+export function getRadarLabelGapAngle(radius, labelWidth, padding = 4) {
+  const halfWidth = (labelWidth / 2 + padding) / radius;
+  return 2 * Math.asin(Math.min(0.999, Math.max(0, halfWidth)));
 }
 
 export function rangeToCameraDistance(range) {

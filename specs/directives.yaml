@@ -31,6 +31,30 @@ directives:
       - Use Fastify for the web server. Provide REST routes and a WebSocket feed.
       - Provide `GET /health`, `GET /api/config`, and `GET /api/aircraft`.
       - Send the same aircraft JSON schema over `/ws` that `--debug` prints.
+      - Read FAA NASR airport and runway data from SQLite in read-only mode.
+      - Return airports by distance band through `GET /api/airports`.
+      - Return VOR, VOR/DME, and VORTAC records by distance band through `GET /api/navaids`.
+      - Return nearby ordered FAA ARTCC boundary paths through `GET /api/airspace-boundaries`.
+      - Fetch airports from zero to the current view range at startup.
+      - Fetch only the new outer distance band when the view expands.
+      - Limit airport range requests to 300 nautical miles.
+      - Keep fetched airport and runway data in browser memory.
+      - Show only public-use airports with a four-character ICAO code that starts with K.
+      - Show airports only when they have an asphalt or concrete runway at least 1,000 feet long.
+      - Draw only qualifying asphalt and concrete runways.
+      - Draw airport markers and codes in light gray.
+      - Center airport labels above their marker dots.
+      - Draw runways as solid gray lines.
+      - Draw much darker gray dotted 10-mile runway centerline extensions from both runway ends.
+      - Draw much darker gray dotted 10-mile perpendicular base-leg marks at extension ends.
+      - Draw VOR symbols and identifiers in blue.
+      - Draw approximate 5- and 10-mile rings around airports with the NASR Class C flag.
+      - Identify approximate Class C rings as visual guides, not official boundaries.
+      - Draw gray approximate Class B, C, and D altitude shells in the 3D view.
+      - Use typical layered Class B, C, and D altitudes when NASR has only a class flag.
+      - Mark all class-based airspace shells as approximate, not official boundaries.
+      - Draw actual ARTCC boundary paths from NASR `ARB_SEG` points.
+      - Do not present ARTCC boundaries as approach control boundaries.
       - Do not require authentication for local REST or WebSocket access.
       - Serve the local page, CSS, and built JavaScript from the web server.
       - Build the first web view as a Three.js 3D space without a map or terrain.
@@ -41,10 +65,14 @@ directives:
       - On mobile, keep home centered and disable panning.
       - Use pinch gestures to zoom on mobile.
       - Use two-finger twist gestures to rotate the radar on mobile.
-      - Show mobile gesture hints for zoom, rotation, and the centered home point.
+      - Do not show gesture instructions or text connection status on the radar view.
+      - Show the home location at the top left of the radar view. Do not show a view title.
       - Use a black background for the page and radar scope.
       - Use green radar text, markers, paths, and axes on black.
       - Use darker green for minor rings and aircraft history marks.
+      - Show the radar in dark gray while the aircraft feed is disconnected. Show it in green while connected.
+      - Retry the WebSocket feed after a disconnect. Start with a one-second delay and double it to a 30-second maximum.
+      - Refresh the aircraft list after each WebSocket connection.
       - Keep the radar scope borderless.
       - Set radar range from 1 through 300 nautical miles in both views.
       - Set the default range to 20 nautical miles or 5 miles past the furthest live target, whichever is larger.
@@ -53,6 +81,7 @@ directives:
       - Keep range limits, auto-zoom, and ring spacing the same in 3D and Canvas views.
       - "Show each aircraft label as three lines: callsign, altitude, and speed, without units."
       - Show the ICAO code when callsign is blank or unknown, or equals `AD`, `OK`, or `RM`.
+      - Keep a useful callsign when later updates contain only a blank, unknown, `AD`, `OK`, or `RM` value.
       - Show altitude in hundreds of feet.
       - Pad altitude below 10,000 feet to three digits with leading zeroes.
       - Add C when vertical rate stays within ±100 feet per minute.
@@ -63,15 +92,21 @@ directives:
       - Show aircraft history as dark-green backslash marks at earlier positions.
       - Show no more than 60 seconds of aircraft history marks.
       - Draw aircraft history marks at half the size of the aircraft labels.
-      - Leave a small gap between each aircraft diamond and its label pointer.
+      - Leave a 9-pixel gap between each aircraft diamond and its leader line.
+      - Leave a 7-pixel gap between each leader line and the label text.
       - Show range values without unit text on rings in both radar views.
       - Anchor each range label at the ring it names.
+      - Place range labels due north of home in both radar views.
+      - Center each range label vertically on its ring.
+      - Leave a small ring gap behind each range label.
       - Show a nautical mile scale and a symbol legend at the lower left of both radar views.
       - Use 18-pixel aircraft labels in 3D and 9-pixel labels in Canvas.
       - Keep 3D aircraft labels twice the size of Canvas labels.
       - Scale 3D range ring thickness with zoom range to keep its screen thickness steady.
-      - Draw rings at 5 nautical mile steps above 10 miles. Draw rings at 1 mile steps below 10 miles.
-      - Draw range rings through 300 nautical miles. Make each 10-mile ring bolder.
+      - Draw solid major rings every 10 nautical miles below 60 miles, every 20 below 150 miles, then every 50 miles.
+      - Draw darker solid rings halfway between each major ring.
+      - Label major range rings only. Keep labels and ring spacing the same in both radar views.
+      - Draw range rings through 300 nautical miles.
       - Allow full camera rotation, tilt, pan, zoom, and a reset to the default view.
       - Describe feed altitude as barometric altitude. Do not claim it always equals true MSL altitude.
       - Keep the dashboard focused on the 3D view, flight strips, and aircraft details.
@@ -81,7 +116,21 @@ directives:
       - Reserve space below the radar view in portrait layout for flight strips.
       - Remove the page header and footer.
       - Place the reset control at the top right over the radar view.
+        - Use Google Earth-style controls at the lower right. Group rotate and tilt around a compass. Put plus and minus zoom buttons beside the compass.
+        - Center the up-tilt button at the top of the compass.
+        - Place the N label at the top center of the inner compass circle.
+        - Move the N marker around the compass ring to show current north.
+        - Allow a drag of the N marker around the ring to rotate the radar view.
+        - Use the center compass control as a small joystick for radar tilt and rotation.
+        - On Canvas, use joystick drag to rotate only. Keep the Canvas view top-down.
+        - Keep the compass fill behind the arrow buttons and the north marker.
+        - Center each arrow glyph inside its button.
+        - Keep clear space between the zoom buttons and the outer control border.
+        - Show zoom and rotate controls in the 2D view. Disable tilt because Canvas stays top-down.
       - Show available aircraft data in flight strips and aircraft details. Mark missing values as unknown.
+      - Draw FAA ARTCC boundary paths in gray when the NASR data provides them.
+      - Do not label ARTCC paths as Portland or A90 approach boundaries.
+      - Load airport, navaid, airspace, and boundary data only through the current zoom range.
       - Leave radio controls out of the dashboard until requested.
       - Document the RTL1090 background and foreground procedures in `docs/`.
       - Provide browser assets, documented routes, and mirrored tests.

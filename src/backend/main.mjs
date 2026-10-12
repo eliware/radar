@@ -4,6 +4,7 @@ export async function startWebApplication(dependencies) {
   const feedPort = validPort(process.env.ADSB_PORT ?? "30003", "ADSB_PORT");
   const location = dependencies.parseAdsbLocation(process.env.MY_LOCATION);
   const elevationFeet = validElevation(process.env.MY_ELEVATION ?? "300");
+  const airportDatabase = dependencies.createAirportDatabase(process.env.NASR_DATABASE_PATH);
   const log = dependencies.createLogger({ level: process.env.LOG_LEVEL ?? "info" });
   dependencies.registerHandlers({ log });
   const feed = dependencies.createAircraftFeed({
@@ -12,7 +13,12 @@ export async function startWebApplication(dependencies) {
     locationText: process.env.MY_LOCATION,
     onError: (error) => log.warn(`ADS-B feed error: ${error.message}`),
   });
-  const app = await dependencies.createRadarServer({ feed, location, elevationFeet });
+  const app = await dependencies.createRadarServer({
+    feed,
+    location,
+    elevationFeet,
+    airportDatabase,
+  });
   let shutdownPromise;
   const shutdown = () => {
     if (shutdownPromise) return shutdownPromise;

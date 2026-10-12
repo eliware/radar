@@ -2,7 +2,7 @@
 
 ## Start
 
-Run `npm run build` to build the browser bundle.
+Run `npm run build` to build the browser entry bundle and async chunks. The server serves the entry at `/client.js` and chunks from `/chunks/`.
 
 Run `node bin/radar.mjs` to start the Fastify server.
 
@@ -16,6 +16,12 @@ The web server listens on `0.0.0.0` at port `3000` by default. This allows acces
 `GET /api/config` returns the local latitude, longitude, and elevation from `.env`.
 
 `GET /api/aircraft` returns an array of recent aircraft. Each item has the same fields as one CLI `--debug` update.
+
+`GET /api/airports?minRangeNm=0&maxRangeNm=20` returns NASR airports in that distance band from `MY_LOCATION`. The maximum range is 300 nautical miles. Each record includes its airport codes, coordinates, elevation, distance, and runway ends. The server returns 503 when NASR data or a home location is not available.
+
+`GET /api/navaids?minRangeNm=0&maxRangeNm=20` returns VOR, VOR/DME, and VORTAC records in the distance band. The response includes the identifier, type, name, coordinates, elevation, and distance.
+
+`GET /api/airspace-boundaries?minRangeNm=0&maxRangeNm=20` returns nearby FAA ARTCC boundary paths from `ARB_SEG`. Each path has ordered points and a low or high altitude class. This table does not include A90 approach control borders.
 
 ## WebSocket route
 
@@ -33,13 +39,21 @@ Both views show each aircraft as a hollow green diamond with a three-line label.
 
 Both views show a nautical mile scale and a symbol legend at the lower left. The legend identifies aircraft, the 60-second vector, history marks, and home.
 
+Keep a known callsign when a later SBS update has a blank value or a placeholder (`AD`, `OK`, `RM`, `UNKNOWN`, or `-`). Show the ICAO code until a known callsign arrives.
+
 The radar scope stays square. Its width and height match the shorter viewport dimension. It sits at the top left. Landscape views leave space on the right for flight strips. Portrait views leave space below the scope for flight strips. The page has no header or footer. The reset button sits over the scope at the top right.
 
 Set `MY_LOCATION` as decimal latitude and longitude in `.env`. Set `MY_ELEVATION` in feet above mean sea level. The default is 300 feet.
 
-On desktop, drag to rotate the 3D view. Right-drag to pan. Use the scroll wheel to zoom. In the 2D fallback, drag to pan and use the scroll wheel to zoom.
+Use the compass controls at the lower right to rotate and tilt the 3D view. Use the plus and minus buttons to zoom both views. The 2D Canvas view stays top-down, so its tilt buttons are disabled. On desktop, drag to rotate the 3D view. Right-drag to pan. Use the scroll wheel to zoom. In the 2D fallback, drag to pan and use the scroll wheel to zoom.
 
-On mobile, keep home centered. Pinch to zoom. Twist two fingers to rotate the radar. Panning is disabled. Select Reset view to restore north-up view.
+On mobile, keep home centered. Pinch to zoom. Twist two fingers to rotate the radar. Panning is disabled. Select Reset view to restore north-up view. The radar scope shows green when the WebSocket feed is connected and dark gray when it is disconnected. The page has no gesture hint or text connection status.
+
+The browser retries a closed or failed WebSocket. It waits one second before the first retry, then doubles the wait up to 30 seconds. It requests a fresh aircraft snapshot after each connection. The SBS TCP feed retries separately after two seconds.
+
+The browser requests airports and navaids from 0 to 20 nautical miles at startup. It requests only the new distance band when the view expands. It keeps loaded records in browser memory. The API returns public-use airports with a four-character ICAO code that starts with K and an asphalt or concrete runway at least 1,000 feet long. The radar draws only qualifying runways. Airport labels sit above their marker dots. Airport markers and labels use light gray. Runways use solid gray lines. The radar draws much darker gray dotted 10-mile centerline extensions and base-leg marks. VOR, VOR/DME, and VORTAC symbols and identifiers use blue.
+
+NASR marks airports with Class B, C, or D service, but this database has no class boundary shapes. The 3D view draws approximate shells from typical class altitude limits. Class B uses 10, 20, and 30-mile layers up to 10,000 feet MSL. Class C uses a 5-mile core and a 5-to-10-mile shelf. Class D uses a 5-mile radius up to 2,500 feet above the airport. These shapes are visual guides, not official boundaries. The database has no Portland or A90 approach boundary shape. NASR does contain real ARTCC boundary points. The radar draws those paths from the `ARB_SEG` table.
 
 Aircraft altitude uses the value reported by the ADS-B feed. The value is barometric altitude. It can differ from true altitude above mean sea level.
 
@@ -48,6 +62,12 @@ Aircraft altitude uses the value reported by the ADS-B feed. The value is barome
 Run `curl.exe http://127.0.0.1:3000/health` to check server status.
 
 Run `curl.exe http://127.0.0.1:3000/api/aircraft` to read the current aircraft list.
+
+Run `curl.exe "http://127.0.0.1:3000/api/airports?minRangeNm=0&maxRangeNm=20"` to read airports near home.
+
+Run `curl.exe "http://127.0.0.1:3000/api/navaids?minRangeNm=0&maxRangeNm=20"` to read navaids near home.
+
+Run `curl.exe "http://127.0.0.1:3000/api/airspace-boundaries?minRangeNm=0&maxRangeNm=20"` to read nearby ARTCC boundary paths.
 
 Use a WebSocket client to connect to `ws://127.0.0.1:3000/ws` and check update messages.
 

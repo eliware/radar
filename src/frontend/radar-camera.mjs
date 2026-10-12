@@ -11,7 +11,6 @@ import { configureMobileRadarControls } from "./mobile-radar-gestures.mjs";
 export function createRadarCamera({
   camera,
   controls,
-  scene,
   element,
   windowRef,
   onManualZoom,
@@ -38,11 +37,22 @@ export function createRadarCamera({
   };
   const zoomBy = (factor) => {
     onManualZoom();
-    setRange(range * factor);
+    const distance = distanceFromTarget(camera.position, controls.target);
+    range = clampRadarRange(range * factor);
+    if (distance === null || distance === 0) return setRange(range);
+    const scale = rangeToCameraDistance(range) / distance;
+    camera.position.set(
+      controls.target.x + (camera.position.x - controls.target.x) * scale,
+      controls.target.y + (camera.position.y - controls.target.y) * scale,
+      controls.target.z + (camera.position.z - controls.target.z) * scale,
+    );
+    controls.update();
+    onRangeChange(range);
   };
-  const detachGestures = configureMobileRadarControls(controls, scene, element, windowRef, zoomBy);
+  const detachGestures = configureMobileRadarControls(controls, element, windowRef, zoomBy);
   return {
     setRange,
+    zoomBy,
     range: () => range,
     dispose() {
       controls.removeEventListener("start", onStart);

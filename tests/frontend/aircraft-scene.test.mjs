@@ -13,6 +13,9 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
   const overlayContext = Object.fromEntries(
     [
       "setTransform",
+      "setLineDash",
+      "save",
+      "restore",
       "clearRect",
       "fillRect",
       "beginPath",
@@ -56,7 +59,20 @@ test("draws live aircraft, resizes, resets, and releases the scene", () => {
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
   });
+  view.setConnected(true);
+  view.updateAirports([
+    { faaId: "PWM", latitude: 43.1, longitude: -70, elevationFeet: 50, classC: "Y" },
+  ]);
+  view.updateNavaids([{ identifier: "ENE", state: "ME" }]);
+  view.updateBoundaries([{ id: "ZBW", type: "ARTCC", points: [] }]);
   expect(Camera.instance.position.values).toEqual([0, rangeToCameraDistance(20), 0]);
+  view.rotate(1);
+  expect(Controls.instance.rotateLeft).toHaveBeenCalledWith(Math.PI / 12);
+  view.tilt(1);
+  expect(Controls.instance.rotateUp).toHaveBeenCalledWith(-Math.PI / 18);
+  view.zoom(0.5);
+  expect(Camera.instance.position.values[1]).toBeCloseTo(rangeToCameraDistance(10), 2);
+  view.reset();
   expect(Camera.instance.up.values).toEqual([0, 0, -1]);
   const rings = Scene.instance.children.filter((item) => item.geometry instanceof TorusGeometry);
   expect(rings).toHaveLength(68);

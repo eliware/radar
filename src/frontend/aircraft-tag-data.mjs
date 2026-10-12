@@ -1,9 +1,8 @@
+import { hasUsefulCallsign } from "../shared/aircraft-callsign.mjs";
+
 export function formatAircraftTag(aircraft) {
   const callsign = aircraft.callsign?.trim();
-  const name =
-    !callsign || ["AD", "OK", "RM", "UNKNOWN", "-"].includes(callsign.toUpperCase())
-      ? aircraft.icao || "-"
-      : callsign;
+  const name = hasUsefulCallsign(callsign) ? callsign : aircraft.icao || "-";
   const altitude = Number.isFinite(aircraft.altitudeFeet)
     ? Math.round(aircraft.altitudeFeet / 100)
     : null;

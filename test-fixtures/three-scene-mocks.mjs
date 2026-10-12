@@ -49,6 +49,15 @@ export function registerThreeSceneMocks(jest) {
     }
     dispose() {}
   }
+  class BufferGeometry {
+    setAttribute() {}
+    dispose() {}
+  }
+  class Float32BufferAttribute {
+    constructor(values, size) {
+      Object.assign(this, { values, size });
+    }
+  }
   class Vector3 {
     constructor(x, y, z) {
       Object.assign(this, { x, y, z });
@@ -61,6 +70,8 @@ export function registerThreeSceneMocks(jest) {
     constructor() {
       this.target = new Vector();
       this.update = jest.fn();
+      this.rotateLeft = jest.fn();
+      this.rotateUp = jest.fn();
       this.dispose = jest.fn();
       this.listeners = new Map();
       this.addEventListener = (name, callback) => this.listeners.set(name, callback);
@@ -75,10 +86,20 @@ export function registerThreeSceneMocks(jest) {
     WebGLRenderer: Renderer,
     SphereGeometry: class {},
     TorusGeometry,
+    BufferGeometry,
+    Float32BufferAttribute,
+    LineSegments: Mesh,
     CylinderGeometry: class {},
     MeshBasicMaterial: class {
       constructor(options) {
         this.options = options;
+        this.color = { setHex: jest.fn() };
+      }
+    },
+    LineBasicMaterial: class {
+      constructor(options) {
+        this.options = options;
+        this.dispose = jest.fn();
       }
     },
     Mesh,

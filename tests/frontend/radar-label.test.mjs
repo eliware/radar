@@ -28,14 +28,14 @@ function makeThree() {
 }
 
 test("creates a canvas sprite label and releases its resources", () => {
-  const context = { fillText: jest.fn() };
+  const context = { fillText: jest.fn(), clearRect: jest.fn() };
   const documentRef = { createElement: jest.fn(() => ({ getContext: () => context })) };
   const THREE = makeThree();
   const label = createRadarLabel(THREE, "N123AB", documentRef);
   const scene = { remove: jest.fn() };
   expect(context.font).toBe("48px sans-serif");
   expect(label.scale.set).toHaveBeenCalledWith(6.4, 1, 1);
-  expect(context.fillText).toHaveBeenCalledWith("N123AB", 4, 56);
+  expect(context.fillText).toHaveBeenCalledWith("N123AB", 4, 40);
   removeRadarLabel(scene, label);
   expect(scene.remove).toHaveBeenCalledWith(label);
   expect(label.material.map.dispose).toHaveBeenCalled();
@@ -52,10 +52,19 @@ test("returns no label when browser canvas or Three.js sprite support is absent"
 });
 
 test("right-aligns aircraft text at the fixed edge of its label", () => {
-  const context = { fillText: jest.fn() };
+  const context = { fillText: jest.fn(), clearRect: jest.fn() };
   const documentRef = { createElement: () => ({ getContext: () => context }) };
   const label = createRadarLabel(makeThree(), "N123AB", documentRef, "right");
   expect(context.textAlign).toBe("right");
-  expect(context.fillText).toHaveBeenCalledWith("N123AB", 508, 56);
+  expect(context.fillText).toHaveBeenCalledWith("N123AB", 508, 40);
+  expect(label).not.toBeNull();
+});
+
+test("centers radar text labels", () => {
+  const context = { fillText: jest.fn(), clearRect: jest.fn() };
+  const documentRef = { createElement: () => ({ getContext: () => context }) };
+  const label = createRadarLabel(makeThree(), "20", documentRef, "center");
+  expect(context.textAlign).toBe("center");
+  expect(context.fillText).toHaveBeenCalledWith("20", 256, 40);
   expect(label).not.toBeNull();
 });

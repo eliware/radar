@@ -1,34 +1,30 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { projectAircraftPosition } from "./aircraft-space-position.mjs";
-import { createRadarRenderer } from "./create-radar-renderer.mjs";
+import { createRadarStage } from "./create-radar-stage.mjs";
 import { createRadarCamera } from "./radar-camera.mjs";
 import { DEFAULT_RADAR_RANGE, selectDefaultRadarRange } from "./radar-range.mjs";
 import { createRadarTargets } from "./radar-targets.mjs";
 import { createRadarSceneOverlays } from "./radar-scene-overlays.mjs";
 import { createAircraftTrails } from "./aircraft-trails.mjs";
 import { createAircraftDisplayOverlay } from "./aircraft-display-overlay.mjs";
-import { watchRadarTargets } from "./watch-radar-targets.mjs";
-import { createRadarRenderLoop } from "./radar-render-loop.mjs";
+import { createOrbitRadarControls } from "./create-orbit-radar-controls.mjs";
+import { createRadarHome } from "./create-radar-home.mjs";
+import { createAircraftRadarLoop } from "./create-aircraft-radar-loop.mjs";
+import { createAirspaceVolumes } from "./create-airspace-volumes.mjs";
+import { createRadarReferenceStore } from "./radar-reference-store.mjs";
 
 export function createAircraftScene({ container, location, elevationFeet, windowRef = window }) {
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
-  const camera = new THREE.PerspectiveCamera(48, 1, 0.05, 1000);
-  camera.up.set(0, 0, -1);
-  const renderer = createRadarRenderer({ THREE, windowRef });
-  container.appendChild(renderer.domElement);
+  const { scene, camera, renderer } = createRadarStage(THREE, container, windowRef);
   const updateRings = createRadarSceneOverlays(THREE, scene);
-  const home = new THREE.Mesh(
-    new THREE.SphereGeometry(0.18, 16, 12),
-    new THREE.MeshBasicMaterial({ color: 0x00ff41 }),
-  );
-  scene.add(home);
+  const airspace = createAirspaceVolumes(THREE, scene, location, elevationFeet);
+  const setConnected = createRadarHome(THREE, scene, updateRings);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
   controls.update();
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
+  const references = createRadarReferenceStore();
   const overlay = createAircraftDisplayOverlay({
     THREE,
     container,
@@ -39,7 +35,6 @@ export function createAircraftScene({ container, location, elevationFeet, window
   const radarCamera = createRadarCamera({
     camera,
     controls,
-    scene,
     element: renderer.domElement,
     windowRef,
     onManualZoom: () => (autoZoom = false),
@@ -48,24 +43,31 @@ export function createAircraftScene({ container, location, elevationFeet, window
     },
   });
   radarCamera.setRange(DEFAULT_RADAR_RANGE);
-  const stopTargetWatch = watchRadarTargets({
+  const viewControls = createOrbitRadarControls(controls, radarCamera);
+  const stopRadarLoops = createAircraftRadarLoop({
     targets,
+    trails,
     windowRef,
-    onExpire: (expired) => {
-      trails.remove(expired);
-      if (autoZoom) radarCamera.setRange(selectDefaultRadarRange(targets.distances()));
-    },
-  });
-  const stopRenderLoop = createRadarRenderLoop({
+    radarCamera,
+    isAutoZoom: () => autoZoom,
     renderer,
     scene,
     camera,
     container,
-    windowRef,
-    onFrame: () =>
-      overlay.draw(targets.items(), trails, location, elevationFeet, camera, radarCamera.range()),
+    overlay,
+    location,
+    elevationFeet,
+    isConnected: () => connected,
+    airports: references.airports,
+    navaids: references.navaids,
+    boundaries: references.boundaries,
   });
+  let connected = false;
   return {
+    setConnected(value) {
+      connected = value;
+      setConnected(value);
+    },
     update(aircraft) {
       const position = projectAircraftPosition(aircraft, location, elevationFeet);
       if (!position) return;
@@ -77,14 +79,16 @@ export function createAircraftScene({ container, location, elevationFeet, window
         if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
       }
     },
+    ...references.updates((items) => airspace.update(items)),
+    ...viewControls,
     reset() {
       scene.rotation.y = 0;
       autoZoom = true;
       radarCamera.setRange(selectDefaultRadarRange(targets.distances()));
     },
     destroy() {
-      stopRenderLoop();
-      stopTargetWatch();
+      stopRadarLoops();
+      airspace.dispose();
       overlay.destroy();
       radarCamera.dispose();
       controls.dispose();

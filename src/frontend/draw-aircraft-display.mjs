@@ -1,23 +1,23 @@
 import { layoutAircraftTags } from "./layout-aircraft-tags.mjs";
 
-const GREEN = "#00ff41";
-const TRAIL_GREEN = "#006b26";
+import { getRadarPalette } from "./radar-palette.mjs";
 
-export function drawAircraftDisplay(context, aircraft, fontSize, width, height) {
-  drawTrails(context, aircraft, fontSize);
-  context.fillStyle = GREEN;
-  context.strokeStyle = GREEN;
+export function drawAircraftDisplay(context, aircraft, fontSize, width, height, connected = true) {
+  const palette = getRadarPalette(connected);
+  drawTrails(context, aircraft, fontSize, palette.trail);
+  context.fillStyle = palette.bright;
+  context.strokeStyle = palette.bright;
   for (const item of aircraft) drawTrack(context, item);
   context.font = `${fontSize}px monospace`;
-  context.fillStyle = GREEN;
-  context.strokeStyle = GREEN;
+  context.fillStyle = palette.bright;
+  context.strokeStyle = palette.bright;
   for (const tag of layoutAircraftTags(context, aircraft, fontSize, width, height)) {
     drawTag(context, tag, fontSize);
   }
 }
 
-function drawTrails(context, aircraft, fontSize) {
-  context.fillStyle = TRAIL_GREEN;
+function drawTrails(context, aircraft, fontSize, trailColor) {
+  context.fillStyle = trailColor;
   context.font = `${fontSize / 2}px monospace`;
   for (const item of aircraft) {
     for (const point of (item.history ?? []).slice(0, -1)) {
@@ -50,12 +50,12 @@ function drawTag(context, tag, fontSize) {
   const dy = anchorY - tag.item.y;
   const distance = Math.hypot(dx, dy);
   const divisor = Math.max(distance, Number.EPSILON);
-  const gap = Math.min(6, distance);
+  const gap = Math.min(9, distance);
   context.beginPath();
   context.moveTo(tag.item.x + (dx / divisor) * gap, tag.item.y + (dy / divisor) * gap);
   context.lineTo(anchorX, anchorY);
   context.stroke();
   tag.item.lines.forEach((line, index) => {
-    context.fillText(line, tag.x + 4, tag.y + fontSize + index * fontSize * 1.15);
+    context.fillText(line, tag.x + 7, tag.y + fontSize + index * fontSize * 1.15);
   });
 }

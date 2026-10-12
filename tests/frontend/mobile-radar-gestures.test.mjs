@@ -18,12 +18,17 @@ test("locks mobile controls and rotates the scene around home", () => {
     addEventListener: (name, fn) => listeners.set(name, fn),
     removeEventListener: jest.fn(),
   };
-  const controls = { enablePan: true, enableRotate: true, enableZoom: true };
-  const scene = { rotation: { y: 0 } };
-  const remove = configureMobileRadarControls(controls, scene, element, {
+  const controls = {
+    enablePan: true,
+    enableRotate: true,
+    enableZoom: true,
+    rotateLeft: jest.fn(),
+    update: jest.fn(),
+  };
+  const remove = configureMobileRadarControls(controls, element, {
     matchMedia: () => ({ matches: true }),
   });
-  expect(controls).toEqual({ enablePan: false, enableRotate: false, enableZoom: false });
+  expect(controls).toMatchObject({ enablePan: false, enableRotate: false, enableZoom: false });
   listeners.get("pointerdown")({ pointerId: 1, pointerType: "touch", clientX: 0, clientY: 0 });
   listeners.get("pointerdown")({ pointerId: 2, pointerType: "touch", clientX: 100, clientY: 0 });
   listeners.get("pointermove")({
@@ -33,13 +38,14 @@ test("locks mobile controls and rotates the scene around home", () => {
     clientY: 100,
     preventDefault() {},
   });
-  expect(scene.rotation.y).toBeCloseTo(Math.PI / 2);
+  expect(controls.rotateLeft).toHaveBeenCalledWith(-Math.PI / 2);
+  expect(controls.update).toHaveBeenCalled();
   remove();
 });
 
 test("keeps desktop controls enabled", () => {
   const controls = { enablePan: true, enableRotate: true, enableZoom: true };
-  const remove = configureMobileRadarControls(controls, {}, {}, {});
+  const remove = configureMobileRadarControls(controls, {}, {});
   expect(controls).toEqual({ enablePan: true, enableRotate: true, enableZoom: true });
   remove();
 });
@@ -95,6 +101,7 @@ test("ignores mouse pointers and normalizes rotation across north", () => {
   attachMobileRadarGestures(element, { onZoom: jest.fn(), onRotate });
   const send = (type, pointerId, clientX, clientY, pointerType = "touch") =>
     listeners.get(type)({ pointerId, pointerType, clientX, clientY, preventDefault() {} });
+  send("pointermove", 99, 0, 0);
   send("pointerdown", 1, 0, 0, "mouse");
   send("pointerdown", 1, 0, 0);
   send("pointerdown", 2, -100, 1.745);

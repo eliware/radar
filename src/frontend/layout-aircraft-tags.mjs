@@ -5,7 +5,7 @@ export function layoutAircraftTags(context, aircraft, fontSize, viewportWidth, v
   const sorted = [...aircraft].sort((a, b) => a.y - b.y || a.x - b.x);
   const placed = [];
   for (const item of sorted) {
-    const width = Math.max(...item.lines.map((line) => context.measureText(line).width)) + 8;
+    const width = Math.max(...item.lines.map((line) => context.measureText(line).width)) + 14;
     const candidates = tagCandidates(item, width, height);
     const rect = candidates.reduce(
       (best, candidate) => {

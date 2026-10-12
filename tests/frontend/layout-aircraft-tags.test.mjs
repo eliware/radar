@@ -16,6 +16,7 @@ test("places tags inside the view and reduces label overlap", () => {
   expect(tags).toHaveLength(2);
   expect(tags[0].x).toBeGreaterThanOrEqual(0);
   expect(tags[0].y).toBeGreaterThanOrEqual(0);
+  expect(tags[0].width).toBe(22);
   expect(tags[1].cost).toBeGreaterThanOrEqual(0);
   expect(jest.isMockFunction(context.measureText)).toBe(false);
 });

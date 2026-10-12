@@ -10,15 +10,81 @@
     <main class="dashboard">
       <section class="scene-panel" aria-label="Aircraft radar view">
         <button class="reset-view" data-reset type="button">Reset view</button>
+        <div class="radar-controls" data-radar-controls role="group" aria-label="Radar controls">
+          <div
+            class="radar-compass"
+            data-radar-compass
+            role="group"
+            aria-label="Compass and view angle"
+          >
+            <button
+              class="compass-north"
+              data-compass-north
+              type="button"
+              aria-label="Drag to rotate the radar"
+            >
+              N
+            </button>
+            <button
+              data-radar-control="tilt-horizon"
+              type="button"
+              aria-label="Tilt toward horizon"
+              title="Tilt toward horizon"
+            >
+              ▲
+            </button>
+            <button
+              data-radar-control="rotate-left"
+              type="button"
+              aria-label="Rotate left"
+              title="Rotate left"
+            >
+              ◀
+            </button>
+            <button
+              class="compass-center"
+              data-compass-joystick
+              type="button"
+              aria-label="Drag to tilt and rotate the radar"
+            >
+              ✦
+            </button>
+            <button
+              data-radar-control="rotate-right"
+              type="button"
+              aria-label="Rotate right"
+              title="Rotate right"
+            >
+              ▶
+            </button>
+            <button
+              data-radar-control="tilt-top"
+              type="button"
+              aria-label="Tilt toward top-down"
+              title="Tilt toward top-down"
+            >
+              ▼
+            </button>
+          </div>
+          <div class="radar-zoom" role="group" aria-label="Zoom">
+            <button data-radar-control="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">
+              +
+            </button>
+            <span aria-hidden="true"></span>
+            <button
+              data-radar-control="zoom-out"
+              type="button"
+              aria-label="Zoom out"
+              title="Zoom out"
+            >
+              −
+            </button>
+          </div>
+        </div>
         <div class="scene-labels">
-          <p class="scene-title" data-view-title>LOCAL 3D SPACE</p>
           <p data-home>Loading home position.</p>
         </div>
         <div class="scene" data-scene></div>
-        <p class="controls-hint" data-controls-hint>
-          Drag to rotate · Right-drag to pan · Scroll to zoom
-        </p>
-        <p class="feed-status" data-status role="status">Loading aircraft feed.</p>
       </section>
     </main>
     <script type="module" src="/client.js"></script>

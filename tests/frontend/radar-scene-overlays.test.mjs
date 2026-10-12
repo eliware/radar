@@ -31,6 +31,7 @@ test("shows matching rings and center axes for the selected range", () => {
   class MeshBasicMaterial {
     constructor(options) {
       this.options = options;
+      this.color = { setHex: jest.fn() };
     }
   }
   class Sprite {
@@ -52,7 +53,9 @@ test("shows matching rings and center axes for the selected range", () => {
       this.dispose = jest.fn();
     }
   }
-  const documentRef = { createElement: () => ({ getContext: () => ({ fillText() {} }) }) };
+  const documentRef = {
+    createElement: () => ({ getContext: () => ({ clearRect() {}, fillText() {} }) }),
+  };
   const update = createRadarSceneOverlays(
     {
       Mesh,
@@ -73,15 +76,10 @@ test("shows matching rings and center axes for the selected range", () => {
     2,
   );
   update(20);
-  expect(labels[9].position.set).toHaveBeenCalledWith(
-    3.2 - 10 * Math.SQRT1_2,
-    0.08,
-    -10 * Math.SQRT1_2,
-  );
-  expect(labels[11].position.set).toHaveBeenCalledWith(
-    3.2 - 20 * Math.SQRT1_2,
-    0.08,
-    -20 * Math.SQRT1_2,
+  expect(labels[9].position.set).toHaveBeenCalledWith(0, 0.08, -10);
+  expect(labels[11].position.set).toHaveBeenCalledWith(0, 0.08, -20);
+  expect(rings.find((ring) => ring.geometry.values[0] === 10).geometry.values[4]).toBeLessThan(
+    2 * Math.PI,
   );
   expect(rings.filter((ring) => ring.visible).map((ring) => ring.geometry.values[0])).toEqual([
     5, 10, 15, 20,
@@ -93,8 +91,11 @@ test("shows matching rings and center axes for the selected range", () => {
   update(8);
   expect(rings.filter((ring) => ring.visible)).toHaveLength(8);
   update(300);
-  expect(rings.filter((ring) => ring.visible)).toHaveLength(60);
-  expect(rings.find((ring) => ring.geometry.values[0] === 10).geometry.values[1]).toBeCloseTo(
+  update(300);
+  expect(rings.filter((ring) => ring.visible)).toHaveLength(12);
+  expect(rings.find((ring) => ring.geometry.values[0] === 50).geometry.values[1]).toBeCloseTo(
     0.825,
   );
+  update.setConnected(true);
+  expect(rings[0].material.color.setHex).toHaveBeenCalled();
 });

@@ -2,27 +2,21 @@ import { expect, jest, test } from "@jest/globals";
 import { startDashboard } from "../../src/frontend/dashboard.mjs";
 
 function makeDocument(protocol = "https:", includeReset = true) {
-  const status = {};
   const home = {};
-  const title = {};
-  const hint = {};
   const reset = { addEventListener: jest.fn((event, callback) => (reset.callback = callback)) };
   return {
-    status,
     home,
-    title,
-    hint,
     reset,
     location: { protocol, host: "localhost:3000" },
     querySelector(selector) {
       return {
-        "[data-status]": status,
         "[data-scene]": {},
         "[data-home]": home,
-        "[data-view-title]": title,
-        "[data-controls-hint]": hint,
         "[data-reset]": includeReset ? reset : null,
       }[selector];
+    },
+    querySelectorAll() {
+      return [];
     },
   };
 }
@@ -39,14 +33,15 @@ test("starts the secure live view and handles feed messages", async () => {
     .mockResolvedValueOnce(
       jsonResponse({ location: { latitude: 43, longitude: -70 }, elevationFeet: 300 }),
     )
-    .mockResolvedValueOnce(jsonResponse([aircraft]));
-  const scene = { mode: "2D", update: jest.fn(), reset: jest.fn() };
-  const createScene = jest.fn(({ onMode }) => {
-    onMode("3D");
-    onMode("2D", false);
-    onMode("2D", true);
-    return scene;
-  });
+    .mockResolvedValueOnce(jsonResponse([aircraft]))
+    .mockResolvedValueOnce(jsonResponse([{ icao: "RESTORE1" }]));
+  const scene = {
+    mode: "2D",
+    update: jest.fn(),
+    reset: jest.fn(),
+    setConnected: jest.fn(),
+  };
+  const createScene = jest.fn(() => scene);
   let socket;
   class MockSocket {
     constructor(url) {
@@ -61,23 +56,28 @@ test("starts the secure live view and handles feed messages", async () => {
     WebSocketClass: MockSocket,
     createScene,
   });
-  expect(result).toEqual({ scene, socket });
+  expect(result).toEqual({ scene, socket, feed: expect.any(Object) });
   expect(socket.url).toBe("wss://localhost:3000/ws");
   expect(document.home.textContent).toContain("43.0000°, -70.0000°");
-  expect(document.title.textContent).toBe("LOCAL 2D RADAR");
-  expect(document.hint.textContent).toContain("Pinch");
+  expect(createScene).toHaveBeenCalledWith(
+    expect.objectContaining({
+      container: expect.any(Object),
+      location: { latitude: 43, longitude: -70 },
+      elevationFeet: 300,
+    }),
+  );
   expect(scene.update).toHaveBeenCalledWith(aircraft);
   document.reset.callback();
   expect(scene.reset).toHaveBeenCalledTimes(1);
-  socket.onopen();
-  expect(document.status.textContent).toBe("Live feed connected.");
-  socket.onclose();
-  expect(document.status.textContent).toBe("Live feed disconnected.");
-  socket.onerror();
-  expect(document.status.textContent).toBe("Live feed error.");
+  await socket.onopen();
+  expect(scene.setConnected).toHaveBeenLastCalledWith(true);
+  expect(scene.update).toHaveBeenLastCalledWith({ icao: "RESTORE1" });
   socket.onmessage({ data: "not-json" });
   socket.onmessage({ data: '{"icao":"DEF456"}' });
   expect(scene.update).toHaveBeenLastCalledWith({ icao: "DEF456" });
+  socket.onclose();
+  expect(scene.setConnected).toHaveBeenLastCalledWith(false);
+  result.feed.close();
 });
 
 test("uses an insecure socket when the page uses HTTP", async () => {
@@ -87,22 +87,16 @@ test("uses an insecure socket when the page uses HTTP", async () => {
     .mockResolvedValueOnce(jsonResponse({ location: null, elevationFeet: 300 }))
     .mockResolvedValueOnce(jsonResponse([]));
   let url;
+  let socket;
   class MockSocket {
     constructor(value) {
       url = value;
+      socket = this;
     }
   }
   const scene = { update: jest.fn(), reset: jest.fn() };
-  const createScene = ({ onMode }) => {
-    onMode("3D");
-    return scene;
-  };
-  const querySelector = document.querySelector.bind(document);
-  document.querySelector = (selector) =>
-    selector === "[data-view-title]" || selector === "[data-controls-hint]"
-      ? null
-      : querySelector(selector);
-  await startDashboard({
+  const createScene = () => scene;
+  const result = await startDashboard({
     document,
     fetchData,
     WebSocketClass: MockSocket,
@@ -110,20 +104,60 @@ test("uses an insecure socket when the page uses HTTP", async () => {
   });
   expect(url).toBe("ws://localhost:3000/ws");
   expect(document.home.textContent).toContain("Set MY_LOCATION in .env");
-  expect(document.status.textContent).toContain("0 aircraft tracked");
+  await socket.onopen();
+  result.feed.close();
+});
+
+test("loads each new reference-data band when the view expands", async () => {
+  const document = makeDocument();
+  const requested = [];
+  const fetchData = jest.fn(async (url) => {
+    requested.push(url);
+    if (url === "/api/config") return jsonResponse({ location: null, elevationFeet: 300 });
+    if (url === "/api/aircraft") return jsonResponse([]);
+    return jsonResponse([]);
+  });
+  let changeView;
+  class MockSocket {
+    constructor() {}
+  }
+  const scene = {
+    update: jest.fn(),
+    updateAirports: jest.fn(),
+    updateNavaids: jest.fn(),
+    updateBoundaries: jest.fn(),
+    range: jest.fn(() => 20),
+    onViewChange: jest.fn((listener) => (changeView = listener)),
+  };
+
+  const result = await startDashboard({
+    document,
+    fetchData,
+    WebSocketClass: MockSocket,
+    createScene: () => scene,
+  });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  changeView(undefined);
+  changeView(30);
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  expect(scene.onViewChange).toHaveBeenCalledTimes(1);
+  expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=20");
+  expect(requested).toContain("/api/navaids?minRangeNm=20&maxRangeNm=30");
+  expect(requested).toContain("/api/airspace-boundaries?minRangeNm=20&maxRangeNm=30");
+  result.feed.close();
 });
 
 test("does not start when the page has no scene element", async () => {
   const document = makeDocument();
-  document.querySelector = (selector) => (selector === "[data-status]" ? document.status : null);
+  document.querySelector = () => null;
   const fetchData = jest.fn();
   expect(await startDashboard({ document, fetchData })).toBeNull();
   expect(fetchData).not.toHaveBeenCalled();
 });
 
-test("reports a failed configuration request", async () => {
+test("does not start when configuration fails", async () => {
   const document = makeDocument();
   const fetchData = jest.fn().mockResolvedValue(jsonResponse({}, false));
   expect(await startDashboard({ document, fetchData })).toBeNull();
-  expect(document.status.textContent).toContain("Request failed: /api/config");
 });
