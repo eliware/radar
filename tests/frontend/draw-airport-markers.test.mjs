@@ -42,8 +42,8 @@ test("draws runway extensions and base legs and skips invalid or distant geometr
     }),
   };
   const runwayEnds = [
-    { latitude: 43, longitude: -70, alignmentDegrees: 90 },
-    { latitude: 43.01, longitude: -70, alignmentDegrees: 270 },
+    { latitude: 43, longitude: -70, elevationFeet: 100, alignmentDegrees: 90 },
+    { latitude: 43.01, longitude: -70, elevationFeet: 110, alignmentDegrees: 270 },
   ];
   const airports = new Map([
     [
@@ -110,7 +110,7 @@ test("draws runway extensions and base legs and skips invalid or distant geometr
   expect(context.strokeStyle).toBe("#b8b8b8");
   expect(context.lineCap).toBe("round");
   expect(context.setLineDash).toHaveBeenCalledWith([1, 5]);
-  expect(context.setLineDash.mock.calls.filter(([dash]) => dash[0] === 1)).toHaveLength(4);
+  expect(context.setLineDash.mock.calls.filter(([dash]) => dash[0] === 1)).toHaveLength(2);
   expect(context.moveTo).toHaveBeenCalledWith(43, -70);
   expect(context.restore).toHaveBeenCalledTimes(1);
 });

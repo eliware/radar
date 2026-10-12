@@ -45,8 +45,11 @@ directives:
       - Draw airport markers and codes in light gray.
       - Center airport labels above their marker dots.
       - Draw runways as solid gray lines.
-      - Draw much darker gray dotted 10-mile runway centerline extensions from both runway ends.
-      - Draw much darker gray dotted 10-mile perpendicular base-leg marks at extension ends.
+      - Draw runway geometry at each runway end's NASR elevation.
+      - Draw much darker gray dotted 10-nautical-mile runway centerline extensions from both runway ends.
+      - Raise each extended centerline to 3,000 feet above its runway end elevation.
+      - Draw much darker gray dotted 10-nautical-mile perpendicular base-leg marks at extension ends.
+      - Draw each base leg at the altitude of its extended centerline endpoint.
       - Draw VOR symbols and identifiers in blue.
       - Draw approximate 5- and 10-mile rings around airports with the NASR Class C flag.
       - Identify approximate Class C rings as visual guides, not official boundaries.

@@ -8,7 +8,7 @@ The server reads airport records from `APT_BASE`, runway ends from `APT_RWY_END`
 
 The browser loads airports from 0 to 20 nautical miles when it starts. It asks only for the next distance band after a zoom-out. It keeps each result in memory. It does not load the full 300-mile area at startup.
 
-The radar shows public-use airports with a four-character ICAO code that starts with K. Each airport must have an asphalt or concrete runway at least 1,000 feet long. It draws only runways with these surfaces. Airport labels sit above their marker dots. Runway centerline extensions and base-leg marks use much darker gray dotted lines. Each extension and base leg is 10 nautical miles long.
+The radar shows public-use airports with a four-character ICAO code that starts with K. Each airport must have an asphalt or concrete runway at least 1,000 feet long. It draws only runways with these surfaces. Airport labels sit above their marker dots. Runway lines use each runway end's NASR elevation. Each dark gray dotted centerline extension runs 10 nautical miles and rises to 3,000 feet above its runway end. Each dotted base leg sits at that extension's end altitude.
 
 VOR, VOR/DME, and VORTAC symbols and identifiers use blue.
 

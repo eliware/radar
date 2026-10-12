@@ -12,8 +12,22 @@ test("opens SQLite in read-only mode and filters airport rows by distance band",
   };
   const runwayStatement = {
     all: jest.fn(() => [
-      { runwayId: "09/27", latitude: 43, longitude: -70, alignmentDegrees: 90 },
-      { runwayId: "09/27", latitude: 43.1, longitude: -70, alignmentDegrees: 270 },
+      {
+        runwayId: "09/27",
+        endId: "09",
+        latitude: 43,
+        longitude: -70,
+        elevationFeet: 80,
+        alignmentDegrees: 90,
+      },
+      {
+        runwayId: "09/27",
+        endId: "27",
+        latitude: 43.1,
+        longitude: -70,
+        elevationFeet: 76,
+        alignmentDegrees: 270,
+      },
       { runwayId: "03/21", latitude: 43, longitude: -70, alignmentDegrees: 30 },
       { runwayId: "BAD-LAT", latitude: Number.NaN, longitude: -70, alignmentDegrees: 30 },
       { runwayId: "BAD-LON", latitude: 43, longitude: Number.NaN, alignmentDegrees: 30 },
@@ -62,6 +76,7 @@ test("opens SQLite in read-only mode and filters airport rows by distance band",
   expect(result.map((airport) => airport.icao)).toEqual(["KPWM"]);
   expect(result[0].runways).toHaveLength(1);
   expect(result[0].runways[0]).toHaveLength(2);
+  expect(result[0].runways[0].map((end) => end.elevationFeet)).toEqual([80, 76]);
   expect(result[0].rangeNm).toBeCloseTo(0, 2);
   expect(database.prepare.mock.calls.find(([sql]) => sql.includes("APT_RWY_END"))[0]).toContain(
     "R.SURFACE_TYPE_CODE IN ('ASPH', 'CONC'",

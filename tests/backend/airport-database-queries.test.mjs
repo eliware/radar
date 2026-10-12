@@ -14,6 +14,8 @@ test("airport query selects only public-use K-code airports with paved runways",
 
 test("runway query selects qualifying paved runway ends", () => {
   expect(RUNWAY_QUERY).toContain("JOIN APT_RWY R");
+  expect(RUNWAY_QUERY).toContain("E.RWY_END_ELEV");
+  expect(RUNWAY_QUERY).toContain("AS elevationFeet");
   expect(RUNWAY_QUERY).toContain("R.SURFACE_TYPE_CODE IN ('ASPH', 'CONC'");
   expect(RUNWAY_QUERY).toContain("CAST(R.RWY_LEN AS REAL) >= 1000");
 });
