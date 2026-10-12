@@ -29,3 +29,13 @@ test("preserves a clear failure when WebGL stays unavailable", () => {
     createRadarRenderer({ THREE: { WebGLRenderer }, windowRef: { devicePixelRatio: 1 } }),
   ).toThrow("WebGL unavailable");
 });
+
+test("uses a pixel ratio of one when the browser reports zero", () => {
+  const renderer = { setPixelRatio: jest.fn() };
+  createRadarRenderer({
+    THREE: { WebGLRenderer: jest.fn(() => renderer) },
+    windowRef: { devicePixelRatio: 0 },
+  });
+
+  expect(renderer.setPixelRatio).toHaveBeenCalledWith(1);
+});

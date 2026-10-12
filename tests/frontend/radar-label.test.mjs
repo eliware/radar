@@ -68,3 +68,16 @@ test("centers radar text labels", () => {
   expect(context.fillText).toHaveBeenCalledWith("20", 256, 40);
   expect(label).not.toBeNull();
 });
+
+test("uses the global document when no document is supplied", () => {
+  const previousDocument = globalThis.document;
+  const context = { fillText: jest.fn(), clearRect: jest.fn() };
+  globalThis.document = { createElement: () => ({ getContext: () => context }) };
+  try {
+    const label = createRadarLabel(makeThree(), "N123AB");
+    expect(label.userData.textWidthRatio).toBeCloseTo(("N123AB".length * 28) / 512);
+  } finally {
+    if (previousDocument === undefined) delete globalThis.document;
+    else globalThis.document = previousDocument;
+  }
+});

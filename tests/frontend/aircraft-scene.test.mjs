@@ -1,147 +1,110 @@
-import { expect, jest, test } from "@jest/globals";
-import { registerThreeSceneMocks } from "../../test-fixtures/three-scene-mocks.mjs";
+import { beforeEach, expect, jest, test } from "@jest/globals";
+import { registerAircraftSceneMocks } from "../../test-fixtures/aircraft-scene-mocks.mjs";
 
-const { Scene, Camera, TorusGeometry, Controls } = registerThreeSceneMocks(jest);
+const mocks = registerAircraftSceneMocks(jest);
 const { createAircraftScene } = await import("../../src/frontend/aircraft-scene.mjs");
-const { rangeToCameraDistance } = await import("../../src/frontend/radar-range.mjs");
+const container = { replaceChildren: jest.fn() };
+const windowRef = {};
+const location = { latitude: 43, longitude: -70 };
+const createView = () =>
+  createAircraftScene({ container, location, elevationFeet: 300, windowRef });
 
-test("draws live aircraft, resizes, resets, and releases the scene", () => {
-  let now = Date.now();
-  const dateNow = jest.spyOn(Date, "now").mockImplementation(() => now);
-  const callbacks = new Map();
-  const intervals = new Map();
-  const overlayContext = Object.fromEntries(
-    [
-      "setTransform",
-      "setLineDash",
-      "save",
-      "restore",
-      "clearRect",
-      "fillRect",
-      "beginPath",
-      "moveTo",
-      "lineTo",
-      "stroke",
-      "fill",
-      "arc",
-      "closePath",
-      "fillText",
-    ].map((name) => [name, jest.fn()]),
-  );
-  overlayContext.measureText = (text) => ({ width: text.length * 8 });
-  const overlayCanvas = { style: {}, getContext: () => overlayContext, remove: jest.fn() };
-  const documentRef = { createElement: jest.fn(() => overlayCanvas) };
-  const windowRef = {
-    devicePixelRatio: 0,
-    requestAnimationFrame: jest.fn((callback) => {
-      callbacks.set(callbacks.size + 1, callback);
-      return callbacks.size;
-    }),
-    cancelAnimationFrame: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    setInterval: jest.fn((callback) => {
-      intervals.set(intervals.size + 1, callback);
-      return intervals.size;
-    }),
-    clearInterval: jest.fn(),
-    document: documentRef,
-  };
-  globalThis.window = windowRef;
-  const container = {
-    clientWidth: 0,
-    clientHeight: 0,
-    appendChild: jest.fn(),
-    replaceChildren: jest.fn(),
-  };
-  const view = createAircraftScene({
+beforeEach(() => jest.clearAllMocks());
+
+test("wires scene services and reports connection changes", () => {
+  const view = createView();
+  const loop = mocks.factories.createAircraftRadarLoop.mock.calls[0][0];
+  const cameraOptions = mocks.factories.createRadarCamera.mock.calls[0][0];
+  expect(mocks.factories.createRadarStage).toHaveBeenCalledWith(
+    expect.anything(),
     container,
-    location: { latitude: 43, longitude: -70 },
-    elevationFeet: 300,
-  });
+    windowRef,
+  );
+  expect(mocks.controls.target.set).toHaveBeenCalledWith(0, 0, 0);
+  expect(mocks.factories.createRadarCamera).toHaveBeenCalledWith(
+    expect.objectContaining({ camera: mocks.camera, controls: mocks.controls }),
+  );
+  expect(mocks.radarCamera.setRange).toHaveBeenCalledWith(20);
+  expect(loop).toEqual(
+    expect.objectContaining({ targets: mocks.targets, renderer: mocks.renderer }),
+  );
+  expect(loop.isAutoZoom()).toBe(true);
+  expect(loop.isConnected()).toBe(false);
   view.setConnected(true);
-  view.updateAirports([
-    { faaId: "PWM", latitude: 43.1, longitude: -70, elevationFeet: 50, classC: "Y" },
-  ]);
-  view.updateNavaids([{ identifier: "ENE", state: "ME" }]);
-  view.updateBoundaries([{ id: "ZBW", type: "ARTCC", points: [] }]);
-  expect(Camera.instance.position.values).toEqual([0, rangeToCameraDistance(20), 0]);
-  expect(view.northAngle()).toBe(0);
-  const viewChange = jest.fn();
-  const detachViewChange = view.onViewChange(viewChange);
-  expect(viewChange).toHaveBeenCalledWith(20);
-  Controls.instance.listeners.get("change")();
-  expect(viewChange).toHaveBeenCalledTimes(2);
-  detachViewChange();
-  expect(view.zoom).toBeUndefined();
-  expect(view.rotate).toBeUndefined();
-  expect(view.tilt).toBeUndefined();
+  expect(mocks.homeConnected).toHaveBeenCalledWith(true);
+  expect(loop.isConnected()).toBe(true);
+  cameraOptions.onRangeChange(40);
+  expect(mocks.updateRings).toHaveBeenCalledWith(40);
+  cameraOptions.onManualZoom();
+  expect(loop.isAutoZoom()).toBe(false);
+});
+
+test("uses the browser window when no window reference is passed", () => {
+  const previousWindow = globalThis.window;
+  globalThis.window = windowRef;
+  try {
+    createAircraftScene({ container, location, elevationFeet: 300 });
+    expect(mocks.factories.createRadarStage).toHaveBeenCalledWith(
+      expect.anything(),
+      container,
+      windowRef,
+    );
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  }
+});
+
+test("updates targets and applies auto-zoom only to valid aircraft", () => {
+  const view = createView();
+  const aircraft = { icao: "ABC123", latitude: 43.1, longitude: -70 };
+  mocks.targets.distances.mockReturnValue([30]);
+  view.update(aircraft);
+  expect(mocks.targets.update).toHaveBeenCalledWith(aircraft, expect.any(Number));
+  expect(mocks.trails.add).toHaveBeenCalledWith("ABC123", expect.any(Object));
+  expect(mocks.radarCamera.setRange).toHaveBeenLastCalledWith(35);
+  view.update({ ...aircraft, icao: "ABC124" });
+  expect(mocks.radarCamera.setRange).toHaveBeenCalledTimes(2);
+  expect(view.update({ icao: "BAD000", latitude: undefined, longitude: -70 })).toBeUndefined();
+  expect(mocks.targets.update).toHaveBeenCalledTimes(2);
+  const loop = mocks.factories.createAircraftRadarLoop.mock.calls.at(-1)[0];
+  mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
+  mocks.targets.distances.mockReturnValue([70]);
+  view.update({ icao: "DEF456", latitude: 43.2, longitude: -70 });
+  expect(loop.isAutoZoom()).toBe(false);
+  expect(mocks.radarCamera.setRange).toHaveBeenCalledTimes(2);
+});
+
+test("publishes reference updates and restores auto-zoom on reset", () => {
+  const view = createView();
+  view.updateAirports([]);
+  view.updateNavaids([]);
+  view.updateBoundaries([]);
+  expect(mocks.referenceUpdates.updateAirports).toHaveBeenCalledWith([]);
+  expect(mocks.airspace.update).toHaveBeenCalledWith([]);
+  expect(mocks.referenceUpdates.updateNavaids).toHaveBeenCalledWith([]);
+  expect(mocks.referenceUpdates.updateBoundaries).toHaveBeenCalledWith([]);
+  const listener = jest.fn();
+  const detach = view.onViewChange(listener);
+  expect(mocks.orbitState.onViewChange).toHaveBeenCalledWith(listener);
+  expect(detach).toEqual(expect.any(Function));
+  detach();
+  mocks.scene.rotation.y = 2;
+  mocks.targets.distances.mockReturnValue([40]);
   view.reset();
-  expect(Camera.instance.up.values).toEqual([0, 0, -1]);
-  const rings = Scene.instance.children.filter((item) => item.geometry instanceof TorusGeometry);
-  expect(rings).toHaveLength(68);
-  expect(rings.filter((ring) => ring.visible).map((ring) => ring.geometry.values[0])).toEqual([
-    5, 10, 15, 20,
-  ]);
-  expect(rings.find((ring) => ring.geometry.values[0] === 1).geometry.values[1]).toBe(0.025);
-  expect(rings.find((ring) => ring.geometry.values[0] === 10).geometry.values[1]).toBe(0.055);
-  const resize = windowRef.addEventListener.mock.calls[0][1];
-  resize();
-  container.clientWidth = 800;
-  container.clientHeight = 0;
-  resize();
-  container.clientHeight = 600;
-  resize();
-  const renderFrame = [...callbacks.values()][0];
-  renderFrame();
-  view.update({
-    icao: "ABC123",
-    latitude: 43,
-    longitude: -70,
-    altitudeFeet: 6376,
-    trackDegrees: 90,
-  });
-  renderFrame();
-  expect(overlayContext.stroke).toHaveBeenCalled();
-  view.update({ icao: "DEF456", latitude: 43, longitude: -70, altitudeFeet: 6376 });
-  view.update({
-    icao: "ABC123",
-    latitude: 43,
-    longitude: -70,
-    altitudeFeet: 6376,
-    trackDegrees: 90,
-  });
-  expect(view.update({ icao: "BAD000", latitude: undefined, longitude: 0 })).toBeUndefined();
-  view.update({
-    icao: "FAR123",
-    latitude: 43.5,
-    longitude: -70,
-    altitudeFeet: 6376,
-  });
-  expect(Camera.instance.position.values[1]).toBeCloseTo(rangeToCameraDistance(35.02), 2);
-  now += 120_001;
-  intervals.get(1)();
-  expect(Camera.instance.position.values).toEqual([0, rangeToCameraDistance(20), 0]);
-  view.update({ icao: "FAR456", latitude: 43.6, longitude: -70 });
-  expect(Camera.instance.position.values[1]).toBeCloseTo(rangeToCameraDistance(41.0243), 2);
-  Controls.instance.listeners.get("start")();
-  view.update({ icao: "FAR789", latitude: 43.7, longitude: -70 });
-  expect(Camera.instance.position.values[1]).toBeCloseTo(rangeToCameraDistance(41.0243), 2);
-  now += 120_001;
-  intervals.get(1)();
-  view.update({ icao: "NEW123", latitude: 43, longitude: -70 });
+  expect(mocks.scene.rotation.y).toBe(0);
+  expect(mocks.radarCamera.setRange).toHaveBeenLastCalledWith(45);
+  mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
   view.reset();
-  expect(Camera.instance.position.values).toEqual([0, rangeToCameraDistance(20), 0]);
-  view.destroy();
-  expect(windowRef.cancelAnimationFrame).toHaveBeenCalledTimes(1);
-  expect(windowRef.removeEventListener).toHaveBeenCalledWith("resize", resize);
-  expect(windowRef.clearInterval).toHaveBeenCalledWith(1);
+  expect(mocks.factories.createAircraftRadarLoop.mock.calls[0][0].isAutoZoom()).toBe(true);
+});
+
+test("releases scene resources", () => {
+  createView().destroy();
+  expect(mocks.stopRadarLoops).toHaveBeenCalledTimes(1);
+  expect(mocks.airspace.dispose).toHaveBeenCalledTimes(1);
+  expect(mocks.overlay.destroy).toHaveBeenCalledTimes(1);
+  expect(mocks.radarCamera.dispose).toHaveBeenCalledTimes(1);
+  expect(mocks.controls.dispose).toHaveBeenCalledTimes(1);
   expect(container.replaceChildren).toHaveBeenCalledTimes(1);
-  windowRef.devicePixelRatio = 2;
-  globalThis.document = documentRef;
-  windowRef.document = undefined;
-  const defaultView = createAircraftScene({ container, location: null, elevationFeet: 300 });
-  defaultView.destroy();
-  delete globalThis.document;
-  dateNow.mockRestore();
 });

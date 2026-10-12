@@ -106,3 +106,42 @@ test("shows matching rings and center axes for the selected range", () => {
   update.setConnected(true);
   expect(rings[0].material.color.setHex).toHaveBeenCalled();
 });
+
+test("draws rings when the browser cannot create text labels", () => {
+  const scene = { add: jest.fn() };
+  class Mesh {
+    constructor(geometry, material) {
+      this.geometry = geometry;
+      this.material = material;
+      this.rotation = {};
+      this.position = { set: jest.fn() };
+      this.scale = { set: jest.fn() };
+      this.userData = {};
+    }
+  }
+  class Geometry {
+    constructor(...values) {
+      this.values = values;
+    }
+
+    rotateZ() {}
+  }
+  class Material {
+    constructor() {
+      this.color = { setHex: jest.fn() };
+    }
+  }
+
+  const update = createRadarSceneOverlays(
+    {
+      Mesh,
+      TorusGeometry: Geometry,
+      CylinderGeometry: Geometry,
+      MeshBasicMaterial: Material,
+    },
+    scene,
+  );
+
+  expect(scene.add).toHaveBeenCalledTimes(70);
+  expect(() => update(20)).not.toThrow();
+});
