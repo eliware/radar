@@ -119,11 +119,15 @@ directives:
       - Reserve space below the radar view in portrait layout for flight strips.
       - Show aircraft flight strips beside the radar in landscape layout and below it in portrait layout.
       - Sort web flight strips by distance from home, with the closest aircraft first.
-      - Show all available aircraft fields in flight strips. Mark missing values with a dash.
-      - Use full flight strip headers when all fields fit on one line. Use short headers at the next width.
-      - Wrap flight strip headers and aircraft into two rows, then three rows as width decreases.
-      - Show flight strip headers once. Do not repeat headers in aircraft rows.
-      - Use even field spacing, a black background, white text, double outer and header borders, and single aircraft dividers.
+      - Show callsign, combined altitude and vertical rate, speed, heading, squawk, range, and bearing in flight strips.
+      - Format flight strip altitude and vertical rate as the aircraft radar labels do.
+      - Omit ICAO, position, and age from flight strips.
+      - Omit units from flight strip values. Keep the degree sign on headings.
+      - Do not show field header rows in flight strips.
+      - Wrap flight strip fields into two rows, then three rows as width decreases.
+      - Use equal column widths in each wrapped flight strip row.
+      - Hide flight strip scrollbars while keeping the aircraft list scrollable.
+      - Use a black background, white text, a double outer border, and single aircraft dividers in flight strips.
       - Remove the page header and footer.
       - Place the reset control at the top right over the radar view.
         - Use Google Earth-style controls at the lower right. Group rotate and tilt around a compass. Put plus and minus zoom buttons beside the compass.
@@ -137,7 +141,8 @@ directives:
         - Center each arrow glyph inside its button.
         - Keep clear space between the zoom buttons and the outer control border.
         - Show zoom and rotate controls in the 2D view. Disable tilt because Canvas stays top-down.
-      - Show available aircraft data in flight strips and aircraft details. Mark missing values as unknown.
+      - Show selected aircraft fields in flight strips and aircraft details.
+      - Mark missing flight strip values with a dash.
       - Draw FAA ARTCC boundary paths in gray when the NASR data provides them.
       - Do not label ARTCC paths as Portland or A90 approach boundaries.
       - Load airport, navaid, airspace, and boundary data only through the current zoom range.

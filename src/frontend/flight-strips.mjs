@@ -14,28 +14,30 @@ function escapeHtml(value) {
   );
 }
 
-function rowMarkup(values, weights, heading = false, lastHeading = false) {
+function rowMarkup(values, weights, labels) {
   const columns = weights.map((weight) => `minmax(0, ${weight}fr)`).join(" ");
-  const cells = values.map((value) => `<span>${escapeHtml(value)}</span>`).join("");
-  const classes = `${heading ? " flight-strip-heading" : ""}${lastHeading ? " flight-strip-header-end" : ""}`;
-  return `<div class="flight-strip-row${classes}" style="grid-template-columns:${columns}">${cells}</div>`;
+  const cells = values
+    .map((value, index) => {
+      if (!value && !labels[index]) return "";
+      const title = ` title="${escapeHtml(`${labels[index]}: ${value}`)}"`;
+      return `<span${title}>${escapeHtml(value)}</span>`;
+    })
+    .join("");
+  return `<div class="flight-strip-row" style="grid-template-columns:${columns}">${cells}</div>`;
 }
 
-export function renderFlightStrips(container, aircraft, width, now = Date.now()) {
+export function renderFlightStrips(container, aircraft, width) {
   if (!container) return;
-  const data = buildFlightStripData(aircraft, width, now);
-  const headings = data.headers
-    .map((row, index) =>
-      rowMarkup(row, data.weights[index], true, index === data.headers.length - 1),
-    )
-    .join("");
+  const data = buildFlightStripData(aircraft, width);
   const rows = data.aircraft
     .map((item) => {
-      const body = item.groups.map((row, index) => rowMarkup(row, data.weights[index])).join("");
+      const body = item.groups
+        .map((row, index) => rowMarkup(row, data.weights[index], item.labels[index]))
+        .join("");
       return `<div class="flight-strip-aircraft" data-icao="${escapeHtml(item.icao)}">${body}</div>`;
     })
     .join("");
-  container.innerHTML = `<div class="flight-strip-frame"><div class="flight-strip-title"><span>RADAR FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div>${headings}<div class="flight-strip-list">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;
+  container.innerHTML = `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;
 }
 
 export function createFlightStripView(container, windowRef, clock = Date.now) {
@@ -45,12 +47,7 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
     for (const [icao, item] of aircraft) {
       if (Number.isFinite(item.lastSeen) && now - item.lastSeen > 120000) aircraft.delete(icao);
     }
-    renderFlightStrips(
-      container,
-      [...aircraft.values()],
-      availableWidth(container, windowRef),
-      now,
-    );
+    renderFlightStrips(container, [...aircraft.values()], availableWidth(container, windowRef));
   };
   windowRef?.addEventListener?.("resize", render);
   const timer = windowRef?.setInterval?.(render, 1000);

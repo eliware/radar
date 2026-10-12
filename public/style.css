@@ -210,7 +210,7 @@ p {
   color: #fff;
   background: #000;
   font-family: Consolas, "Courier New", monospace;
-  font-size: 0.78rem;
+  font-size: 0.86rem;
 }
 .flight-strip-frame {
   display: flex;
@@ -223,10 +223,13 @@ p {
 .flight-strip-title {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
-  padding: 10px;
+  gap: 6px;
+  padding: 6px;
   border-bottom: 3px double #ddd;
   font-weight: 700;
+}
+.flight-strip-title span {
+  white-space: nowrap;
 }
 .flight-strip-title span:last-child {
   text-align: right;
@@ -234,29 +237,28 @@ p {
 .flight-strip-row {
   display: grid;
   width: 100%;
+  font-size: 0.9rem;
 }
 .flight-strip-row span {
   min-width: 0;
-  padding: 7px 5px;
+  padding: 5px 4px;
   overflow: hidden;
   border-right: 1px solid #777;
-  text-overflow: ellipsis;
+  text-overflow: clip;
   white-space: nowrap;
 }
 .flight-strip-row span:last-child {
   border-right: 0;
 }
-.flight-strip-heading {
-  border-bottom: 1px solid #777;
-  font-weight: 700;
-}
-.flight-strip-header-end {
-  border-bottom: 3px double #ddd;
-}
 .flight-strip-list {
   min-height: 0;
   flex: 1;
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.flight-strip-list::-webkit-scrollbar {
+  display: none;
 }
 .flight-strip-aircraft:not(:last-child) {
   border-bottom: 1px solid #888;

@@ -5,28 +5,32 @@ function aircraft(icao, distance, callsign = "TEST") {
   return { icao, callsign, distanceNauticalMiles: distance, lastSeen: 1000 };
 }
 
-test("renders white strips with a count, one header, sorted rows, and safe text", () => {
+test("renders white strips without field headers and sorts safe aircraft data", () => {
   const container = {};
-  renderFlightStrips(container, [aircraft("FAR", 9), aircraft("NEAR", 1, "<R&\"'")], 3000, 2000);
-  expect(container.innerHTML).toContain("RADAR FLIGHT STRIPS");
+  renderFlightStrips(container, [aircraft("FAR", 9), aircraft("NEAR", 1, "<R&>\"'")], 3000);
+  expect(container.innerHTML).toContain("FLIGHT STRIPS");
   expect(container.innerHTML).toContain("2 AIRCRAFT");
   expect(container.innerHTML.indexOf('data-icao="NEAR"')).toBeLessThan(
     container.innerHTML.indexOf('data-icao="FAR"'),
   );
-  expect(container.innerHTML).toContain("&lt;R&amp;&quot;&#39;");
-  expect(container.innerHTML.match(/flight-strip-heading/g)).toHaveLength(1);
+  expect(container.innerHTML).toContain("&lt;R&amp;&gt;&quot;&#39;");
+  expect(container.innerHTML).not.toContain("flight-strip-heading");
+  expect(container.innerHTML).not.toMatch(/>CALLSIGN</);
 });
 
-test("renders grouped headings and grouped aircraft rows at narrow widths", () => {
+test("renders aligned aircraft data rows at narrow widths", () => {
   const container = {};
-  renderFlightStrips(container, [aircraft("ONE", 1)], 400, 2000);
-  expect(container.innerHTML.match(/flight-strip-heading/g)).toHaveLength(2);
-  expect(container.innerHTML.match(/flight-strip-row/g)).toHaveLength(4);
+  renderFlightStrips(container, [aircraft("ONE", 1, "AIRCRAFT1")], 200);
+  const tracks = [...container.innerHTML.matchAll(/grid-template-columns:([^"]+)/g)].map(
+    (match) => match[1],
+  );
+  expect(tracks).toHaveLength(3);
+  expect(new Set(tracks).size).toBe(1);
 });
 
 test("shows the empty state and accepts a missing container", () => {
   const container = {};
-  renderFlightStrips(container, [], 300, 2000);
+  renderFlightStrips(container, [], 300);
   expect(container.innerHTML).toContain("Waiting for aircraft...");
   expect(() => renderFlightStrips(null, [], 300)).not.toThrow();
 });
@@ -49,10 +53,10 @@ test("updates on resize and each second, then removes stale aircraft on destroy"
   expect(container.innerHTML).toContain("2 AIRCRAFT");
   now = 3000;
   tick();
-  expect(container.innerHTML).toContain("2s");
+  expect(container.innerHTML).toContain("FRESH");
   container.clientWidth = 300;
   resize();
-  expect(container.innerHTML.match(/flight-strip-heading/g)).toHaveLength(3);
+  expect(container.innerHTML.match(/flight-strip-row/g)).toHaveLength(4);
   now = 122000;
   tick();
   expect(container.innerHTML).toContain("1 AIRCRAFT");
@@ -66,6 +70,11 @@ test("supports an unavailable container and window", () => {
   view.update(aircraft("A", 1));
   view.destroy();
   expect(true).toBe(true);
+});
+
+test("supports a window without timer functions", () => {
+  const view = createFlightStripView(null, {});
+  view.destroy();
 });
 
 test("uses zero padding when computed panel padding is empty", () => {
