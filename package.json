@@ -26,6 +26,7 @@
     "build": "webpack --config webpack.config.mjs",
     "prebuild": "webpack-cli --version",
     "screenshots": "node bin/screenshots.mjs",
+    "screenshots:primary": "node bin/screenshots.mjs --primary",
     "lighthouse": "lighthouse http://127.0.0.1:3000 --only-categories=accessibility --output=json --output-path=artifacts/lighthouse.json --chrome-flags=--headless",
     "puppeteer": "puppeteer browsers install chrome"
   },

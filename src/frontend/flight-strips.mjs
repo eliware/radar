@@ -45,7 +45,12 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
     for (const [icao, item] of aircraft) {
       if (Number.isFinite(item.lastSeen) && now - item.lastSeen > 120000) aircraft.delete(icao);
     }
-    renderFlightStrips(container, [...aircraft.values()], container?.clientWidth ?? 0, now);
+    renderFlightStrips(
+      container,
+      [...aircraft.values()],
+      availableWidth(container, windowRef),
+      now,
+    );
   };
   windowRef?.addEventListener?.("resize", render);
   const timer = windowRef?.setInterval?.(render, 1000);
@@ -62,4 +67,13 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
       if (timer !== undefined) windowRef?.clearInterval?.(timer);
     },
   };
+}
+
+function availableWidth(container, windowRef) {
+  const width = container?.clientWidth ?? 0;
+  const style = windowRef?.getComputedStyle?.(container);
+  if (!style) return width;
+  const padding =
+    Number.parseFloat(style.paddingLeft || 0) + Number.parseFloat(style.paddingRight || 0);
+  return Math.max(0, width - padding - 6);
 }

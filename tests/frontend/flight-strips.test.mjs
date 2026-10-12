@@ -38,6 +38,7 @@ test("updates on resize and each second, then removes stale aircraft on destroy"
   const container = { clientWidth: 700 };
   const windowRef = {
     addEventListener: jest.fn((name, callback) => (resize = callback)),
+    getComputedStyle: jest.fn(() => ({ paddingLeft: "10px", paddingRight: "10px" })),
     removeEventListener: jest.fn(),
     setInterval: jest.fn((callback) => ((tick = callback), 17)),
     clearInterval: jest.fn(),
@@ -61,8 +62,18 @@ test("updates on resize and each second, then removes stale aircraft on destroy"
 });
 
 test("supports an unavailable container and window", () => {
-  const view = createFlightStripView(null, undefined, () => 0);
+  const view = createFlightStripView(null, undefined);
   view.update(aircraft("A", 1));
   view.destroy();
   expect(true).toBe(true);
+});
+
+test("uses zero padding when computed panel padding is empty", () => {
+  const container = { clientWidth: 700 };
+  const windowRef = {
+    getComputedStyle: jest.fn(() => ({ paddingLeft: "", paddingRight: "" })),
+  };
+  const view = createFlightStripView(container, windowRef, () => 0);
+  expect(windowRef.getComputedStyle).toHaveBeenCalledWith(container);
+  view.destroy();
 });

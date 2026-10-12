@@ -3,6 +3,7 @@ import { KnownDevices } from "puppeteer";
 
 const iphone = KnownDevices["iPhone 12"];
 const viewports = [
+  { name: "desktop-primary", viewport: { width: 1280, height: 1024, deviceScaleFactor: 1 } },
   { name: "desktop-1080p", viewport: { width: 1920, height: 1080, deviceScaleFactor: 1 } },
   { name: "desktop-1440p", viewport: { width: 2560, height: 1440, deviceScaleFactor: 1 } },
   { name: "desktop-2160p", viewport: { width: 3840, height: 2160, deviceScaleFactor: 1 } },

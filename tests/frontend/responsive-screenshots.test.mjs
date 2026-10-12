@@ -30,8 +30,13 @@ function makeCaptureTools({ size = 1000, pageError = false } = {}) {
   };
 }
 
-test("selects all five documented screen sizes", () => {
-  expect(selectScreenshotViewports()).toHaveLength(5);
+test("selects all six documented screen sizes", () => {
+  expect(selectScreenshotViewports()).toHaveLength(6);
+  expect(selectScreenshotViewports("desktop-primary")[0].viewport).toEqual({
+    width: 1280,
+    height: 1024,
+    deviceScaleFactor: 1,
+  });
   expect(selectScreenshotViewports("desktop-1080p")[0].viewport).toEqual({
     width: 1920,
     height: 1080,

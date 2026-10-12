@@ -77,4 +77,6 @@ Use a WebSocket client to connect to `ws://127.0.0.1:3000/ws` and check update m
 
 Start the web app, then run `npm run screenshots`. The command saves above-fold and full-page images in `artifacts/screenshots/`.
 
-The command uses 1920 × 1080, 2560 × 1440, and 3840 × 2160 desktop sizes. It also uses iPhone 12 portrait and landscape sizes.
+Run `npm run screenshots:primary` to capture the main 1280 × 1024 monitor size only.
+
+The command uses 1280 × 1024, 1920 × 1080, 2560 × 1440, and 3840 × 2160 desktop sizes. It also uses iPhone 12 portrait and landscape sizes.
