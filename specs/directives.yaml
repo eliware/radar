@@ -1,7 +1,7 @@
-version: "11.0"
+version: "12.0"
 description: Repository-specific guidance for the Eliware Radar.
 directives:
-  - id: E-1390
+  - id: E-1390.0
     dos:
       - Build an aviation app that reads decoded ADS-B records from one RTL1090 TCP feed.
       - Keep the second SDR available to other apps.
@@ -130,17 +130,14 @@ directives:
       - Use a black background, white text, a double outer border, and single aircraft dividers in flight strips.
       - Remove the page header and footer.
       - Place the reset control at the top right over the radar view.
-        - Use Google Earth-style controls at the lower right. Group rotate and tilt around a compass. Put plus and minus zoom buttons beside the compass.
-        - Center the up-tilt button at the top of the compass.
-        - Place the N label at the top center of the inner compass circle.
-        - Move the N marker around the compass ring to show current north.
-        - Allow a drag of the N marker around the ring to rotate the radar view.
-        - Use the center compass control as a small joystick for radar tilt and rotation.
-        - On Canvas, use joystick drag to rotate only. Keep the Canvas view top-down.
-        - Keep the compass fill behind the arrow buttons and the north marker.
-        - Center each arrow glyph inside its button.
-        - Keep clear space between the zoom buttons and the outer control border.
-        - Show zoom and rotate controls in the 2D view. Disable tilt because Canvas stays top-down.
+      - Show a passive 16-point compass at the lower right of both radar views.
+      - Make the north point 1.5 times as long as the south, east, and west points.
+      - Make the northeast, northwest, southeast, and southwest points half as long as the cardinal points.
+      - Make the other eight points half as long as the diagonal points.
+      - Label only north, south, east, and west. Make the north label slightly more prominent.
+      - Rotate the compass star and labels with the radar view.
+      - Show the rotation as an upright three-digit value from 000 through 359 at the compass center.
+      - Do not let compass clicks or touches change the radar view.
       - Show selected aircraft fields in flight strips and aircraft details.
       - Mark missing flight strip values with a dash.
       - Draw FAA ARTCC boundary paths in gray when the NASR data provides them.

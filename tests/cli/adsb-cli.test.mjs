@@ -1,4 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
+import packageJson from "../../package.json" with { type: "json" };
 import { startAdsbCli } from "../../src/cli/adsb-cli.mjs";
 
 function dependencies() {
@@ -162,7 +163,7 @@ test("prints version and invalid option errors without opening the feed", () => 
     dependencies: version.values,
   });
   versionCli.close();
-  expect(version.write).toHaveBeenCalledWith("11.0.0");
+  expect(version.write).toHaveBeenCalledWith(packageJson.version);
   expect(version.values.connectSbsFeed).not.toHaveBeenCalled();
 
   const invalid = dependencies();

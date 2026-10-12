@@ -10,76 +10,43 @@
     <main class="dashboard">
       <section class="scene-panel" aria-label="Aircraft radar view">
         <button class="reset-view" data-reset type="button">Reset view</button>
-        <div class="radar-controls" data-radar-controls role="group" aria-label="Radar controls">
-          <div
-            class="radar-compass"
-            data-radar-compass
-            role="group"
-            aria-label="Compass and view angle"
-          >
-            <button
-              class="compass-north"
-              data-compass-north
-              type="button"
-              aria-label="Drag to rotate the radar"
-            >
-              N
-            </button>
-            <button
-              data-radar-control="tilt-horizon"
-              type="button"
-              aria-label="Tilt toward horizon"
-              title="Tilt toward horizon"
-            >
-              ▲
-            </button>
-            <button
-              data-radar-control="rotate-left"
-              type="button"
-              aria-label="Rotate left"
-              title="Rotate left"
-            >
-              ◀
-            </button>
-            <button
-              class="compass-center"
-              data-compass-joystick
-              type="button"
-              aria-label="Drag to tilt and rotate the radar"
-            >
-              ✦
-            </button>
-            <button
-              data-radar-control="rotate-right"
-              type="button"
-              aria-label="Rotate right"
-              title="Rotate right"
-            >
-              ▶
-            </button>
-            <button
-              data-radar-control="tilt-top"
-              type="button"
-              aria-label="Tilt toward top-down"
-              title="Tilt toward top-down"
-            >
-              ▼
-            </button>
-          </div>
-          <div class="radar-zoom" role="group" aria-label="Zoom">
-            <button data-radar-control="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">
-              +
-            </button>
-            <span aria-hidden="true"></span>
-            <button
-              data-radar-control="zoom-out"
-              type="button"
-              aria-label="Zoom out"
-              title="Zoom out"
-            >
-              −
-            </button>
-          </div>
+        <div
+          class="radar-compass"
+          data-radar-compass
+          role="img"
+          aria-label="Radar heading 000 degrees"
+        >
+          <svg viewBox="0 0 116 116" aria-hidden="true">
+            <g data-compass-rose transform="rotate(0 58 58)">
+              <defs>
+                <line id="north-point" x1="58" y1="58" x2="58" y2="16" />
+                <line id="cardinal-point" x1="58" y1="58" x2="58" y2="30" />
+                <line id="diagonal-point" x1="58" y1="58" x2="58" y2="44" />
+                <line id="secondary-point" x1="58" y1="58" x2="58" y2="51" />
+              </defs>
+              <use href="#north-point" />
+              <use href="#cardinal-point" transform="rotate(90 58 58)" />
+              <use href="#cardinal-point" transform="rotate(180 58 58)" />
+              <use href="#cardinal-point" transform="rotate(270 58 58)" />
+              <use href="#diagonal-point" transform="rotate(45 58 58)" />
+              <use href="#diagonal-point" transform="rotate(135 58 58)" />
+              <use href="#diagonal-point" transform="rotate(225 58 58)" />
+              <use href="#diagonal-point" transform="rotate(315 58 58)" />
+              <use href="#secondary-point" transform="rotate(22.5 58 58)" />
+              <use href="#secondary-point" transform="rotate(67.5 58 58)" />
+              <use href="#secondary-point" transform="rotate(112.5 58 58)" />
+              <use href="#secondary-point" transform="rotate(157.5 58 58)" />
+              <use href="#secondary-point" transform="rotate(202.5 58 58)" />
+              <use href="#secondary-point" transform="rotate(247.5 58 58)" />
+              <use href="#secondary-point" transform="rotate(292.5 58 58)" />
+              <use href="#secondary-point" transform="rotate(337.5 58 58)" />
+              <text class="compass-label compass-label-north" x="58" y="10">N</text>
+              <text class="compass-label" x="106" y="58">E</text>
+              <text class="compass-label" x="58" y="106">S</text>
+              <text class="compass-label" x="10" y="58">W</text>
+            </g>
+            <text data-compass-heading x="58" y="58">000</text>
+          </svg>
         </div>
         <div class="scene-labels">
           <p data-home>Loading home position.</p>

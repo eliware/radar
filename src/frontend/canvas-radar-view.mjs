@@ -3,7 +3,7 @@ import { createCanvasRadarDraw } from "./create-canvas-radar-draw.mjs";
 import { DEFAULT_RADAR_RANGE, selectDefaultRadarRange } from "./radar-range.mjs";
 import { createRadarTargets } from "./radar-targets.mjs";
 import { createAircraftTrails } from "./aircraft-trails.mjs";
-import { createCanvasRadarControls } from "./create-canvas-radar-controls.mjs";
+import { createCanvasRadarState } from "./create-canvas-radar-state.mjs";
 import { createViewChangeListeners } from "./create-view-change-listeners.mjs";
 import { createRadarReferenceStore } from "./radar-reference-store.mjs";
 import { attachCanvasRadarEvents } from "./attach-canvas-radar-events.mjs";
@@ -49,7 +49,7 @@ export function createCanvasRadarView({
   };
   const detachEvents = attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef);
   draw();
-  const controls = createCanvasRadarControls(state, draw, () => targets.distances());
+  const viewState = createCanvasRadarState(state, draw, () => targets.distances(), viewChanges);
   return {
     mode: "2D",
     setConnected(connected) {
@@ -77,10 +77,7 @@ export function createCanvasRadarView({
       references.updateBoundaries(items);
       draw();
     },
-    ...controls,
-    northAngle: () => state.rotation,
-    range: () => state.range,
-    onViewChange: (listener) => viewChanges.subscribe(listener),
+    ...viewState,
     destroy() {
       detachEvents();
       viewChanges.clear();

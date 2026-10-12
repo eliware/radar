@@ -1,31 +1,28 @@
 # Dependencies
-node_modules/
+**/node_modules/
 
 # Version control state
-.git/
+**/.git/
 
-# Test coverage
-coverage/
-.nyc_output/
-
-# Build output
-build/
-dist/
-
-# Generated artifacts and caches
-artifacts/
-.cache/
+# Generated output and test data
+**/coverage/
+**/.nyc_output/
+**/build/
+**/dist/
+**/generated/
+**/artifacts/
+**/test-results/
+**/.cache/
 
 # Runtime data
-logs/
+**/logs/
 *.log
 *.pid
 *.seed
 
-# Environment secrets
-.env
-.env.*
-!.env.example
+# Environment files
+.env*
+!.env*.example
 
 # Machine-specific files
 .vscode/

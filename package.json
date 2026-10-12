@@ -1,39 +1,8 @@
 {
   "name": "@eliware/radar",
+  "version": "12.0.0",
   "type": "module",
-  "version": "11.0.0",
   "description": "Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
-  "main": "./bin/radar.mjs",
-  "files": [
-    "src/",
-    "docs/",
-    "README.md",
-    "AGENTS.md",
-    "LICENSE",
-    "RELEASE_NOTES.md",
-    "bin/"
-  ],
-  "bin": {
-    "radar-adsb": "./bin/adsb.mjs"
-  },
-  "scripts": {
-    "test": "eliware-test",
-    "pack": "eliware-test --pack",
-    "lint": "eliware-test --lint",
-    "audit": "eliware-test --audit",
-    "format": "eliware-test --format",
-    "format:check": "eliware-test --format-check",
-    "build": "webpack --config webpack.config.mjs",
-    "prebuild": "webpack-cli --version",
-    "screenshots": "node bin/screenshots.mjs",
-    "screenshots:primary": "node bin/screenshots.mjs --primary",
-    "lighthouse": "lighthouse http://127.0.0.1:3000 --only-categories=accessibility --output=json --output-path=artifacts/lighthouse.json --chrome-flags=--headless",
-    "puppeteer": "puppeteer browsers install chrome"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eliware/radar.git"
-  },
   "keywords": [
     "radar",
     "aviation",
@@ -47,32 +16,53 @@
     "web",
     "nodejs"
   ],
-  "author": "Eliware <eliware@eliware.org>",
-  "license": "MIT",
   "private": false,
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
+  "main": "./bin/radar.mjs",
+  "bin": {
+    "radar-adsb": "./bin/adsb.mjs"
+  },
+  "files": [
+    "src/",
+    "docs/",
+    "README.md",
+    "AGENTS.md",
+    "LICENSE",
+    "RELEASE_NOTES.md",
+    "bin/",
+    "specs/"
+  ],
+  "scripts": {
+    "test": "eliware-test",
+    "pack": "eliware-test --pack",
+    "lint": "eliware-test --lint",
+    "audit": "eliware-test --audit",
+    "format": "eliware-test --format",
+    "format:check": "eliware-test --format-check",
+    "build": "webpack --config src/frontend/webpack-config.mjs",
+    "prebuild": "webpack-cli --version",
+    "screenshots": "node bin/screenshots.mjs",
+    "screenshots:primary": "node bin/screenshots.mjs --primary",
+    "lighthouse": "lighthouse http://127.0.0.1:3000 --only-categories=accessibility --output=json --output-path=artifacts/lighthouse.json --chrome-flags=--headless",
+    "puppeteer": "puppeteer browsers install chrome"
+  },
   "engines": {
-    "node": "26"
+    "node": ">=26"
   },
-  "eliware": {
-    "id": "E-1390",
-    "apply": [
-      "general",
-      "application",
-      "cli",
-      "web",
-      "npm-published"
-    ]
+  "dependencies": {
+    "@eliware/common": "^2.0.0",
+    "@fastify/websocket": "^11.3.4",
+    "dotenv": "^18.0.7",
+    "fastify": "^5.12.5",
+    "lighthouse": "^13.5.0",
+    "puppeteer": "^25.13.0",
+    "three": "^0.186.1"
   },
-  "bugs": {
-    "url": "https://github.com/eliware/radar/issues"
-  },
-  "homepage": "https://github.com/eliware/radar#readme",
   "devDependencies": {
-    "@eliware/test": "^11.0.0",
+    "@eliware/test": "^12.0.0",
     "webpack": "^5.99.9",
     "webpack-cli": "^7.2.3"
   },
@@ -97,15 +87,6 @@
       }
     }
   },
-  "dependencies": {
-    "@eliware/common": "^2.0.0",
-    "@fastify/websocket": "^11.3.4",
-    "dotenv": "^18.0.7",
-    "fastify": "^5.12.5",
-    "lighthouse": "^13.5.0",
-    "puppeteer": "^25.13.0",
-    "three": "^0.186.1"
-  },
   "prettier": {
     "printWidth": 100,
     "tabWidth": 2,
@@ -120,5 +101,25 @@
     "arrowParens": "always",
     "proseWrap": "preserve",
     "endOfLine": "lf"
+  },
+  "author": "Eliware <eliware@eliware.org>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliware/radar.git"
+  },
+  "homepage": "https://github.com/eliware/radar#readme",
+  "bugs": {
+    "url": "https://github.com/eliware/radar/issues"
+  },
+  "eliware": {
+    "id": "E-1390",
+    "apply": [
+      "general",
+      "application",
+      "cli",
+      "web",
+      "npm-published"
+    ]
   }
 }

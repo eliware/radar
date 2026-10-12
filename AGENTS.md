@@ -18,7 +18,7 @@ These Development instructions apply repository-wide. Subdirectory AGENTS.md ins
 
 ## Validation
 
-Run `npm ci`, then `npm test`. Aggregate validation runs tests, lint, format checks, audit, pack checks, and the web build. Run `npm run pack` to check the npm archive. Require each check to pass before release review.
+Run `npm ci`, then `npm test`. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` for focused checks. Aggregate validation runs tests, lint, format checks, audit, pack checks, conventions, and the web build. Run `npm run pack` to check the npm archive. Require each check to pass before release review.
 
 ## Security
 
@@ -42,4 +42,4 @@ Web configuration uses `PORT`, which defaults to 3000. The server binds to `0.0.
 
 ## npm publication
 
-The package is `@eliware/radar`. Read its version from `package.json`. The exact files allowlist is `src/`, `docs/`, `README.md`, `AGENTS.md`, `LICENSE`, `RELEASE_NOTES.md`, and `bin/`. The pack validation command is `npm run pack` (script: `eliware-test --pack`); require it to pass. Publish with npm Trusted Publishing and provenance through `publish.yaml`. After an authorized release, run `npm view @eliware/radar@VERSION version --registry=https://registry.npmjs.org`. Confirm the exact package version matches `package.json`. Eli and the project developer run TagIt preflight together. Eli decides release readiness and instructs DevOps. DevOps executes the authorized release. This section does not authorize publication. Publication requires explicit authorization through the applicable Operations release handoff.
+The package is `@eliware/radar`. Read its version from `package.json`. The exact files allowlist is `src/`, `docs/`, `README.md`, `AGENTS.md`, `LICENSE`, `RELEASE_NOTES.md`, `bin/`, and `specs/`. The pack validation command is `npm run pack` (script: `eliware-test --pack`); require it to pass. Publish with npm Trusted Publishing and provenance through `publish.yaml`. After an authorized release, run `npm view @eliware/radar@VERSION version --registry=https://registry.npmjs.org`. Confirm the exact package version matches `package.json`. Eli and the project developer run TagIt preflight together. Eli decides release readiness and instructs DevOps. DevOps executes the authorized release. This section does not authorize publication. Publication requires explicit authorization through the applicable Operations release handoff.

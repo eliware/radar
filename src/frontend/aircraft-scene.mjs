@@ -8,7 +8,7 @@ import { createRadarTargets } from "./radar-targets.mjs";
 import { createRadarSceneOverlays } from "./radar-scene-overlays.mjs";
 import { createAircraftTrails } from "./aircraft-trails.mjs";
 import { createAircraftDisplayOverlay } from "./aircraft-display-overlay.mjs";
-import { createOrbitRadarControls } from "./create-orbit-radar-controls.mjs";
+import { createOrbitRadarState } from "./create-orbit-radar-state.mjs";
 import { createRadarHome } from "./create-radar-home.mjs";
 import { createAircraftRadarLoop } from "./create-aircraft-radar-loop.mjs";
 import { createAirspaceVolumes } from "./create-airspace-volumes.mjs";
@@ -43,7 +43,6 @@ export function createAircraftScene({ container, location, elevationFeet, window
     },
   });
   radarCamera.setRange(DEFAULT_RADAR_RANGE);
-  const viewControls = createOrbitRadarControls(controls, radarCamera);
   const stopRadarLoops = createAircraftRadarLoop({
     targets,
     trails,
@@ -80,7 +79,7 @@ export function createAircraftScene({ container, location, elevationFeet, window
       }
     },
     ...references.updates((items) => airspace.update(items)),
-    ...viewControls,
+    ...createOrbitRadarState(controls, radarCamera),
     reset() {
       scene.rotation.y = 0;
       autoZoom = true;

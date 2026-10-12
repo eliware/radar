@@ -47,7 +47,9 @@ Flight strips sort aircraft by distance from home, with the closest aircraft fir
 
 Set `MY_LOCATION` as decimal latitude and longitude in `.env`. Set `MY_ELEVATION` in feet above mean sea level. The default is 300 feet.
 
-Use the compass controls at the lower right to rotate and tilt the 3D view. Use the plus and minus buttons to zoom both views. The 2D Canvas view stays top-down, so its tilt buttons are disabled. On desktop, drag to rotate the 3D view. Right-drag to pan. Use the scroll wheel to zoom. In the 2D fallback, drag to pan and use the scroll wheel to zoom.
+The lower-right compass displays the current radar rotation. It has 16 points, labels only N, S, E, and W, and shows the rotation as an upright three-digit value from 000 through 359. The north point is 1.5 times the length of the other cardinal points. The diagonal points are half as long as the cardinal points. The remaining points are half as long as the diagonal points. The compass does not change the radar view when clicked or touched.
+
+On desktop, drag to rotate the 3D view. Right-drag to pan. Use the scroll wheel to zoom. In the 2D fallback, drag to pan and use the scroll wheel to zoom.
 
 On mobile, keep home centered. Pinch to zoom. Twist two fingers to rotate the radar. Panning is disabled. Select Reset view to restore north-up view. The radar scope shows green when the WebSocket feed is connected and dark gray when it is disconnected. The page has no gesture hint or text connection status.
 

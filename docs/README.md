@@ -1,12 +1,9 @@
 # Documentation
 
-Purpose: document Radar user workflows. Scope: explain how to use the ADS-B CLI and the web app. Usage: follow the ADS-B command page or the project README.
+The Radar docs describe the ADS-B CLI, NASR data, RTL1090 setup, and web service.
 
-- [docs/adsb-cli.md](adsb-cli.md) explains the live TCP feed command.
-- [docs/web-api.md](web-api.md) explains the local REST API and WebSocket feed.
-- [docs/nasr-data.md](nasr-data.md) explains the local FAA NASR SQLite data.
-- [docs/rtl1090-background.md](rtl1090-background.md) explains the Windows background task.
-- [docs/web-service-background.md](web-service-background.md) explains the Radar web task.
-- [Project README](../README.md) covers setup, the web app, validation, and support.
-- [Specifications](../specs/README.md) lists repository requirements.
-- [Release notes](../RELEASE_NOTES.md) records released changes.
+- [ADS-B CLI](adsb-cli.md)
+- [NASR data](nasr-data.md)
+- [RTL1090 background service](rtl1090-background.md)
+- [Web API](web-api.md)
+- [Web service background](web-service-background.md)

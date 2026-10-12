@@ -47,130 +47,51 @@ p {
   color: inherit;
   cursor: pointer;
 }
-.radar-controls {
+.radar-compass {
   position: absolute;
   z-index: 2;
   right: 14px;
   bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px 8px 8px;
-  border: 1px solid #00551f;
-  border-radius: 48px;
-  background: #000e;
-}
-.radar-compass {
-  position: relative;
-  display: grid;
-  width: 112px;
-  height: 112px;
-  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-  border: 1px solid #006b26;
-  border-radius: 50%;
-  background: radial-gradient(circle, #061309 0 46%, #001006 47% 100%);
-}
-.radar-controls button {
-  display: flex;
-  width: 34px;
-  height: 34px;
-  border: 1px solid #006b26;
-  border-radius: 50%;
-  background: #000;
-  color: inherit;
-  font: inherit;
-  font-family: "Segoe UI Symbol", "Segoe UI", sans-serif;
-  font-size: 0.9rem;
-  line-height: 1;
-  padding: 0;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.radar-compass [data-radar-control] {
-  width: 28px;
-  height: 28px;
+  width: 116px;
+  height: 116px;
+  color: #00ff41;
+  pointer-events: auto;
   touch-action: none;
+  user-select: none;
 }
-.radar-compass [data-radar-control="tilt-horizon"] {
-  transform: translateY(14px);
+.radar-compass svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
-.compass-north {
-  position: absolute;
-  z-index: 2;
-  width: auto !important;
-  height: auto !important;
-  padding: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-  color: inherit;
-  font-size: 0.58rem !important;
-  line-height: 1;
-  transform: translate(-50%, -50%);
-  touch-action: none;
-  cursor: grab !important;
+.radar-compass use {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
 }
-.compass-north:active {
-  cursor: grabbing !important;
+.compass-label {
+  fill: currentColor;
+  font:
+    8px "Segoe UI",
+    sans-serif;
+  text-anchor: middle;
+  dominant-baseline: middle;
 }
-.compass-center {
-  z-index: 2;
-  width: 16px !important;
-  height: 16px !important;
-  padding: 0 !important;
-  background: #061309 !important;
-  font-size: 0.6rem !important;
-  touch-action: none;
-  cursor: grab !important;
-}
-.compass-center:active {
-  cursor: grabbing !important;
-}
-.radar-controls button:hover:not(:disabled) {
-  background: #00320f;
-}
-.radar-controls button:disabled {
-  color: #006b26;
-  cursor: not-allowed;
-}
-.compass-north,
-.compass-center {
-  color: #00a832;
-  font-size: 0.7rem;
+.compass-label-north {
+  font-size: 10px;
   font-weight: 700;
 }
-.compass-north {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.compass-center {
-  grid-area: 2 / 2;
-}
-.radar-compass [data-radar-control="tilt-horizon"] {
-  grid-area: 1 / 2;
-}
-.radar-compass [data-radar-control="rotate-left"] {
-  grid-area: 2 / 1;
-}
-.radar-compass [data-radar-control="rotate-right"] {
-  grid-area: 2 / 3;
-}
-.radar-compass [data-radar-control="tilt-top"] {
-  grid-area: 3 / 2;
-}
-.radar-zoom {
-  display: flex;
-  width: 42px;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-}
-.radar-zoom span {
-  width: 2px;
-  height: 32px;
-  background: #006b26;
+.radar-compass [data-compass-heading] {
+  fill: currentColor;
+  font:
+    bold 10px Consolas,
+    monospace;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  paint-order: stroke;
+  stroke: #000;
+  stroke-width: 3px;
 }
 .scene-panel {
   position: relative;
@@ -268,36 +189,9 @@ p {
 }
 
 @media (max-width: 620px), (max-height: 620px) {
-  .radar-controls {
-    gap: 5px;
-    padding: 5px 12px 5px 5px;
-  }
   .radar-compass {
     width: 88px;
     height: 88px;
-  }
-  .radar-controls button {
-    width: 28px;
-    height: 28px;
-    font-size: 0.75rem;
-  }
-  .radar-compass [data-radar-control] {
-    width: 24px;
-    height: 24px;
-  }
-  .radar-compass [data-radar-control="tilt-horizon"] {
-    transform: translateY(9px);
-  }
-  .compass-center {
-    width: 14px !important;
-    height: 14px !important;
-  }
-  .radar-zoom {
-    width: 34px;
-    gap: 5px;
-  }
-  .radar-zoom span {
-    height: 22px;
   }
 }
 

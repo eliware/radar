@@ -1,8 +1,8 @@
 # Release Notes
 
-## 11.0.0 — 2026-10-10
+## 12.0.0 — 2026-10-12
 
 ### Changed
 
-- Create the initial Radar web application shell.
-- Add a CLI that reads decoded aircraft data from an SBS/BaseStation TCP feed.
+- Replace the radar control buttons and joystick with a passive compass.
+- Upgrade repository checks to Convention 12.

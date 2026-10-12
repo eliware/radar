@@ -59,6 +59,14 @@ test("sets bounded camera distance and reports manual range changes", () => {
   state.events.get("change")();
   state.events.get("start")();
   expect(state.onManualZoom).toHaveBeenCalledTimes(3);
+  state.view.setRange(1);
+  state.camera.position.set(0, 0, 0);
+  state.view.zoomBy(2);
+  expect(state.view.range()).toBe(2);
+  state.camera.position.x = Number.NaN;
+  state.view.zoomBy(2);
+  expect(state.view.range()).toBe(4);
+  expect(state.onManualZoom).toHaveBeenCalledTimes(5);
   state.view.dispose();
   expect(state.removed).toHaveBeenCalledTimes(2);
 });

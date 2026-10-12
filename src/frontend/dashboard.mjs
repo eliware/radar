@@ -1,4 +1,4 @@
-import { attachRadarControls } from "./attach-radar-controls.mjs";
+import { attachRadarCompassDisplay } from "./attach-radar-compass-display.mjs";
 import { connectWebSocketFeed } from "./websocket-feed.mjs";
 import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
 import { createFlightStripView } from "./flight-strips.mjs";
@@ -27,7 +27,7 @@ export async function startDashboard({
       location: config.location,
       elevationFeet: config.elevationFeet,
     });
-    attachRadarControls(document, scene);
+    attachRadarCompassDisplay(document, scene);
     const referenceLoader =
       scene.updateAirports && scene.updateNavaids && scene.updateBoundaries && scene.range
         ? createRadarReferenceLoader(fetchData, scene)
