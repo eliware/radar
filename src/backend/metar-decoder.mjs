@@ -9,7 +9,9 @@ export function decodeMetarReport(report, parse = parseMetar) {
     const decoded = decodedFields(data);
     return {
       ...report,
-      decoded: Object.values(decoded).every((value) => value === "—") ? null : decoded,
+      decoded: Object.values(decoded).every((value) => value === "—" || value === false)
+        ? null
+        : decoded,
     };
   } catch {
     return { ...report, decoded: null };
@@ -18,8 +20,10 @@ export function decodeMetarReport(report, parse = parseMetar) {
 
 function decodedFields(data) {
   return {
+    automated: Boolean(data.auto),
     observed: timeText(data),
-    wind: windText(data.wind),
+    windDirection: windDirectionText(data.wind),
+    windSpeed: windSpeedText(data.wind),
     visibility: visibilityText(data),
     conditions: conditionText(data.weatherConditions),
     clouds: cloudText(data),
@@ -34,11 +38,14 @@ function timeText({ day, hour, minute }) {
   return `${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}Z`;
 }
 
-function windText(wind) {
+function windDirectionText(wind) {
   if (!wind) return "—";
-  const direction = wind.degrees == null ? wind.direction : `${wind.degrees}°`;
-  const gust = wind.gust == null ? "" : `G${wind.gust}`;
-  return `${direction} ${wind.speed}${gust}`;
+  return wind.degrees == null ? wind.direction : `${wind.degrees}°`;
+}
+
+function windSpeedText(wind) {
+  if (!wind) return "—";
+  return `${wind.speed}${wind.gust == null ? "" : `G${wind.gust}`}`;
 }
 
 function visibilityText(data) {

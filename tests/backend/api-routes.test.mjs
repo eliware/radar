@@ -54,8 +54,10 @@ test("registers the METAR route when its lookup is configured", async () => {
       {
         ...reports[0],
         decoded: {
+          automated: false,
           observed: "13 16:51Z",
-          wind: "290° 12",
+          windDirection: "290°",
+          windSpeed: "12",
           visibility: "10",
           conditions: "—",
           clouds: "FEW 4500",

@@ -6,8 +6,10 @@ function nodes() {
 }
 
 const decoded = {
+  automated: true,
   observed: "13 16:51Z",
-  wind: "290° 12G18",
+  windDirection: "290°",
+  windSpeed: "12G18",
   visibility: "10",
   conditions: "-RA",
   clouds: "FEW 4500 SCT 25000",
@@ -24,9 +26,13 @@ test("renders decoded METAR rows and builds a mobile ticker", () => {
       { id: "KPWM", metar: "04006KT", decoded },
     ],
   });
-  expect(panel.innerHTML).toContain("<th>STATION</th><th>AGE</th>");
+  expect(panel.innerHTML).toContain("<th></th><th>APT</th><th>AGE</th><th>DIR</th><th>SPD</th>");
   expect(panel.innerHTML).toContain("<th>SKY</th><th>TEMP</th><th>DEW</th>");
-  expect(panel.innerHTML).toMatch(/<td>KLEW<\/td><td>\d+(?:h\d*m?|m)<\/td><td>290° 12G18<\/td>/);
+  expect(panel.innerHTML).toContain("<td>A</td><td>KLEW</td>");
+  expect(panel.innerHTML).toMatch(
+    /<td>KLEW<\/td><td>\d+(?:h\d*m?|m)<\/td><td>290°<\/td><td>12G18<\/td>/,
+  );
+  expect(panel.innerHTML).toContain('<td class="metar-weather">-RA</td>');
   expect(panel.innerHTML.match(/<tr>/g)).toHaveLength(3);
   expect(ticker.textContent).toBe("KLEW 02004KT　•　KPWM 04006KT");
 });
@@ -36,7 +42,7 @@ test("shows raw METAR text when the parser cannot decode a report", () => {
   updateMetarDisplay(panel, nodes()[1], {
     reports: [{ id: "KPWM", metar: "bad <data>", decoded: null }],
   });
-  expect(panel.innerHTML).toContain('<th>KPWM</th><td colspan="8">bad &lt;data&gt;</td>');
+  expect(panel.innerHTML).toContain('<td></td><th>KPWM</th><td colspan="9">bad &lt;data&gt;</td>');
 });
 
 test("shows an empty report message and ignores missing display nodes", () => {

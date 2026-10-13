@@ -11,8 +11,10 @@ test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
     id: "KPWM",
     metar: "131651Z 29012G18KT 10SM -RA FEW045 BKN080 18/07 A2992",
     decoded: {
+      automated: false,
       observed: "13 16:51Z",
-      wind: "290° 12G18",
+      windDirection: "290°",
+      windSpeed: "12G18",
       visibility: "10",
       conditions: "-RA",
       clouds: "FEW 4500 BKN 8000",
@@ -29,8 +31,10 @@ test("decodes variable wind, vertical visibility, and negative temperatures", ()
     metar: "METAR KLEW 131651Z VRB03KT 1/2SM FG VV002 M02/M04 A2988",
   });
   expect(result.decoded).toEqual({
+    automated: false,
     observed: "13 16:51Z",
-    wind: "VRB 3",
+    windDirection: "VRB",
+    windSpeed: "3",
     visibility: "VV 200 ft",
     conditions: "FG",
     clouds: "Vertical visibility",
@@ -43,8 +47,10 @@ test("decodes variable wind, vertical visibility, and negative temperatures", ()
 test("keeps report time when weather fields are missing", () => {
   const result = decodeMetarReport({ id: "KBXM", metar: "METAR KBXM 131651Z /////KT" });
   expect(result.decoded).toEqual({
+    automated: false,
     observed: "13 16:51Z",
-    wind: "—",
+    windDirection: "—",
+    windSpeed: "—",
     visibility: "—",
     conditions: "—",
     clouds: "—",
@@ -79,8 +85,10 @@ test("formats optional cloud and temperature values", () => {
   }));
   const result = decodeMetarReport({ id: "KPWM", metar: "raw" }, parse);
   expect(result.decoded).toEqual({
+    automated: false,
     observed: "13 16:51Z",
-    wind: "VRB 3",
+    windDirection: "VRB",
+    windSpeed: "3",
     visibility: "10",
     conditions: "—",
     clouds: "BKN —",
@@ -99,6 +107,14 @@ test("formats optional cloud and temperature values", () => {
   );
   expect(missingTemperature.decoded.temperature).toBe("—");
   expect(missingTemperature.decoded.dewPoint).toBe("46°F");
+});
+
+test("exposes the METAR AUTO modifier", () => {
+  const result = decodeMetarReport({
+    id: "KPWM",
+    metar: "METAR KPWM 132051Z AUTO 10006KT 10SM CLR 11/10 A3000",
+  });
+  expect(result.decoded.automated).toBe(true);
 });
 
 test("shows CAVOK when the report has no visibility or cloud groups", () => {

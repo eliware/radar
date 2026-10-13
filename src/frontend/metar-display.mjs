@@ -13,18 +13,20 @@ export function updateMetarDisplay(element, ticker, data) {
 }
 
 function headers() {
-  return ["STATION", "AGE", "WIND", "VIS", "WX", "SKY", "TEMP", "DEW", "ALT"]
+  return ["", "APT", "AGE", "DIR", "SPD", "VIS", "WX", "SKY", "TEMP", "DEW", "ALT"]
     .map((label) => `<th>${label}</th>`)
     .join("");
 }
 
 function reportRow({ id, metar, decoded }) {
   if (!decoded)
-    return `<tr><th>${escapeText(id)}</th><td colspan="8">${escapeText(metar)}</td></tr>`;
+    return `<tr><td></td><th>${escapeText(id)}</th><td colspan="9">${escapeText(metar)}</td></tr>`;
   const values = [
+    decoded.automated ? "A" : "",
     id,
     formatAge(decoded.observed),
-    decoded.wind,
+    decoded.windDirection,
+    decoded.windSpeed,
     decoded.visibility,
     decoded.conditions,
     decoded.clouds,
@@ -32,7 +34,12 @@ function reportRow({ id, metar, decoded }) {
     decoded.dewPoint,
     decoded.altimeter,
   ];
-  return `<tr>${values.map((value) => `<td>${escapeText(value)}</td>`).join("")}</tr>`;
+  return `<tr>${values
+    .map(
+      (value, index) =>
+        `<td${index === 6 ? ' class="metar-weather"' : ""}>${escapeText(value)}</td>`,
+    )
+    .join("")}</tr>`;
 }
 
 export function formatAge(observed, now = new Date()) {
