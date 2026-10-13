@@ -12,6 +12,7 @@ export function createCanvasRadarDraw({
   navaids,
   boundaries,
   ilsApproaches,
+  procedures,
 }) {
   return () =>
     drawCanvasRadar(
@@ -31,5 +32,7 @@ export function createCanvasRadarDraw({
       boundaries,
       ilsApproaches,
       state.ilsVisible,
+      procedures,
+      state.proceduresVisible,
     );
 }

@@ -13,7 +13,7 @@ import { createRadarHome } from "./create-radar-home.mjs";
 import { startAircraftSceneLoop } from "./start-aircraft-scene-loop.mjs";
 import { createAirspaceVolumes } from "./create-airspace-volumes.mjs";
 import { createRadarReferenceStore } from "./radar-reference-store.mjs";
-import { createIlsVisibility } from "./create-ils-visibility.mjs";
+import { createRadarLayerVisibility } from "./create-radar-layer-visibility.mjs";
 export function createAircraftScene({ container, location, elevationFeet, windowRef = window }) {
   const { scene, camera, renderer } = createRadarStage(THREE, container, windowRef);
   const updateRings = createRadarSceneOverlays(THREE, scene);
@@ -24,7 +24,7 @@ export function createAircraftScene({ container, location, elevationFeet, window
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
   const references = createRadarReferenceStore();
-  const ils = createIlsVisibility(windowRef.document ?? globalThis.document);
+  const layers = createRadarLayerVisibility(windowRef.document ?? globalThis.document);
   const overlay = createAircraftDisplayOverlay({
     THREE,
     container,
@@ -57,7 +57,8 @@ export function createAircraftScene({ container, location, elevationFeet, window
     elevationFeet,
     isConnected: () => connected,
     isAutoZoom: () => autoZoom,
-    ils,
+    ils: layers.ils,
+    procedures: layers.procedures,
     references,
   });
   let connected = false;
@@ -78,7 +79,7 @@ export function createAircraftScene({ container, location, elevationFeet, window
       }
     },
     ...references.updates((items) => airspace.update(items)),
-    setIlsVisible: ils.setVisible,
+    setIlsVisible: layers.ils.setVisible,
     ...createOrbitRadarState(controls, radarCamera),
     reset() {
       scene.rotation.y = 0;
@@ -87,7 +88,7 @@ export function createAircraftScene({ container, location, elevationFeet, window
     },
     destroy() {
       stopRadarLoops();
-      ils.destroy();
+      layers.destroy();
       airspace.dispose();
       overlay.destroy();
       radarCamera.dispose();

@@ -21,6 +21,8 @@ export function createAircraftRadarLoop({
   boundaries,
   ilsApproaches = new Map(),
   isIlsVisible = () => true,
+  procedures = new Map(),
+  isProceduresVisible = () => true,
 }) {
   const stopWatch = watchRadarTargets({
     targets,
@@ -50,6 +52,8 @@ export function createAircraftRadarLoop({
         boundaries,
         ilsApproaches,
         isIlsVisible(),
+        procedures,
+        isProceduresVisible(),
       ),
   });
   return () => {

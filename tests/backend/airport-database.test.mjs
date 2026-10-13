@@ -50,7 +50,7 @@ test("opens SQLite in read-only mode and filters airport rows by distance band",
   };
   const database = {
     prepare: jest.fn((sql) => {
-      if (sql.includes("APT_BASE")) {
+      if (sql.includes("A.FACILITY_USE_CODE")) {
         expect(sql).toContain("A.FACILITY_USE_CODE = 'PU'");
         expect(sql).toContain("A.ICAO_ID GLOB 'K[A-Z0-9][A-Z0-9][A-Z0-9]'");
         expect(sql).toContain("R.SURFACE_TYPE_CODE IN ('ASPH', 'CONC'");

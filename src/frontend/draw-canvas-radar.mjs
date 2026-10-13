@@ -6,6 +6,7 @@ import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 import { getRadarPalette } from "./radar-palette.mjs";
 import { drawCanvasRings } from "./draw-canvas-rings.mjs";
 import { drawRadarReferences } from "./draw-radar-references.mjs";
+import { createRadarScopePath } from "./create-radar-scope-path.mjs";
 
 export function drawCanvasRadar(
   ctx,
@@ -24,6 +25,8 @@ export function drawCanvasRadar(
   boundaries = new Map(),
   ilsApproaches = new Map(),
   ilsVisible = true,
+  procedures = new Map(),
+  proceduresVisible = true,
 ) {
   const palette = getRadarPalette(connected);
   const width = canvas.clientWidth || 1;
@@ -50,7 +53,7 @@ export function drawCanvasRadar(
   });
   drawRadarReferences(
     ctx,
-    { airports, navaids, boundaries, ilsApproaches },
+    { airports, navaids, boundaries, ilsApproaches, procedures },
     (item) => {
       const position = projectAircraftPosition(
         { ...item, altitudeFeet: Number.isFinite(item.elevationFeet) ? item.elevationFeet : 0 },
@@ -61,6 +64,11 @@ export function drawCanvasRadar(
     },
     range,
     ilsVisible,
+    proceduresVisible,
+    createRadarScopePath(range, (point) => ({
+      x: centerX + (point.x / range) * radius,
+      y: centerY + (point.z / range) * radius,
+    })),
   );
   const display = [];
   for (const item of aircraft.values()) {

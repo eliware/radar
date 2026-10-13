@@ -33,6 +33,7 @@ export async function startDashboard({
       scene.updateNavaids &&
       scene.updateBoundaries &&
       scene.updateIls &&
+      scene.updateProcedures &&
       scene.range
         ? createRadarReferenceLoader(fetchData, scene)
         : null;

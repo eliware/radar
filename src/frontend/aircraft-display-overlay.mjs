@@ -5,6 +5,7 @@ import { predictAircraftPosition } from "./predict-aircraft-position.mjs";
 import { RADAR_SCOPE_RADIUS_RATIO } from "./radar-range.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 import { drawRadarReferences } from "./draw-radar-references.mjs";
+import { createRadarScopePath } from "./create-radar-scope-path.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
@@ -31,6 +32,8 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     boundaries = new Map(),
     ilsApproaches = new Map(),
     ilsVisible = true,
+    procedures = new Map(),
+    proceduresVisible = true,
   ) {
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
@@ -41,10 +44,12 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     context.clearRect(0, 0, width, height);
     drawRadarReferences(
       context,
-      { airports, navaids, boundaries, ilsApproaches },
+      { airports, navaids, boundaries, ilsApproaches, procedures },
       (point) => projectAirport(point),
       range,
       ilsVisible,
+      proceduresVisible,
+      createRadarScopePath(range, (position) => project(position)),
     );
     const items = [];
     for (const item of aircraft.values()) items.push(projectItem(item));

@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import { distanceNauticalMiles } from "../shared/distance-nautical-miles.mjs";
 import { createArtccBoundaryQuery } from "./artcc-boundary-query.mjs";
 import { createIlsApproachQuery } from "./ils-approach-query.mjs";
+import { createProcedureQuery } from "./procedure-query.mjs";
 import { AIRPORT_QUERY, NAVAID_QUERY, RUNWAY_QUERY } from "./airport-database-queries.mjs";
 
 const DEFAULT_PATH = "artifacts/nasr/NASR_2026_10_01.sqlite";
@@ -20,6 +21,7 @@ export function createAirportDatabase(path, { Database = DatabaseSync, exists = 
   const navaidStatement = database.prepare(NAVAID_QUERY);
   const findBoundaries = createArtccBoundaryQuery(database);
   const findIlsApproaches = createIlsApproachQuery(database);
+  const findProceduresBetween = createProcedureQuery(database);
   return {
     findBetween(location, minRangeNm, maxRangeNm) {
       const rows = rowsBetween(statement, location, maxRangeNm);
@@ -36,6 +38,7 @@ export function createAirportDatabase(path, { Database = DatabaseSync, exists = 
       );
     },
     findIlsApproaches,
+    findProceduresBetween,
     findBoundariesBetween: findBoundaries,
     close: () => database.close(),
   };

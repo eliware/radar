@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { registerApiRoutes } from "../../src/backend/api-routes.mjs";
 
-test("registers health, data, ILS, and update relay routes", async () => {
+test("registers health, data, procedure, and update relay routes", async () => {
   const routes = new Map();
   const app = { get: jest.fn((path, ...args) => routes.set(path, args)) };
   const subscriber = jest.fn();
@@ -18,6 +18,7 @@ test("registers health, data, ILS, and update relay routes", async () => {
   });
   expect(await routes.get("/api/aircraft")[0]()).toEqual([{ icao: "ABC123" }]);
   expect(routes.has("/api/ils")).toBe(true);
+  expect(routes.has("/api/procedures")).toBe(true);
   const socket = { readyState: 1, send: jest.fn(), on: jest.fn() };
   routes.get("/ws")[1](socket);
   const update = feed.subscribe.mock.calls[0][0];

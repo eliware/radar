@@ -36,11 +36,13 @@ directives:
       - Return VOR, VOR/DME, and VORTAC records by distance band through `GET /api/navaids`.
       - Return nearby ordered FAA ARTCC boundary paths through `GET /api/airspace-boundaries`.
       - Return operational ILS records by distance band through `GET /api/ils`.
+      - Return FAA SID and STAR paths through `GET /api/procedures`.
       - Fetch airports from zero to the current view range at startup.
       - Fetch only the new outer distance band when the view expands.
       - Limit airport range requests to 300 nautical miles.
       - Keep fetched airport and runway data in browser memory.
       - Keep fetched ILS data in browser memory. Request only the new outer distance band.
+      - Keep fetched SID and STAR paths in browser memory. Request only the new outer distance band.
       - Show only public-use airports with a four-character ICAO code that starts with K.
       - Show airports only when they have an asphalt or concrete runway at least 1,000 feet long.
       - Draw only qualifying asphalt and concrete runways.
@@ -60,6 +62,12 @@ directives:
       - Extend ILS course guides away from the runway on the reciprocal of the corrected true approach course.
       - Follow the NASR glide-slope angle in 3D. Draw ILS course guides flat in Canvas.
       - Treat ILS course guides as visual guides. Do not present them as complete approach paths.
+      - Show SIDs and STARs by default in both radar views. Press S to toggle them.
+      - Draw SIDs and STARs in different colors.
+      - Draw a small hollow pyramid at each SID and STAR fix.
+      - Label SID endpoint fixes, STAR transition fixes, and the common STAR fix.
+      - Do not show labels for other SID or STAR fixes.
+      - Draw SID and STAR paths at the radar baseline. Do not invent crossing altitudes.
       - Draw approximate 5- and 10-mile rings around airports with the NASR Class C flag.
       - Identify approximate Class C rings as visual guides, not official boundaries.
       - Draw gray approximate Class B, C, and D altitude shells in the 3D view.
@@ -163,6 +171,7 @@ directives:
       - Do not label ARTCC paths as Portland or A90 approach boundaries.
       - Load airport, navaid, airspace, and boundary data only through the current zoom range.
       - Load ILS data only through the current zoom range.
+      - Load SID and STAR data only through the current zoom range.
       - Leave radio controls out of the dashboard until requested.
       - Document the RTL1090 background and foreground procedures in `docs/`.
       - Provide browser assets, documented routes, and mirrored tests.

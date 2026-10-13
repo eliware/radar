@@ -48,6 +48,7 @@ function makeContext() {
       "fillRect",
       "beginPath",
       "arc",
+      "clip",
       "stroke",
       "fillText",
       "moveTo",

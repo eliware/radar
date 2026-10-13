@@ -138,6 +138,7 @@ test("loads each new reference-data band when the view expands", async () => {
     updateNavaids: jest.fn(),
     updateBoundaries: jest.fn(),
     updateIls: jest.fn(),
+    updateProcedures: jest.fn(),
     range: jest.fn(() => 20),
     onViewChange: jest.fn((listener) => (changeView = listener)),
   };

@@ -10,6 +10,7 @@ test("draws the latest targets with view and connection state", () => {
       "fillRect",
       "beginPath",
       "arc",
+      "clip",
       "stroke",
       "fillText",
       "moveTo",

@@ -21,6 +21,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
     closePath: jest.fn(),
     fill: jest.fn(),
     arc: jest.fn(),
+    clip: jest.fn(),
     fillText: jest.fn(),
   };
   const canvas = { style: {}, getContext: () => context, remove: jest.fn() };

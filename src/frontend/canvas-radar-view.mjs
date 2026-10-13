@@ -7,7 +7,7 @@ import { createCanvasRadarState } from "./create-canvas-radar-state.mjs";
 import { createViewChangeListeners } from "./create-view-change-listeners.mjs";
 import { createRadarReferenceStore } from "./radar-reference-store.mjs";
 import { attachCanvasRadarEvents } from "./attach-canvas-radar-events.mjs";
-import { createIlsVisibility } from "./create-ils-visibility.mjs";
+import { createRadarLayerVisibility } from "./create-radar-layer-visibility.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -28,6 +28,7 @@ export function createCanvasRadarView({
     rotation: 0,
     connected: false,
     ilsVisible: true,
+    proceduresVisible: true,
   };
   const viewChanges = createViewChangeListeners();
   canvas.setAttribute("aria-label", "Top-down 2D radar view");
@@ -45,13 +46,15 @@ export function createCanvasRadarView({
     navaids: references.navaids,
     boundaries: references.boundaries,
     ilsApproaches: references.ilsApproaches,
+    procedures: references.procedures,
   });
   const draw = () => {
-    state.ilsVisible = ils.isVisible();
+    state.ilsVisible = layers.ils.isVisible();
+    state.proceduresVisible = layers.procedures.isVisible();
     drawRadar();
     viewChanges.emit(state.range);
   };
-  const ils = createIlsVisibility(documentRef, draw);
+  const layers = createRadarLayerVisibility(documentRef, draw);
   const detachEvents = attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef);
   draw();
   const viewState = createCanvasRadarState(state, draw, () => targets.distances(), viewChanges);
@@ -71,11 +74,11 @@ export function createCanvasRadarView({
       draw();
     },
     ...references.updates(() => {}, draw),
-    setIlsVisible: ils.setVisible,
+    setIlsVisible: layers.ils.setVisible,
     ...viewState,
     destroy() {
       detachEvents();
-      ils.destroy();
+      layers.destroy();
       viewChanges.clear();
       container.replaceChildren();
     },
