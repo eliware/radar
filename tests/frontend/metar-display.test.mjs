@@ -26,8 +26,10 @@ test("renders decoded METAR rows and builds a mobile ticker", () => {
       { id: "KPWM", metar: "04006KT", decoded },
     ],
   });
-  expect(panel.innerHTML).toContain("<th></th><th>APT</th><th>AGE</th><th>DIR</th><th>SPD</th>");
-  expect(panel.innerHTML).toContain("<th>SKY</th><th>TEMP</th><th>DEW</th>");
+  expect(panel.innerHTML).toContain('<th colspan="2">WIND</th>');
+  expect(panel.innerHTML).toContain('<th class="metar-wx-header">WX</th>');
+  expect(panel.innerHTML).toContain('<th class="metar-sky-header">SKY</th>');
+  expect(panel.innerHTML).toContain("<th>TMP</th><th>DEW</th>");
   expect(panel.innerHTML).toContain("<td>A</td><td>KLEW</td>");
   expect(panel.innerHTML).toMatch(
     /<td>KLEW<\/td><td>\d+(?:h\d*m?|m)<\/td><td>290°<\/td><td>12G18<\/td>/,

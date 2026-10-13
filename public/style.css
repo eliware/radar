@@ -170,6 +170,16 @@ p {
   color: #aaa;
   text-align: left;
 }
+.metar-reports th.metar-wx-header,
+.metar-reports th.metar-sky-header {
+  text-align: center;
+}
+.metar-reports td:nth-child(3),
+.metar-reports td:nth-child(4),
+.metar-reports td:nth-child(9),
+.metar-reports td:nth-child(10) {
+  text-align: right;
+}
 .metar-reports td.metar-weather {
   text-align: right;
 }

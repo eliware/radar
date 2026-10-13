@@ -62,7 +62,10 @@ directives:
       - Leave the first table column blank when the METAR has no AUTO modifier.
       - Name the METAR station column APT.
       - Split METAR wind direction and speed into separate columns, in that order.
-      - Right-align METAR weather values. Keep the WX header left-aligned.
+      - Merge wind direction and speed under one WIND header.
+      - Right-align METAR age, wind direction, temperature, and dew point values.
+      - Center the WX and SKY headers. Keep weather values right-aligned.
+      - Name the METAR temperature column TMP.
       - Show the decoded METAR table only in 3D mode on screens wider than 900 pixels.
       - Show a raw one-line METAR ticker in 2D mode and on screens 900 pixels wide or less.
       - Show only public-use airports with a four-character ICAO code that starts with K.

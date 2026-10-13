@@ -13,9 +13,18 @@ export function updateMetarDisplay(element, ticker, data) {
 }
 
 function headers() {
-  return ["", "APT", "AGE", "DIR", "SPD", "VIS", "WX", "SKY", "TEMP", "DEW", "ALT"]
-    .map((label) => `<th>${label}</th>`)
-    .join("");
+  return [
+    "<th></th>",
+    "<th>APT</th>",
+    "<th>AGE</th>",
+    '<th colspan="2">WIND</th>',
+    "<th>VIS</th>",
+    '<th class="metar-wx-header">WX</th>',
+    '<th class="metar-sky-header">SKY</th>',
+    "<th>TMP</th>",
+    "<th>DEW</th>",
+    "<th>ALT</th>",
+  ].join("");
 }
 
 function reportRow({ id, metar, decoded }) {
