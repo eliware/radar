@@ -19,8 +19,22 @@ export function drawIlsApproaches(context, approaches, project, range, visible =
     context.moveTo(endpoint.x, endpoint.y);
     context.lineTo(origin.x, origin.y);
     context.stroke();
+    drawMarkers(context, approach.markers ?? [], project, range);
   }
   context.restore();
+}
+
+function drawMarkers(context, markers, project, range) {
+  context.setLineDash([]);
+  for (const marker of markers) {
+    if (marker.rangeNm > range) continue;
+    const point = project({ ...marker, elevationFeet: safeElevation(marker) });
+    if (!validPoint(point)) continue;
+    context.beginPath();
+    context.arc(point.x, point.y, 3, 0, Math.PI * 2);
+    context.stroke();
+  }
+  context.setLineDash([4, 4]);
 }
 
 function approachBearing(approach) {

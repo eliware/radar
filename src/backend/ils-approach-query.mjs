@@ -14,27 +14,62 @@ export const ILS_APPROACH_QUERY = `SELECT I.ARPT_ID AS faaId, I.RWY_END_ID AS ru
   AND COALESCE(CAST(G.LAT_DECIMAL AS REAL), CAST(I.LAT_DECIMAL AS REAL)) BETWEEN ? AND ?
   AND COALESCE(CAST(G.LONG_DECIMAL AS REAL), CAST(I.LONG_DECIMAL AS REAL)) BETWEEN ? AND ?`;
 
+export const ILS_MARKER_QUERY = `SELECT ARPT_ID AS faaId, RWY_END_ID AS runwayEnd,
+  ILS_LOC_ID AS identifier, SYSTEM_TYPE_CODE AS systemType,
+  ILS_COMP_TYPE_CODE AS componentType, MKR_FAC_TYPE_CODE AS facilityType,
+  CAST(LAT_DECIMAL AS REAL) AS latitude, CAST(LONG_DECIMAL AS REAL) AS longitude,
+  CAST(SITE_ELEVATION AS REAL) AS elevationFeet
+  FROM ILS_MKR WHERE COMPONENT_STATUS LIKE 'OPERATIONAL%'
+  AND CAST(LAT_DECIMAL AS REAL) BETWEEN ? AND ?
+  AND CAST(LONG_DECIMAL AS REAL) BETWEEN ? AND ?`;
+
 export function createIlsApproachQuery(database) {
   const statement = database.prepare(ILS_APPROACH_QUERY);
+  const markerStatement = database.prepare(ILS_MARKER_QUERY);
   return (location, minRangeNm, maxRangeNm) => {
-    const latDelta = maxRangeNm / 60;
-    const lonDelta =
-      maxRangeNm / (60 * Math.max(0.01, Math.cos((location.latitude * Math.PI) / 180)));
+    const bounds = selectBounds(location, maxRangeNm);
+    const markers = markerStatement.all(...bounds).flatMap((row) => mapMarker(row, location));
+    const markersBySystem = groupMarkers(markers);
     return statement
-      .all(
-        Math.max(-90, location.latitude - latDelta),
-        Math.min(90, location.latitude + latDelta),
-        Math.max(-180, location.longitude - lonDelta),
-        Math.min(180, location.longitude + lonDelta),
-      )
-      .flatMap((row) => mapApproach(row, location, minRangeNm, maxRangeNm));
+      .all(...bounds)
+      .flatMap((row) => mapApproach(row, location, minRangeNm, maxRangeNm, markersBySystem));
   };
 }
 
-function mapApproach(row, location, minRangeNm, maxRangeNm) {
+function selectBounds(location, maxRangeNm) {
+  const latDelta = maxRangeNm / 60;
+  const lonDelta =
+    maxRangeNm / (60 * Math.max(0.01, Math.cos((location.latitude * Math.PI) / 180)));
+  return [
+    Math.max(-90, location.latitude - latDelta),
+    Math.min(90, location.latitude + latDelta),
+    Math.max(-180, location.longitude - lonDelta),
+    Math.min(180, location.longitude + lonDelta),
+  ];
+}
+
+function mapMarker(row, location) {
+  if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude)) return [];
+  return [{ ...row, rangeNm: distanceNauticalMiles(location, row) }];
+}
+
+function groupMarkers(markers) {
+  const groups = new Map();
+  for (const marker of markers) {
+    const key = systemKey(marker);
+    groups.set(key, [...(groups.get(key) ?? []), marker]);
+  }
+  return groups;
+}
+
+function mapApproach(row, location, minRangeNm, maxRangeNm, markersBySystem) {
   if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude)) return [];
   const rangeNm = distanceNauticalMiles(location, row);
   if (rangeNm < minRangeNm || (minRangeNm > 0 && rangeNm <= minRangeNm) || rangeNm > maxRangeNm)
     return [];
-  return [{ ...row, rangeNm }];
+  return [{ ...row, rangeNm, markers: markersBySystem.get(systemKey(row)) ?? [] }];
+}
+
+function systemKey(record) {
+  return `${record.faaId}:${record.runwayEnd}:${record.identifier}:${record.systemType}`;
 }

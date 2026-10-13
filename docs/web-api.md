@@ -23,7 +23,7 @@ The web server listens on `0.0.0.0` at port `3000` by default. This allows acces
 
 `GET /api/airspace-boundaries?minRangeNm=0&maxRangeNm=20` returns nearby FAA ARTCC boundary paths from `ARB_SEG`. Each path has ordered points and a low or high altitude class. This table does not include A90 approach control borders.
 
-`GET /api/ils?minRangeNm=0&maxRangeNm=20` returns operational ILS records in the requested distance band. Records include airport, runway end, localizer identifier, magnetic course, magnetic variation, glide-slope angle, site location, elevation, category, and distance.
+`GET /api/ils?minRangeNm=0&maxRangeNm=20` returns operational ILS records in the requested distance band. Records include airport, runway end, localizer identifier, magnetic course, magnetic variation, glide-slope angle, site location, elevation, category, distance, and matching marker beacon locations.
 
 ## WebSocket route
 

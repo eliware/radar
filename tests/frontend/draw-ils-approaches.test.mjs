@@ -3,10 +3,9 @@ import { drawIlsApproaches } from "../../src/frontend/draw-ils-approaches.mjs";
 
 function context() {
   return Object.fromEntries(
-    ["save", "restore", "setLineDash", "beginPath", "moveTo", "lineTo", "stroke"].map((method) => [
-      method,
-      jest.fn(),
-    ]),
+    ["save", "restore", "setLineDash", "beginPath", "moveTo", "lineTo", "stroke", "arc"].map(
+      (method) => [method, jest.fn()],
+    ),
   );
 }
 
@@ -25,16 +24,19 @@ const approach = {
 test("draws a dashed ten-mile approach line with a descending glide path", () => {
   const ctx = context();
   const points = [];
+  const marker = { latitude: 43.01, longitude: -70, elevationFeet: 120, rangeNm: 2 };
+  const farMarker = { ...marker, rangeNm: 21 };
+  const invalidMarker = { ...marker, facilityType: "BAD" };
   drawIlsApproaches(
     ctx,
-    new Map([["PWM:11", approach]]),
-    (point) => (
-      points.push(point),
-      {
-        x: point.longitude,
+    new Map([["PWM:11", { ...approach, markers: [marker, farMarker, invalidMarker] }]]),
+    (point) => {
+      points.push(point);
+      return {
+        x: point.facilityType === "BAD" ? Number.NaN : point.longitude,
         y: point.elevationFeet,
-      }
-    ),
+      };
+    },
     20,
   );
   expect(ctx.strokeStyle).toBe("#00b8cc");
@@ -42,6 +44,8 @@ test("draws a dashed ten-mile approach line with a descending glide path", () =>
   expect(ctx.moveTo).toHaveBeenCalledWith(points[1].longitude, points[1].elevationFeet);
   expect(ctx.lineTo).toHaveBeenCalledWith(points[0].longitude, points[0].elevationFeet);
   expect(points[1].elevationFeet).toBeGreaterThan(points[0].elevationFeet);
+  expect(ctx.arc).toHaveBeenCalledWith(-70, 120, 3, 0, Math.PI * 2);
+  expect(ctx.setLineDash).toHaveBeenCalledWith([]);
 });
 
 test("skips hidden, distant, invalid, and out-of-range courses", () => {
