@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { updateMetarDisplay } from "../../src/frontend/metar-display.mjs";
+import { formatAge, updateMetarDisplay } from "../../src/frontend/metar-display.mjs";
 
 function nodes() {
   return [{ textContent: "", innerHTML: "" }, { textContent: "" }];
@@ -7,12 +7,13 @@ function nodes() {
 
 const decoded = {
   observed: "13 16:51Z",
-  wind: "290° 12G18 KT",
-  visibility: "10 SM",
+  wind: "290° 12G18",
+  visibility: "10",
   conditions: "-RA",
   clouds: "FEW 4500 SCT 25000",
-  temperature: "18/7 °C",
-  altimeter: "29.92 inHg",
+  temperature: "64°F",
+  dewPoint: "45°F",
+  altimeter: "29.92",
 };
 
 test("renders decoded METAR rows and builds a mobile ticker", () => {
@@ -23,8 +24,9 @@ test("renders decoded METAR rows and builds a mobile ticker", () => {
       { id: "KPWM", metar: "04006KT", decoded },
     ],
   });
-  expect(panel.innerHTML).toContain("<th>STATION</th>");
-  expect(panel.innerHTML).toContain("<td>KLEW</td><td>13 16:51Z</td><td>290° 12G18 KT</td>");
+  expect(panel.innerHTML).toContain("<th>STATION</th><th>AGE</th>");
+  expect(panel.innerHTML).toContain("<th>SKY</th><th>TEMP</th><th>DEW</th>");
+  expect(panel.innerHTML).toMatch(/<td>KLEW<\/td><td>\d+(?:h\d*m?|m)<\/td><td>290° 12G18<\/td>/);
   expect(panel.innerHTML.match(/<tr>/g)).toHaveLength(3);
   expect(ticker.textContent).toBe("KLEW 02004KT　•　KPWM 04006KT");
 });
@@ -34,7 +36,7 @@ test("shows raw METAR text when the parser cannot decode a report", () => {
   updateMetarDisplay(panel, nodes()[1], {
     reports: [{ id: "KPWM", metar: "bad <data>", decoded: null }],
   });
-  expect(panel.innerHTML).toContain('<th>KPWM</th><td colspan="7">bad &lt;data&gt;</td>');
+  expect(panel.innerHTML).toContain('<th>KPWM</th><td colspan="8">bad &lt;data&gt;</td>');
 });
 
 test("shows an empty report message and ignores missing display nodes", () => {
@@ -52,4 +54,15 @@ test("renders placeholders for missing decoded values", () => {
     reports: [{ id: "KBXM", metar: "raw", decoded: { observed: null } }],
   });
   expect(panel.innerHTML).toContain("<td>KBXM</td><td>—</td>");
+});
+
+test("formats METAR report age in minutes or hours and minutes", () => {
+  const now = new Date("2026-10-13T18:00:00Z");
+  expect(formatAge("13 17:50Z", now)).toBe("10m");
+  expect(formatAge("13 16:50Z", now)).toBe("1h10m");
+  expect(formatAge("12 23:00Z", now)).toBe("19h");
+  expect(formatAge("30 23:00Z", new Date("2026-10-01T00:10:00Z"))).toBe("1h10m");
+  expect(formatAge("31 23:00Z", new Date("2026-01-01T00:10:00Z"))).toBe("1h10m");
+  expect(formatAge("13 23:00Z", now)).toBe("0m");
+  expect(formatAge("bad", now)).toBe("—");
 });

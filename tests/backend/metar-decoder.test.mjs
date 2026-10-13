@@ -12,12 +12,13 @@ test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
     metar: "131651Z 29012G18KT 10SM -RA FEW045 BKN080 18/07 A2992",
     decoded: {
       observed: "13 16:51Z",
-      wind: "290° 12G18 KT",
-      visibility: "10 SM",
+      wind: "290° 12G18",
+      visibility: "10",
       conditions: "-RA",
       clouds: "FEW 4500 BKN 8000",
-      temperature: "18/7 °C",
-      altimeter: "29.92 inHg",
+      temperature: "64°F",
+      dewPoint: "45°F",
+      altimeter: "29.92",
     },
   });
 });
@@ -29,12 +30,13 @@ test("decodes variable wind, vertical visibility, and negative temperatures", ()
   });
   expect(result.decoded).toEqual({
     observed: "13 16:51Z",
-    wind: "VRB 3 KT",
+    wind: "VRB 3",
     visibility: "VV 200 ft",
     conditions: "FG",
     clouds: "Vertical visibility",
-    temperature: "-2/-4 °C",
-    altimeter: "29.88 inHg",
+    temperature: "28°F",
+    dewPoint: "25°F",
+    altimeter: "29.88",
   });
 });
 
@@ -47,6 +49,7 @@ test("keeps report time when weather fields are missing", () => {
     conditions: "—",
     clouds: "—",
     temperature: "—",
+    dewPoint: "—",
     altimeter: "—",
   });
 });
@@ -77,11 +80,12 @@ test("formats optional cloud and temperature values", () => {
   const result = decodeMetarReport({ id: "KPWM", metar: "raw" }, parse);
   expect(result.decoded).toEqual({
     observed: "13 16:51Z",
-    wind: "VRB 3 KT",
-    visibility: "10 SM",
+    wind: "VRB 3",
+    visibility: "10",
     conditions: "—",
     clouds: "BKN —",
-    temperature: "18/— °C",
+    temperature: "64°F",
+    dewPoint: "—",
     altimeter: "—",
   });
   const missingTemperature = decodeMetarReport(
@@ -93,7 +97,8 @@ test("formats optional cloud and temperature values", () => {
       dewPoint: 8,
     })),
   );
-  expect(missingTemperature.decoded.temperature).toBe("—/8 °C");
+  expect(missingTemperature.decoded.temperature).toBe("—");
+  expect(missingTemperature.decoded.dewPoint).toBe("46°F");
 });
 
 test("shows CAVOK when the report has no visibility or cloud groups", () => {

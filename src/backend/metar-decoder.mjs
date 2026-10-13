@@ -23,8 +23,9 @@ function decodedFields(data) {
     visibility: visibilityText(data),
     conditions: conditionText(data.weatherConditions),
     clouds: cloudText(data),
-    temperature: temperatureText(data),
-    altimeter: data.altimeter ? `${data.altimeter.value} ${data.altimeter.unit}` : "—",
+    temperature: fahrenheitText(data.temperature),
+    dewPoint: fahrenheitText(data.dewPoint),
+    altimeter: data.altimeter ? Number(data.altimeter.value).toFixed(2) : "—",
   };
 }
 
@@ -37,13 +38,13 @@ function windText(wind) {
   if (!wind) return "—";
   const direction = wind.degrees == null ? wind.direction : `${wind.degrees}°`;
   const gust = wind.gust == null ? "" : `G${wind.gust}`;
-  return `${direction} ${wind.speed}${gust} ${wind.unit}`;
+  return `${direction} ${wind.speed}${gust}`;
 }
 
 function visibilityText(data) {
   if (data.verticalVisibility != null) return `VV ${data.verticalVisibility} ft`;
   if (!data.visibility) return "—";
-  return `${data.visibility.indicator ?? ""}${data.visibility.value} ${data.visibility.unit}`;
+  return `${data.visibility.indicator ?? ""}${data.visibility.value}`;
 }
 
 function conditionText(conditions) {
@@ -67,7 +68,6 @@ function cloudText(data) {
   return data.cavok ? "CAVOK" : "—";
 }
 
-function temperatureText(data) {
-  if (data.temperature == null && data.dewPoint == null) return "—";
-  return `${data.temperature ?? "—"}/${data.dewPoint ?? "—"} °C`;
+function fahrenheitText(celsius) {
+  return celsius == null ? "—" : `${Math.round((celsius * 9) / 5 + 32)}°F`;
 }

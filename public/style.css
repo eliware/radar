@@ -128,7 +128,8 @@ p {
   z-index: 1;
   top: 42px;
   left: 50%;
-  width: min(88%, 1200px);
+  width: max-content;
+  max-width: calc(100% - 220px);
   max-height: 118px;
   overflow: hidden;
   transform: translateX(-50%);
@@ -155,7 +156,8 @@ p {
   display: none;
 }
 .metar-reports table {
-  width: 100%;
+  width: max-content;
+  max-width: 100%;
   border-collapse: collapse;
   text-align: left;
   white-space: nowrap;

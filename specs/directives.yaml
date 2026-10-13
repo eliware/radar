@@ -49,6 +49,15 @@ directives:
       - Cache METAR reports in server memory for five minutes.
       - Show decoded METAR reports in a table at the top center of the radar.
       - Show one METAR report per table row on desktop screens.
+      - Size the decoded METAR table to fit its content.
+      - Show METAR report age as minutes or hours and minutes.
+      - Omit KT, SM, and inHg unit labels from decoded METAR values.
+      - Show METAR wind speed without the KT label.
+      - Show METAR visibility without the SM label.
+      - Show altimeter pressure with two decimal places and no unit label.
+      - Convert METAR temperature and dew point to rounded whole degrees Fahrenheit.
+      - Show temperature and dew point in separate table fields.
+      - Name the METAR cloud field SKY.
       - Show the decoded METAR table only in 3D mode on screens wider than 900 pixels.
       - Show a raw one-line METAR ticker in 2D mode and on screens 900 pixels wide or less.
       - Show only public-use airports with a four-character ICAO code that starts with K.
