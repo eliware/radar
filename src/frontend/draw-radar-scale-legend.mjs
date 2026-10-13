@@ -34,7 +34,7 @@ export function drawRadarScaleLegend(
   context.arc(105, secondRow - 4, 2, 0, Math.PI * 2);
   context.fill();
   context.fillText("HOME", 112, secondRow);
-  context.strokeStyle = ilsVisible ? "#00b8cc" : "#444";
+  context.strokeStyle = ilsVisible ? "#50402e" : "#444";
   context.fillStyle = context.strokeStyle;
   context.setLineDash([3, 3]);
   context.beginPath();

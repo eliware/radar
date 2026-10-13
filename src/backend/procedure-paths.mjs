@@ -57,6 +57,7 @@ function labelStarEntryFixes(paths) {
   const transitions = paths.filter((path) => path.portionType === "TRANSITION");
   for (const path of transitions) path.points[0].label = true;
   const bodies = paths.filter((path) => path.portionType === "BODY");
+  for (const path of bodies) path.points.at(-1).label = true;
   for (const [_code, pathsForProcedure] of groupByCode(bodies)) {
     const mainFix = commonMainFix(pathsForProcedure);
     for (const path of pathsForProcedure) {

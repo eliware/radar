@@ -56,16 +56,18 @@ directives:
       - Draw each base leg at the altitude of its extended centerline endpoint.
       - Draw VOR symbols and identifiers in blue.
       - Show ILS course guides by default in both radar views. Press I to toggle them.
-      - Draw dashed cyan ILS course guides for 10 nautical miles from each glide-slope site.
-      - Draw NASR ILS marker beacons as small hollow cyan circles at their coordinates.
+      - Draw dotted dim-orange ILS course guides for 10 nautical miles from each glide-slope site.
+      - Draw NASR ILS marker beacons as small hollow dim-orange circles at their coordinates.
       - Do not show text labels on ILS guides.
       - Extend ILS course guides away from the runway on the reciprocal of the corrected true approach course.
       - Follow the NASR glide-slope angle in 3D. Draw ILS course guides flat in Canvas.
       - Treat ILS course guides as visual guides. Do not present them as complete approach paths.
       - Show SIDs and STARs by default in both radar views. Press S to toggle them.
-      - Draw SIDs and STARs in different colors.
+      - Draw SID paths as dotted dim-blue lines.
+      - Draw STAR paths as dotted dim-orange lines, like ILS guides.
+      - Keep SID, STAR, and ILS line brightness slightly above the dark-gray runway guides.
       - Draw a small hollow pyramid at each SID and STAR fix.
-      - Label SID endpoint fixes, STAR transition fixes, and the common STAR fix.
+      - Label SID endpoints, STAR transition entries, common STAR fixes, and STAR route endpoints.
       - Do not show labels for other SID or STAR fixes.
       - Draw SID and STAR paths at the radar baseline. Do not invent crossing altitudes.
       - Draw approximate 5- and 10-mile rings around airports with the NASR Class C flag.

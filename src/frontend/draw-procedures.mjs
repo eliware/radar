@@ -1,4 +1,4 @@
-const COLORS = { SID: "#29a8ff", STAR: "#ffb347" };
+const COLORS = { SID: "#2b3d4d", STAR: "#50402e" };
 
 export function drawProcedures(context, procedures, project, range, visible = true, scope = null) {
   if (!visible) return;
@@ -7,7 +7,9 @@ export function drawProcedures(context, procedures, project, range, visible = tr
   context.lineWidth = 1;
   context.font = "10px monospace";
   context.textAlign = "center";
+  context.setLineDash([3, 3]);
   for (const procedure of procedures.values()) drawProcedure(context, procedure, project, range);
+  context.setLineDash([]);
   context.restore();
 }
 
@@ -25,11 +27,13 @@ function drawProcedure(context, procedure, project, range) {
   context.fillStyle = context.strokeStyle;
   const points = procedure.points.map((point) => ({ ...point, screen: project(point) }));
   drawRoute(context, points, range);
+  context.setLineDash([]);
   for (const point of points) {
     if (point.rangeNm > range || !valid(point.screen)) continue;
     drawPyramid(context, point.screen);
     if (point.label) context.fillText(point.fix, point.screen.x, point.screen.y - 6);
   }
+  context.setLineDash([3, 3]);
 }
 
 function drawRoute(context, points, range) {

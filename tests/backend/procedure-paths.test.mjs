@@ -34,7 +34,7 @@ test("groups SID routes and labels only each last fix", () => {
   ).toEqual([["LBSTA"], ["LBSTA"]]);
 });
 
-test("labels STAR transition entry fixes and the common main fix only", () => {
+test("labels STAR transition entries, common main fixes, and route endpoints", () => {
   const rows = [
     row("STAR", "BODY-A", 10, "EURRO"),
     row("STAR", "BODY-A", 20, "OOSHN"),
@@ -54,7 +54,7 @@ test("labels STAR transition entry fixes and the common main fix only", () => {
   const paths = createProcedurePaths(rows);
   expect(
     paths.map((path) => path.points.filter((point) => point.label).map((point) => point.fix)),
-  ).toEqual([["OOSHN"], ["OOSHN"], ["AJJAY"]]);
+  ).toEqual([["OOSHN", "AYBEE"], ["OOSHN", "JOBEE"], ["AJJAY"]]);
 });
 
 test("drops routes that contain fewer than two fixes", () => {

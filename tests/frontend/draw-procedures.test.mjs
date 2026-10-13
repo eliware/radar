@@ -13,6 +13,7 @@ function context() {
       "stroke",
       "fillText",
       "clip",
+      "setLineDash",
     ].map((name) => [name, jest.fn()]),
   );
 }
@@ -44,6 +45,8 @@ test("draws separate SID and STAR paths, hollow fix symbols, and selected labels
   expect(ctx.closePath).toHaveBeenCalledTimes(4);
   expect(ctx.save).toHaveBeenCalledTimes(1);
   expect(ctx.restore).toHaveBeenCalledTimes(1);
+  expect(ctx.setLineDash).toHaveBeenNthCalledWith(1, [3, 3]);
+  expect(ctx.setLineDash).toHaveBeenLastCalledWith([]);
 });
 
 test("skips hidden, distant, and invalid points and segments", () => {

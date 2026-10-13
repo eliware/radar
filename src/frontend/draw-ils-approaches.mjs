@@ -1,6 +1,6 @@
 const APPROACH_LENGTH_NM = 10;
 const FEET_PER_NM = 6076.12;
-const ILS_COLOR = "#00b8cc";
+const ILS_COLOR = "#50402e";
 
 export function drawIlsApproaches(context, approaches, project, range, visible = true) {
   if (!visible) return;
