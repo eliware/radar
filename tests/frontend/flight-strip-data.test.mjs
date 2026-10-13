@@ -9,13 +9,16 @@ const fullAircraft = {
   trackDegrees: 9,
   verticalRateFeetPerMinute: -640,
   squawk: "1200",
+  aircraftTypeCode: "B738",
   distanceNauticalMiles: 4.2,
   bearingDegrees: 7,
+  origin: "KPWM",
+  destination: "KBOS",
 };
 
-test("sorts aircraft and formats the seven visible fields", () => {
+test("sorts aircraft and formats the nine visible fields", () => {
   const far = { ...fullAircraft, icao: "FAR123", distanceNauticalMiles: 40 };
-  const result = buildFlightStripData([far, fullAircraft], 1000);
+  const result = buildFlightStripData([far, fullAircraft], 3000);
   expect(result.count).toBe(2);
   expect(result.aircraft.map((item) => item.icao)).toEqual(["ABC123", "FAR123"]);
   expect(result.aircraft[0].groups[0]).toEqual([
@@ -24,32 +27,37 @@ test("sorts aircraft and formats the seven visible fields", () => {
     "200",
     "009°",
     "1200",
-    "4.2",
-    "007°",
+    "B738",
+    "4@007°",
+    "KPWM",
+    "KBOS",
   ]);
 });
 
 test("uses two or three aligned data rows as width shrinks", () => {
   expect(buildFlightStripData([], 100).count).toBe(0);
-  const two = buildFlightStripData([fullAircraft], 300);
-  const three = buildFlightStripData([fullAircraft], 150);
+  const two = buildFlightStripData([fullAircraft], 500);
+  const three = buildFlightStripData([fullAircraft], 250);
   expect(two.weights).toHaveLength(2);
   expect(three.weights).toHaveLength(3);
-  expect(two.weights.every((row) => row.length === 4)).toBe(true);
+  expect(two.weights.every((row) => row.length === 5)).toBe(true);
   expect(three.weights.every((row) => row.length === 3)).toBe(true);
 });
 
-test("keeps only callsign fallback, altitude, speed, heading, squawk, range, and bearing", () => {
+test("shows optional type, range, origin, and destination values", () => {
   const row = buildFlightStripData([{ icao: "A1B2C3" }], 1000).aircraft[0];
-  expect(row.groups[0]).toEqual(["A1B2C3", "-", "-", "-", "-", "-", "-"]);
+  expect(row.groups.flat()).toContain("A1B2C3");
+  expect(row.groups.flat()).toContain("-");
   expect(row.labels[0]).toEqual([
     "CALLSIGN",
     "ALTITUDE / VS",
     "SPEED",
     "HEADING",
     "SQUAWK",
-    "RANGE",
-    "BEARING",
+    "TYPE",
+    "RANGE @ BEARING",
+    "ORIGIN",
+    "DESTINATION",
   ]);
   const missingIdentity = buildFlightStripData([{ distanceNauticalMiles: 2 }, {}], 1000);
   expect(buildFlightStripData([{}, { distanceNauticalMiles: 2 }], 1000).count).toBe(2);

@@ -15,7 +15,7 @@ The web server listens on `0.0.0.0` at port `3000` by default. This allows acces
 
 `GET /api/config` returns the local latitude, longitude, and elevation from `.env`.
 
-`GET /api/aircraft` returns an array of recent aircraft. Each item has the same fields as one CLI `--debug` update.
+`GET /api/aircraft` returns recent aircraft. Each item has the same fields as one CLI `--debug` update, plus lookup fields when available.
 
 `GET /api/airports?minRangeNm=0&maxRangeNm=20` returns NASR airports in that distance band from `MY_LOCATION`. The maximum range is 300 nautical miles. Each record includes its airport codes, coordinates, elevation, distance, and runway ends. The server returns 503 when NASR data or a home location is not available.
 
@@ -27,7 +27,9 @@ The web server listens on `0.0.0.0` at port `3000` by default. This allows acces
 
 Connect to `ws://localhost:3000/ws` to receive aircraft updates.
 
-The server sends one JSON aircraft object for each valid feed update. The object matches the CLI `--debug` output.
+The server sends JSON aircraft updates for each valid feed update. The object contains the CLI `--debug` fields and lookup fields when available.
+
+The server looks up aircraft type codes by ICAO hex and callsign origin and destination codes with ADSBdb. It keeps up to 256 lookup results in memory. It caches aircraft type results for 24 hours, route results for one hour, missing results for five minutes, and failures for 30 seconds. The server does not save lookup data to disk. ADSBdb errors do not stop feed updates. Callsign route data can be wrong or missing.
 
 The API has no authentication. Keep access on a trusted network. The Windows firewall rule permits port `3000` from the local subnet.
 
@@ -35,7 +37,7 @@ The API has no authentication. Keep access on a trusted network. The Windows fir
 
 The browser shows a borderless black radar scope without a map or terrain. Green scope marks appear on black. Darker green marks show minor rings and aircraft history. The range can show 1 to 300 nautical miles from home. The default range is 20 nautical miles or 5 miles beyond the furthest live aircraft, whichever is greater. Auto-zoom runs until you change the view. Reset restores auto-zoom. The app drops targets after 120 seconds without an update. Aircraft markers and labels fade from full brightness to invisible during those 120 seconds. Both views use the same range and rings. They draw rings at 5-mile steps above 10 miles and 1-mile steps below 10 miles. Rings at 10-mile steps use a bold line. The default view looks down at your home location, with north at the top. The home marker sits at the center and uses `MY_ELEVATION` as its altitude reference. If WebGL cannot start, the app shows a 2D Canvas radar with the same range, rings, and aircraft positions.
 
-Both views show each aircraft as a hollow green diamond with a three-line label. The lines show callsign, altitude, and speed without units. The label uses the ICAO code when callsign is blank or unknown, or equals `AD`, `OK`, or `RM`. Altitude uses hundreds of feet. Values below 10,000 feet use three digits with leading zeroes. A `C` marks a vertical rate within 100 feet per minute. Other rates use a signed value in hundreds of feet per minute. Label placement reduces overlap and uses a leader line with a small gap before the diamond. A green line shows the predicted position after 60 seconds. Dark-green backslashes show aircraft positions from the past 60 seconds at half the label font size. Ring range labels show values without units. Aircraft labels use 18 px in 3D and 9 px in Canvas. The 3D labels are twice the size of the Canvas labels.
+Both views show each aircraft as a hollow green diamond with a three-line label. The lines show callsign, altitude, and speed, followed by the type code when known. Values have no units. The label uses the ICAO code when callsign is blank or unknown, or equals `AD`, `OK`, or `RM`. Altitude uses hundreds of feet. Values below 10,000 feet use three digits with leading zeroes. A `C` marks a vertical rate within 100 feet per minute. Other rates use a signed value in hundreds of feet per minute. Label placement reduces overlap and uses a leader line with a small gap before the diamond. A green line shows the predicted position after 60 seconds. Dark-green backslashes show aircraft positions from the past 60 seconds at half the label font size. Ring range labels show values without units. Aircraft labels use 18 px in 3D and 9 px in Canvas. The 3D labels are twice the size of the Canvas labels.
 
 Both views show a nautical mile scale and a symbol legend at the lower left. The legend identifies aircraft, the 60-second vector, history marks, and home.
 
@@ -43,7 +45,7 @@ Keep a known callsign when a later SBS update has a blank value or a placeholder
 
 The radar scope stays square. Its width and height match the shorter viewport dimension. It sits at the top left. Landscape views show flight strips on the right. Portrait views show flight strips below the scope. The page has no header or footer. The reset button sits over the scope at the top right.
 
-Flight strips sort aircraft by distance from home, with the closest aircraft first. They show available callsign, ICAO, altitude, speed, heading, vertical rate, squawk, position, range, bearing, and age data. Missing values show a dash. The strips use full headers when all fields fit on one line, then use short headers. Narrow views wrap the header and each aircraft into two or three rows. They show headers once. The black panel uses white text, double outer and header borders, and single dividers between aircraft.
+Flight strips sort aircraft by distance from home, with the closest aircraft first. They show callsign, altitude and vertical rate, speed, heading, squawk, type code, combined range and bearing, origin, and destination. They omit ICAO, position, age, and field headers. Missing values show a dash. Range and bearing use the format `12@270°`, with range rounded to a whole nautical mile. Origin and destination show airport codes when known. Narrow views wrap each aircraft into two or three aligned rows. The black panel uses white text, double outer borders, and single dividers between aircraft.
 
 Set `MY_LOCATION` as decimal latitude and longitude in `.env`. Set `MY_ELEVATION` in feet above mean sea level. The default is 300 feet.
 

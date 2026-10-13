@@ -28,6 +28,13 @@ test("renders aligned aircraft data rows at narrow widths", () => {
   expect(new Set(tracks).size).toBe(1);
 });
 
+test("keeps empty alignment cells out of two-row strips", () => {
+  const container = {};
+  renderFlightStrips(container, [aircraft("ONE", 1)], 250);
+  expect(container.innerHTML.match(/flight-strip-row/g)).toHaveLength(2);
+  expect(container.innerHTML).not.toContain(": </span>");
+});
+
 test("shows the empty state and accepts a missing container", () => {
   const container = {};
   renderFlightStrips(container, [], 300);
@@ -56,7 +63,7 @@ test("updates on resize and each second, then removes stale aircraft on destroy"
   expect(container.innerHTML).toContain("FRESH");
   container.clientWidth = 300;
   resize();
-  expect(container.innerHTML.match(/flight-strip-row/g)).toHaveLength(4);
+  expect(container.innerHTML.match(/flight-strip-row/g)).toHaveLength(6);
   now = 122000;
   tick();
   expect(container.innerHTML).toContain("1 AIRCRAFT");

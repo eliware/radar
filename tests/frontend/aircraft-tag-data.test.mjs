@@ -11,6 +11,9 @@ test("formats the name, flight level, and speed without units", () => {
     }),
   ).toEqual(["TEST", "123+22", "402"]);
   expect(
+    formatAircraftTag({ callsign: "AAL174", groundSpeedKnots: 496, aircraftTypeCode: "B738" }),
+  ).toEqual(["AAL174", "-", "496 B738"]);
+  expect(
     formatAircraftTag({ icao: "ABC", altitudeFeet: 12300, verticalRateFeetPerMinute: -2150 }),
   ).toEqual(["ABC", "123-22", "-"]);
   expect(formatAircraftTag({ altitudeFeet: 12300, verticalRateFeetPerMinute: 100 })).toEqual([

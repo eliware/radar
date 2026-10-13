@@ -1,18 +1,33 @@
-import { formatAircraftTag } from "./aircraft-tag-data.mjs";
+import { formatAircraftSpeed, formatAircraftTag } from "./aircraft-tag-data.mjs";
 
-const fieldLabels = ["CALLSIGN", "ALTITUDE / VS", "SPEED", "HEADING", "SQUAWK", "RANGE", "BEARING"];
+const fieldLabels = [
+  "CALLSIGN",
+  "ALTITUDE / VS",
+  "SPEED",
+  "HEADING",
+  "SQUAWK",
+  "TYPE",
+  "RANGE @ BEARING",
+  "ORIGIN",
+  "DESTINATION",
+];
 const twoRows = [
-  [0, 1, 2, 3],
-  [4, 5, 6],
+  [0, 1, 2, 3, 4],
+  [5, 6, 7, 8],
 ];
 const threeRows = [
   [0, 1, 2],
-  [3, 4],
-  [5, 6],
+  [3, 4, 5],
+  [6, 7, 8],
 ];
 
 function valuesOf(aircraft) {
-  const [callsign, altitude, speed] = formatAircraftTag(aircraft);
+  const [callsign, altitude] = formatAircraftTag(aircraft);
+  const speed = formatAircraftSpeed(aircraft);
+  const rangeAndBearing =
+    Number.isFinite(aircraft.distanceNauticalMiles) && Number.isFinite(aircraft.bearingDegrees)
+      ? `${Math.round(aircraft.distanceNauticalMiles)}@${String(Math.round(aircraft.bearingDegrees) % 360).padStart(3, "0")}°`
+      : "-";
   return [
     callsign,
     altitude,
@@ -21,10 +36,10 @@ function valuesOf(aircraft) {
       ? `${String(aircraft.trackDegrees).padStart(3, "0")}°`
       : "-",
     aircraft.squawk || "-",
-    Number.isFinite(aircraft.distanceNauticalMiles) ? String(aircraft.distanceNauticalMiles) : "-",
-    Number.isFinite(aircraft.bearingDegrees)
-      ? `${String(aircraft.bearingDegrees).padStart(3, "0")}°`
-      : "-",
+    aircraft.aircraftTypeCode || "-",
+    rangeAndBearing,
+    aircraft.origin || "-",
+    aircraft.destination || "-",
   ];
 }
 
@@ -43,7 +58,7 @@ export function buildFlightStripData(aircraft, width) {
   const groups =
     width >= requiredWidth(indexes, values, indexes.length)
       ? [indexes]
-      : Math.max(...twoRows.map((group) => requiredWidth(group, values, 4))) <= width
+      : Math.max(...twoRows.map((group) => requiredWidth(group, values, 5))) <= width
         ? twoRows
         : threeRows;
   const columnCount = Math.max(...groups.map((group) => group.length));

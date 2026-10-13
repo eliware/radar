@@ -8,10 +8,15 @@ export function formatAircraftTag(aircraft) {
     : null;
   const rate = aircraft.verticalRateFeetPerMinute;
   const altitudeLine = altitude === null ? "-" : formatAltitude(altitude, rate);
-  const speed = Number.isFinite(aircraft.groundSpeedKnots)
+  const speed = formatAircraftSpeed(aircraft);
+  const typeCode = aircraft.aircraftTypeCode?.trim();
+  return [name, altitudeLine, typeCode ? `${speed} ${typeCode}` : speed];
+}
+
+export function formatAircraftSpeed(aircraft) {
+  return Number.isFinite(aircraft.groundSpeedKnots)
     ? String(Math.round(aircraft.groundSpeedKnots))
     : "-";
-  return [name, altitudeLine, speed];
 }
 
 function formatAltitude(altitude, rate) {

@@ -18,11 +18,15 @@ afterEach(() => {
 function dependencies() {
   const log = { info: jest.fn(), warn: jest.fn() };
   const feed = { close: jest.fn() };
+  const enrichedFeed = { close: jest.fn() };
+  const lookup = {};
   const app = { listen: jest.fn(async () => undefined), close: jest.fn(async () => undefined) };
   const signals = {};
   return {
     log,
     feed,
+    enrichedFeed,
+    lookup,
     app,
     signals,
     values: {
@@ -31,6 +35,8 @@ function dependencies() {
       registerHandlers: jest.fn(),
       registerSignals: jest.fn((value) => Object.assign(signals, value)),
       createAircraftFeed: jest.fn(() => feed),
+      createAdsbdbLookup: jest.fn(() => lookup),
+      createAircraftEnrichmentFeed: jest.fn(() => enrichedFeed),
       createAirportDatabase: jest.fn(() => null),
       createRadarServer: jest.fn(async () => app),
       parseAdsbLocation: (value) => (value ? { latitude: 43, longitude: -70 } : null),
@@ -50,7 +56,7 @@ test("starts Fastify and closes the feed after a signal", async () => {
     expect.objectContaining({ host: "receiver", port: 30004, locationText: "43, -70" }),
   );
   expect(deps.values.createRadarServer).toHaveBeenCalledWith({
-    feed: deps.feed,
+    feed: deps.values.createAircraftEnrichmentFeed.mock.results[0].value,
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 320,
     airportDatabase: null,
@@ -61,8 +67,12 @@ test("starts Fastify and closes the feed after a signal", async () => {
   await deps.signals.shutdownHook();
   await deps.signals.shutdownHook();
   expect(deps.feed.close).toHaveBeenCalledTimes(1);
+  expect(
+    deps.values.createAircraftEnrichmentFeed.mock.results[0].value.close,
+  ).toHaveBeenCalledTimes(1);
   expect(deps.app.close).toHaveBeenCalledTimes(1);
   expect(runtime.app).toBe(deps.app);
+  expect(runtime.feed).toBe(deps.enrichedFeed);
 });
 
 test("uses default web and feed settings", async () => {

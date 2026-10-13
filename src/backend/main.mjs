@@ -13,8 +13,12 @@ export async function startWebApplication(dependencies) {
     locationText: process.env.MY_LOCATION,
     onError: (error) => log.warn(`ADS-B feed error: ${error.message}`),
   });
-  const app = await dependencies.createRadarServer({
+  const enrichedFeed = dependencies.createAircraftEnrichmentFeed(
     feed,
+    dependencies.createAdsbdbLookup(),
+  );
+  const app = await dependencies.createRadarServer({
+    feed: enrichedFeed,
     location,
     elevationFeet,
     airportDatabase,
@@ -22,6 +26,7 @@ export async function startWebApplication(dependencies) {
   let shutdownPromise;
   const shutdown = () => {
     if (shutdownPromise) return shutdownPromise;
+    enrichedFeed.close();
     feed.close();
     shutdownPromise = app.close().then(() => log.info("Web application stopped"));
     return shutdownPromise;
@@ -29,7 +34,7 @@ export async function startWebApplication(dependencies) {
   dependencies.registerSignals({ log, shutdownHook: shutdown });
   await app.listen({ host: "0.0.0.0", port });
   log.info(`Web application listening on port ${port}`);
-  return { app, feed, shutdown };
+  return { app, feed: enrichedFeed, shutdown };
 }
 
 function validPort(value, name) {

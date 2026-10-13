@@ -4,6 +4,8 @@ import { createAircraftFeed } from "./aircraft-feed.mjs";
 import { createRadarServer } from "./server.mjs";
 import { createAirportDatabase } from "./airport-database.mjs";
 import { parseAdsbLocation } from "../shared/adsb-location.mjs";
+import { createAdsbdbLookup } from "./adsbdb-lookup.mjs";
+import { createAircraftEnrichmentFeed } from "./aircraft-enrichment-feed.mjs";
 
 export const runtimeDependencies = {
   loadEnvironment: config,
@@ -14,4 +16,6 @@ export const runtimeDependencies = {
   createRadarServer,
   createAirportDatabase,
   parseAdsbLocation,
+  createAdsbdbLookup,
+  createAircraftEnrichmentFeed,
 };

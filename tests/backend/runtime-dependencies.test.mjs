@@ -19,6 +19,8 @@ test("provides server and feed runtime dependencies", () => {
     "createRadarServer",
     "createAirportDatabase",
     "parseAdsbLocation",
+    "createAdsbdbLookup",
+    "createAircraftEnrichmentFeed",
   ]);
   expect(
     Object.values(runtimeDependencies).every((dependency) => typeof dependency === "function"),
