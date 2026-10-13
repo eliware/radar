@@ -70,7 +70,7 @@ directives:
       - Show the decoded METAR table only in 3D mode on screens wider than 900 pixels.
       - Show a raw one-line METAR ticker in 2D mode and on screens 900 pixels wide or less.
       - Show only public-use airports with a four-character ICAO code that starts with K.
-      - Show airports only when they have an asphalt or concrete runway at least 1,000 feet long.
+      - Show airports only when they have an asphalt or concrete runway over 1,000 feet long.
       - Draw only qualifying asphalt and concrete runways.
       - Draw airport markers and codes in light gray.
       - Center airport labels above their marker dots.

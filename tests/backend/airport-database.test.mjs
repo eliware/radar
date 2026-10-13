@@ -54,7 +54,7 @@ test("opens SQLite in read-only mode and filters airport rows by distance band",
         expect(sql).toContain("A.FACILITY_USE_CODE = 'PU'");
         expect(sql).toContain("A.ICAO_ID GLOB 'K[A-Z0-9][A-Z0-9][A-Z0-9]'");
         expect(sql).toContain("R.SURFACE_TYPE_CODE IN ('ASPH', 'CONC'");
-        expect(sql).toContain("R.RWY_LEN AS REAL) >= 1000");
+        expect(sql).toContain("R.RWY_LEN AS REAL) > 1000");
       }
       if (sql.includes("APT_RWY_END")) return runwayStatement;
       if (sql.includes("NAV_BASE")) return navaidStatement;
