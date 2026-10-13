@@ -28,11 +28,11 @@ test("renders aligned aircraft data rows at narrow widths", () => {
   expect(new Set(tracks).size).toBe(1);
 });
 
-test("keeps empty alignment cells out of two-row strips", () => {
+test("keeps the blank type slot aligned in two-row strips", () => {
   const container = {};
   renderFlightStrips(container, [aircraft("ONE", 1)], 250);
   expect(container.innerHTML.match(/flight-strip-row/g)).toHaveLength(2);
-  expect(container.innerHTML).not.toContain(": </span>");
+  expect(container.innerHTML).toContain('<span aria-hidden="true"></span>');
 });
 
 test("shows the empty state and accepts a missing container", () => {

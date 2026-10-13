@@ -18,7 +18,7 @@ function rowMarkup(values, weights, labels) {
   const columns = weights.map((weight) => `minmax(0, ${weight}fr)`).join(" ");
   const cells = values
     .map((value, index) => {
-      if (!value && !labels[index]) return "";
+      if (!value && !labels[index]) return '<span aria-hidden="true"></span>';
       const title = ` title="${escapeHtml(`${labels[index]}: ${value}`)}"`;
       return `<span${title}>${escapeHtml(value)}</span>`;
     })

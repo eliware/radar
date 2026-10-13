@@ -120,13 +120,15 @@ directives:
       - Reserve space below the radar view in portrait layout for flight strips.
       - Show aircraft flight strips beside the radar in landscape layout and below it in portrait layout.
       - Sort web flight strips by distance from home, with the closest aircraft first.
-      - Show callsign, combined altitude and vertical rate, speed, heading, squawk, aircraft type code, combined range and bearing, origin, and destination in flight strips.
+      - Show callsign, combined altitude and vertical rate, aircraft type code, combined heading and speed, squawk, a blank field, combined bearing and range, origin, and destination in flight strips.
       - Format flight strip altitude and vertical rate as the aircraft radar labels do.
       - Omit ICAO, position, and age from flight strips.
       - Omit units from flight strip values. Keep the degree sign on headings.
       - Put the aircraft type code after the speed on the third radar label line, separated by one space.
-      - Put the aircraft type code after the squawk value in flight strips.
-      - Combine flight strip range and bearing as rounded whole nautical miles, an at sign, and bearing degrees.
+      - Put the aircraft type code in the speed field position in flight strips.
+      - Keep a blank field in the former aircraft type code position in flight strips.
+      - Combine flight strip heading and speed as three-digit heading, degree sign, and speed.
+      - Combine flight strip bearing and range as three-digit bearing, degree sign, and rounded whole nautical miles.
       - Put origin and destination airport codes in the last two flight strip fields when known.
       - Use ADSBdb aircraft lookup by ICAO hex for aircraft type codes.
       - Use ADSBdb callsign lookup for origin and destination airport codes only.

@@ -16,7 +16,7 @@ const fullAircraft = {
   destination: "KBOS",
 };
 
-test("sorts aircraft and formats the nine visible fields", () => {
+test("sorts aircraft and formats the nine aligned fields", () => {
   const far = { ...fullAircraft, icao: "FAR123", distanceNauticalMiles: 40 };
   const result = buildFlightStripData([far, fullAircraft], 3000);
   expect(result.count).toBe(2);
@@ -24,11 +24,11 @@ test("sorts aircraft and formats the nine visible fields", () => {
   expect(result.aircraft[0].groups[0]).toEqual([
     "RADAR1",
     "125-06",
-    "200",
-    "009°",
-    "1200",
     "B738",
-    "4@007°",
+    "009°200",
+    "1200",
+    "",
+    "007°4",
     "KPWM",
     "KBOS",
   ]);
@@ -51,11 +51,11 @@ test("shows optional type, range, origin, and destination values", () => {
   expect(row.labels[0]).toEqual([
     "CALLSIGN",
     "ALTITUDE / VS",
-    "SPEED",
-    "HEADING",
-    "SQUAWK",
     "TYPE",
-    "RANGE @ BEARING",
+    "HEADING / SPEED",
+    "SQUAWK",
+    "",
+    "BEARING / RANGE",
     "ORIGIN",
     "DESTINATION",
   ]);
@@ -63,4 +63,13 @@ test("shows optional type, range, origin, and destination values", () => {
   expect(buildFlightStripData([{}, { distanceNauticalMiles: 2 }], 1000).count).toBe(2);
   expect(missingIdentity.aircraft[0].icao).toBe("");
   expect(missingIdentity.aircraft[0].groups[0][0]).toBe("-");
+});
+
+test("keeps the combined fields readable when one value is missing", () => {
+  const row = buildFlightStripData(
+    [{ trackDegrees: 359 }, { groundSpeedKnots: 457 }],
+    3000,
+  ).aircraft;
+  expect(row[0].groups[0][3]).toBe("359°-");
+  expect(row[1].groups[0][3]).toBe("-457");
 });
