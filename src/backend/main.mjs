@@ -8,7 +8,6 @@ export async function startWebApplication(dependencies) {
   const metarLookup = dependencies.createMetarLookup(
     dependencies.parseMetarStations(process.env.METAR_STATIONS),
   );
-  const mapOutlines = dependencies.loadMapOutlines();
   const log = dependencies.createLogger({ level: process.env.LOG_LEVEL ?? "info" });
   dependencies.registerHandlers({ log });
   const feed = dependencies.createAircraftFeed({
@@ -27,7 +26,6 @@ export async function startWebApplication(dependencies) {
     elevationFeet,
     airportDatabase,
     metarLookup,
-    mapOutlines,
   });
   let shutdownPromise;
   const shutdown = () => {

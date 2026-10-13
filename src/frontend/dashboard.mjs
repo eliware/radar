@@ -3,7 +3,6 @@ import { connectWebSocketFeed } from "./websocket-feed.mjs";
 import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
 import { createFlightStripView } from "./flight-strips.mjs";
 import { startMetarRefresh } from "./start-metar-refresh.mjs";
-import { loadDashboardConfig } from "./load-dashboard-config.mjs";
 
 export async function startDashboard({
   document,
@@ -14,10 +13,12 @@ export async function startDashboard({
 }) {
   const container = document.querySelector("[data-scene]");
   if (!container) return null;
-  const strips = document.querySelector("[data-flight-strips]");
-  const flightStrips = createFlightStripView(strips, windowRef);
+  const flightStrips = createFlightStripView(
+    document.querySelector("[data-flight-strips]"),
+    windowRef,
+  );
   try {
-    const { config, mapOutlines } = await loadDashboardConfig(fetchData);
+    const config = await readJson(fetchData, "/api/config");
     startMetarRefresh({
       fetchData,
       panel: document.querySelector("[data-metar-reports]"),
@@ -32,7 +33,6 @@ export async function startDashboard({
       container,
       location: config.location,
       elevationFeet: config.elevationFeet,
-      mapOutlines,
       onMode: (mode) =>
         document.querySelector("[data-metar]").setAttribute("data-radar-mode", mode),
     });

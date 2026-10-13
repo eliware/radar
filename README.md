@@ -29,7 +29,7 @@ Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.
 
 ## Features
 
-Radar is a local web dashboard and CLI for ADS-B aircraft data. The server uses Fastify. The dashboard uses a Three.js radar view and a 2D Canvas fallback. It includes bundled coastline and lake outlines, flight strips, aircraft details, airport references, and a passive compass. The CLI reads decoded aircraft records from an SBS/BaseStation TCP feed.
+Radar is a local web dashboard and CLI for ADS-B aircraft data. The server uses Fastify. The dashboard uses a Three.js radar view and a 2D Canvas fallback. It includes flight strips, aircraft details, airport references, and a passive compass. The CLI reads decoded aircraft records from an SBS/BaseStation TCP feed.
 
 ## Requirements
 

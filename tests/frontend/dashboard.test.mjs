@@ -1,16 +1,48 @@
 import { expect, jest, test } from "@jest/globals";
 import { startDashboard } from "../../src/frontend/dashboard.mjs";
-import { jsonResponse, makeDashboardDocument } from "../../test-fixtures/dashboard-test-data.mjs";
+
+function makeDocument(protocol = "https:", includeReset = true) {
+  const home = {};
+  const strips = { clientWidth: 800 };
+  const metarDisplay = {
+    dataset: {},
+    setAttribute: jest.fn((_name, value) => (metarDisplay.dataset.radarMode = value)),
+  };
+  const reset = { addEventListener: jest.fn((event, callback) => (reset.callback = callback)) };
+  return {
+    home,
+    reset,
+    strips,
+    location: { protocol, host: "localhost:3000" },
+    querySelector(selector) {
+      return {
+        "[data-scene]": {},
+        "[data-home]": home,
+        "[data-reset]": includeReset ? reset : null,
+        "[data-flight-strips]": strips,
+        "[data-metar]": metarDisplay,
+        "[data-metar-reports]": { textContent: "", innerHTML: "" },
+        "[data-metar-ticker]": { textContent: "" },
+      }[selector];
+    },
+    querySelectorAll() {
+      return [];
+    },
+  };
+}
+
+function jsonResponse(value, ok = true) {
+  return { ok, json: async () => value };
+}
 
 test("starts the secure live view and handles feed messages", async () => {
-  const document = makeDashboardDocument();
+  const document = makeDocument();
   const aircraft = { icao: "ABC123" };
   const fetchData = jest
     .fn()
     .mockResolvedValueOnce(
       jsonResponse({ location: { latitude: 43, longitude: -70 }, elevationFeet: 300 }),
     )
-    .mockResolvedValueOnce(jsonResponse({ coastline: [], lakes: [] }))
     .mockResolvedValueOnce(jsonResponse({ reports: [{ id: "KPWM", metar: "METAR" }] }))
     .mockResolvedValueOnce(jsonResponse([aircraft]))
     .mockResolvedValueOnce(jsonResponse([{ icao: "RESTORE1" }]));
@@ -53,7 +85,6 @@ test("starts the secure live view and handles feed messages", async () => {
       container: expect.any(Object),
       location: { latitude: 43, longitude: -70 },
       elevationFeet: 300,
-      mapOutlines: { coastline: [], lakes: [] },
     }),
   );
   expect(scene.update).toHaveBeenCalledWith(aircraft);
@@ -74,11 +105,10 @@ test("starts the secure live view and handles feed messages", async () => {
 });
 
 test("uses an insecure socket when the page uses HTTP", async () => {
-  const document = makeDashboardDocument("http:", false);
+  const document = makeDocument("http:", false);
   const fetchData = jest
     .fn()
     .mockResolvedValueOnce(jsonResponse({ location: null, elevationFeet: 300 }))
-    .mockResolvedValueOnce(jsonResponse({ coastline: [], lakes: [] }))
     .mockResolvedValueOnce(jsonResponse({ reports: [] }))
     .mockResolvedValueOnce(jsonResponse([]));
   let url;
@@ -104,12 +134,11 @@ test("uses an insecure socket when the page uses HTTP", async () => {
 });
 
 test("loads each new reference-data band when the view expands", async () => {
-  const document = makeDashboardDocument();
+  const document = makeDocument();
   const requested = [];
   const fetchData = jest.fn(async (url) => {
     requested.push(url);
     if (url === "/api/config") return jsonResponse({ location: null, elevationFeet: 300 });
-    if (url === "/api/map-outlines") return jsonResponse({ coastline: [], lakes: [] });
     if (url === "/api/aircraft") return jsonResponse([]);
     return jsonResponse([]);
   });
@@ -148,25 +177,15 @@ test("loads each new reference-data band when the view expands", async () => {
 });
 
 test("does not start when the page has no scene element", async () => {
-  const document = makeDashboardDocument();
+  const document = makeDocument();
   document.querySelector = () => null;
   const fetchData = jest.fn();
   expect(await startDashboard({ document, fetchData })).toBeNull();
   expect(fetchData).not.toHaveBeenCalled();
 });
 
-test("stops when the aircraft snapshot route fails", async () => {
-  const document = makeDashboardDocument();
-  const fetchData = jest
-    .fn()
-    .mockResolvedValueOnce(jsonResponse({ location: null, elevationFeet: 300 }))
-    .mockResolvedValueOnce(jsonResponse({ coastline: [], lakes: [] }))
-    .mockResolvedValueOnce(jsonResponse({ reports: [] }))
-    .mockResolvedValueOnce(jsonResponse([], false));
-  const result = await startDashboard({
-    document,
-    fetchData,
-    createScene: () => ({ update: jest.fn() }),
-  });
-  expect(result).toBeNull();
+test("does not start when configuration fails", async () => {
+  const document = makeDocument();
+  const fetchData = jest.fn().mockResolvedValue(jsonResponse({}, false));
+  expect(await startDashboard({ document, fetchData })).toBeNull();
 });

@@ -68,13 +68,6 @@ test("registers the METAR API when a lookup is available", async () => {
   expect(app.get.mock.calls.map(([route]) => route)).toContain("/api/metar");
 });
 
-test("registers the map outline API when data is available", async () => {
-  const app = createApp();
-  const mapOutlines = { coastline: [], lakes: [] };
-  await createRadarServer({ feed: { list: () => [] }, mapOutlines, fastifyFactory: () => app });
-  expect(app.get.mock.calls.map(([route]) => route)).toContain("/api/map-outlines");
-});
-
 test("uses the default Fastify factory", async () => {
   const server = await createRadarServer({ feed: { list: () => [] } });
 

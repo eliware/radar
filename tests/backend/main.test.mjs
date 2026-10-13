@@ -40,7 +40,6 @@ function dependencies() {
       createAircraftEnrichmentFeed: jest.fn(() => enrichedFeed),
       parseMetarStations: jest.fn(() => ["KLEW", "KPWM", "KBXM"]),
       createMetarLookup: jest.fn((stations) => ({ stations, get: jest.fn() })),
-      loadMapOutlines: jest.fn(() => ({ coastline: [], lakes: [] })),
       createAirportDatabase: jest.fn(() => null),
       createRadarServer: jest.fn(async () => app),
       parseAdsbLocation: (value) => (value ? { latitude: 43, longitude: -70 } : null),
@@ -65,7 +64,6 @@ test("starts Fastify and closes the feed after a signal", async () => {
     elevationFeet: 320,
     airportDatabase: null,
     metarLookup: deps.values.createMetarLookup.mock.results[0].value,
-    mapOutlines: { coastline: [], lakes: [] },
   });
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 8080 });
   deps.values.createAircraftFeed.mock.calls[0][0].onError(new Error("offline"));

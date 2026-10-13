@@ -7,7 +7,6 @@ import { parseAdsbLocation } from "../shared/adsb-location.mjs";
 import { createAdsbdbLookup } from "./adsbdb-lookup.mjs";
 import { createAircraftEnrichmentFeed } from "./aircraft-enrichment-feed.mjs";
 import { createMetarLookup, parseMetarStations } from "./metar-lookup.mjs";
-import { loadMapOutlines } from "./map-outline-data.mjs";
 
 export const runtimeDependencies = {
   loadEnvironment: config,
@@ -22,5 +21,4 @@ export const runtimeDependencies = {
   createAircraftEnrichmentFeed,
   createMetarLookup,
   parseMetarStations,
-  loadMapOutlines,
 };

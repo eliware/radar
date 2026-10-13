@@ -34,7 +34,6 @@ test("wires scene services and reports connection changes", () => {
   expect(loop.isConnected()).toBe(true);
   cameraOptions.onRangeChange(40);
   expect(mocks.updateRings).toHaveBeenCalledWith(40);
-  expect(mocks.map.setRange).toHaveBeenCalledWith(40);
   cameraOptions.onManualZoom();
   expect(loop.isAutoZoom()).toBe(false);
 });
@@ -103,7 +102,6 @@ test("releases scene resources", () => {
   createView().destroy();
   expect(mocks.stopRadarLoops).toHaveBeenCalledTimes(1);
   expect(mocks.airspace.dispose).toHaveBeenCalledTimes(1);
-  expect(mocks.map).toHaveBeenCalledTimes(1);
   expect(mocks.overlay.destroy).toHaveBeenCalledTimes(1);
   expect(mocks.radarCamera.dispose).toHaveBeenCalledTimes(1);
   expect(mocks.controls.dispose).toHaveBeenCalledTimes(1);
