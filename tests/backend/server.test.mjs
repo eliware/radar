@@ -58,6 +58,16 @@ test("closes the airport database when the server closes", async () => {
   expect(airportDatabase.close).toHaveBeenCalledTimes(1);
 });
 
+test("registers the METAR API when a lookup is available", async () => {
+  const app = createApp();
+  await createRadarServer({
+    feed: { list: () => [] },
+    metarLookup: { stations: ["KPWM"], get: async () => [] },
+    fastifyFactory: () => app,
+  });
+  expect(app.get.mock.calls.map(([route]) => route)).toContain("/api/metar");
+});
+
 test("uses the default Fastify factory", async () => {
   const server = await createRadarServer({ feed: { list: () => [] } });
 

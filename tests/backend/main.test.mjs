@@ -9,6 +9,7 @@ afterEach(() => {
     "MY_LOCATION",
     "MY_ELEVATION",
     "NASR_DATABASE_PATH",
+    "METAR_STATIONS",
     "LOG_LEVEL",
   ]) {
     delete process.env[key];
@@ -37,6 +38,8 @@ function dependencies() {
       createAircraftFeed: jest.fn(() => feed),
       createAdsbdbLookup: jest.fn(() => lookup),
       createAircraftEnrichmentFeed: jest.fn(() => enrichedFeed),
+      parseMetarStations: jest.fn(() => ["KLEW", "KPWM", "KBXM"]),
+      createMetarLookup: jest.fn((stations) => ({ stations, get: jest.fn() })),
       createAirportDatabase: jest.fn(() => null),
       createRadarServer: jest.fn(async () => app),
       parseAdsbLocation: (value) => (value ? { latitude: 43, longitude: -70 } : null),
@@ -60,6 +63,7 @@ test("starts Fastify and closes the feed after a signal", async () => {
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 320,
     airportDatabase: null,
+    metarLookup: deps.values.createMetarLookup.mock.results[0].value,
   });
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 8080 });
   deps.values.createAircraftFeed.mock.calls[0][0].onError(new Error("offline"));

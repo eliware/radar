@@ -38,3 +38,15 @@ test("uses the default home elevation without config", async () => {
   registerApiRoutes({ get: (path, ...args) => routes.set(path, args) }, { list: () => [] });
   expect(await routes.get("/api/config")[0]()).toEqual({ location: null, elevationFeet: 300 });
 });
+
+test("registers the METAR route when its lookup is configured", async () => {
+  const routes = new Map();
+  const reports = [{ id: "KPWM", metar: "04006KT" }];
+  const metarLookup = { stations: ["KPWM"], get: jest.fn(async () => reports) };
+  registerApiRoutes(
+    { get: (path, ...args) => routes.set(path, args) },
+    { list: () => [] },
+    { metarLookup },
+  );
+  expect(await routes.get("/api/metar")[0]()).toEqual({ stations: ["KPWM"], reports });
+});

@@ -5,6 +5,9 @@ export async function startWebApplication(dependencies) {
   const location = dependencies.parseAdsbLocation(process.env.MY_LOCATION);
   const elevationFeet = validElevation(process.env.MY_ELEVATION ?? "300");
   const airportDatabase = dependencies.createAirportDatabase(process.env.NASR_DATABASE_PATH);
+  const metarLookup = dependencies.createMetarLookup(
+    dependencies.parseMetarStations(process.env.METAR_STATIONS),
+  );
   const log = dependencies.createLogger({ level: process.env.LOG_LEVEL ?? "info" });
   dependencies.registerHandlers({ log });
   const feed = dependencies.createAircraftFeed({
@@ -22,6 +25,7 @@ export async function startWebApplication(dependencies) {
     location,
     elevationFeet,
     airportDatabase,
+    metarLookup,
   });
   let shutdownPromise;
   const shutdown = () => {

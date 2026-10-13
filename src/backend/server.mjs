@@ -9,6 +9,7 @@ export async function createRadarServer({
   location = null,
   elevationFeet = 300,
   airportDatabase = null,
+  metarLookup = null,
   fastifyFactory = Fastify,
   websocketPlugin = websocket,
   publicRoot = resolve("public"),
@@ -17,7 +18,7 @@ export async function createRadarServer({
 }) {
   const app = fastifyFactory({ logger: false });
   await app.register(websocketPlugin);
-  registerApiRoutes(app, feed, { location, elevationFeet, airportDatabase });
+  registerApiRoutes(app, feed, { location, elevationFeet, airportDatabase, metarLookup });
   if (airportDatabase) app.addHook("onClose", async () => airportDatabase.close());
   registerStaticRoutes(app, { publicRoot, buildRoot, read });
   return app;

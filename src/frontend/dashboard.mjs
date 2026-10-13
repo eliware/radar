@@ -2,6 +2,7 @@ import { attachRadarCompassDisplay } from "./attach-radar-compass-display.mjs";
 import { connectWebSocketFeed } from "./websocket-feed.mjs";
 import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
 import { createFlightStripView } from "./flight-strips.mjs";
+import { startMetarRefresh } from "./start-metar-refresh.mjs";
 
 export async function startDashboard({
   document,
@@ -18,6 +19,12 @@ export async function startDashboard({
   );
   try {
     const config = await readJson(fetchData, "/api/config");
+    startMetarRefresh({
+      fetchData,
+      panel: document.querySelector("[data-metar-reports]"),
+      ticker: document.querySelector("[data-metar-ticker]"),
+      timerHost: windowRef,
+    });
     const home = document.querySelector("[data-home]");
     home.textContent = config.location
       ? `${config.location.latitude.toFixed(4)}°, ${config.location.longitude.toFixed(4)}° · ${config.elevationFeet} ft MSL`

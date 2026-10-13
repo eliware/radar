@@ -43,6 +43,12 @@ directives:
       - Keep fetched airport and runway data in browser memory.
       - Keep fetched ILS data in browser memory. Request only the new outer distance band.
       - Keep fetched SID and STAR paths in browser memory. Request only the new outer distance band.
+      - Read METAR station ICAO codes from the comma-delimited `METAR_STATIONS` setting.
+      - Default `METAR_STATIONS` to `KLEW,KPWM,KBXM`.
+      - Fetch METAR reports from the public VATSIM METAR API through the server.
+      - Cache METAR reports in server memory for five minutes.
+      - Show configured METAR reports at the top center of the radar.
+      - Use a scrolling one-line METAR ticker on narrow mobile screens.
       - Show only public-use airports with a four-character ICAO code that starts with K.
       - Show airports only when they have an asphalt or concrete runway at least 1,000 feet long.
       - Draw only qualifying asphalt and concrete runways.

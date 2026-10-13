@@ -16,6 +16,8 @@ function makeDocument(protocol = "https:", includeReset = true) {
         "[data-home]": home,
         "[data-reset]": includeReset ? reset : null,
         "[data-flight-strips]": strips,
+        "[data-metar-reports]": { textContent: "", innerHTML: "" },
+        "[data-metar-ticker]": { textContent: "" },
       }[selector];
     },
     querySelectorAll() {
@@ -36,6 +38,7 @@ test("starts the secure live view and handles feed messages", async () => {
     .mockResolvedValueOnce(
       jsonResponse({ location: { latitude: 43, longitude: -70 }, elevationFeet: 300 }),
     )
+    .mockResolvedValueOnce(jsonResponse({ reports: [{ id: "KPWM", metar: "METAR" }] }))
     .mockResolvedValueOnce(jsonResponse([aircraft]))
     .mockResolvedValueOnce(jsonResponse([{ icao: "RESTORE1" }]));
   const scene = {
@@ -67,6 +70,7 @@ test("starts the secure live view and handles feed messages", async () => {
   });
   expect(socket.url).toBe("wss://localhost:3000/ws");
   expect(document.home.textContent).toContain("43.0000°, -70.0000°");
+  expect(fetchData).toHaveBeenCalledWith("/api/metar");
   expect(createScene).toHaveBeenCalledWith(
     expect.objectContaining({
       container: expect.any(Object),
@@ -96,6 +100,7 @@ test("uses an insecure socket when the page uses HTTP", async () => {
   const fetchData = jest
     .fn()
     .mockResolvedValueOnce(jsonResponse({ location: null, elevationFeet: 300 }))
+    .mockResolvedValueOnce(jsonResponse({ reports: [] }))
     .mockResolvedValueOnce(jsonResponse([]));
   let url;
   let socket;

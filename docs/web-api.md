@@ -15,6 +15,8 @@ The web server listens on `0.0.0.0` at port `3000` by default. This allows acces
 
 `GET /api/config` returns the local latitude, longitude, and elevation from `.env`.
 
+`GET /api/metar` returns VATSIM METAR reports for ICAO codes in `METAR_STATIONS`. The server caches reports for five minutes. Set the value as a comma-separated list. The default list is `KLEW,KPWM,KBXM`.
+
 `GET /api/aircraft` returns recent aircraft. Each item has the same fields as one CLI `--debug` update, plus lookup fields when available.
 
 `GET /api/airports?minRangeNm=0&maxRangeNm=20` returns NASR airports in that distance band from `MY_LOCATION`. The maximum range is 300 nautical miles. Each record includes its airport codes, coordinates, elevation, distance, and runway ends. The server returns 503 when NASR data or a home location is not available.

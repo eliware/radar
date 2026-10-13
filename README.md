@@ -71,6 +71,8 @@ The web app serves local assets and a local aircraft API. The API has no authent
 
 Runtime settings come from environment variables or an untracked `.env` file. `PORT` defaults to 3000 and accepts integers from 1 through 65535. `LOG_LEVEL` defaults to `info`. `ADSB_HOST` defaults to `127.0.0.1`. `ADSB_PORT` defaults to 30003 and accepts integers from 1 through 65535. Set optional `MY_LOCATION` as decimal latitude and longitude, separated by a comma. Set `MY_ELEVATION` in feet above mean sea level; it defaults to 300. CLI flags `--host` and `--port` override feed settings.
 
+Set optional `METAR_STATIONS` to a comma-separated list of four-character ICAO codes. Radar shows reports from the public VATSIM METAR API. The default list is `KLEW,KPWM,KBXM`.
+
 ## Operations
 
 Build the web app with `npm run build`, then start it with `node bin/radar.mjs`. Stop it with a signal. Start the CLI with `node bin/adsb.mjs`; stop it with Ctrl+C. The web API provides `GET /health`, `GET /api/config`, `GET /api/aircraft`, range-based airport, navaid, airspace, and ILS routes, and WebSocket `/ws`. The WebSocket sends one aircraft JSON object for each feed update. The CLI does not write files.
