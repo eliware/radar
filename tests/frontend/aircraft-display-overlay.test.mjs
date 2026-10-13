@@ -103,7 +103,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
   expect(container.appendChild).toHaveBeenCalledWith(canvas);
   expect(context.setTransform).toHaveBeenCalledWith(2, 0, 0, 2, 0, 0);
   expect(context.fillText).toHaveBeenCalled();
-  expect(context.fillText).toHaveBeenCalledWith("ILS 11", expect.any(Number), expect.any(Number));
+  expect(context.setLineDash).toHaveBeenCalledWith([4, 4]);
   expect(measuredFonts).toContain("18px monospace");
   container.clientWidth = 0;
   container.clientHeight = 0;

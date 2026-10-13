@@ -3,9 +3,10 @@ import { drawIlsApproaches } from "../../src/frontend/draw-ils-approaches.mjs";
 
 function context() {
   return Object.fromEntries(
-    ["save", "restore", "setLineDash", "beginPath", "moveTo", "lineTo", "stroke", "fillText"].map(
-      (method) => [method, jest.fn()],
-    ),
+    ["save", "restore", "setLineDash", "beginPath", "moveTo", "lineTo", "stroke"].map((method) => [
+      method,
+      jest.fn(),
+    ]),
   );
 }
 
@@ -41,11 +42,6 @@ test("draws a dashed ten-mile approach line with a descending glide path", () =>
   expect(ctx.moveTo).toHaveBeenCalledWith(points[1].longitude, points[1].elevationFeet);
   expect(ctx.lineTo).toHaveBeenCalledWith(points[0].longitude, points[0].elevationFeet);
   expect(points[1].elevationFeet).toBeGreaterThan(points[0].elevationFeet);
-  expect(ctx.fillText).toHaveBeenCalledWith(
-    "ILS 11",
-    points[0].longitude,
-    points[0].elevationFeet - 7,
-  );
 });
 
 test("skips hidden, distant, invalid, and out-of-range courses", () => {

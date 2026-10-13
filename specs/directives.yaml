@@ -55,9 +55,9 @@ directives:
       - Draw VOR symbols and identifiers in blue.
       - Show ILS course guides by default in both radar views. Press I to toggle them.
       - Draw dashed cyan ILS course guides for 10 nautical miles from each glide-slope site.
+      - Do not show text labels on ILS guides.
       - Extend ILS course guides away from the runway on the reciprocal of the corrected true approach course.
       - Follow the NASR glide-slope angle in 3D. Draw ILS course guides flat in Canvas.
-      - Label each ILS course guide with its runway end.
       - Treat ILS course guides as visual guides. Do not present them as complete approach paths.
       - Draw approximate 5- and 10-mile rings around airports with the NASR Class C flag.
       - Identify approximate Class C rings as visual guides, not official boundaries.

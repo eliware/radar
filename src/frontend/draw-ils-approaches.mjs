@@ -6,10 +6,7 @@ export function drawIlsApproaches(context, approaches, project, range, visible =
   if (!visible) return;
   context.save();
   context.strokeStyle = ILS_COLOR;
-  context.fillStyle = ILS_COLOR;
   context.lineWidth = 1.25;
-  context.font = "10px monospace";
-  context.textAlign = "center";
   context.setLineDash([4, 4]);
   for (const approach of approaches.values()) {
     if (approach.rangeNm > range) continue;
@@ -22,9 +19,6 @@ export function drawIlsApproaches(context, approaches, project, range, visible =
     context.moveTo(endpoint.x, endpoint.y);
     context.lineTo(origin.x, origin.y);
     context.stroke();
-    context.setLineDash([]);
-    context.fillText(`ILS ${approach.runwayEnd}`, origin.x, origin.y - 7);
-    context.setLineDash([4, 4]);
   }
   context.restore();
 }
