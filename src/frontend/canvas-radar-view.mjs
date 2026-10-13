@@ -8,6 +8,7 @@ import { createViewChangeListeners } from "./create-view-change-listeners.mjs";
 import { createRadarReferenceStore } from "./radar-reference-store.mjs";
 import { attachCanvasRadarEvents } from "./attach-canvas-radar-events.mjs";
 import { createRadarLayerVisibility } from "./create-radar-layer-visibility.mjs";
+import { createCanvasWater } from "./create-canvas-water.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -20,6 +21,7 @@ export function createCanvasRadarView({
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
   const references = createRadarReferenceStore();
+  const water = { paths: [], visible: true, isVisible: () => water.visible };
   const state = {
     range: DEFAULT_RADAR_RANGE,
     autoZoom: true,
@@ -47,14 +49,25 @@ export function createCanvasRadarView({
     boundaries: references.boundaries,
     ilsApproaches: references.ilsApproaches,
     procedures: references.procedures,
+    water,
   });
   const draw = () => {
     state.ilsVisible = layers.ils.isVisible();
     state.proceduresVisible = layers.procedures.isVisible();
     drawRadar();
+    waterLayer.update();
     viewChanges.emit(state.range);
   };
   const layers = createRadarLayerVisibility(documentRef, draw);
+  const waterLayer = createCanvasWater(
+    documentRef,
+    windowRef,
+    location,
+    canvas,
+    state,
+    water,
+    drawRadar,
+  );
   const detachEvents = attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef);
   draw();
   const viewState = createCanvasRadarState(state, draw, () => targets.distances(), viewChanges);
@@ -79,6 +92,7 @@ export function createCanvasRadarView({
     destroy() {
       detachEvents();
       layers.destroy();
+      waterLayer.destroy();
       viewChanges.clear();
       container.replaceChildren();
     },

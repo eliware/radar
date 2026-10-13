@@ -105,7 +105,12 @@ directives:
       - Do not present ARTCC boundaries as approach control boundaries.
       - Do not require authentication for local REST or WebSocket access.
       - Serve the local page, CSS, and built JavaScript from the web server.
-      - Build the first web view as a Three.js 3D space without a map or terrain.
+      - Keep Three.js as the primary 3D radar renderer.
+      - Offer an optional runtime vector-tile layer for faint gray lake and ocean outlines.
+      - Load only the vector tiles that cover the current radar view. Keep tile data in browser memory.
+      - Draw the same geographic water outlines in the Three.js and Canvas radar views.
+      - Keep the water layer flat at zero feet MSL and omit fills, rivers, and streams.
+      - Show map data attribution and let users turn the water layer off.
       - Show a 2D Canvas radar when WebGL cannot start. Keep the 3D radar when WebGL works.
       - Place the home marker at the `MY_LOCATION` origin and the `MY_ELEVATION` height.
       - Place aircraft by their coordinates and feed altitude relative to the home height.
@@ -209,4 +214,5 @@ directives:
       - Write an aircraft JSON file for another app to watch.
       - Print the flight table in `--debug` mode.
       - Use more than three display lines for a table header or aircraft row.
-      - Add a map, terrain, or radio panel to the first 3D view.
+      - Replace the Three.js radar scene with a map renderer.
+      - Add a server proxy or persistent tile store for map requests.

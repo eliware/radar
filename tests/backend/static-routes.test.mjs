@@ -38,10 +38,13 @@ test("serves safe JavaScript chunks and rejects invalid chunk names", async () =
   const read = jest.fn(async (file) => file);
   registerStaticRoutes(app, { publicRoot: "public", buildRoot: "dist", read });
   const chunk = await app.inject({ url: "/chunks/vendor-1.js" });
+  const hashedChunk = await app.inject({ url: "/chunks/510.b677546a14dfc2a612af.js" });
   const invalid = await app.inject({ url: "/chunks/secret.css" });
   expect(chunk.statusCode).toBe(200);
+  expect(hashedChunk.statusCode).toBe(200);
   expect(chunk.headers["content-type"]).toContain("text/javascript");
   expect(read).toHaveBeenCalledWith("dist/chunks/vendor-1.js");
+  expect(read).toHaveBeenCalledWith("dist/chunks/510.b677546a14dfc2a612af.js");
   expect(invalid.statusCode).toBe(404);
   await app.close();
 });

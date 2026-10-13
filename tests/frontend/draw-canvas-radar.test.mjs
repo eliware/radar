@@ -56,6 +56,16 @@ test("draws north-up range rings, home, and valid aircraft", () => {
     { devicePixelRatio: 0 },
     0,
     new Map([["A", []]]),
+    true,
+    new Map(),
+    new Map(),
+    new Map(),
+    new Map(),
+    true,
+    new Map(),
+    true,
+    [],
+    false,
   );
   expect(canvas.width).toBe(1);
   expect(canvas.height).toBe(1);

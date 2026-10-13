@@ -7,6 +7,7 @@ import { getRadarPalette } from "./radar-palette.mjs";
 import { drawCanvasRings } from "./draw-canvas-rings.mjs";
 import { drawRadarReferences } from "./draw-radar-references.mjs";
 import { createRadarScopePath } from "./create-radar-scope-path.mjs";
+import { drawWaterOutlines } from "./draw-water-outlines.mjs";
 
 export function drawCanvasRadar(
   ctx,
@@ -27,6 +28,8 @@ export function drawCanvasRadar(
   ilsVisible = true,
   procedures = new Map(),
   proceduresVisible = true,
+  waterPaths = [],
+  waterVisible = true,
 ) {
   const palette = getRadarPalette(connected);
   const width = canvas.clientWidth || 1;
@@ -40,17 +43,18 @@ export function drawCanvasRadar(
   const radius = Math.max(1, Math.min(width, height) * 0.44);
   const centerX = width / 2 + panX;
   const centerY = height / 2 + panY;
-  ctx.save();
-  ctx.translate(centerX, centerY);
-  ctx.rotate(rotation);
-  drawCanvasRings(ctx, 0, 0, radius, range, palette);
-  ctx.restore();
   const cosine = Math.cos(rotation);
   const sine = Math.sin(rotation);
   const project = (point) => ({
     x: centerX + (point.x / range) * radius * cosine - (point.z / range) * radius * sine,
     y: centerY + (point.x / range) * radius * sine + (point.z / range) * radius * cosine,
   });
+  if (waterVisible) drawWaterOutlines(ctx, waterPaths, project, location);
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  ctx.rotate(rotation);
+  drawCanvasRings(ctx, 0, 0, radius, range, palette);
+  ctx.restore();
   drawRadarReferences(
     ctx,
     { airports, navaids, boundaries, ilsApproaches, procedures },

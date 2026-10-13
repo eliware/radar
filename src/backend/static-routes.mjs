@@ -12,7 +12,8 @@ export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFi
   );
   app.get("/chunks/:filename", async (request, reply) => {
     const filename = request.params.filename;
-    if (!/^[\w-]+\.js$/.test(filename)) return reply.code(404).send("Not found");
+    if (!/^[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*\.js$/.test(filename))
+      return reply.code(404).send("Not found");
     return sendAsset(reply, `${buildRoot}/chunks/${filename}`, "text/javascript", read);
   });
 }

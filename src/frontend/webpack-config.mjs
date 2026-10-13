@@ -6,9 +6,9 @@ export default {
   output: {
     path: resolve("dist"),
     filename: "client.js",
-    chunkFilename: "chunks/[name].js",
+    chunkFilename: "chunks/[id].[contenthash].js",
     publicPath: "/",
   },
-  optimization: { splitChunks: { chunks: "all" } },
+  optimization: { splitChunks: { chunks: "async" } },
   performance: { maxAssetSize: 900 * 1024, maxEntrypointSize: 250 * 1024 },
 };

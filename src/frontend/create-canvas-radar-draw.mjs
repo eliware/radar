@@ -13,6 +13,7 @@ export function createCanvasRadarDraw({
   boundaries,
   ilsApproaches,
   procedures,
+  water = { paths: [], isVisible: () => false },
 }) {
   return () =>
     drawCanvasRadar(
@@ -34,5 +35,7 @@ export function createCanvasRadarDraw({
       state.ilsVisible,
       procedures,
       state.proceduresVisible,
+      water.paths,
+      water.isVisible(),
     );
 }
