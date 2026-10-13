@@ -47,8 +47,10 @@ directives:
       - Default `METAR_STATIONS` to `KLEW,KPWM,KBXM`.
       - Fetch METAR reports from the public VATSIM METAR API through the server.
       - Cache METAR reports in server memory for five minutes.
-      - Show configured METAR reports at the top center of the radar.
-      - Use a scrolling one-line METAR ticker on narrow mobile screens.
+      - Show decoded METAR reports in a table at the top center of the radar.
+      - Show one METAR report per table row on desktop screens.
+      - Show the decoded METAR table only in 3D mode on screens wider than 900 pixels.
+      - Show a raw one-line METAR ticker in 2D mode and on screens 900 pixels wide or less.
       - Show only public-use airports with a four-character ICAO code that starts with K.
       - Show airports only when they have an asphalt or concrete runway at least 1,000 feet long.
       - Draw only qualifying asphalt and concrete runways.

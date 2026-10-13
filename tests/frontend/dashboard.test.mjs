@@ -4,6 +4,10 @@ import { startDashboard } from "../../src/frontend/dashboard.mjs";
 function makeDocument(protocol = "https:", includeReset = true) {
   const home = {};
   const strips = { clientWidth: 800 };
+  const metarDisplay = {
+    dataset: {},
+    setAttribute: jest.fn((_name, value) => (metarDisplay.dataset.radarMode = value)),
+  };
   const reset = { addEventListener: jest.fn((event, callback) => (reset.callback = callback)) };
   return {
     home,
@@ -16,6 +20,7 @@ function makeDocument(protocol = "https:", includeReset = true) {
         "[data-home]": home,
         "[data-reset]": includeReset ? reset : null,
         "[data-flight-strips]": strips,
+        "[data-metar]": metarDisplay,
         "[data-metar-reports]": { textContent: "", innerHTML: "" },
         "[data-metar-ticker]": { textContent: "" },
       }[selector];
@@ -47,7 +52,10 @@ test("starts the secure live view and handles feed messages", async () => {
     reset: jest.fn(),
     setConnected: jest.fn(),
   };
-  const createScene = jest.fn(() => scene);
+  const createScene = jest.fn(({ onMode }) => {
+    onMode("2D");
+    return scene;
+  });
   let socket;
   class MockSocket {
     constructor(url) {
@@ -70,6 +78,7 @@ test("starts the secure live view and handles feed messages", async () => {
   });
   expect(socket.url).toBe("wss://localhost:3000/ws");
   expect(document.home.textContent).toContain("43.0000°, -70.0000°");
+  expect(document.querySelector("[data-metar]").dataset.radarMode).toBe("2D");
   expect(fetchData).toHaveBeenCalledWith("/api/metar");
   expect(createScene).toHaveBeenCalledWith(
     expect.objectContaining({

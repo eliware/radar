@@ -33,6 +33,8 @@ export async function startDashboard({
       container,
       location: config.location,
       elevationFeet: config.elevationFeet,
+      onMode: (mode) =>
+        document.querySelector("[data-metar]").setAttribute("data-radar-mode", mode),
     });
     attachRadarCompassDisplay(document, scene);
     const referenceLoader =

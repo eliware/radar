@@ -128,7 +128,7 @@ p {
   z-index: 1;
   top: 42px;
   left: 50%;
-  width: min(76%, 760px);
+  width: min(88%, 1200px);
   max-height: 118px;
   overflow: hidden;
   transform: translateX(-50%);
@@ -141,23 +141,34 @@ p {
   pointer-events: none;
 }
 .metar-reports {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  padding: 6px 8px;
-}
-.metar-reports article {
-  min-width: 0;
-}
-.metar-reports b {
-  display: block;
-  color: #aaa;
-}
-.metar-reports span {
-  overflow-wrap: anywhere;
+  display: none;
+  overflow-x: auto;
+  padding: 4px 8px;
 }
 .metar-ticker {
+  display: block;
+}
+.metar-display[data-radar-mode="3D"] .metar-reports {
+  display: block;
+}
+.metar-display[data-radar-mode="3D"] .metar-ticker {
   display: none;
+}
+.metar-reports table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+.metar-reports th,
+.metar-reports td {
+  padding: 2px 8px 2px 0;
+}
+.metar-reports th {
+  color: #aaa;
+}
+.metar-reports tbody tr + tr {
+  border-top: 1px solid #444;
 }
 .flight-strips-panel {
   min-width: 0;
@@ -230,7 +241,7 @@ p {
     height: 88px;
   }
 }
-@media (max-width: 620px) {
+@media (max-width: 900px) {
   .metar-display {
     top: 68px;
     width: calc(100% - 24px);
@@ -239,10 +250,10 @@ p {
     white-space: nowrap;
   }
   .metar-reports {
-    display: none;
+    display: none !important;
   }
   .metar-ticker {
-    display: block;
+    display: block !important;
     overflow: hidden;
     padding: 3px 0;
   }
