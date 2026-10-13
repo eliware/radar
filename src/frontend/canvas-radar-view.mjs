@@ -13,6 +13,7 @@ export function createCanvasRadarView({
   location,
   windowRef = window,
   documentRef = document,
+  mapOutlines = null,
 }) {
   const canvas = documentRef.createElement("canvas");
   const context = canvas.getContext("2d");
@@ -47,6 +48,7 @@ export function createCanvasRadarView({
     boundaries: references.boundaries,
     ilsApproaches: references.ilsApproaches,
     procedures: references.procedures,
+    mapOutlines,
   });
   const draw = () => {
     state.ilsVisible = layers.ils.isVisible();

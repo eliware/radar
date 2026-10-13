@@ -23,6 +23,7 @@ test("provides server and feed runtime dependencies", () => {
     "createAircraftEnrichmentFeed",
     "createMetarLookup",
     "parseMetarStations",
+    "loadMapOutlines",
   ]);
   expect(
     Object.values(runtimeDependencies).every((dependency) => typeof dependency === "function"),

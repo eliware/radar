@@ -103,9 +103,14 @@ directives:
       - Mark all class-based airspace shells as approximate, not official boundaries.
       - Draw actual ARTCC boundary paths from NASR `ARB_SEG` points.
       - Do not present ARTCC boundaries as approach control boundaries.
+      - Draw faint gray coastline and major lake outlines beneath radar symbols in both views.
+      - Do not fill land or water on the radar.
+      - Bundle low-resolution global Natural Earth coastline and lake data in the npm package.
+      - Use Natural Earth 50m data so any `MY_LOCATION` value works without runtime downloads.
+      - Show map outlines only within the current radar range.
       - Do not require authentication for local REST or WebSocket access.
       - Serve the local page, CSS, and built JavaScript from the web server.
-      - Build the first web view as a Three.js 3D space without a map or terrain.
+      - Keep map outlines schematic. Do not add a basemap or terrain.
       - Show a 2D Canvas radar when WebGL cannot start. Keep the 3D radar when WebGL works.
       - Place the home marker at the `MY_LOCATION` origin and the `MY_ELEVATION` height.
       - Place aircraft by their coordinates and feed altitude relative to the home height.
@@ -209,4 +214,5 @@ directives:
       - Write an aircraft JSON file for another app to watch.
       - Print the flight table in `--debug` mode.
       - Use more than three display lines for a table header or aircraft row.
-      - Add a map, terrain, or radio panel to the first 3D view.
+      - Fill map areas or require external map requests at runtime.
+      - Add a basemap, terrain, or radio panel to the radar view.

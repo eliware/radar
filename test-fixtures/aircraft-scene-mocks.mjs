@@ -14,6 +14,7 @@ export function registerAircraftSceneMocks(jest) {
   };
   const homeConnected = jest.fn();
   const updateRings = jest.fn();
+  const map = Object.assign(jest.fn(), { setRange: jest.fn() });
   const airspace = { update: jest.fn(), dispose: jest.fn() };
   const targets = {
     update: jest.fn(() => []),
@@ -65,25 +66,26 @@ export function registerAircraftSceneMocks(jest) {
   };
   const factories = {
     createRadarStage: jest.fn(() => ({ scene, camera, renderer })),
-    createRadarSceneOverlays: jest.fn(() => updateRings),
-    createAirspaceVolumes: jest.fn(() => airspace),
-    createRadarHome: jest.fn(() => homeConnected),
+    createRadarSceneLayers: jest.fn(() => ({
+      map,
+      updateRings,
+      airspace,
+      setConnected: homeConnected,
+      layers: { ils: { setVisible: jest.fn() }, procedures: {}, destroy: jest.fn() },
+      overlay,
+    })),
     createRadarCamera: jest.fn(() => radarCamera),
     createRadarTargets: jest.fn(() => targets),
     createAircraftTrails: jest.fn(() => trails),
-    createAircraftDisplayOverlay: jest.fn(() => overlay),
     createAircraftRadarLoop: jest.fn(() => stopRadarLoops),
     createRadarReferenceStore: jest.fn(() => references),
   };
   const modules = {
     createRadarStage: "create-radar-stage",
-    createRadarSceneOverlays: "radar-scene-overlays",
-    createAirspaceVolumes: "create-airspace-volumes",
-    createRadarHome: "create-radar-home",
+    createRadarSceneLayers: "create-radar-scene-layers",
     createRadarCamera: "radar-camera",
     createRadarTargets: "radar-targets",
     createAircraftTrails: "aircraft-trails",
-    createAircraftDisplayOverlay: "aircraft-display-overlay",
     createAircraftRadarLoop: "create-aircraft-radar-loop",
     createRadarReferenceStore: "radar-reference-store",
   };
@@ -117,6 +119,7 @@ export function registerAircraftSceneMocks(jest) {
     controls,
     homeConnected,
     updateRings,
+    map,
     airspace,
     targets,
     trails,

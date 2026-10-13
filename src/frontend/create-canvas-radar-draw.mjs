@@ -13,6 +13,7 @@ export function createCanvasRadarDraw({
   boundaries,
   ilsApproaches,
   procedures,
+  mapOutlines,
 }) {
   return () =>
     drawCanvasRadar(
@@ -34,5 +35,6 @@ export function createCanvasRadarDraw({
       state.ilsVisible,
       procedures,
       state.proceduresVisible,
+      mapOutlines,
     );
 }
