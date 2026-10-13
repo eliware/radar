@@ -11,6 +11,7 @@ export function createCanvasRadarDraw({
   airports,
   navaids,
   boundaries,
+  ilsApproaches,
 }) {
   return () =>
     drawCanvasRadar(
@@ -28,5 +29,7 @@ export function createCanvasRadarDraw({
       airports,
       navaids,
       boundaries,
+      ilsApproaches,
+      state.ilsVisible,
     );
 }

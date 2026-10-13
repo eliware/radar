@@ -23,6 +23,8 @@ The web server listens on `0.0.0.0` at port `3000` by default. This allows acces
 
 `GET /api/airspace-boundaries?minRangeNm=0&maxRangeNm=20` returns nearby FAA ARTCC boundary paths from `ARB_SEG`. Each path has ordered points and a low or high altitude class. This table does not include A90 approach control borders.
 
+`GET /api/ils?minRangeNm=0&maxRangeNm=20` returns operational ILS records in the requested distance band. Records include airport, runway end, localizer identifier, magnetic course, magnetic variation, glide-slope angle, site location, elevation, category, and distance.
+
 ## WebSocket route
 
 Connect to `ws://localhost:3000/ws` to receive aircraft updates.
@@ -59,6 +61,8 @@ The browser retries a closed or failed WebSocket. It waits one second before the
 
 The browser requests airports and navaids from 0 to 20 nautical miles at startup. It requests only the new distance band when the view expands. It keeps loaded records in browser memory. The API returns public-use airports with a four-character ICAO code that starts with K and an asphalt or concrete runway at least 1,000 feet long. The radar draws only qualifying runways. Airport labels sit above their marker dots. Airport markers and labels use light gray. Runway lines use endpoint elevations. Dark gray dotted centerline extensions rise 3,000 feet over 10 nautical miles. Dotted base legs sit at the extension end altitude. VOR, VOR/DME, and VORTAC symbols and identifiers use blue.
 
+The browser loads operational ILS records by distance band and keeps them in memory. Dashed cyan lines show 10-nautical-mile final-course guides. The line starts near the glide-slope antenna and follows the reciprocal of the corrected true approach course. In 3D, the line rises outward at the published glide-slope angle. Canvas shows the same course on a flat plane. The line label shows its runway end. Press `I` to show or hide ILS lines. These guides do not show every leg of an instrument approach.
+
 NASR marks airports with Class B, C, or D service, but this database has no class boundary shapes. The 3D view draws approximate shells from typical class altitude limits. Class B uses 10, 20, and 30-mile layers up to 10,000 feet MSL. Class C uses a 5-mile core and a 5-to-10-mile shelf. Class D uses a 5-mile radius up to 2,500 feet above the airport. These shapes are visual guides, not official boundaries. The database has no Portland or A90 approach boundary shape. NASR does contain real ARTCC boundary points. The radar draws those paths from the `ARB_SEG` table.
 
 Aircraft altitude uses the value reported by the ADS-B feed. The value is barometric altitude. It can differ from true altitude above mean sea level.
@@ -74,6 +78,8 @@ Run `curl.exe "http://127.0.0.1:3000/api/airports?minRangeNm=0&maxRangeNm=20"` t
 Run `curl.exe "http://127.0.0.1:3000/api/navaids?minRangeNm=0&maxRangeNm=20"` to read navaids near home.
 
 Run `curl.exe "http://127.0.0.1:3000/api/airspace-boundaries?minRangeNm=0&maxRangeNm=20"` to read nearby ARTCC boundary paths.
+
+Run `curl.exe "http://127.0.0.1:3000/api/ils?minRangeNm=0&maxRangeNm=20"` to read ILS records near home.
 
 Use a WebSocket client to connect to `ws://127.0.0.1:3000/ws` and check update messages.
 

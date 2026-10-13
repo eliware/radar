@@ -8,8 +8,13 @@ export function createRadarReferenceLoader(fetchData, scene) {
     while (loadedThrough < requestedThrough) {
       const start = loadedThrough;
       const end = requestedThrough;
-      const paths = ["/api/airports", "/api/navaids", "/api/airspace-boundaries"];
-      const updates = [scene.updateAirports, scene.updateNavaids, scene.updateBoundaries];
+      const paths = ["/api/airports", "/api/navaids", "/api/airspace-boundaries", "/api/ils"];
+      const updates = [
+        scene.updateAirports,
+        scene.updateNavaids,
+        scene.updateBoundaries,
+        scene.updateIls,
+      ];
       const collections = await Promise.all(
         paths.map((path) => loadCollection(fetchData, path, start, end)),
       );

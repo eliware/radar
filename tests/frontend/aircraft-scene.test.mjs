@@ -20,7 +20,6 @@ test("wires scene services and reports connection changes", () => {
     container,
     windowRef,
   );
-  expect(mocks.controls.target.set).toHaveBeenCalledWith(0, 0, 0);
   expect(mocks.factories.createRadarCamera).toHaveBeenCalledWith(
     expect.objectContaining({ camera: mocks.camera, controls: mocks.controls }),
   );

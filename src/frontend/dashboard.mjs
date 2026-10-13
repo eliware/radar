@@ -29,7 +29,11 @@ export async function startDashboard({
     });
     attachRadarCompassDisplay(document, scene);
     const referenceLoader =
-      scene.updateAirports && scene.updateNavaids && scene.updateBoundaries && scene.range
+      scene.updateAirports &&
+      scene.updateNavaids &&
+      scene.updateBoundaries &&
+      scene.updateIls &&
+      scene.range
         ? createRadarReferenceLoader(fetchData, scene)
         : null;
     if (referenceLoader)

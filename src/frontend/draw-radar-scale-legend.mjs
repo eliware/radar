@@ -1,11 +1,20 @@
 import { getRadarPalette } from "./radar-palette.mjs";
 
-export function drawRadarScaleLegend(context, width, height, range, radius, connected = true) {
+export function drawRadarScaleLegend(
+  context,
+  width,
+  height,
+  range,
+  radius,
+  connected = true,
+  ilsVisible = true,
+) {
   const palette = getRadarPalette(connected);
-  const firstRow = height - 78;
-  const secondRow = height - 60;
+  const firstRow = height - 96;
+  const secondRow = height - 78;
+  const thirdRow = height - 60;
   context.fillStyle = "#000";
-  context.fillRect(8, height - 90, 212, 80);
+  context.fillRect(8, height - 108, 212, 98);
   context.font = "12px monospace";
   context.textAlign = "left";
   context.fillStyle = palette.bright;
@@ -25,6 +34,15 @@ export function drawRadarScaleLegend(context, width, height, range, radius, conn
   context.arc(105, secondRow - 4, 2, 0, Math.PI * 2);
   context.fill();
   context.fillText("HOME", 112, secondRow);
+  context.strokeStyle = ilsVisible ? "#00b8cc" : "#444";
+  context.fillStyle = context.strokeStyle;
+  context.setLineDash([3, 3]);
+  context.beginPath();
+  context.moveTo(14, thirdRow - 4);
+  context.lineTo(26, thirdRow - 4);
+  context.stroke();
+  context.setLineDash([]);
+  context.fillText("I ILS", 32, thirdRow);
   drawScale(context, range, radius, height);
 }
 

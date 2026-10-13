@@ -35,10 +35,12 @@ directives:
       - Return airports by distance band through `GET /api/airports`.
       - Return VOR, VOR/DME, and VORTAC records by distance band through `GET /api/navaids`.
       - Return nearby ordered FAA ARTCC boundary paths through `GET /api/airspace-boundaries`.
+      - Return operational ILS records by distance band through `GET /api/ils`.
       - Fetch airports from zero to the current view range at startup.
       - Fetch only the new outer distance band when the view expands.
       - Limit airport range requests to 300 nautical miles.
       - Keep fetched airport and runway data in browser memory.
+      - Keep fetched ILS data in browser memory. Request only the new outer distance band.
       - Show only public-use airports with a four-character ICAO code that starts with K.
       - Show airports only when they have an asphalt or concrete runway at least 1,000 feet long.
       - Draw only qualifying asphalt and concrete runways.
@@ -51,6 +53,12 @@ directives:
       - Draw much darker gray dotted 10-nautical-mile perpendicular base-leg marks at extension ends.
       - Draw each base leg at the altitude of its extended centerline endpoint.
       - Draw VOR symbols and identifiers in blue.
+      - Show ILS course guides by default in both radar views. Press I to toggle them.
+      - Draw dashed cyan ILS course guides for 10 nautical miles from each glide-slope site.
+      - Extend ILS course guides away from the runway on the reciprocal of the corrected true approach course.
+      - Follow the NASR glide-slope angle in 3D. Draw ILS course guides flat in Canvas.
+      - Label each ILS course guide with its runway end.
+      - Treat ILS course guides as visual guides. Do not present them as complete approach paths.
       - Draw approximate 5- and 10-mile rings around airports with the NASR Class C flag.
       - Identify approximate Class C rings as visual guides, not official boundaries.
       - Draw gray approximate Class B, C, and D altitude shells in the 3D view.
@@ -153,6 +161,7 @@ directives:
       - Draw FAA ARTCC boundary paths in gray when the NASR data provides them.
       - Do not label ARTCC paths as Portland or A90 approach boundaries.
       - Load airport, navaid, airspace, and boundary data only through the current zoom range.
+      - Load ILS data only through the current zoom range.
       - Leave radio controls out of the dashboard until requested.
       - Document the RTL1090 background and foreground procedures in `docs/`.
       - Provide browser assets, documented routes, and mirrored tests.

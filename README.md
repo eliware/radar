@@ -73,7 +73,7 @@ Runtime settings come from environment variables or an untracked `.env` file. `P
 
 ## Operations
 
-Build the web app with `npm run build`, then start it with `node bin/radar.mjs`. Stop it with a signal. Start the CLI with `node bin/adsb.mjs`; stop it with Ctrl+C. The web API provides `GET /health`, `GET /api/config`, `GET /api/aircraft`, and WebSocket `/ws`. The WebSocket sends one aircraft JSON object for each feed update. The CLI does not write files.
+Build the web app with `npm run build`, then start it with `node bin/radar.mjs`. Stop it with a signal. Start the CLI with `node bin/adsb.mjs`; stop it with Ctrl+C. The web API provides `GET /health`, `GET /api/config`, `GET /api/aircraft`, range-based airport, navaid, airspace, and ILS routes, and WebSocket `/ws`. The WebSocket sends one aircraft JSON object for each feed update. The CLI does not write files.
 
 For browser checks, run `npm run puppeteer`, start the app, then run `npm run screenshots` or `npm run lighthouse`. Build a local container with `docker build -t radar .`. This repository does not deploy the app.
 

@@ -4,9 +4,7 @@ import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
 import { predictAircraftPosition } from "./predict-aircraft-position.mjs";
 import { RADAR_SCOPE_RADIUS_RATIO } from "./radar-range.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
-import { drawAirportMarkers } from "./draw-airport-markers.mjs";
-import { drawNavaidMarkers } from "./draw-navaid-markers.mjs";
-import { drawArtccBoundaries } from "./draw-artcc-boundaries.mjs";
+import { drawRadarReferences } from "./draw-radar-references.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
@@ -31,6 +29,8 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     airports = new Map(),
     navaids = new Map(),
     boundaries = new Map(),
+    ilsApproaches = new Map(),
+    ilsVisible = true,
   ) {
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
@@ -39,9 +39,13 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     canvas.height = Math.round(height * ratio);
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
     context.clearRect(0, 0, width, height);
-    drawAirportMarkers(context, airports, (airport) => projectAirport(airport), range);
-    drawNavaidMarkers(context, navaids, (navaid) => projectAirport(navaid), range);
-    drawArtccBoundaries(context, boundaries, (point) => projectAirport(point));
+    drawRadarReferences(
+      context,
+      { airports, navaids, boundaries, ilsApproaches },
+      (point) => projectAirport(point),
+      range,
+      ilsVisible,
+    );
     const items = [];
     for (const item of aircraft.values()) items.push(projectItem(item));
     drawAircraftDisplay(context, items.filter(Boolean), 18, width, height, connected);
@@ -52,6 +56,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       range,
       Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO,
       connected,
+      ilsVisible,
     );
 
     function projectItem(item) {

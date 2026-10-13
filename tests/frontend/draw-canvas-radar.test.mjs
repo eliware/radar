@@ -177,7 +177,7 @@ test("draws nearby reference data and disconnected aircraft", () => {
   );
 
   expect(canvas.width).toBe(600);
-  expect(context.fillStyle).toBe("#555555");
+  expect(context.fillStyle).toBe("#00b8cc");
   expect(context.rotate).toHaveBeenCalledWith(Math.PI / 4);
   expect(context.fillText).toHaveBeenCalledWith("KPWM", expect.any(Number), expect.any(Number));
   expect(context.fillText).toHaveBeenCalledWith("ENE", expect.any(Number), expect.any(Number));

@@ -1,6 +1,7 @@
 import { registerAirportRoutes } from "./airport-routes.mjs";
 import { registerNavaidRoutes } from "./navaid-routes.mjs";
 import { registerAirspaceBoundaryRoutes } from "./airspace-boundary-routes.mjs";
+import { registerIlsApproachRoutes } from "./ils-approach-routes.mjs";
 
 export function registerApiRoutes(
   app,
@@ -13,6 +14,7 @@ export function registerApiRoutes(
   registerAirportRoutes(app, airportDatabase, location);
   registerNavaidRoutes(app, airportDatabase, location);
   registerAirspaceBoundaryRoutes(app, airportDatabase, location);
+  registerIlsApproachRoutes(app, airportDatabase, location);
   app.get("/ws", { websocket: true }, (socket) => {
     const unsubscribe = feed.subscribe((aircraft) => {
       if (socket.readyState === 1) socket.send(JSON.stringify(aircraft));

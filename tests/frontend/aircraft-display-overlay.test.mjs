@@ -40,6 +40,22 @@ test("draws projected aircraft and history over the scene, then removes its canv
     windowRef,
     documentRef: { createElement: () => canvas },
   });
+  const ilsApproaches = new Map([
+    [
+      "PWM:11",
+      {
+        latitude: 43.1,
+        longitude: -70.1,
+        elevationFeet: 76,
+        rangeNm: 2,
+        magneticCourse: 110,
+        magneticVariation: 15,
+        magneticVariationHemisphere: "W",
+        glideSlopeDegrees: 3,
+        runwayEnd: "11",
+      },
+    ],
+  ]);
   overlay.draw(
     new Map([
       [
@@ -81,11 +97,13 @@ test("draws projected aircraft and history over the scene, then removes its canv
         },
       ],
     ]),
+    ilsApproaches,
   );
   expect(canvas.width).toBe(400);
   expect(container.appendChild).toHaveBeenCalledWith(canvas);
   expect(context.setTransform).toHaveBeenCalledWith(2, 0, 0, 2, 0, 0);
   expect(context.fillText).toHaveBeenCalled();
+  expect(context.fillText).toHaveBeenCalledWith("ILS 11", expect.any(Number), expect.any(Number));
   expect(measuredFonts).toContain("18px monospace");
   container.clientWidth = 0;
   container.clientHeight = 0;

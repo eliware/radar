@@ -4,10 +4,8 @@ import { formatAircraftTag } from "./aircraft-tag-data.mjs";
 import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 import { getRadarPalette } from "./radar-palette.mjs";
-import { drawAirportMarkers } from "./draw-airport-markers.mjs";
 import { drawCanvasRings } from "./draw-canvas-rings.mjs";
-import { drawNavaidMarkers } from "./draw-navaid-markers.mjs";
-import { drawArtccBoundaries } from "./draw-artcc-boundaries.mjs";
+import { drawRadarReferences } from "./draw-radar-references.mjs";
 
 export function drawCanvasRadar(
   ctx,
@@ -24,6 +22,8 @@ export function drawCanvasRadar(
   airports = new Map(),
   navaids = new Map(),
   boundaries = new Map(),
+  ilsApproaches = new Map(),
+  ilsVisible = true,
 ) {
   const palette = getRadarPalette(connected);
   const width = canvas.clientWidth || 1;
@@ -48,28 +48,20 @@ export function drawCanvasRadar(
     x: centerX + (point.x / range) * radius * cosine - (point.z / range) * radius * sine,
     y: centerY + (point.x / range) * radius * sine + (point.z / range) * radius * cosine,
   });
-  drawAirportMarkers(
+  drawRadarReferences(
     ctx,
-    airports,
-    (airport) => {
-      const position = projectAircraftPosition(airportPosition(airport), location, 0);
+    { airports, navaids, boundaries, ilsApproaches },
+    (item) => {
+      const position = projectAircraftPosition(
+        { ...item, altitudeFeet: Number.isFinite(item.elevationFeet) ? item.elevationFeet : 0 },
+        location,
+        0,
+      );
       return position ? project(position) : null;
     },
     range,
+    ilsVisible,
   );
-  drawNavaidMarkers(
-    ctx,
-    navaids,
-    (navaid) => {
-      const position = projectAircraftPosition(airportPosition(navaid), location, 0);
-      return position ? project(position) : null;
-    },
-    range,
-  );
-  drawArtccBoundaries(ctx, boundaries, (point) => {
-    const position = projectAircraftPosition({ ...point, altitudeFeet: 0 }, location, 0);
-    return position ? project(position) : null;
-  });
   const display = [];
   for (const item of aircraft.values()) {
     const position = projectAircraftPosition(item, location, 0);
@@ -91,9 +83,5 @@ export function drawCanvasRadar(
   ctx.beginPath();
   ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
   ctx.fill();
-  drawRadarScaleLegend(ctx, width, height, range, radius, connected);
-}
-
-function airportPosition(airport) {
-  return { ...airport, altitudeFeet: airport.elevationFeet };
+  drawRadarScaleLegend(ctx, width, height, range, radius, connected, ilsVisible);
 }

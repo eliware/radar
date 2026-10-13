@@ -33,6 +33,7 @@ test("registers API and static routes with defaults", async () => {
     "/api/airports",
     "/api/navaids",
     "/api/airspace-boundaries",
+    "/api/ils",
     "/ws",
     "/",
     "/style.css",

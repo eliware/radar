@@ -11,6 +11,7 @@ test("requests all reference data by new range band only", async () => {
     updateAirports: jest.fn(),
     updateNavaids: jest.fn(),
     updateBoundaries: jest.fn(),
+    updateIls: jest.fn(),
   };
   const loader = createRadarReferenceLoader(fetchData, scene);
   await loader.load(20);
@@ -19,9 +20,11 @@ test("requests all reference data by new range band only", async () => {
     "/api/airports?minRangeNm=0&maxRangeNm=20",
     "/api/navaids?minRangeNm=0&maxRangeNm=20",
     "/api/airspace-boundaries?minRangeNm=0&maxRangeNm=20",
+    "/api/ils?minRangeNm=0&maxRangeNm=20",
     "/api/airports?minRangeNm=20&maxRangeNm=30",
     "/api/navaids?minRangeNm=20&maxRangeNm=30",
     "/api/airspace-boundaries?minRangeNm=20&maxRangeNm=30",
+    "/api/ils?minRangeNm=20&maxRangeNm=30",
   ]);
   expect(scene.updateBoundaries).toHaveBeenCalledTimes(2);
   expect(loader.loadedThrough()).toBe(30);
@@ -33,6 +36,7 @@ test("ignores invalid ranges and caps requested data at the radar limit", async 
     updateAirports: jest.fn(),
     updateNavaids: jest.fn(),
     updateBoundaries: jest.fn(),
+    updateIls: jest.fn(),
   };
   const loader = createRadarReferenceLoader(fetchData, scene);
 
@@ -43,7 +47,7 @@ test("ignores invalid ranges and caps requested data at the radar limit", async 
   await loader.load(400);
 
   expect(loader.loadedThrough()).toBe(300);
-  expect(fetchData).toHaveBeenCalledTimes(3);
+  expect(fetchData).toHaveBeenCalledTimes(4);
   expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("maxRangeNm=300"));
 });
 
@@ -56,6 +60,7 @@ test("resets the requested range after a failed API response so callers can retr
     updateAirports: jest.fn(),
     updateNavaids: jest.fn(),
     updateBoundaries: jest.fn(),
+    updateIls: jest.fn(),
   };
   const loader = createRadarReferenceLoader(fetchData, scene);
 
@@ -76,6 +81,7 @@ test("extends the requested band while the previous band is still loading", asyn
     updateAirports: jest.fn(),
     updateNavaids: jest.fn(),
     updateBoundaries: jest.fn(),
+    updateIls: jest.fn(),
   };
   const loader = createRadarReferenceLoader(fetchData, scene);
   const first = loader.load(10);
@@ -88,6 +94,6 @@ test("extends the requested band while the previous band is still loading", asyn
   }
   await first;
 
-  expect(fetchData).toHaveBeenCalledTimes(6);
+  expect(fetchData).toHaveBeenCalledTimes(8);
   expect(loader.loadedThrough()).toBe(20);
 });

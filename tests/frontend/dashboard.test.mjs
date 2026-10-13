@@ -137,6 +137,7 @@ test("loads each new reference-data band when the view expands", async () => {
     updateAirports: jest.fn(),
     updateNavaids: jest.fn(),
     updateBoundaries: jest.fn(),
+    updateIls: jest.fn(),
     range: jest.fn(() => 20),
     onViewChange: jest.fn((listener) => (changeView = listener)),
   };
@@ -156,6 +157,7 @@ test("loads each new reference-data band when the view expands", async () => {
   expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=20");
   expect(requested).toContain("/api/navaids?minRangeNm=20&maxRangeNm=30");
   expect(requested).toContain("/api/airspace-boundaries?minRangeNm=20&maxRangeNm=30");
+  expect(requested).toContain("/api/ils?minRangeNm=20&maxRangeNm=30");
   result.feed.close();
 });
 

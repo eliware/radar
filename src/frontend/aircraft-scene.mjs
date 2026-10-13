@@ -10,21 +10,21 @@ import { createAircraftTrails } from "./aircraft-trails.mjs";
 import { createAircraftDisplayOverlay } from "./aircraft-display-overlay.mjs";
 import { createOrbitRadarState } from "./create-orbit-radar-state.mjs";
 import { createRadarHome } from "./create-radar-home.mjs";
-import { createAircraftRadarLoop } from "./create-aircraft-radar-loop.mjs";
+import { startAircraftSceneLoop } from "./start-aircraft-scene-loop.mjs";
 import { createAirspaceVolumes } from "./create-airspace-volumes.mjs";
 import { createRadarReferenceStore } from "./radar-reference-store.mjs";
-
+import { createIlsVisibility } from "./create-ils-visibility.mjs";
 export function createAircraftScene({ container, location, elevationFeet, windowRef = window }) {
   const { scene, camera, renderer } = createRadarStage(THREE, container, windowRef);
   const updateRings = createRadarSceneOverlays(THREE, scene);
   const airspace = createAirspaceVolumes(THREE, scene, location, elevationFeet);
   const setConnected = createRadarHome(THREE, scene, updateRings);
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 0, 0);
   controls.update();
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
   const references = createRadarReferenceStore();
+  const ils = createIlsVisibility(windowRef.document ?? globalThis.document);
   const overlay = createAircraftDisplayOverlay({
     THREE,
     container,
@@ -43,12 +43,11 @@ export function createAircraftScene({ container, location, elevationFeet, window
     },
   });
   radarCamera.setRange(DEFAULT_RADAR_RANGE);
-  const stopRadarLoops = createAircraftRadarLoop({
+  const stopRadarLoops = startAircraftSceneLoop({
     targets,
     trails,
     windowRef,
     radarCamera,
-    isAutoZoom: () => autoZoom,
     renderer,
     scene,
     camera,
@@ -57,9 +56,9 @@ export function createAircraftScene({ container, location, elevationFeet, window
     location,
     elevationFeet,
     isConnected: () => connected,
-    airports: references.airports,
-    navaids: references.navaids,
-    boundaries: references.boundaries,
+    isAutoZoom: () => autoZoom,
+    ils,
+    references,
   });
   let connected = false;
   return {
@@ -79,6 +78,7 @@ export function createAircraftScene({ container, location, elevationFeet, window
       }
     },
     ...references.updates((items) => airspace.update(items)),
+    setIlsVisible: ils.setVisible,
     ...createOrbitRadarState(controls, radarCamera),
     reset() {
       scene.rotation.y = 0;
@@ -87,6 +87,7 @@ export function createAircraftScene({ container, location, elevationFeet, window
     },
     destroy() {
       stopRadarLoops();
+      ils.destroy();
       airspace.dispose();
       overlay.destroy();
       radarCamera.dispose();
