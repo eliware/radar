@@ -16,8 +16,8 @@ function headers() {
   return [
     "<th></th>",
     "<th>APT</th>",
-    "<th>AGE</th>",
-    '<th colspan="2">WIND</th>',
+    '<th class="metar-age-header">AGE</th>',
+    '<th class="metar-wind-header" colspan="2">WIND</th>',
     "<th>VIS</th>",
     '<th class="metar-wx-header">WX</th>',
     '<th class="metar-sky-header">SKY</th>',

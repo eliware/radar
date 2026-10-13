@@ -65,6 +65,7 @@ directives:
       - Merge wind direction and speed under one WIND header.
       - Right-align METAR age, wind direction, temperature, and dew point values.
       - Center the WX and SKY headers. Keep weather values right-aligned.
+      - Right-align the AGE header. Center the WIND header over both wind columns.
       - Name the METAR temperature column TMP.
       - Show the decoded METAR table only in 3D mode on screens wider than 900 pixels.
       - Show a raw one-line METAR ticker in 2D mode and on screens 900 pixels wide or less.
