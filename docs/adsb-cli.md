@@ -1,10 +1,10 @@
 # ADS-B command-line tool
 
-The `radar-adsb` command reads decoded SBS/BaseStation records from a TCP feed. It shows aircraft data in a terminal. It does not decode radio signals.
+The ADS-B CLI reads decoded SBS/BaseStation records from a TCP feed. It shows aircraft data in a terminal. It does not decode radio signals.
 
 ## Start the command
 
-Run `radar-adsb` after you install the npm package. From a source checkout, run `node bin/adsb.mjs`. The default feed address is `127.0.0.1:30003`.
+From the repository checkout, run `node bin/adsb.mjs`. The default feed address is `127.0.0.1:30003`.
 
 Use `--host HOST` and `--port PORT` to select a feed. Set `ADSB_HOST` and `ADSB_PORT` to set default values. A CLI option takes priority over an environment value.
 
@@ -24,11 +24,11 @@ Range uses nautical miles. Bearing uses degrees clockwise from north. The feed d
 
 ## Read JSON updates
 
-Run `radar-adsb --debug` to print one JSON object for each aircraft update. This mode does not draw the table.
+Run `node bin/adsb.mjs --debug` to print one JSON object for each aircraft update. This mode does not draw the table.
 
 ## Options and errors
 
-Run `radar-adsb --help` to show command help. Run `radar-adsb --version` to show the package version.
+Run `node bin/adsb.mjs --help` to show command help. Run `node bin/adsb.mjs --version` to show the app version.
 
 The command writes feed errors to standard error. It retries after two seconds. It exits with code 0 after help, version, or signal shutdown. It exits with code 1 after a fatal error. It exits with code 2 after invalid options.
 

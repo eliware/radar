@@ -12,7 +12,7 @@
 - Add optional client-side water outlines.
 - Add a passive compass that shows radar rotation.
 - Add aircraft labels, predicted paths, history marks, and age-based dimming.
-- Add a Git LFS copy of the NASR database to the npm package.
+- Add a Git LFS copy of the NASR database for local deployment.
 
 ### Changed
 

@@ -58,3 +58,10 @@ test("handles repeated adjacent boundary vertices", () => {
   const { query } = queryWith([row(1, 43, -70), row(2, 43, -70)]);
   expect(query(home, 0, 20)).toHaveLength(1);
 });
+
+test("loads and groups boundary rows once across range requests", () => {
+  const { query, statement } = queryWith([row(1, 43, -70), row(2, 43.1, -70)]);
+  query(home, 0, 10);
+  query(home, 10, 20);
+  expect(statement.all).toHaveBeenCalledTimes(1);
+});

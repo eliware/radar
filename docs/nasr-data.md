@@ -1,6 +1,6 @@
 # FAA NASR data
 
-Radar reads the FAA NASR SQLite database in read-only mode. The package includes `nasr/NASR_2026_10_01.sqlite`. Set `NASR_DATABASE_PATH` to use another database file.
+Radar reads the FAA NASR SQLite database in read-only mode. The repository tracks `nasr/NASR_2026_10_01.sqlite` with Git LFS. Install Git LFS before cloning. If the checkout contains a 133-byte pointer instead of the database, run `git lfs install` and `git lfs pull` from the repository root. Set `NASR_DATABASE_PATH` to use another database file.
 
 ## Airports and runways
 

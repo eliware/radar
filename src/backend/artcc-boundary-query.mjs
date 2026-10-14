@@ -6,8 +6,9 @@ const ARTCC_POINTS = `SELECT LOCATION_ID AS locationId, LOCATION_NAME AS name,
 
 export function createArtccBoundaryQuery(database) {
   const points = database.prepare(ARTCC_POINTS);
+  let boundaries;
   return (location, minRangeNm, maxRangeNm) => {
-    const boundaries = groupBoundaries(points.all());
+    boundaries ??= groupBoundaries(points.all());
     return [...boundaries.values()]
       .filter((boundary) => intersectsRange(boundary.points, location, minRangeNm, maxRangeNm))
       .map((boundary) => ({

@@ -18,7 +18,7 @@ Use Node.js 26 or later, npm, and native ESM. Keep each source file under 100 li
 
 ## Validation
 
-Run `npm ci`, then `npm test`. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` for focused checks. Run `npm run pack` to check package contents.
+Run `npm ci`, then `npm test`. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` for focused checks.
 
 ## Security
 
@@ -39,7 +39,3 @@ Document installation, commands, options, defaults, errors, and exit codes. Supp
 ## Web
 
 Document routes, assets, ports, build output, and browser checks. Keep public assets in `public/`. Build output goes to `dist/`.
-
-## npm publication
-
-Keep `RELEASE_NOTES.md`. Validate package contents with `npm run pack`.

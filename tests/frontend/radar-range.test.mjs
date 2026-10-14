@@ -20,6 +20,9 @@ test("clamps manual ranges between one and 300 nautical miles", () => {
   expect(clampRadarRange(0)).toBe(1);
   expect(clampRadarRange(42)).toBe(42);
   expect(clampRadarRange(301)).toBe(300);
+  expect(clampRadarRange(Number.NaN)).toBe(20);
+  expect(clampRadarRange(Number.POSITIVE_INFINITY)).toBe(20);
+  expect(clampRadarRange(Number.NEGATIVE_INFINITY)).toBe(20);
 });
 
 test("uses adaptive ring spacing through 300 miles", () => {

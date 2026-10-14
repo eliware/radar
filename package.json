@@ -16,29 +16,12 @@
     "web",
     "nodejs"
   ],
-  "private": false,
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "main": "./bin/radar.mjs",
+  "private": true,
   "bin": {
     "radar-adsb": "./bin/adsb.mjs"
   },
-  "files": [
-    "src/",
-    "docs/",
-    "README.md",
-    "AGENTS.md",
-    "LICENSE",
-    "RELEASE_NOTES.md",
-    "bin/",
-    "specs/",
-    "nasr/"
-  ],
   "scripts": {
     "test": "eliware-test",
-    "pack": "eliware-test --pack",
     "lint": "eliware-test --lint",
     "audit": "eliware-test --audit",
     "format": "eliware-test --format",
@@ -122,8 +105,7 @@
       "general",
       "application",
       "cli",
-      "web",
-      "npm-published"
+      "web"
     ]
   }
 }

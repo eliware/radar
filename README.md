@@ -1,6 +1,6 @@
 # [![eliware.org](https://eliware.org/logos/brand.png)](https://discord.gg/M6aTR9eTwN)
 
-## @eliware/radar [![npm](https://img.shields.io/npm/v/@eliware/radar)](https://www.npmjs.com/package/@eliware/radar) [![License](https://img.shields.io/github/license/eliware/radar)](https://github.com/eliware/radar/blob/main/LICENSE) [![CI](https://github.com/eliware/radar/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/radar/actions/workflows/ci.yaml)
+## @eliware/radar [![License](https://img.shields.io/github/license/eliware/radar)](https://github.com/eliware/radar/blob/main/LICENSE) [![CI](https://github.com/eliware/radar/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/radar/actions/workflows/ci.yaml)
 
 Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.
 
@@ -69,9 +69,9 @@ Read the [web task guide](docs/web-service-background.md) and [RTL1090 task guid
 
 ## Commands
 
-- `radar-adsb` starts the CLI.
-- `radar-adsb --help` shows CLI options.
-- `radar-adsb --version` shows the package version.
+- `node bin/adsb.mjs` starts the CLI.
+- `node bin/adsb.mjs --help` shows CLI options.
+- `node bin/adsb.mjs --version` shows the app version.
 
 ## Exit codes
 
@@ -95,7 +95,7 @@ Run `npm run build` to build the browser app.
 
 ## Deployment
 
-On each push, the dev workflow pulls main, installs dependencies with `npm ci`, and runs `npm test`. It does not start or publish the app.
+When a push targets the `dev` deployment, it pulls `main`, installs dependencies with `npm ci`, and runs `npm test`. It does not start or publish the app.
 
 ## Support
 
@@ -111,7 +111,6 @@ For help, questions, or to chat with the author and community, visit:
 - [GitHub Org](https://github.com/eliware)
 - [GitHub Repo](https://github.com/eliware/radar)
 - [Bug Reports](https://github.com/eliware/radar/issues)
-- [npm](https://www.npmjs.com/package/@eliware/radar)
 - [Discord](https://discord.gg/M6aTR9eTwN)
 
 ## License
