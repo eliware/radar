@@ -118,6 +118,7 @@ directives:
       - On mobile, keep home centered and disable panning.
       - Use pinch gestures to zoom on mobile.
       - Use two-finger twist gestures to rotate the radar on mobile.
+      - Use Up and Down arrow keys to zoom in and out. Use Left and Right arrow keys to rotate by 15 degrees.
       - Do not show gesture instructions or text connection status on the radar view.
       - Show the home location at the top left of the radar view. Do not show a view title.
       - Use a black background for the page and radar scope.

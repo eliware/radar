@@ -7,11 +7,18 @@ test("reports the view range and rotation, and notifies on camera changes", () =
     getAzimuthalAngle: jest.fn(() => -0.5),
     addEventListener: jest.fn((name, listener) => listeners.set(name, listener)),
     removeEventListener: jest.fn(),
+    rotateLeft: jest.fn(),
+    update: jest.fn(),
   };
-  const radarCamera = { range: jest.fn(() => 20) };
+  const radarCamera = { range: jest.fn(() => 20), zoomBy: jest.fn() };
   const state = createOrbitRadarState(controls, radarCamera);
   expect(state.northAngle()).toBe(-0.5);
   expect(state.range()).toBe(20);
+  state.zoomBy(1.2);
+  state.rotateBy(Math.PI / 12);
+  expect(radarCamera.zoomBy).toHaveBeenCalledWith(1.2);
+  expect(controls.rotateLeft).toHaveBeenCalledWith(-Math.PI / 12);
+  expect(controls.update).toHaveBeenCalled();
   const listener = jest.fn();
   const detach = state.onViewChange(listener);
   expect(listener).toHaveBeenCalledWith(20);

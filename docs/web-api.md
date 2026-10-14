@@ -50,6 +50,8 @@ On desktop, drag to rotate the view. Right-drag to pan. Use the scroll wheel to 
 
 The compass shows current rotation. Click it or press R to face north and restore the default range. Press Enter or Space when the compass has focus. The compass shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`.
 
+Use the Up and Down arrow keys to zoom in or out. Use the Left and Right arrow keys to rotate the radar by 15 degrees. Do not use these keys when an editable field has focus.
+
 Press W to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows map data attribution.
 
 ## Airport and procedure layers

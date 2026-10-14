@@ -3,7 +3,7 @@ import { startDashboard } from "../../src/frontend/dashboard.mjs";
 
 function makeDocument(protocol = "https:") {
   const home = {},
-    keyListeners = new Map(),
+    keyListeners = new Map([["keydown", []]]),
     compassListeners = new Map();
   const compass = {
     setAttribute: jest.fn(),
@@ -33,9 +33,9 @@ function makeDocument(protocol = "https:") {
     compass,
     strips,
     location: { protocol, host: "localhost:3000" },
-    addEventListener: jest.fn((name, callback) => keyListeners.set(name, callback)),
+    addEventListener: jest.fn((name, callback) => keyListeners.get(name).push(callback)),
     removeEventListener: jest.fn(),
-    sendKey: (event) => keyListeners.get("keydown")(event),
+    sendKey: (event) => keyListeners.get("keydown").forEach((callback) => callback(event)),
     clickCompass: () => compassListeners.get("click")(),
     querySelector: (selector) => elements[selector],
     querySelectorAll: () => [],
@@ -60,6 +60,8 @@ test("starts the secure live view and handles feed messages", async () => {
     mode: "2D",
     update: jest.fn(),
     reset: jest.fn(),
+    zoomBy: jest.fn(),
+    rotateBy: jest.fn(),
     setConnected: jest.fn(),
     onViewChange: jest.fn(() => detachCompass),
     destroy: jest.fn(),
@@ -96,7 +98,10 @@ test("starts the secure live view and handles feed messages", async () => {
   expect(document.strips.innerHTML).toContain("1 AIRCRAFT");
   document.sendKey({ key: "r", preventDefault: jest.fn() });
   document.clickCompass();
+  for (const key of ["ArrowUp", "ArrowLeft"]) document.sendKey({ key, preventDefault: jest.fn() });
   expect(scene.reset).toHaveBeenCalledTimes(2);
+  expect(scene.zoomBy).toHaveBeenCalledWith(1 / 1.2);
+  expect(scene.rotateBy).toHaveBeenCalledWith(-Math.PI / 12);
   await socket.onopen();
   expect(scene.setConnected).toHaveBeenLastCalledWith(true);
   expect(scene.update).toHaveBeenLastCalledWith({ icao: "RESTORE1" });
@@ -108,6 +113,7 @@ test("starts the secure live view and handles feed messages", async () => {
   result.destroy();
   expect(detachCompass).toHaveBeenCalledTimes(1);
   expect(document.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
+  expect(document.removeEventListener).toHaveBeenCalledTimes(2);
   expect(document.compass.removeEventListener).toHaveBeenCalledTimes(2);
   expect(scene.destroy).toHaveBeenCalledTimes(1);
 });

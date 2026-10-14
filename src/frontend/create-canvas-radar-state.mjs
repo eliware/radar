@@ -1,4 +1,4 @@
-import { selectDefaultRadarRange } from "./radar-range.mjs";
+import { clampRadarRange, selectDefaultRadarRange } from "./radar-range.mjs";
 
 export function createCanvasRadarState(state, draw, distances, viewChanges) {
   return {
@@ -12,6 +12,15 @@ export function createCanvasRadarState(state, draw, distances, viewChanges) {
       draw();
     },
     range: () => state.range,
+    zoomBy(factor) {
+      state.autoZoom = false;
+      state.range = clampRadarRange(state.range * factor);
+      draw();
+    },
+    rotateBy(angle) {
+      state.rotation += angle;
+      draw();
+    },
     onViewChange: (listener) => viewChanges.subscribe(listener),
   };
 }

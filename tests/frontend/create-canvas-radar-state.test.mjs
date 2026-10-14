@@ -22,3 +22,15 @@ test("reports Canvas view state and resets the view", () => {
   detach();
   changes.clear();
 });
+
+test("zooms within range limits and rotates from keyboard controls", () => {
+  const state = { range: 20, autoZoom: true, rotation: 0 };
+  const draw = jest.fn();
+  const view = createCanvasRadarState(state, draw, () => [], createViewChangeListeners());
+  view.zoomBy(0.5);
+  expect(state.range).toBe(10);
+  expect(state.autoZoom).toBe(false);
+  view.rotateBy(Math.PI / 12);
+  expect(state.rotation).toBe(Math.PI / 12);
+  expect(draw).toHaveBeenCalledTimes(2);
+});

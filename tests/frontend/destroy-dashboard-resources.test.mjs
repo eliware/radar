@@ -7,6 +7,7 @@ test("destroys resources that exist after partial dashboard setup", () => {
     metarTimer: 17,
     detachCompass: jest.fn(),
     detachReset: jest.fn(),
+    detachArrowControls: jest.fn(),
     detachReferences: jest.fn(),
     feed: { close: jest.fn() },
     flightStrips: { destroy: jest.fn() },
@@ -15,6 +16,7 @@ test("destroys resources that exist after partial dashboard setup", () => {
   destroyDashboardResources(resources);
   expect(resources.detachCompass).toHaveBeenCalled();
   expect(resources.detachReset).toHaveBeenCalled();
+  expect(resources.detachArrowControls).toHaveBeenCalled();
   expect(resources.detachReferences).toHaveBeenCalled();
   expect(resources.windowRef.clearInterval).toHaveBeenCalledWith(17);
   expect(resources.feed.close).toHaveBeenCalled();
