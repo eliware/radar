@@ -18,6 +18,7 @@ function setup(coarse = false) {
     removeEventListener: removed,
     update: jest.fn(),
     rotateLeft: jest.fn(),
+    getAzimuthalAngle: jest.fn(() => 0),
     enablePan: true,
     enableRotate: true,
     enableZoom: true,
@@ -45,6 +46,11 @@ test("sets bounded camera distance and reports manual range changes", () => {
   state.view.setRange(300);
   expect(state.view.range()).toBe(300);
   expect(state.onRangeChange).toHaveBeenLastCalledWith(300);
+  state.view.setRotation((140 * Math.PI) / 180);
+  expect(state.controls.rotateLeft).toHaveBeenCalledWith((-140 * Math.PI) / 180);
+  state.controls.getAzimuthalAngle = undefined;
+  state.view.setRotation(0.5);
+  expect(state.controls.rotateLeft).toHaveBeenLastCalledWith(-0.5);
   state.camera.position.set(3, 4, 5);
   state.view.zoomBy(0.5);
   expect(state.view.range()).toBe(150);

@@ -10,6 +10,8 @@ import { createCanvasRadarWater } from "./create-canvas-radar-water.mjs";
 export function createCanvasRadarView({
   container,
   location,
+  defaultRangeNm = DEFAULT_RADAR_RANGE,
+  defaultRotationDegrees = 0,
   windowRef = window,
   documentRef = document,
 }) {
@@ -18,11 +20,13 @@ export function createCanvasRadarView({
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
   const references = createRadarReferenceStore();
   const state = {
-    range: DEFAULT_RADAR_RANGE,
+    range: defaultRangeNm,
+    defaultRangeNm,
     autoZoom: true,
     offsetX: 0,
     offsetY: 0,
-    rotation: 0,
+    rotation: (defaultRotationDegrees * Math.PI) / 180,
+    defaultRotationRadians: (defaultRotationDegrees * Math.PI) / 180,
     connected: false,
     ilsVisible: true,
     proceduresVisible: true,

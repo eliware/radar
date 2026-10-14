@@ -9,9 +9,9 @@ export function clampRadarRange(range) {
   return Math.min(MAX_RADAR_RANGE, Math.max(MIN_RADAR_RANGE, range));
 }
 
-export function selectDefaultRadarRange(targetDistances) {
+export function selectDefaultRadarRange(targetDistances, defaultRange = DEFAULT_RADAR_RANGE) {
   const furthest = Math.max(0, ...targetDistances.filter(Number.isFinite));
-  return clampRadarRange(Math.max(DEFAULT_RADAR_RANGE, furthest + RADAR_RANGE_MARGIN));
+  return clampRadarRange(Math.max(defaultRange, furthest + RADAR_RANGE_MARGIN));
 }
 
 export function getRadarRingRanges(range) {

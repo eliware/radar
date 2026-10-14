@@ -14,8 +14,9 @@ export function createRadarCamera({
   windowRef,
   onManualZoom,
   onRangeChange,
+  defaultRangeNm = DEFAULT_RADAR_RANGE,
 }) {
-  let range = DEFAULT_RADAR_RANGE;
+  let range = defaultRangeNm;
   controls.minDistance = rangeToCameraDistance(MIN_RADAR_RANGE);
   controls.maxDistance = rangeToCameraDistance(MAX_RADAR_RANGE);
   const onStart = () => onManualZoom();
@@ -34,6 +35,11 @@ export function createRadarCamera({
     controls.update();
     onRangeChange(range);
   };
+  const setRotation = (radians) => {
+    const current = controls.getAzimuthalAngle?.() ?? 0;
+    controls.rotateLeft(-(radians - current));
+    controls.update();
+  };
   const zoomBy = (factor) => {
     onManualZoom();
     const distance = distanceFromTarget(camera.position, controls.target);
@@ -51,6 +57,7 @@ export function createRadarCamera({
   const detachGestures = configureMobileRadarControls(controls, element, windowRef, zoomBy);
   return {
     setRange,
+    setRotation,
     zoomBy,
     range: () => range,
     dispose() {

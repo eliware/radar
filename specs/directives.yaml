@@ -13,6 +13,14 @@ directives:
       - Sort aircraft by distance from `MY_LOCATION`, with the closest aircraft first.
       - Calculate distance and bearing from decimal coordinates in `MY_LOCATION`.
       - Read `MY_LOCATION` and `MY_ELEVATION` from `.env`. Default elevation to 300 feet.
+      - Read `RADAR_DEFAULT_RANGE_NM` and `RADAR_DEFAULT_ROTATION` from `.env`.
+      - Default to a 20-nautical-mile range and north-up rotation.
+      - Reset both radar views to the configured range and rotation.
+      - Let mobile users opt in to phone compass tracking.
+      - Request compass access after a user action when the browser requires permission.
+      - Apply phone compass headings to both radar views.
+      - Require HTTPS for mobile compass tracking outside secure local origins.
+      - Keep manual rotation available when phone compass tracking is off.
       - Load `.env` settings with `dotenv`.
       - Use the full terminal width for the CLI table. Space each field evenly.
       - Use full field names on wide terminals. Use short names when the width is limited.
@@ -132,8 +140,9 @@ directives:
       - Keep the radar scope borderless.
       - Set radar range from 1 through 300 nautical miles in both views.
       - Set the default range to 20 nautical miles or 5 miles past the furthest live target, whichever is larger.
+      - Allow the default range and rotation to be set with RADAR_DEFAULT_RANGE_NM and RADAR_DEFAULT_ROTATION in `.env`.
       - Keep auto-zoom active until the user changes the view. Resume auto-zoom after reset.
-      - Reset the radar to north and the default range when users press R or click the compass.
+      - Reset the radar to its configured default rotation and range when users press R or click the compass.
       - Remove aircraft targets after 120 seconds without an update.
       - Fade aircraft markers and labels from full brightness to invisible over 120 seconds without updates.
       - Keep range limits, auto-zoom, and ring spacing the same in 3D and Canvas views.

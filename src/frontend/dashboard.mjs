@@ -1,6 +1,4 @@
-import { attachRadarCompassDisplay } from "./attach-radar-compass-display.mjs";
-import { attachRadarResetControls } from "./attach-radar-reset-controls.mjs";
-import { attachRadarArrowControls } from "./attach-radar-arrow-controls.mjs";
+import { attachDashboardCompassControls } from "./attach-dashboard-compass-controls.mjs";
 import { connectWebSocketFeed } from "./websocket-feed.mjs";
 import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
 import { createFlightStripView } from "./flight-strips.mjs";
@@ -40,14 +38,13 @@ export async function startDashboard({
       container,
       location: config.location,
       elevationFeet: config.elevationFeet,
+      defaultRangeNm: config.defaultRangeNm,
+      defaultRotationDegrees: config.defaultRotationDegrees,
       onMode: (mode) =>
         document.querySelector("[data-metar]").setAttribute("data-radar-mode", mode),
     });
     resources.scene = scene;
-    const detachCompass = attachRadarCompassDisplay(document, scene);
-    resources.detachCompass = detachCompass;
-    resources.detachReset = attachRadarResetControls(document, scene);
-    resources.detachArrowControls = attachRadarArrowControls(document, scene);
+    Object.assign(resources, attachDashboardCompassControls(document, windowRef, scene));
     let detachReferences = () => {};
     const referenceLoader =
       scene.updateAirports &&

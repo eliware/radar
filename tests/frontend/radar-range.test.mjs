@@ -12,6 +12,8 @@ test("selects the greater of 20 nautical miles or five miles beyond the furthest
   expect(selectDefaultRadarRange([12, 14.5])).toBe(20);
   expect(selectDefaultRadarRange([12, 19.5])).toBe(24.5);
   expect(selectDefaultRadarRange([Number.NaN, 400])).toBe(300);
+  expect(selectDefaultRadarRange([], 25)).toBe(25);
+  expect(selectDefaultRadarRange([24], 25)).toBe(29);
 });
 
 test("clamps manual ranges between one and 300 nautical miles", () => {

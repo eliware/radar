@@ -6,6 +6,7 @@ export function createOrbitRadarState(controls, radarCamera) {
       controls.rotateLeft(-angle);
       controls.update();
     },
+    setRotation: (angle) => radarCamera.setRotation(angle),
     onViewChange(listener) {
       const notify = () => listener(radarCamera.range());
       controls.addEventListener("change", notify);

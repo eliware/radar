@@ -34,3 +34,26 @@ test("zooms within range limits and rotates from keyboard controls", () => {
   expect(state.rotation).toBe(Math.PI / 12);
   expect(draw).toHaveBeenCalledTimes(2);
 });
+
+test("resets to configured range and rotation", () => {
+  const state = {
+    range: 20,
+    autoZoom: false,
+    rotation: 0,
+    defaultRangeNm: 25,
+    defaultRotationRadians: (140 * Math.PI) / 180,
+  };
+  const view = createCanvasRadarState(state, jest.fn(), () => [], createViewChangeListeners());
+  view.reset();
+  expect(state.range).toBe(25);
+  expect(state.rotation).toBeCloseTo((140 * Math.PI) / 180);
+});
+
+test("sets an absolute rotation and redraws", () => {
+  const state = { range: 20, rotation: 0 };
+  const draw = jest.fn();
+  const view = createCanvasRadarState(state, draw, () => [], createViewChangeListeners());
+  view.setRotation((140 * Math.PI) / 180);
+  expect(state.rotation).toBeCloseTo((140 * Math.PI) / 180);
+  expect(draw).toHaveBeenCalledTimes(1);
+});

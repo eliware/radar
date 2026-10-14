@@ -8,7 +8,7 @@ Run `npm run build` to build browser files. Run `node bin/radar.mjs` to start th
 
 Open `http://localhost:3000` on the server computer. Find its Wi-Fi address with `ipconfig` on Windows. Open `http://<computer-ip>:3000` on a device on the same network.
 
-Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. The defaults are `3000`, `127.0.0.1`, and `30003`. Set `MY_LOCATION` as decimal latitude and longitude. Set `MY_ELEVATION` in feet above mean sea level. The default elevation is 300 feet.
+Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. The defaults are `3000`, `127.0.0.1`, and `30003`. Set `MY_LOCATION` as decimal latitude and longitude. Set `MY_ELEVATION` in feet above mean sea level. The default elevation is 300 feet. Set `RADAR_DEFAULT_RANGE_NM` from 1 through 300 to change the default range. Set `RADAR_DEFAULT_ROTATION` from 0 through 359 to change the default rotation in degrees. Their defaults are 20 nautical miles and north-up.
 
 ## REST routes
 
@@ -36,7 +36,7 @@ The browser reconnects after a WebSocket failure. It waits one second before the
 
 ## Radar view
 
-The radar is a black square, aligned to the top left. The default view is centered on home, with north up. The range starts at 20 nautical miles or five miles beyond the furthest aircraft, whichever is greater. The range limits are 1 and 300 nautical miles.
+The radar is a black square, aligned to the top left. The default view is centered on home. The default rotation and range use `RADAR_DEFAULT_ROTATION` and `RADAR_DEFAULT_RANGE_NM`. The range starts at the configured default or five nautical miles beyond the furthest aircraft, whichever is greater. The range limits are 1 and 300 nautical miles.
 
 The app draws rings every one nautical mile below 10 miles. It draws rings every five miles below 60 miles, every 10 miles below 150 miles, and every 25 miles at greater ranges. It draws bold labeled rings at 2, 10, 20, or 50-mile intervals. Darker minor rings sit halfway between. Ring labels do not show units.
 
@@ -48,7 +48,9 @@ The 3D view uses Three.js. If WebGL cannot start, the app uses a 2D Canvas view.
 
 On desktop, drag to rotate the view. Right-drag to pan. Use the scroll wheel to zoom. On mobile, keep home centered. Pinch to zoom and twist two fingers to rotate. Panning is disabled on mobile.
 
-The compass shows current rotation. Click it or press R to face north and restore the default range. Press Enter or Space when the compass has focus. The compass shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`.
+The compass shows current rotation. Click it or press R to restore the configured default rotation and range. Press Enter or Space when the compass has focus. The compass shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`.
+
+On mobile, select FOLLOW PHONE to rotate the radar with the device compass. Select it again to stop tracking. The browser may ask for sensor permission after the tap. Use HTTPS outside localhost. The radar shows a status when sensor access is unavailable or denied. Manual rotation remains available when tracking is off.
 
 Use the Up and Down arrow keys to zoom in or out. Use the Left and Right arrow keys to rotate the radar by 15 degrees. Do not use these keys when an editable field has focus.
 

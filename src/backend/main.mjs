@@ -1,9 +1,12 @@
+import { parseRadarViewSettings } from "../shared/radar-view-settings.mjs";
+
 export async function startWebApplication(dependencies) {
   dependencies.loadEnvironment({ quiet: true });
   const port = validPort(process.env.PORT ?? "3000", "PORT");
   const feedPort = validPort(process.env.ADSB_PORT ?? "30003", "ADSB_PORT");
   const location = dependencies.parseAdsbLocation(process.env.MY_LOCATION);
   const elevationFeet = validElevation(process.env.MY_ELEVATION ?? "300");
+  const radarViewSettings = parseRadarViewSettings(process.env);
   const airportDatabase = dependencies.createAirportDatabase(process.env.NASR_DATABASE_PATH);
   const metarLookup = dependencies.createMetarLookup(
     dependencies.parseMetarStations(process.env.METAR_STATIONS),
@@ -24,6 +27,7 @@ export async function startWebApplication(dependencies) {
     feed: enrichedFeed,
     location,
     elevationFeet,
+    ...radarViewSettings,
     airportDatabase,
     metarLookup,
   });

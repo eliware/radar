@@ -1,9 +1,15 @@
 import { selectDefaultRadarRange } from "./radar-range.mjs";
 
-export function createRadarViewReset(scene, radarCamera, targets, setAutoZoom) {
+export function createRadarViewReset(
+  radarCamera,
+  targets,
+  setAutoZoom,
+  defaultRangeNm,
+  defaultRotationRadians,
+) {
   return () => {
-    scene.rotation.y = 0;
     setAutoZoom(true);
-    radarCamera.setRange(selectDefaultRadarRange(targets.distances()));
+    radarCamera.setRange(selectDefaultRadarRange(targets.distances(), defaultRangeNm));
+    radarCamera.setRotation(defaultRotationRadians);
   };
 }

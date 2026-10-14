@@ -8,10 +8,22 @@ import { registerMetarRoutes } from "./metar-routes.mjs";
 export function registerApiRoutes(
   app,
   feed,
-  { location = null, elevationFeet = 300, airportDatabase = null, metarLookup = null } = {},
+  {
+    location = null,
+    elevationFeet = 300,
+    defaultRangeNm = 20,
+    defaultRotationDegrees = 0,
+    airportDatabase = null,
+    metarLookup = null,
+  } = {},
 ) {
   app.get("/health", async () => ({ status: "ok" }));
-  app.get("/api/config", async () => ({ location, elevationFeet }));
+  app.get("/api/config", async () => ({
+    location,
+    elevationFeet,
+    defaultRangeNm,
+    defaultRotationDegrees,
+  }));
   app.get("/api/aircraft", async () => feed.list());
   registerAirportRoutes(app, airportDatabase, location);
   registerNavaidRoutes(app, airportDatabase, location);

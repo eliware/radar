@@ -28,6 +28,7 @@ export function registerAircraftSceneMocks(jest) {
     setRange: jest.fn(function (range) {
       this.currentRange = range;
     }),
+    setRotation: jest.fn(),
     range: jest.fn(function () {
       return this.currentRange;
     }),

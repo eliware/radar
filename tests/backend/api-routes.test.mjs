@@ -9,12 +9,16 @@ test("registers health, data, procedure, and update relay routes", async () => {
   registerApiRoutes(app, feed, {
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
+    defaultRangeNm: 25,
+    defaultRotationDegrees: 140,
   });
 
   expect(await routes.get("/health")[0]()).toEqual({ status: "ok" });
   expect(await routes.get("/api/config")[0]()).toEqual({
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
+    defaultRangeNm: 25,
+    defaultRotationDegrees: 140,
   });
   expect(await routes.get("/api/aircraft")[0]()).toEqual([{ icao: "ABC123" }]);
   expect(routes.has("/api/ils")).toBe(true);
@@ -36,7 +40,12 @@ test("registers health, data, procedure, and update relay routes", async () => {
 test("uses the default home elevation without config", async () => {
   const routes = new Map();
   registerApiRoutes({ get: (path, ...args) => routes.set(path, args) }, { list: () => [] });
-  expect(await routes.get("/api/config")[0]()).toEqual({ location: null, elevationFeet: 300 });
+  expect(await routes.get("/api/config")[0]()).toEqual({
+    location: null,
+    elevationFeet: 300,
+    defaultRangeNm: 20,
+    defaultRotationDegrees: 0,
+  });
 });
 
 test("registers the METAR route when its lookup is configured", () => {

@@ -15,6 +15,7 @@ export function createAircraftRadarLoop({
   overlay,
   location,
   elevationFeet,
+  defaultRangeNm,
   isConnected,
   airports,
   navaids,
@@ -30,7 +31,8 @@ export function createAircraftRadarLoop({
     windowRef,
     onExpire: (expired) => {
       trails.remove(expired);
-      if (isAutoZoom()) radarCamera.setRange(selectDefaultRadarRange(targets.distances()));
+      if (isAutoZoom())
+        radarCamera.setRange(selectDefaultRadarRange(targets.distances(), defaultRangeNm));
     },
   });
   const stopRender = createRadarRenderLoop({

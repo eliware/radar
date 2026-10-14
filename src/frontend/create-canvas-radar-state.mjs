@@ -5,10 +5,10 @@ export function createCanvasRadarState(state, draw, distances, viewChanges) {
     northAngle: () => state.rotation,
     reset() {
       state.autoZoom = true;
-      state.range = selectDefaultRadarRange(distances());
+      state.range = selectDefaultRadarRange(distances(), state.defaultRangeNm);
       state.offsetX = 0;
       state.offsetY = 0;
-      state.rotation = 0;
+      state.rotation = state.defaultRotationRadians ?? 0;
       draw();
     },
     range: () => state.range,
@@ -19,6 +19,10 @@ export function createCanvasRadarState(state, draw, distances, viewChanges) {
     },
     rotateBy(angle) {
       state.rotation += angle;
+      draw();
+    },
+    setRotation(angle) {
+      state.rotation = angle;
       draw();
     },
     onViewChange: (listener) => viewChanges.subscribe(listener),

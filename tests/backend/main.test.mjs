@@ -8,6 +8,8 @@ afterEach(() => {
     "ADSB_HOST",
     "MY_LOCATION",
     "MY_ELEVATION",
+    "RADAR_DEFAULT_RANGE_NM",
+    "RADAR_DEFAULT_ROTATION",
     "NASR_DATABASE_PATH",
     "METAR_STATIONS",
     "LOG_LEVEL",
@@ -53,6 +55,8 @@ test("starts Fastify and closes the feed after a signal", async () => {
   process.env.ADSB_HOST = "receiver";
   process.env.MY_LOCATION = "43, -70";
   process.env.MY_ELEVATION = "320";
+  process.env.RADAR_DEFAULT_RANGE_NM = "25";
+  process.env.RADAR_DEFAULT_ROTATION = "140";
   const deps = dependencies();
   const runtime = await startWebApplication(deps.values);
   expect(deps.values.createAircraftFeed).toHaveBeenCalledWith(
@@ -62,6 +66,8 @@ test("starts Fastify and closes the feed after a signal", async () => {
     feed: deps.values.createAircraftEnrichmentFeed.mock.results[0].value,
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 320,
+    defaultRangeNm: 25,
+    defaultRotationDegrees: 140,
     airportDatabase: null,
     metarLookup: deps.values.createMetarLookup.mock.results[0].value,
   });
@@ -86,6 +92,9 @@ test("uses default web and feed settings", async () => {
     expect.objectContaining({ host: "127.0.0.1", port: 30003 }),
   );
   expect(deps.values.createAirportDatabase).toHaveBeenCalledWith(undefined);
+  expect(deps.values.createRadarServer).toHaveBeenCalledWith(
+    expect.objectContaining({ defaultRangeNm: 20, defaultRotationDegrees: 0 }),
+  );
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
 });
@@ -94,13 +103,17 @@ test.each([
   ["PORT", "bad"],
   ["ADSB_PORT", "65536"],
   ["MY_ELEVATION", "bad"],
+  ["RADAR_DEFAULT_RANGE_NM", "301"],
+  ["RADAR_DEFAULT_ROTATION", "360"],
 ])("rejects invalid %s before it starts the feed", async (key, value) => {
   process.env[key] = value;
   const deps = dependencies();
   const message =
-    key === "MY_ELEVATION"
-      ? "MY_ELEVATION must be a number of feet."
-      : `${key} must be an integer from 1 through 65535`;
+    {
+      MY_ELEVATION: "MY_ELEVATION must be a number of feet.",
+      RADAR_DEFAULT_RANGE_NM: "RADAR_DEFAULT_RANGE_NM must be a number from 1 through 300.",
+      RADAR_DEFAULT_ROTATION: "RADAR_DEFAULT_ROTATION must be an integer from 0 through 359.",
+    }[key] ?? `${key} must be an integer from 1 through 65535`;
   await expect(startWebApplication(deps.values)).rejects.toThrow(message);
   expect(deps.values.createAircraftFeed).not.toHaveBeenCalled();
 });

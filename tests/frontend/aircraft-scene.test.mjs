@@ -24,6 +24,7 @@ test("wires scene services, reports connection changes, and publishes references
     expect.objectContaining({ camera: mocks.camera, controls: mocks.controls }),
   );
   expect(mocks.radarCamera.setRange).toHaveBeenCalledWith(20);
+  expect(mocks.radarCamera.setRotation).toHaveBeenCalledWith(0);
   expect(loop).toEqual(
     expect.objectContaining({ targets: mocks.targets, renderer: mocks.renderer }),
   );
@@ -89,12 +90,24 @@ test("restores auto-zoom when the view resets", () => {
   const loop = mocks.factories.createAircraftRadarLoop.mock.calls.at(-1)[0];
   mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
   expect(loop.isAutoZoom()).toBe(false);
-  mocks.scene.rotation.y = 2;
   mocks.targets.distances.mockReturnValue([40]);
   view.reset();
-  expect(mocks.scene.rotation.y).toBe(0);
   expect(mocks.radarCamera.setRange).toHaveBeenLastCalledWith(45);
+  expect(mocks.radarCamera.setRotation).toHaveBeenLastCalledWith(0);
   expect(loop.isAutoZoom()).toBe(true);
+});
+
+test("starts and resets with configured radar defaults", () => {
+  createAircraftScene({
+    container,
+    location,
+    elevationFeet: 300,
+    defaultRangeNm: 25,
+    defaultRotationDegrees: 140,
+    windowRef,
+  });
+  expect(mocks.radarCamera.setRange).toHaveBeenCalledWith(25);
+  expect(mocks.radarCamera.setRotation).toHaveBeenCalledWith((140 * Math.PI) / 180);
 });
 
 test("releases scene resources", () => {

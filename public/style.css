@@ -91,6 +91,9 @@ p {
   stroke: #000;
   stroke-width: 3px;
 }
+.compass-follow {
+  display: none;
+}
 .scene-panel {
   position: relative;
   overflow: hidden;
@@ -259,6 +262,23 @@ p {
   .radar-compass {
     width: 88px;
     height: 88px;
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .compass-follow {
+    position: absolute;
+    z-index: 3;
+    right: 14px;
+    bottom: 108px;
+    display: block;
+    padding: 7px 9px;
+    border: 1px solid #007b20;
+    border-radius: 4px;
+    color: #00ff41;
+    background: #000;
+    font:
+      10px Consolas,
+      monospace;
   }
 }
 @media (max-width: 900px) {
