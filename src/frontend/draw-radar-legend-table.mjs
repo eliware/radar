@@ -33,11 +33,14 @@ export function drawRadarLegendTable(context, width, height, connected, visibili
   const firstY = height - 54 - (rows - 1) * 16;
   context.font = "12px monospace";
   context.textAlign = "left";
+  const firstColumnWidth = context.measureText?.("60s VECTOR").width ?? 70;
+  const columnGap = 8;
+  const columnOffset = 14 + firstColumnWidth + columnGap;
   ENTRIES.forEach((entry, index) => {
     const [icon, label, color, toggle] = entry;
     const column = Math.floor(index / rows);
     const row = index % rows;
-    const x = 12 + column * (width / columns);
+    const x = 12 + column * columnOffset;
     const y = firstY + row * 16;
     const enabled = !toggle || visibility[toggle];
     const ink = connected && enabled ? (palette[color] ?? COLORS[color]) : "#444444";

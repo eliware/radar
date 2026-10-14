@@ -160,6 +160,7 @@ directives:
       - Show a nautical mile scale and a symbol legend at the lower left of both radar views.
       - Keep the radar legend background transparent. Align each symbol with its label in a table.
       - Use two legend columns on wide views and one column on narrow views.
+      - Place the second legend column next to the first column.
       - Show aircraft, vectors, history, home, airports, VORs, runways, and runway guides in the legend.
       - Show I for ILS, S for SID and STAR, and W for water in the legend.
       - Use 18-pixel aircraft labels in 3D and 9-pixel labels in Canvas.

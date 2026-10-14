@@ -2,19 +2,22 @@ import { expect, jest, test } from "@jest/globals";
 import { drawRadarScaleLegend } from "../../src/frontend/draw-radar-scale-legend.mjs";
 
 function createContext() {
-  return Object.fromEntries(
-    [
-      "beginPath",
-      "moveTo",
-      "lineTo",
-      "stroke",
-      "closePath",
-      "fill",
-      "arc",
-      "fillText",
-      "setLineDash",
-    ].map((name) => [name, jest.fn()]),
-  );
+  return {
+    ...Object.fromEntries(
+      [
+        "beginPath",
+        "moveTo",
+        "lineTo",
+        "stroke",
+        "closePath",
+        "fill",
+        "arc",
+        "fillText",
+        "setLineDash",
+      ].map((name) => [name, jest.fn()]),
+    ),
+    measureText: jest.fn((text) => ({ width: text.length * 7 })),
+  };
 }
 
 test("draws a transparent two-column legend with layer toggles", () => {
@@ -39,7 +42,7 @@ test("draws a transparent two-column legend with layer toggles", () => {
   );
   expect(context.fillRect).toBeUndefined();
   expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 26, 946);
-  expect(context.fillText).toHaveBeenCalledWith("RUNWAY", 566, 946);
+  expect(context.fillText).toHaveBeenCalledWith("RUNWAY", 118, 946);
   expect(context.closePath).toHaveBeenCalled();
   expect(context.fill).toHaveBeenCalled();
 });
