@@ -22,9 +22,32 @@ test("draws a gray identifier for airports inside the current range", () => {
   drawAirportMarkers(context, airports, () => ({ x: 20, y: 30 }), 20);
   expect(context.fillStyle).toBe("#b8b8b8");
   expect(context.textAlign).toBe("center");
+  expect(context.font).toBe("12px monospace");
   expect(context.fillText).toHaveBeenCalledWith("KPWM", 20, 20);
   expect(context.fillText).toHaveBeenCalledWith("BGR", 20, 20);
   expect(context.fillText).toHaveBeenCalledTimes(2);
+});
+
+test("uses smaller airport labels on narrow 2D canvases", () => {
+  const context = {
+    canvas: { clientWidth: 390 },
+    save: jest.fn(),
+    restore: jest.fn(),
+    beginPath: jest.fn(),
+    arc: jest.fn(),
+    fill: jest.fn(),
+    fillText: jest.fn(),
+  };
+
+  drawAirportMarkers(
+    context,
+    new Map([["PWM", { faaId: "PWM", icao: "KPWM", rangeNm: 5 }]]),
+    () => ({ x: 20, y: 30 }),
+    20,
+  );
+
+  expect(context.font).toBe("9px monospace");
+  expect(context.fillText).toHaveBeenCalledWith("KPWM", 20, 20);
 });
 
 test("skips airport markers with invalid projected coordinates", () => {

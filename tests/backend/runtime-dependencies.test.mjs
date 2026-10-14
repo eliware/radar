@@ -6,6 +6,26 @@ jest.unstable_mockModule("@eliware/common", () => ({
   registerSignals: jest.fn(),
 }));
 jest.unstable_mockModule("dotenv", () => ({ config: jest.fn() }));
+jest.unstable_mockModule("../../src/backend/aircraft-feed.mjs", () => ({
+  createAircraftFeed: jest.fn(),
+}));
+jest.unstable_mockModule("../../src/backend/server.mjs", () => ({ createRadarServer: jest.fn() }));
+jest.unstable_mockModule("../../src/backend/airport-database.mjs", () => ({
+  createAirportDatabase: jest.fn(),
+}));
+jest.unstable_mockModule("../../src/shared/adsb-location.mjs", () => ({
+  parseAdsbLocation: jest.fn(),
+}));
+jest.unstable_mockModule("../../src/backend/adsbdb-lookup.mjs", () => ({
+  createAdsbdbLookup: jest.fn(),
+}));
+jest.unstable_mockModule("../../src/backend/aircraft-enrichment-feed.mjs", () => ({
+  createAircraftEnrichmentFeed: jest.fn(),
+}));
+jest.unstable_mockModule("../../src/backend/metar-lookup.mjs", () => ({
+  createMetarLookup: jest.fn(),
+  parseMetarStations: jest.fn(),
+}));
 
 const { runtimeDependencies } = await import("../../src/backend/runtime-dependencies.mjs");
 
