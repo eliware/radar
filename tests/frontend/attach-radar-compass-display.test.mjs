@@ -84,3 +84,15 @@ test("defines a clickable 16-point compass with four labels and reset access", (
   expect(markup).not.toContain("data-radar-control");
   expect(markup).not.toContain("data-compass-joystick");
 });
+
+test("keeps small map attribution in the lower-left corner", () => {
+  const markup = readFileSync(new URL("../../public/index.html", import.meta.url), "utf8");
+  const stylesheet = readFileSync(new URL("../../public/style.css", import.meta.url), "utf8");
+  const attribution = stylesheet.match(/\.map-attribution\s*\{([^}]+)\}/)?.[1] ?? "";
+  expect(markup).toContain('class="map-attribution"');
+  expect(markup).toContain("© OpenStreetMap · OpenMapTiles · OpenFreeMap");
+  expect(markup).toContain('href="https://www.openstreetmap.org/copyright"');
+  expect(attribution).toContain("bottom: 2px");
+  expect(attribution).toContain("left: 5px");
+  expect(attribution).toContain("font-size: 8px");
+});

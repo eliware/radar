@@ -38,10 +38,10 @@ p {
 .map-attribution {
   position: absolute;
   z-index: 2;
-  top: 88px;
-  right: 14px;
+  bottom: 2px;
+  left: 5px;
   color: #777;
-  font-size: 9px;
+  font-size: 8px;
   text-decoration: none;
 }
 .radar-compass {

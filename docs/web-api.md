@@ -52,7 +52,7 @@ The compass shows current rotation. Click it or press R to face north and restor
 
 Use the Up and Down arrow keys to zoom in or out. Use the Left and Right arrow keys to rotate the radar by 15 degrees. Do not use these keys when an editable field has focus.
 
-Press W to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows map data attribution.
+Press W to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows small map data attribution at the bottom left.
 
 The radar legend has a transparent background. It aligns each symbol with its label. It uses two columns on wide views and one column on narrow views. The legend shows aircraft, vectors, history, home, airports, VORs, runways, runway guides, ILS, SIDs, STARs, and water. Press I for ILS. Press S for SIDs and STARs. Press W for water.
 

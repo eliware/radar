@@ -110,7 +110,7 @@ directives:
       - Load only the vector tiles that cover the current radar view. Keep tile data in browser memory.
       - Draw the same geographic water outlines in the Three.js and Canvas radar views.
       - Keep the water layer flat at zero feet MSL and omit fills, rivers, and streams.
-      - Show map data attribution and let users toggle the water layer with the W key.
+      - Show small map data attribution at the bottom left. Let users toggle water with W.
       - Show a 2D Canvas radar when WebGL cannot start. Keep the 3D radar when WebGL works.
       - Place the home marker at the `MY_LOCATION` origin and the `MY_ELEVATION` height.
       - Place aircraft by their coordinates and feed altitude relative to the home height.
