@@ -5,7 +5,11 @@ test("registers health, data, procedure, and update relay routes", async () => {
   const routes = new Map();
   const app = { get: jest.fn((path, ...args) => routes.set(path, args)) };
   const subscriber = jest.fn();
-  const feed = { list: jest.fn(() => [{ icao: "ABC123" }]), subscribe: jest.fn(() => subscriber) };
+  const feed = {
+    list: jest.fn(() => [{ icao: "ABC123" }]),
+    subscribe: jest.fn(() => subscriber),
+    isReady: jest.fn(() => true),
+  };
   registerApiRoutes(app, feed, {
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
@@ -14,6 +18,7 @@ test("registers health, data, procedure, and update relay routes", async () => {
   });
 
   expect(await routes.get("/health")[0]()).toEqual({ status: "ok" });
+  expect(await routes.get("/ready")[0]({}, { code: jest.fn() })).toEqual({ status: "ready" });
   expect(await routes.get("/api/config")[0]()).toEqual({
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
@@ -35,6 +40,16 @@ test("registers health, data, procedure, and update relay routes", async () => {
   expect(socket.on).toHaveBeenCalledWith("error", subscriber);
   socket.on.mock.calls.find(([event]) => event === "close")[1]();
   expect(subscriber).toHaveBeenCalledTimes(1);
+});
+
+test("returns service unavailable until the SBS feed connects", async () => {
+  const routes = new Map();
+  const feed = { isReady: jest.fn(() => false) };
+  registerApiRoutes({ get: (path, ...args) => routes.set(path, args) }, feed);
+  const reply = { code: jest.fn() };
+
+  expect(await routes.get("/ready")[0]({}, reply)).toEqual({ status: "not_ready" });
+  expect(reply.code).toHaveBeenCalledWith(503);
 });
 
 test("uses the default home elevation without config", async () => {

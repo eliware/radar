@@ -19,7 +19,7 @@ function setup(overrides = {}) {
     calculateAircraftRange: jest.fn(() => null),
     connectSbsFeed: jest.fn((options) => {
       feedOptions = options;
-      return { close: jest.fn() };
+      return { close: jest.fn(), isConnected: jest.fn(() => true) };
     }),
     ...overrides,
   };
@@ -43,6 +43,7 @@ test("publishes parsed aircraft updates and returns current aircraft", () => {
   );
   expect(subscriber).toHaveBeenCalledWith(state.aircraft);
   expect(state.feed.list()).toEqual([state.aircraft]);
+  expect(state.feed.isReady()).toBe(true);
   expect(unsubscribe()).toBe(true);
   expect(unsubscribe()).toBe(false);
   state.feed.close();

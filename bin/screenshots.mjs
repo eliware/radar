@@ -4,7 +4,7 @@ import { captureResponsiveScreenshots } from "../src/frontend/responsive-screens
 import {
   selectScreenshotModes,
   selectScreenshotViewports,
-} from "../src/frontend/responsive-screenshots.mjs";
+} from "../src/frontend/responsive-screenshot-options.mjs";
 
 const args = process.argv.slice(2);
 const viewportSelection = args.includes("--primary")
@@ -17,6 +17,7 @@ await captureResponsiveScreenshots({
   targets: selectScreenshotViewports(viewportSelection),
   modes: selectScreenshotModes(process.env.RADAR_SCREENSHOT_MODES ?? "above-fold,full-page"),
   browserLauncher: puppeteer,
+  browserArgs: process.getuid?.() === 0 ? ["--no-sandbox", "--disable-setuid-sandbox"] : [],
   fetcher: fetch,
   files: { mkdir, stat },
   delayMs: 500,

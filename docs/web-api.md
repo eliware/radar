@@ -12,7 +12,7 @@ Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. T
 
 ## REST routes
 
-`GET /health` returns server status. `GET /api/config` returns home location and elevation. `GET /api/aircraft` returns recent aircraft.
+`GET /health` reports that the Radar server can handle requests. `GET /ready` returns HTTP 200 when Radar has an active SBS TCP connection and HTTP 503 while disconnected. Readiness does not require aircraft reception. `GET /api/config` returns home location and elevation. `GET /api/aircraft` returns recent aircraft.
 
 `GET /api/metar` returns decoded reports for `METAR_STATIONS`. Radar reads reports from the VATSIM METAR API. It caches reports for five minutes. The default station list is `KLEW,KPWM,KBXM`.
 

@@ -7,6 +7,7 @@ function setup(items = []) {
   const unsubscribe = jest.fn();
   const feed = {
     list: jest.fn(() => currentItems),
+    isReady: jest.fn(() => true),
     subscribe: jest.fn((callback) => ((onUpdate = callback), unsubscribe)),
   };
   const lookup = {
@@ -31,6 +32,7 @@ test("relays feed updates and enriches the current snapshot", () => {
   state.onUpdate(item);
   expect(subscriber).toHaveBeenCalledWith(item);
   expect(state.enriched.list()).toEqual([item]);
+  expect(state.enriched.isReady()).toBe(true);
   expect(state.feed.list).toHaveBeenCalledTimes(2);
 });
 

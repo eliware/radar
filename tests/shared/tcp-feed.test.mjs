@@ -37,17 +37,24 @@ test("forwards lines and reconnects after a reader reset", () => {
 
   expect(connectionFactory).toHaveBeenCalledWith({ host: "localhost", port: 30003 });
   expect(lineReaderFactory).toHaveBeenCalledWith({ input: socket });
+  expect(feed.isConnected()).toBe(false);
+  socket.emit("connect");
+  expect(feed.isConnected()).toBe(true);
   reader.emit("line", "MSG,1");
   reader.emit("error", new Error("reset"));
+  expect(feed.isConnected()).toBe(false);
   expect(onLine).toHaveBeenCalledWith("MSG,1");
   expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: "reset" }));
   expect(socket.destroy).toHaveBeenCalledTimes(1);
   socket.emit("error", new Error("duplicate"));
   expect(onError).toHaveBeenCalledTimes(1);
   retry();
+  nextSocket.emit("connect");
+  expect(feed.isConnected()).toBe(true);
   nextReader.emit("line", "MSG,2");
   expect(onLine).toHaveBeenCalledWith("MSG,2");
   feed.close();
+  expect(feed.isConnected()).toBe(false);
   expect(reader.close).toHaveBeenCalledTimes(1);
   expect(socket.destroy).toHaveBeenCalledTimes(1);
   expect(nextReader.close).toHaveBeenCalledTimes(1);

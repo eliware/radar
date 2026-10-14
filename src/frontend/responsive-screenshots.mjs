@@ -6,6 +6,7 @@ export async function captureResponsiveScreenshots({
   targets,
   modes,
   browserLauncher,
+  browserArgs = [],
   fetcher,
   files,
   delayMs,
@@ -15,14 +16,14 @@ export async function captureResponsiveScreenshots({
   if (!health.ok) throw new Error(`Radar health check failed with HTTP ${health.status}`);
   const folder = resolve(outputDir);
   await files.mkdir(folder, { recursive: true });
-  const browser = await browserLauncher.launch({ headless: true });
+  const browser = await browserLauncher.launch({ headless: true, args: browserArgs });
   const errors = [];
   try {
     for (const { name, viewport } of targets) {
       const page = await browser.newPage();
       page.on("pageerror", (error) => errors.push(`${name}: ${error.message}`));
       await page.setViewport(viewport);
-      await page.goto(baseUrl, { waitUntil: "networkidle2", timeout: 30000 });
+      await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
       await page.waitForSelector("[data-scene] canvas", { timeout: 30000 });
       await page.evaluate(() => document.fonts?.ready);
       await new Promise((done) => setTimeout(done, delayMs));

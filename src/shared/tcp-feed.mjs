@@ -15,6 +15,7 @@ export function connectSbsFeed({
   let activeConnection;
   let retryTimer;
   let closed = false;
+  let connected = false;
 
   function connect() {
     if (closed) return;
@@ -26,6 +27,7 @@ export function connectSbsFeed({
     function retry(error) {
       if (closed || connection.retryScheduled) return;
       connection.retryScheduled = true;
+      connected = false;
       activeConnection = undefined;
       onError(error);
       reader.close();
@@ -38,6 +40,9 @@ export function connectSbsFeed({
 
     reader.on("line", onLine);
     reader.on("error", retry);
+    socket.on("connect", () => {
+      connected = true;
+    });
     socket.on("error", retry);
     socket.on("close", () => retry(new Error("SBS feed connection closed")));
   }
@@ -47,6 +52,7 @@ export function connectSbsFeed({
     close() {
       if (closed) return;
       closed = true;
+      connected = false;
       if (retryTimer !== undefined) clearTimer(retryTimer);
       const connection = activeConnection;
       activeConnection = undefined;
@@ -54,5 +60,6 @@ export function connectSbsFeed({
       connection.reader.close();
       connection.socket.destroy();
     },
+    isConnected: () => connected,
   };
 }

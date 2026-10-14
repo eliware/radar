@@ -1,0 +1,56 @@
+services:
+  readsb:
+    build:
+      context: .
+      dockerfile: Dockerfile.readsb
+    command: ["--device-type", "rtlsdr", "--net", "--net-sbs-port", "30003", "--quiet"]
+    device_cgroup_rules:
+      - "c 189:* rwm"
+    expose:
+      - "30003"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "30003"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /dev/bus/usb
+        target: /dev/bus/usb
+    networks:
+      - radar
+
+  radar:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      readsb:
+        condition: service_healthy
+    environment:
+      ADSB_HOST: readsb
+      ADSB_PORT: "30003"
+    env_file:
+      - path: .env
+        required: false
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - radar
+
+networks:
+  radar:
+    driver: bridge

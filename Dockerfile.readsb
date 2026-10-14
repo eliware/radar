@@ -1,0 +1,33 @@
+FROM debian:bookworm-slim AS build
+
+ARG READSB_REF=8afcc22de2de81be38231695285070603af78ef4
+WORKDIR /usr/src/readsb
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    build-essential \
+    git \
+    libncurses-dev \
+    librtlsdr-dev \
+    libusb-1.0-0-dev \
+    libzstd-dev \
+    pkg-config \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+RUN git init . \
+    && git remote add origin https://github.com/wiedehopf/readsb.git \
+    && git fetch --depth 1 origin "$READSB_REF" \
+    && git checkout --detach FETCH_HEAD \
+    && make -j"$(nproc)" RTLSDR=yes
+
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libncurses6 \
+    librtlsdr0 \
+    libusb-1.0-0 \
+    libzstd1 \
+    netcat-openbsd \
+    zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+COPY --from=build /usr/src/readsb/readsb /usr/local/bin/readsb
+ENTRYPOINT ["/usr/local/bin/readsb"]
+CMD ["--device-type", "rtlsdr", "--net", "--net-sbs-port", "30003", "--quiet"]

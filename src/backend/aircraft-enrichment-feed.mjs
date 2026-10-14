@@ -21,6 +21,7 @@ export function createAircraftEnrichmentFeed(feed, lookup) {
       subscribers.add(subscriber);
       return () => subscribers.delete(subscriber);
     },
+    isReady: () => feed.isReady(),
     close() {
       if (closed) return;
       closed = true;

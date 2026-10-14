@@ -41,6 +41,7 @@ export function createAircraftFeed({
       subscribers.add(subscriber);
       return () => subscribers.delete(subscriber);
     },
+    isReady: () => connection.isConnected(),
     close: () => connection.close(),
   };
 }

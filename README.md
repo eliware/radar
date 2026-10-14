@@ -65,7 +65,7 @@ Set runtime options in `.env` or in the process environment. See [.env.example](
 
 ## Operations
 
-Read the [web task guide](docs/web-service-background.md) and [RTL1090 task guide](docs/rtl1090-background.md) for Windows setup.
+For the Linux Docker deployment, read the [Linux Compose guide](docs/linux-compose.md). The [web task guide](docs/web-service-background.md) and [RTL1090 task guide](docs/rtl1090-background.md) cover Windows setup.
 
 ## Commands
 

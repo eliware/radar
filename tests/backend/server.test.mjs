@@ -28,6 +28,7 @@ test("registers API and static routes with defaults", async () => {
   expect(app.addHook).not.toHaveBeenCalled();
   expect(app.get.mock.calls.map(([route]) => route)).toEqual([
     "/health",
+    "/ready",
     "/api/config",
     "/api/aircraft",
     "/api/airports",
