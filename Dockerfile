@@ -15,6 +15,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY --chown=node:node bin/radar.mjs ./bin/radar.mjs
 COPY --chown=node:node src ./src
 COPY --chown=node:node public ./public
+COPY --chown=node:node nasr ./nasr
 COPY --from=build --chown=node:node /app/dist ./dist
 USER node
 EXPOSE 3000

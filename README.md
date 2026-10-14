@@ -33,7 +33,7 @@ Radar is a local web dashboard and CLI for ADS-B aircraft data. The server uses 
 
 ## Requirements
 
-Use Node.js 26 or later and npm 12 or later. CI runs on Ubuntu. We directly validate changes on Windows when the change record says so. We infer macOS support from Node.js APIs; we do not claim direct macOS validation.
+Use Node.js 26 or later and npm 12 or later. Install Git LFS before you clone this repository. CI runs on Ubuntu. We directly validate changes on Windows when the change record says so. We infer macOS support from Node.js APIs; we do not claim direct macOS validation.
 
 ## Setup
 

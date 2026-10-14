@@ -2,7 +2,7 @@
 
 Radar reads airport and runway records from the FAA NASR SQLite database. The server opens the database in read-only mode.
 
-Place the SQLite file at `artifacts/nasr/NASR_2026_10_01.sqlite`, or set `NASR_DATABASE_PATH` in `.env` to its full path. Keep the database out of Git.
+The package includes `nasr/NASR_2026_10_01.sqlite` in Git LFS. Radar opens this file by default. Set `NASR_DATABASE_PATH` in `.env` to use another file.
 
 The server reads airport records from `APT_BASE`, runway ends from `APT_RWY_END`, airport class flags from `CLS_ARSP`, VOR records from `NAV_BASE`, and ARTCC boundary points from `ARB_SEG`. It serves airports, navaids, and ARTCC paths by distance band. Each route needs `MY_LOCATION`.
 

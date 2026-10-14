@@ -33,7 +33,8 @@
     "LICENSE",
     "RELEASE_NOTES.md",
     "bin/",
-    "specs/"
+    "specs/",
+    "nasr/"
   ],
   "scripts": {
     "test": "eliware-test",

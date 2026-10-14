@@ -1,8 +1,12 @@
 import { DatabaseSync } from "node:sqlite";
 import { existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const DEFAULT_PATH = "artifacts/nasr/NASR_2026_10_01.sqlite";
+const DEFAULT_PATH = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../nasr/NASR_2026_10_01.sqlite",
+);
 
 export function openAirportDatabase(path, { Database = DatabaseSync, exists = existsSync } = {}) {
   const file = resolve(path || DEFAULT_PATH);

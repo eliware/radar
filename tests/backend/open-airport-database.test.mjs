@@ -11,6 +11,15 @@ test("opens an existing database in read-only mode", () => {
   });
 });
 
+test("resolves the packaged NASR database by default", () => {
+  const exists = jest.fn(() => true);
+  const database = {};
+  const Database = jest.fn(() => database);
+  expect(openAirportDatabase(undefined, { Database, exists })).toBe(database);
+  expect(exists.mock.calls[0][0]).toMatch(/[\\/]nasr[\\/]NASR_2026_10_01\.sqlite$/);
+  expect(Database).toHaveBeenCalledWith(exists.mock.calls[0][0], { readOnly: true });
+});
+
 test("keeps a missing default database optional", () => {
   expect(openAirportDatabase(undefined, { exists: () => false })).toBeNull();
 });
