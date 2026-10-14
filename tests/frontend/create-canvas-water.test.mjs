@@ -2,14 +2,14 @@ import { expect, jest, test } from "@jest/globals";
 import { createCanvasWater } from "../../src/frontend/create-canvas-water.mjs";
 
 test("loads the visible map area once and redraws when tile data arrives", async () => {
-  const button = fakeButton();
+  const events = new Map();
   const fetchRef = jest.fn(async () => ({ ok: true, json: async () => ({ tiles: [] }) }));
   const redraw = jest.fn();
   const canvas = { clientWidth: 200, clientHeight: 200 };
   const state = { range: 20, rotation: 0, offsetX: 0, offsetY: 0 };
   const data = { paths: [], visible: true, isVisible: () => data.visible };
   const water = createCanvasWater(
-    { querySelector: () => button },
+    { addEventListener: (_name, callback) => events.set("keydown", callback) },
     { fetch: fetchRef },
     { latitude: 43, longitude: -70 },
     canvas,
@@ -22,7 +22,7 @@ test("loads the visible map area once and redraws when tile data arrives", async
   water.update();
   expect(fetchRef).toHaveBeenCalledTimes(1);
   expect(redraw).toHaveBeenCalled();
-  button.handlers.click();
+  events.get("keydown")({ key: "w", preventDefault: jest.fn() });
   expect(data.visible).toBe(false);
   canvas.clientWidth = 0;
   state.offsetX = 5;
@@ -33,7 +33,7 @@ test("loads the visible map area once and redraws when tile data arrives", async
 test("does not request tiles without a home location", () => {
   const fetchRef = jest.fn();
   const water = createCanvasWater(
-    { querySelector: () => null },
+    null,
     { fetch: fetchRef },
     null,
     {},
@@ -45,17 +45,3 @@ test("does not request tiles without a home location", () => {
   expect(fetchRef).not.toHaveBeenCalled();
   water.destroy();
 });
-
-function fakeButton() {
-  const handlers = {};
-  return {
-    handlers,
-    setAttribute: jest.fn(),
-    addEventListener: (name, callback) => {
-      handlers[name] = callback;
-    },
-    removeEventListener: (name) => {
-      delete handlers[name];
-    },
-  };
-}

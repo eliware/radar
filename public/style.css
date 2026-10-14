@@ -47,21 +47,6 @@ p {
   color: inherit;
   cursor: pointer;
 }
-.water-toggle {
-  position: absolute;
-  z-index: 2;
-  top: 56px;
-  right: 14px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  padding: 5px 8px;
-  background: #000e;
-  color: #aaa;
-  font:
-    11px Consolas,
-    monospace;
-  cursor: pointer;
-}
 .map-attribution {
   position: absolute;
   z-index: 2;

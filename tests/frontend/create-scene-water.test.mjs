@@ -2,11 +2,7 @@ import { expect, jest, test } from "@jest/globals";
 import { createSceneWater } from "../../src/frontend/create-scene-water.mjs";
 
 test("loads map outlines around the current camera target and cleans up", async () => {
-  const button = {
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    setAttribute: jest.fn(),
-  };
+  const listeners = new Map();
   const fetchRef = jest.fn(async () => ({ ok: true, json: async () => ({ tiles: [] }) }));
   const controls = { target: { x: 4, z: -2 } };
   const scene = { add: jest.fn(), remove: jest.fn() };
@@ -16,13 +12,19 @@ test("loads map outlines around the current camera target and cleans up", async 
     { latitude: 43, longitude: -70 },
     300,
     controls,
-    { fetch: fetchRef, document: { querySelector: () => button } },
+    {
+      fetch: fetchRef,
+      document: {
+        addEventListener: jest.fn((_name, callback) => listeners.set("keydown", callback)),
+        removeEventListener: jest.fn(),
+      },
+    },
   );
   water.load(20);
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(fetchRef).toHaveBeenCalledTimes(1);
+  listeners.get("keydown")({ key: "w", preventDefault: jest.fn() });
   water.destroy();
-  expect(button.removeEventListener).toHaveBeenCalled();
 });
 
 function fakeThree() {

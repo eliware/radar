@@ -34,7 +34,7 @@ export function createCanvasRadarView({
   let draw;
   const aircraftState = createCanvasRadarAircraftState(location, state, () => draw());
   const { targets, trails } = aircraftState;
-  let drawRadar = () => {};
+  let drawRadar;
   const waterLayer = createCanvasRadarWater(
     documentRef,
     windowRef,

@@ -50,7 +50,7 @@ On desktop, drag to rotate the view. Right-drag to pan. Use the scroll wheel to 
 
 The compass shows current rotation. It does not respond to clicks or touch. It shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`. Select **Reset view** to face north and restore the default range.
 
-Select `WATER ON` or `WATER OFF` to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows map data attribution.
+Press W to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows map data attribution.
 
 ## Airport and procedure layers
 

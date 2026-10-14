@@ -1,8 +1,9 @@
 import { expect, jest, test } from "@jest/globals";
 import { createCanvasRadarView } from "../../src/frontend/canvas-radar-view.mjs";
 
-function setup(context = makeContext(), includeWaterButton = false) {
+function setup(context = makeContext()) {
   const listeners = new Map();
+  const keyListeners = new Map();
   const intervals = [];
   const canvas = {
     clientWidth: 200,
@@ -26,14 +27,12 @@ function setup(context = makeContext(), includeWaterButton = false) {
     }),
     clearInterval: jest.fn(),
   };
-  const waterButton = {
-    addEventListener: jest.fn((_event, callback) => (waterButton.click = callback)),
-    removeEventListener: jest.fn(),
-    setAttribute: jest.fn(),
-  };
   const documentRef = {
     createElement: jest.fn(() => canvas),
-    querySelector: () => (includeWaterButton ? waterButton : null),
+    addEventListener: jest.fn((name, callback) =>
+      keyListeners.set(name, [...(keyListeners.get(name) ?? []), callback]),
+    ),
+    removeEventListener: jest.fn(),
   };
   return {
     context,
@@ -41,8 +40,8 @@ function setup(context = makeContext(), includeWaterButton = false) {
     container,
     windowRef,
     documentRef,
-    waterButton,
     send: (name, event) => listeners.get(name).forEach((listener) => listener(event)),
+    sendKey: (event) => keyListeners.get("keydown").forEach((listener) => listener(event)),
     tick: () => intervals.forEach((callback) => callback()),
   };
 }
@@ -153,12 +152,15 @@ test("uses the browser globals when callers omit them", () => {
   delete globalThis.document;
 });
 
-test("redraws the radar when the water control changes", () => {
-  const state = setup(makeContext(), true);
+test("redraws the radar when the W key changes water visibility", () => {
+  const state = setup();
   const view = createCanvasRadarView({ ...state, location: null });
   const drawCount = state.context.fillRect.mock.calls.length;
-  state.waterButton.click();
+  state.sendKey({ key: "w", preventDefault: jest.fn() });
   expect(state.context.fillRect.mock.calls.length).toBeGreaterThan(drawCount);
   view.destroy();
-  expect(state.waterButton.removeEventListener).toHaveBeenCalledWith("click", expect.any(Function));
+  expect(state.documentRef.removeEventListener).toHaveBeenCalledWith(
+    "keydown",
+    expect.any(Function),
+  );
 });
