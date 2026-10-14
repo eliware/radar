@@ -12,6 +12,15 @@ test("assembles airport and navaid reference lookups with close support", () => 
   expect(repository.findNavaidsBetween(location, 0, 20)).toEqual([]);
   expect(statement.all).toHaveBeenCalledTimes(2);
   repository.close();
+  repository.close();
   expect(database.close).toHaveBeenCalledTimes(1);
+  for (const query of [
+    () => repository.findBetween(location, 0, 20),
+    () => repository.findNavaidsBetween(location, 0, 20),
+    () => repository.findIlsApproaches(location, 0, 20),
+    () => repository.findProceduresBetween(location, 0, 20),
+    () => repository.findBoundariesBetween(location, 0, 20),
+  ])
+    expect(query).toThrow("Airport database is closed.");
   expect(createAirportDatabase(undefined, { exists: () => false })).toBeNull();
 });

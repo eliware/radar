@@ -22,12 +22,28 @@ test("loads each new Canvas view once and updates paths when data arrives", () =
   expect(center.longitude).toBeCloseTo(-70);
   expect(range).toBe(20);
   const paths = [[{ latitude: 43, longitude: -70 }]];
-  onPaths(paths);
+  onPaths(paths, true);
   expect(data.paths).toBe(paths);
   expect(redraw).toHaveBeenCalledTimes(1);
   requester.update();
   expect(loader.load).toHaveBeenCalledTimes(1);
   state.range = 30;
+  requester.update();
+  expect(loader.load).toHaveBeenCalledTimes(2);
+});
+
+test("retries the same view after a failed tile request", () => {
+  const loader = { load: jest.fn() };
+  const requester = createCanvasWaterViewRequester(
+    { latitude: 43, longitude: -70 },
+    { clientWidth: 200, clientHeight: 200 },
+    { range: 20, rotation: 0, offsetX: 0, offsetY: 0 },
+    loader,
+    { paths: [] },
+    jest.fn(),
+  );
+  requester.update();
+  loader.load.mock.calls[0][2]([], false);
   requester.update();
   expect(loader.load).toHaveBeenCalledTimes(2);
 });

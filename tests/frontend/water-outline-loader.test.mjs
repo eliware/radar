@@ -13,7 +13,7 @@ test("loads visible tiles once and reuses cached tile data", async () => {
   const tileCalls = fetchRef.mock.calls.length - 1;
   await loader.load({ latitude: 43.8, longitude: -70.3 }, 1, onChange);
   expect(fetchRef).toHaveBeenCalledTimes(tileCalls + 1);
-  expect(onChange).toHaveBeenCalledWith([]);
+  expect(onChange).toHaveBeenCalledWith([], true);
   loader.cancel();
 });
 
@@ -21,11 +21,11 @@ test("returns an empty layer when metadata fails or has no tile template", async
   const fail = createWaterOutlineLoader(jest.fn(async () => ({ ok: false })));
   const failed = jest.fn();
   await fail.load({ latitude: 43, longitude: -70 }, 10, failed);
-  expect(failed).toHaveBeenCalledWith([]);
+  expect(failed).toHaveBeenCalledWith([], false);
   const empty = createWaterOutlineLoader(jest.fn(async () => response({ tiles: [] })));
   const loaded = jest.fn();
   await empty.load({ latitude: 43, longitude: -70 }, 10, loaded);
-  expect(loaded).toHaveBeenCalledWith([]);
+  expect(loaded).toHaveBeenCalledWith([], false);
 });
 
 test("does not publish stale results after cancel", async () => {
@@ -54,7 +54,7 @@ test("reuses pending tile requests and ignores failed tile responses", async () 
   ]);
   expect(tileCalls).toBeGreaterThan(0);
   expect(onChange).toHaveBeenCalledTimes(1);
-  expect(onChange).toHaveBeenCalledWith([]);
+  expect(onChange).toHaveBeenCalledWith([], false);
 });
 
 test("evicts old tile data and retries metadata after a request failure", async () => {
@@ -101,7 +101,7 @@ test("keeps loading when one tile request throws", async () => {
   const loader = createWaterOutlineLoader(fetchRef);
   const onChange = jest.fn();
   await loader.load({ latitude: 43.8, longitude: -70.3 }, 1, onChange);
-  expect(onChange).toHaveBeenCalledWith([]);
+  expect(onChange).toHaveBeenCalledWith([], false);
 });
 
 test("uses the global fetch function by default", async () => {
@@ -110,7 +110,7 @@ test("uses the global fetch function by default", async () => {
   const loaded = jest.fn();
   await createWaterOutlineLoader().load({ latitude: 43, longitude: -70 }, 10, loaded);
   expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-  expect(loaded).toHaveBeenCalledWith([]);
+  expect(loaded).toHaveBeenCalledWith([], false);
   globalThis.fetch = original;
 });
 

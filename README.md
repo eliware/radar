@@ -95,7 +95,7 @@ Run `npm run build` to build the browser app.
 
 ## Deployment
 
-The repository does not deploy the app.
+The dev workflow updates the checkout and runs validation. It does not start or publish the app.
 
 ## Support
 

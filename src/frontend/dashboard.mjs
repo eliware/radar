@@ -6,6 +6,7 @@ import { startMetarRefresh } from "./start-metar-refresh.mjs";
 import { handleDashboardFeedUpdate } from "./handle-dashboard-feed-update.mjs";
 import { dashboardWebSocketUrl } from "./dashboard-websocket-url.mjs";
 import { attachDashboardPagehide } from "./attach-dashboard-pagehide.mjs";
+import { destroyDashboardResources } from "./destroy-dashboard-resources.mjs";
 
 export async function startDashboard({
   document,
@@ -20,10 +21,10 @@ export async function startDashboard({
     document.querySelector("[data-flight-strips]"),
     windowRef,
   );
-  let metarTimer;
+  const resources = { windowRef, flightStrips };
   try {
     const config = await readJson(fetchData, "/api/config");
-    metarTimer = startMetarRefresh({
+    resources.metarTimer = startMetarRefresh({
       fetchData,
       panel: document.querySelector("[data-metar-reports]"),
       ticker: document.querySelector("[data-metar-ticker]"),
@@ -40,7 +41,9 @@ export async function startDashboard({
       onMode: (mode) =>
         document.querySelector("[data-metar]").setAttribute("data-radar-mode", mode),
     });
+    resources.scene = scene;
     const detachCompass = attachRadarCompassDisplay(document, scene);
+    resources.detachCompass = detachCompass;
     let detachReferences = () => {};
     const referenceLoader =
       scene.updateAirports &&
@@ -54,6 +57,7 @@ export async function startDashboard({
     if (referenceLoader)
       detachReferences =
         scene.onViewChange((range) => referenceLoader.load(range ?? scene.range())) ?? (() => {});
+    resources.detachReferences = detachReferences;
     if (referenceLoader) referenceLoader.load(scene.range());
     const aircraft = await readJson(fetchData, "/api/aircraft");
     flightStrips.update(aircraft);
@@ -73,21 +77,16 @@ export async function startDashboard({
         }
       },
     });
+    resources.feed = feed;
     const reset = document.querySelector("[data-reset]");
     const resetView = () => scene.reset();
     reset?.addEventListener("click", resetView);
-    const destroy = attachDashboardPagehide(windowRef, () => {
-      detachCompass();
-      detachReferences();
-      reset?.removeEventListener?.("click", resetView);
-      if (metarTimer !== null && metarTimer !== undefined) windowRef?.clearInterval?.(metarTimer);
-      feed.close();
-      flightStrips.destroy();
-      scene.destroy?.();
-    });
+    resources.reset = reset;
+    resources.resetView = resetView;
+    const destroy = attachDashboardPagehide(windowRef, () => destroyDashboardResources(resources));
     return { scene, socket: feed.socket, feed, flightStrips, destroy };
   } catch {
-    flightStrips.destroy();
+    destroyDashboardResources(resources);
     return null;
   }
 }

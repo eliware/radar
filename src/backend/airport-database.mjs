@@ -11,11 +11,23 @@ export function createAirportDatabase(path, options) {
   const findBoundaries = createArtccBoundaryQuery(database);
   const findIlsApproaches = createIlsApproachQuery(database);
   const findProceduresBetween = createProcedureQuery(database);
+  let closed = false;
+  const guard =
+    (query) =>
+    (...args) => {
+      if (closed) throw new Error("Airport database is closed.");
+      return query(...args);
+    };
   return {
-    ...references,
-    findIlsApproaches,
-    findProceduresBetween,
-    findBoundariesBetween: findBoundaries,
-    close: () => database.close(),
+    findBetween: guard(references.findBetween),
+    findNavaidsBetween: guard(references.findNavaidsBetween),
+    findIlsApproaches: guard(findIlsApproaches),
+    findProceduresBetween: guard(findProceduresBetween),
+    findBoundariesBetween: guard(findBoundaries),
+    close() {
+      if (closed) return;
+      closed = true;
+      database.close();
+    },
   };
 }

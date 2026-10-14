@@ -130,6 +130,23 @@ test("does not start when configuration fails", async () => {
   expect(await startDashboard({ document, fetchData })).toBeNull();
 });
 
+test("destroys the scene when dashboard setup fails after scene creation", async () => {
+  const document = makeDocument();
+  const fetchData = jest
+    .fn()
+    .mockResolvedValueOnce(jsonResponse({ location: null, elevationFeet: 300 }))
+    .mockResolvedValueOnce(jsonResponse({ reports: [] }));
+  const scene = {
+    onViewChange: jest.fn(() => {
+      throw new Error("setup failed");
+    }),
+    destroy: jest.fn(),
+  };
+  const result = await startDashboard({ document, fetchData, createScene: () => scene });
+  expect(result).toBeNull();
+  expect(scene.destroy).toHaveBeenCalledTimes(1);
+});
+
 test("loads reference data only for each new view range", async () => {
   const document = makeDocument();
   const requested = [];

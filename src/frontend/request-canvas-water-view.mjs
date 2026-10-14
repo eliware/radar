@@ -15,7 +15,8 @@ export function createCanvasWaterViewRequester(location, canvas, state, loader, 
       const key = JSON.stringify([center, state.range]);
       if (!center || key === requestedView) return;
       requestedView = key;
-      loader.load(center, state.range, (paths) => {
+      loader.load(center, state.range, (paths, successful) => {
+        if (!successful) requestedView = "";
         data.paths = paths;
         redraw();
       });

@@ -7,9 +7,11 @@ export function drawAirspaceRings(context, airports, project, range) {
   context.lineWidth = 1;
   context.setLineDash([]);
   for (const airport of airports.values()) {
-    if (airport.rangeNm > range || !airportAirspaceBands(airport).length) continue;
+    if (airport.rangeNm > range) continue;
+    const bands = airportAirspaceBands(airport);
+    if (!bands.length) continue;
     const radii = new Set(
-      airportAirspaceBands(airport)
+      bands
         .flatMap((band) => [band.innerRadiusNm, band.outerRadiusNm])
         .filter((radius) => radius > 0),
     );

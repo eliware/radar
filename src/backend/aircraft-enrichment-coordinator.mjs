@@ -7,14 +7,16 @@ import {
 export function createAircraftEnrichmentCoordinator(lookup) {
   const metadata = createAircraftMetadataStore();
   const lastAircraft = new Map();
+  let closed = false;
 
   function publishIfChanged(icao, changed, publish) {
-    if (!changed) return;
-    publish(metadata.enrich(lastAircraft.get(icao)));
+    const aircraft = lastAircraft.get(icao);
+    if (closed || !changed || !aircraft) return;
+    publish(metadata.enrich(aircraft));
   }
 
   function update(aircraft, publish) {
-    if (!aircraft?.icao) return;
+    if (closed || !aircraft?.icao) return;
     const icao = normalizeAircraftMetadataKey(aircraft.icao);
     const callsign = normalizeAircraftMetadataKey(aircraft.callsign);
     lastAircraft.set(icao, aircraft);
@@ -30,5 +32,16 @@ export function createAircraftEnrichmentCoordinator(lookup) {
       .catch(() => undefined);
   }
 
-  return { update, enrich: (aircraft) => metadata.enrich(aircraft) };
+  return {
+    update,
+    enrich: (aircraft) => metadata.enrich(aircraft),
+    retain(aircraft) {
+      const live = new Set(aircraft.map((item) => normalizeAircraftMetadataKey(item.icao)));
+      for (const icao of lastAircraft.keys()) if (!live.has(icao)) lastAircraft.delete(icao);
+    },
+    close() {
+      closed = true;
+      lastAircraft.clear();
+    },
+  };
 }

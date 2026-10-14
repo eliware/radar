@@ -2,10 +2,11 @@ import { expect, jest, test } from "@jest/globals";
 import { createAircraftEnrichmentFeed } from "../../src/backend/aircraft-enrichment-feed.mjs";
 
 function setup(items = []) {
+  let currentItems = items;
   let onUpdate;
   const unsubscribe = jest.fn();
   const feed = {
-    list: jest.fn(() => items),
+    list: jest.fn(() => currentItems),
     subscribe: jest.fn((callback) => ((onUpdate = callback), unsubscribe)),
   };
   const lookup = {
@@ -15,7 +16,9 @@ function setup(items = []) {
   return {
     feed,
     enriched: createAircraftEnrichmentFeed(feed, lookup),
+    lookup,
     onUpdate: (item) => onUpdate(item),
+    setItems: (next) => (currentItems = next),
     unsubscribe,
   };
 }
@@ -28,7 +31,7 @@ test("relays feed updates and enriches the current snapshot", () => {
   state.onUpdate(item);
   expect(subscriber).toHaveBeenCalledWith(item);
   expect(state.enriched.list()).toEqual([item]);
-  expect(state.feed.list).toHaveBeenCalledTimes(1);
+  expect(state.feed.list).toHaveBeenCalledTimes(2);
 });
 
 test("unsubscribes from the source and clears feed listeners", () => {
@@ -38,7 +41,25 @@ test("unsubscribes from the source and clears feed listeners", () => {
   expect(unsubscribe()).toBe(true);
   expect(unsubscribe()).toBe(false);
   state.enriched.close();
+  state.enriched.close();
   state.onUpdate({ icao: "ABC123" });
   expect(state.unsubscribe).toHaveBeenCalledTimes(1);
   expect(subscriber).not.toHaveBeenCalled();
+});
+
+test("does not publish a type lookup after the source removes an aircraft", async () => {
+  let resolveType;
+  const item = { icao: "ABC123" };
+  const state = setup([item]);
+  state.lookup.getAircraftType.mockImplementation(
+    () => new Promise((resolve) => (resolveType = resolve)),
+  );
+  const subscriber = jest.fn();
+  state.enriched.subscribe(subscriber);
+  state.onUpdate(item);
+  state.setItems([]);
+  resolveType({ aircraftTypeCode: "B738" });
+  await Promise.resolve();
+  expect(subscriber).toHaveBeenCalledTimes(1);
+  expect(state.enriched.list()).toEqual([]);
 });
