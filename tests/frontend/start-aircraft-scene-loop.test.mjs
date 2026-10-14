@@ -19,6 +19,7 @@ test("starts the scene loop with shared references and ILS visibility", () => {
     isAutoZoom: () => false,
     ils: { isVisible: isIlsVisible },
     procedures: { isVisible: jest.fn(() => true) },
+    water: { isVisible: jest.fn(() => true) },
     references: { airports: {}, navaids: {}, boundaries: {}, ilsApproaches: {}, procedures: {} },
   };
   let loopOptions;
@@ -31,6 +32,7 @@ test("starts the scene loop with shared references and ILS visibility", () => {
     expect.objectContaining({
       isIlsVisible,
       isProceduresVisible: options.procedures.isVisible,
+      isWaterVisible: options.water.isVisible,
       airports: options.references.airports,
       navaids: options.references.navaids,
       boundaries: options.references.boundaries,

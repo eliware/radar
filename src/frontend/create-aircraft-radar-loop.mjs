@@ -23,6 +23,7 @@ export function createAircraftRadarLoop({
   isIlsVisible = () => true,
   procedures = new Map(),
   isProceduresVisible = () => true,
+  isWaterVisible = () => true,
 }) {
   const stopWatch = watchRadarTargets({
     targets,
@@ -54,6 +55,7 @@ export function createAircraftRadarLoop({
         isIlsVisible(),
         procedures,
         isProceduresVisible(),
+        isWaterVisible(),
       ),
   });
   return () => {

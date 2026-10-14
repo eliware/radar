@@ -12,28 +12,42 @@ function createContext() {
       "fill",
       "arc",
       "fillText",
-      "fillRect",
       "setLineDash",
     ].map((name) => [name, jest.fn()]),
   );
 }
 
-test("draws the radar legend keys", () => {
+test("draws a transparent two-column legend with layer toggles", () => {
   const context = createContext();
   drawRadarScaleLegend(context, 1080, 1080, 20, 475.2);
-  expect(context.fillRect).toHaveBeenCalledWith(8, 972, 212, 98);
-  expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 24, 984);
-  expect(context.fillText).toHaveBeenCalledWith("60s VECTOR", 132, 984);
-  expect(context.fillText).toHaveBeenCalledWith("HISTORY", 24, 1002);
-  expect(context.fillText).toHaveBeenCalledWith("HOME", 112, 1002);
-  expect(context.fillText).toHaveBeenCalledWith("I ILS", 32, 1020);
+  const labels = context.fillText.mock.calls.map(([label]) => label);
+  expect(labels).toEqual(
+    expect.arrayContaining([
+      "AIRCRAFT",
+      "60s VECTOR",
+      "HISTORY",
+      "HOME",
+      "AIRPORT",
+      "VOR",
+      "RUNWAY",
+      "EXTENSION / BASE",
+      "I ILS",
+      "S SID",
+      "S STAR",
+      "W WATER",
+    ]),
+  );
+  expect(context.fillRect).toBeUndefined();
+  expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 26, 946);
+  expect(context.fillText).toHaveBeenCalledWith("RUNWAY", 566, 946);
   expect(context.closePath).toHaveBeenCalled();
   expect(context.fill).toHaveBeenCalled();
 });
 
-test("marks hidden ILS lines as off in the legend", () => {
+test("uses one column and dims hidden layers on narrow views", () => {
   const context = createContext();
-  drawRadarScaleLegend(context, 320, 320, 1, 140.8, true, false);
-  expect(context.fillText).toHaveBeenCalledWith("I ILS", 32, 260);
-  expect(context.strokeStyle).toBe("#444");
+  drawRadarScaleLegend(context, 320, 320, 1, 140.8, true, false, false, false);
+  expect(context.fillText).toHaveBeenCalledWith("I ILS", 26, 218);
+  expect(context.fillText).toHaveBeenCalledWith("W WATER", 26, 266);
+  expect(context.strokeStyle).toBe("#444444");
 });

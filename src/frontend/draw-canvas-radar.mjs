@@ -77,5 +77,15 @@ export function drawCanvasRadar(
   ctx.beginPath();
   ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
   ctx.fill();
-  drawRadarScaleLegend(ctx, width, height, range, radius, connected, ilsVisible);
+  drawRadarScaleLegend(
+    ctx,
+    width,
+    height,
+    range,
+    radius,
+    connected,
+    ilsVisible,
+    proceduresVisible,
+    waterVisible,
+  );
 }

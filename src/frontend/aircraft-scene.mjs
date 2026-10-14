@@ -65,6 +65,7 @@ export function createAircraftScene({ container, location, elevationFeet, window
     isAutoZoom: () => autoZoom,
     ils: layers.ils,
     procedures: layers.procedures,
+    water,
     references,
   });
   const updateAircraft = createAircraftSceneUpdater({

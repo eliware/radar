@@ -33,6 +33,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     ilsVisible = true,
     procedures = new Map(),
     proceduresVisible = true,
+    waterVisible = true,
   ) {
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
@@ -60,6 +61,8 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO,
       connected,
       ilsVisible,
+      proceduresVisible,
+      waterVisible,
     );
 
     function project(position) {

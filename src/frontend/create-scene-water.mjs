@@ -9,6 +9,7 @@ export function createSceneWater(THREE, scene, location, elevationFeet, controls
   const loader = createWaterOutlineLoader(getWaterFetch(windowRef));
   const visibility = createWaterVisibility(windowRef.document, layer.setVisible);
   return {
+    isVisible: visibility.isVisible,
     load(range) {
       loadSceneWaterView(loader, location, controls.target, range, layer.setPaths);
     },

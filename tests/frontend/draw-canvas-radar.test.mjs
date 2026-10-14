@@ -28,7 +28,7 @@ test("draws close range rings below five nautical miles", () => {
   drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 0 });
   expect(canvas.width).toBe(1);
   expect(canvas.height).toBe(1);
-  expect(context.arc).toHaveBeenCalledTimes(6);
+  expect(context.arc).toHaveBeenCalledTimes(7);
   expect(context.clip).toHaveBeenCalledTimes(2);
   expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
 });
@@ -131,7 +131,7 @@ test("draws north-up rings, aircraft, and nearby references while disconnected",
 
   expect(canvas.width).toBe(600);
   expect(canvas.height).toBe(400);
-  expect(context.fillStyle).toBe("#50402e");
+  expect(context.fillStyle).toBe("#444444");
   expect(context.rotate).toHaveBeenCalledWith(0);
   expect(context.fillText).toHaveBeenCalledWith("NORTH", expect.any(Number), expect.any(Number));
   expect(context.fillText).toHaveBeenCalledWith("KPWM", expect.any(Number), expect.any(Number));
