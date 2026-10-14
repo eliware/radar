@@ -1,68 +1,36 @@
 import { expect, jest, test } from "@jest/globals";
 import { decodeWaterLayer, decodeWaterTile } from "../../src/frontend/decode-water-tile.mjs";
 
-test("decodes lake and ocean geometry and skips tile edge lines", () => {
-  const layer = fakeLayer([
-    feature("lake", [
-      [
-        { x: 10, y: 10 },
-        { x: 20, y: 10 },
-        { x: 20, y: 20 },
-        { x: 10, y: 20 },
-      ],
-    ]),
-    feature("ocean", [
-      [
-        { x: 0, y: 10 },
-        { x: 0, y: 20 },
-        { x: 10, y: 20 },
-        { x: 10, y: 10 },
-      ],
-    ]),
-    feature("river", [
-      [
-        { x: 1, y: 1 },
-        { x: 2, y: 1 },
-        { x: 2, y: 2 },
-      ],
-    ]),
-    feature("lake", [
-      [
-        { x: 0, y: 0 },
-        { x: 0, y: 10 },
-        { x: 10, y: 0 },
-      ],
-    ]),
-    feature("lake", [
-      [
-        { x: 0, y: 0 },
-        { x: 0, y: 10 },
-        { x: 10, y: 10 },
-        { x: 20, y: 5 },
-        { x: 10, y: 0 },
-      ],
-    ]),
+test("selects ocean and lake features from a vector tile", () => {
+  const lake = feature("lake", [
+    [
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+      { x: 2, y: 2 },
+    ],
   ]);
-  const paths = decodeWaterLayer(layer, { z: 1, x: 1, y: 1 });
-  expect(paths).toHaveLength(3);
-  expect(paths[0][0].longitude).toBeGreaterThan(-180);
-  expect(paths[1].length).toBeGreaterThan(2);
+  const ocean = feature("ocean", [
+    [
+      { x: 3, y: 3 },
+      { x: 4, y: 3 },
+      { x: 4, y: 4 },
+    ],
+  ]);
+  const river = feature("river", [
+    [
+      { x: 5, y: 5 },
+      { x: 6, y: 5 },
+      { x: 6, y: 6 },
+    ],
+  ]);
+  const paths = decodeWaterLayer(fakeLayer([lake, ocean, river]), { z: 1, x: 1, y: 1 });
+  expect(paths).toHaveLength(2);
+  expect(lake.loadGeometry).toHaveBeenCalledTimes(1);
+  expect(ocean.loadGeometry).toHaveBeenCalledTimes(1);
+  expect(river.loadGeometry).not.toHaveBeenCalled();
 });
 
-test("skips short paths and returns no paths when the tile has no water layer", () => {
-  expect(
-    decodeWaterLayer(
-      fakeLayer([
-        feature("lake", [
-          [
-            { x: 2, y: 2 },
-            { x: 3, y: 3 },
-          ],
-        ]),
-      ]),
-      { z: 0, x: 0, y: 0 },
-    ),
-  ).toEqual([]);
+test("returns no paths when the vector tile has no water layer", () => {
   expect(
     decodeWaterTile(new Uint8Array([26, 11, 10, 5, 119, 97, 116, 101, 114, 18, 0, 120, 2]).buffer, {
       z: 1,

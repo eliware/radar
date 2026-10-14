@@ -1,4 +1,5 @@
 import { hasUsefulCallsign } from "../shared/aircraft-callsign.mjs";
+import { createLookupCache } from "./lookup-cache.mjs";
 
 const apiRoot = "https://api.adsbdb.com/v0";
 const day = 24 * 60 * 60 * 1000;
@@ -12,33 +13,19 @@ export function createAdsbdbLookup({
   failureTtlMs = 30 * 1000,
   maxCacheEntries = 256,
 } = {}) {
-  const cache = new Map();
+  const cache = createLookupCache({ clock, maxEntries: maxCacheEntries });
 
   function lookup(key, path, select, ttl = successTtlMs) {
-    const cached = cache.get(key);
-    if (cached?.promise) return cached.promise;
-    if (cached && cached.expiresAt > clock()) return Promise.resolve(cached.value);
-    cache.delete(key);
-    const entry = { expiresAt: Infinity, promise: null, value: null };
-    entry.promise = Promise.resolve()
-      .then(() => request(`${apiRoot}${path}`))
-      .then(async (response) => {
-        if (response.status === 404) return save(entry, null, missingTtlMs);
+    return cache.lookup(
+      key,
+      async () => {
+        const response = await request(`${apiRoot}${path}`);
+        if (response.status === 404) return null;
         if (!response.ok) throw new Error("ADSBdb request failed");
-        const value = select(await response.json());
-        return save(entry, value, value ? ttl : missingTtlMs);
-      })
-      .catch(() => save(entry, null, failureTtlMs));
-    cache.set(key, entry);
-    if (cache.size > maxCacheEntries) cache.delete(cache.keys().next().value);
-    return entry.promise;
-  }
-
-  function save(entry, value, ttl) {
-    entry.value = value;
-    entry.expiresAt = clock() + ttl;
-    entry.promise = null;
-    return value;
+        return select(await response.json());
+      },
+      { successTtlMs: ttl, missingTtlMs, failureTtlMs },
+    );
   }
 
   return {

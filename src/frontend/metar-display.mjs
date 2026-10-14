@@ -1,3 +1,5 @@
+import { formatMetarAge } from "./format-metar-age.mjs";
+
 export function updateMetarDisplay(element, ticker, data) {
   if (!element || !ticker) return;
   const reports = Array.isArray(data?.reports) ? data.reports : [];
@@ -33,7 +35,7 @@ function reportRow({ id, metar, decoded }) {
   const values = [
     decoded.automated ? "A" : "",
     id,
-    formatAge(decoded.observed),
+    formatMetarAge(decoded.observed),
     decoded.windDirection,
     decoded.windSpeed,
     decoded.visibility,
@@ -49,27 +51,6 @@ function reportRow({ id, metar, decoded }) {
         `<td${index === 6 ? ' class="metar-weather"' : ""}>${escapeText(value)}</td>`,
     )
     .join("")}</tr>`;
-}
-
-export function formatAge(observed, now = new Date()) {
-  const match = String(observed ?? "").match(/^(\d{1,2}) (\d{2}):(\d{2})Z$/);
-  if (!match) return "—";
-  const [, day, hour, minute] = match;
-  let month = now.getUTCMonth();
-  let year = now.getUTCFullYear();
-  if (Number(day) > now.getUTCDate()) {
-    month -= 1;
-    if (month < 0) {
-      month = 11;
-      year -= 1;
-    }
-  }
-  let stamp = Date.UTC(year, month, Number(day), Number(hour), Number(minute));
-  if (stamp > now.getTime()) stamp = now.getTime();
-  const ageMinutes = Math.max(0, Math.floor((now.getTime() - stamp) / 60000));
-  const hours = Math.floor(ageMinutes / 60);
-  const minutes = ageMinutes % 60;
-  return hours ? `${hours}h${minutes ? `${minutes}m` : ""}` : `${minutes}m`;
 }
 
 function escapeText(value) {

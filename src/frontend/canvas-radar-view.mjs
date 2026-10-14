@@ -1,14 +1,12 @@
-import { projectAircraftPosition } from "./aircraft-space-position.mjs";
 import { createCanvasRadarDraw } from "./create-canvas-radar-draw.mjs";
-import { DEFAULT_RADAR_RANGE, selectDefaultRadarRange } from "./radar-range.mjs";
-import { createRadarTargets } from "./radar-targets.mjs";
-import { createAircraftTrails } from "./aircraft-trails.mjs";
+import { DEFAULT_RADAR_RANGE } from "./radar-range.mjs";
+import { createCanvasRadarAircraftState } from "./create-canvas-radar-aircraft-state.mjs";
 import { createCanvasRadarState } from "./create-canvas-radar-state.mjs";
 import { createViewChangeListeners } from "./create-view-change-listeners.mjs";
 import { createRadarReferenceStore } from "./radar-reference-store.mjs";
 import { attachCanvasRadarEvents } from "./attach-canvas-radar-events.mjs";
 import { createRadarLayerVisibility } from "./create-radar-layer-visibility.mjs";
-import { createCanvasWater } from "./create-canvas-water.mjs";
+import { createCanvasRadarWater } from "./create-canvas-radar-water.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -18,10 +16,7 @@ export function createCanvasRadarView({
   const canvas = documentRef.createElement("canvas");
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
-  const targets = createRadarTargets();
-  const trails = createAircraftTrails();
   const references = createRadarReferenceStore();
-  const water = { paths: [], visible: true, isVisible: () => water.visible };
   const state = {
     range: DEFAULT_RADAR_RANGE,
     autoZoom: true,
@@ -36,7 +31,19 @@ export function createCanvasRadarView({
   canvas.setAttribute("aria-label", "Top-down 2D radar view");
   canvas.style.touchAction = "none";
   container.replaceChildren(canvas);
-  const drawRadar = createCanvasRadarDraw({
+  let draw;
+  const aircraftState = createCanvasRadarAircraftState(location, state, () => draw());
+  const { targets, trails } = aircraftState;
+  let drawRadar = () => {};
+  const waterLayer = createCanvasRadarWater(
+    documentRef,
+    windowRef,
+    location,
+    canvas,
+    state,
+    () => drawRadar,
+  );
+  drawRadar = createCanvasRadarDraw({
     context,
     canvas,
     targets,
@@ -49,9 +56,9 @@ export function createCanvasRadarView({
     boundaries: references.boundaries,
     ilsApproaches: references.ilsApproaches,
     procedures: references.procedures,
-    water,
+    water: waterLayer.data,
   });
-  const draw = () => {
+  draw = () => {
     state.ilsVisible = layers.ils.isVisible();
     state.proceduresVisible = layers.procedures.isVisible();
     drawRadar();
@@ -59,15 +66,6 @@ export function createCanvasRadarView({
     viewChanges.emit(state.range);
   };
   const layers = createRadarLayerVisibility(documentRef, draw);
-  const waterLayer = createCanvasWater(
-    documentRef,
-    windowRef,
-    location,
-    canvas,
-    state,
-    water,
-    drawRadar,
-  );
   const detachEvents = attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef);
   draw();
   const viewState = createCanvasRadarState(state, draw, () => targets.distances(), viewChanges);
@@ -77,15 +75,7 @@ export function createCanvasRadarView({
       state.connected = connected;
       draw();
     },
-    update(item) {
-      const position = projectAircraftPosition(item, location, 0);
-      if (!position) return;
-      const expired = targets.update(item, Math.hypot(position.x, position.z));
-      trails.remove(expired);
-      trails.add(item.icao, position);
-      if (state.autoZoom) state.range = selectDefaultRadarRange(targets.distances());
-      draw();
-    },
+    update: aircraftState.update,
     ...references.updates(() => {}, draw),
     setIlsVisible: layers.ils.setVisible,
     ...viewState,

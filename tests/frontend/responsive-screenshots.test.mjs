@@ -1,20 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-jest.unstable_mockModule("puppeteer", () => ({
-  KnownDevices: {
-    "iPhone 12": {
-      viewport: {
-        width: 390,
-        height: 844,
-        deviceScaleFactor: 3,
-        isMobile: true,
-        hasTouch: true,
-      },
-    },
-  },
-}));
-
-const { captureResponsiveScreenshots, selectScreenshotModes, selectScreenshotViewports } =
-  await import("../../src/frontend/responsive-screenshots.mjs");
+import { captureResponsiveScreenshots } from "../../src/frontend/responsive-screenshots.mjs";
+import { selectScreenshotViewports } from "../../src/frontend/responsive-screenshot-options.mjs";
 
 function makeCaptureTools({ size = 1000, pageError = false } = {}) {
   const page = {
@@ -40,27 +26,6 @@ function makeCaptureTools({ size = 1000, pageError = false } = {}) {
     files: { mkdir: jest.fn(), stat: jest.fn().mockResolvedValue({ size }) },
   };
 }
-
-test("selects all six documented screen sizes", () => {
-  expect(selectScreenshotViewports()).toHaveLength(6);
-  expect(selectScreenshotViewports("desktop-primary")[0].viewport).toEqual({
-    width: 1280,
-    height: 1024,
-    deviceScaleFactor: 1,
-  });
-  expect(selectScreenshotViewports("desktop-1080p")[0].viewport).toEqual({
-    width: 1920,
-    height: 1080,
-    deviceScaleFactor: 1,
-  });
-  expect(selectScreenshotViewports("iphone-12-landscape")[0].viewport.isLandscape).toBe(true);
-});
-
-test("validates viewport and capture mode selections", () => {
-  expect(selectScreenshotModes()).toEqual(["above-fold", "full-page"]);
-  expect(() => selectScreenshotViewports("unknown")).toThrow("Unknown viewport selection");
-  expect(() => selectScreenshotModes("unknown")).toThrow("Unknown screenshot mode");
-});
 
 test("captures selected modes and checks the local server", async () => {
   const tools = makeCaptureTools();

@@ -34,16 +34,6 @@ test("sorts aircraft and formats the nine aligned fields", () => {
   ]);
 });
 
-test("uses two or three aligned data rows as width shrinks", () => {
-  expect(buildFlightStripData([], 100).count).toBe(0);
-  const two = buildFlightStripData([fullAircraft], 500);
-  const three = buildFlightStripData([fullAircraft], 250);
-  expect(two.weights).toHaveLength(2);
-  expect(three.weights).toHaveLength(3);
-  expect(two.weights.every((row) => row.length === 5)).toBe(true);
-  expect(three.weights.every((row) => row.length === 3)).toBe(true);
-});
-
 test("shows optional type, range, origin, and destination values", () => {
   const row = buildFlightStripData([{ icao: "A1B2C3" }], 1000).aircraft[0];
   expect(row.groups.flat()).toContain("A1B2C3");

@@ -1,9 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { projectAircraftPosition } from "./aircraft-space-position.mjs";
 import { createRadarStage } from "./create-radar-stage.mjs";
 import { createRadarCamera } from "./radar-camera.mjs";
-import { DEFAULT_RADAR_RANGE, selectDefaultRadarRange } from "./radar-range.mjs";
+import { DEFAULT_RADAR_RANGE } from "./radar-range.mjs";
 import { createRadarTargets } from "./radar-targets.mjs";
 import { createRadarSceneOverlays } from "./radar-scene-overlays.mjs";
 import { createAircraftTrails } from "./aircraft-trails.mjs";
@@ -17,6 +16,7 @@ import { createRadarLayerVisibility } from "./create-radar-layer-visibility.mjs"
 import { createSceneWater } from "./create-scene-water.mjs";
 import { createRadarViewReset } from "./create-radar-view-reset.mjs";
 import { createRadarConnectionState } from "./create-radar-connection-state.mjs";
+import { createAircraftSceneUpdater } from "./update-aircraft-scene.mjs";
 export function createAircraftScene({ container, location, elevationFeet, windowRef = window }) {
   const { scene, camera, renderer } = createRadarStage(THREE, container, windowRef);
   const updateRings = createRadarSceneOverlays(THREE, scene);
@@ -67,19 +67,17 @@ export function createAircraftScene({ container, location, elevationFeet, window
     procedures: layers.procedures,
     references,
   });
+  const updateAircraft = createAircraftSceneUpdater({
+    location,
+    elevationFeet,
+    targets,
+    trails,
+    radarCamera,
+    isAutoZoom: () => autoZoom,
+  });
   return {
     ...connection,
-    update(aircraft) {
-      const position = projectAircraftPosition(aircraft, location, elevationFeet);
-      if (!position) return;
-      const expired = targets.update(aircraft, Math.hypot(position.x, position.z));
-      trails.remove(expired);
-      trails.add(aircraft.icao, position);
-      if (autoZoom) {
-        const nextRange = selectDefaultRadarRange(targets.distances());
-        if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
-      }
-    },
+    update: updateAircraft,
     ...references.updates((items) => airspace.update(items)),
     setIlsVisible: layers.ils.setVisible,
     ...createOrbitRadarState(controls, radarCamera),

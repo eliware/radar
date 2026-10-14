@@ -1,4 +1,5 @@
 import { distanceNauticalMiles } from "../shared/distance-nautical-miles.mjs";
+import { createIlsMarkerIndex, ilsSystemKey } from "./ils-marker-groups.mjs";
 
 export const ILS_APPROACH_QUERY = `SELECT I.ARPT_ID AS faaId, I.RWY_END_ID AS runwayEnd,
   I.ILS_LOC_ID AS identifier, I.SYSTEM_TYPE_CODE AS systemType, I.CATEGORY AS category,
@@ -28,8 +29,7 @@ export function createIlsApproachQuery(database) {
   const markerStatement = database.prepare(ILS_MARKER_QUERY);
   return (location, minRangeNm, maxRangeNm) => {
     const bounds = selectBounds(location, maxRangeNm);
-    const markers = markerStatement.all(...bounds).flatMap((row) => mapMarker(row, location));
-    const markersBySystem = groupMarkers(markers);
+    const markersBySystem = createIlsMarkerIndex(markerStatement.all(...bounds), location);
     return statement
       .all(...bounds)
       .flatMap((row) => mapApproach(row, location, minRangeNm, maxRangeNm, markersBySystem));
@@ -48,28 +48,10 @@ function selectBounds(location, maxRangeNm) {
   ];
 }
 
-function mapMarker(row, location) {
-  if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude)) return [];
-  return [{ ...row, rangeNm: distanceNauticalMiles(location, row) }];
-}
-
-function groupMarkers(markers) {
-  const groups = new Map();
-  for (const marker of markers) {
-    const key = systemKey(marker);
-    groups.set(key, [...(groups.get(key) ?? []), marker]);
-  }
-  return groups;
-}
-
 function mapApproach(row, location, minRangeNm, maxRangeNm, markersBySystem) {
   if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude)) return [];
   const rangeNm = distanceNauticalMiles(location, row);
   if (rangeNm < minRangeNm || (minRangeNm > 0 && rangeNm <= minRangeNm) || rangeNm > maxRangeNm)
     return [];
-  return [{ ...row, rangeNm, markers: markersBySystem.get(systemKey(row)) ?? [] }];
-}
-
-function systemKey(record) {
-  return `${record.faaId}:${record.runwayEnd}:${record.identifier}:${record.systemType}`;
+  return [{ ...row, rangeNm, markers: markersBySystem.get(ilsSystemKey(row)) ?? [] }];
 }

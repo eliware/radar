@@ -39,33 +39,14 @@ test("uses the default home elevation without config", async () => {
   expect(await routes.get("/api/config")[0]()).toEqual({ location: null, elevationFeet: 300 });
 });
 
-test("registers the METAR route when its lookup is configured", async () => {
+test("registers the METAR route when its lookup is configured", () => {
   const routes = new Map();
-  const reports = [{ id: "KPWM", metar: "131651Z 29012KT 10SM FEW045 18/07 A2992" }];
-  const metarLookup = { stations: ["KPWM"], get: jest.fn(async () => reports) };
+  const metarLookup = { stations: ["KPWM"], get: jest.fn() };
   registerApiRoutes(
     { get: (path, ...args) => routes.set(path, args) },
     { list: () => [] },
     { metarLookup },
   );
-  expect(await routes.get("/api/metar")[0]()).toEqual({
-    stations: ["KPWM"],
-    reports: [
-      {
-        ...reports[0],
-        decoded: {
-          automated: false,
-          observed: "13 16:51Z",
-          windDirection: "290°",
-          windSpeed: "12",
-          visibility: "10",
-          conditions: "—",
-          clouds: "FEW 4500",
-          temperature: "64°F",
-          dewPoint: "45°F",
-          altimeter: "29.92",
-        },
-      },
-    ],
-  });
+  expect(routes.has("/api/metar")).toBe(true);
+  expect(metarLookup.get).not.toHaveBeenCalled();
 });

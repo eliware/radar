@@ -1,6 +1,5 @@
-import { projectAircraftPosition } from "./aircraft-space-position.mjs";
-import { predictAircraftPosition } from "./predict-aircraft-position.mjs";
-import { formatAircraftTag } from "./aircraft-tag-data.mjs";
+import { projectAircraftDisplayItems } from "./project-aircraft-display-items.mjs";
+import { projectRadarReference } from "./project-radar-reference.mjs";
 import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 import { getRadarPalette } from "./radar-palette.mjs";
@@ -58,14 +57,7 @@ export function drawCanvasRadar(
   drawRadarReferences(
     ctx,
     { airports, navaids, boundaries, ilsApproaches, procedures },
-    (item) => {
-      const position = projectAircraftPosition(
-        { ...item, altitudeFeet: Number.isFinite(item.elevationFeet) ? item.elevationFeet : 0 },
-        location,
-        0,
-      );
-      return position ? project(position) : null;
-    },
+    (item) => projectRadarReference(item, location, 0, project),
     range,
     ilsVisible,
     proceduresVisible,
@@ -74,22 +66,7 @@ export function drawCanvasRadar(
       y: centerY + (point.z / range) * radius,
     })),
   );
-  const display = [];
-  for (const item of aircraft.values()) {
-    const position = projectAircraftPosition(item, location, 0);
-    if (!position) continue;
-    const marker = project(position);
-    const future = predictAircraftPosition(position, item);
-    const history = trails.get(item.icao) ?? [];
-    display.push({
-      ...marker,
-      receivedAt: item.receivedAt,
-      futureX: future ? project(future).x : null,
-      futureY: future ? project(future).y : null,
-      lines: formatAircraftTag(item),
-      history: history.map(project),
-    });
-  }
+  const display = projectAircraftDisplayItems(aircraft, trails, location, 0, project);
   drawAircraftDisplay(ctx, display, 9, width, height, connected);
   ctx.fillStyle = palette.bright;
   ctx.beginPath();

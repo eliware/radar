@@ -21,7 +21,7 @@ test("uses Three.js when WebGL starts", async () => {
       onMode,
     }),
   ).toBe(view);
-  expect(onMode).toHaveBeenCalledWith("3D", false);
+  expect(onMode).toHaveBeenCalledWith("3D");
   expect(createCanvasRadarView).not.toHaveBeenCalled();
 });
 
@@ -62,20 +62,7 @@ test("uses Canvas when WebGL context creation fails", async () => {
     location: null,
     windowRef: args.windowRef,
   });
-  expect(args.onMode).toHaveBeenCalledWith("2D", false);
-});
-
-test("passes the coarse pointer state to the view label callback", async () => {
-  const onMode = jest.fn();
-  createAircraftScene.mockReturnValueOnce({ mode: "3D" });
-  await createRadarView({
-    container: {},
-    location: null,
-    elevationFeet: 300,
-    windowRef: { matchMedia: () => ({ matches: true }) },
-    onMode,
-  });
-  expect(onMode).toHaveBeenCalledWith("3D", true);
+  expect(args.onMode).toHaveBeenCalledWith("2D");
 });
 
 test("does not hide unrelated scene errors", async () => {

@@ -1,5 +1,5 @@
 import { attachCanvasPan } from "./canvas-radar-pan.mjs";
-import { attachMobileRadarGestures } from "./mobile-radar-gestures.mjs";
+import { attachMobileRadarGestures } from "./attach-mobile-radar-gestures.mjs";
 import { attachCanvasRefresh } from "./attach-canvas-refresh.mjs";
 import { watchRadarTargets } from "./watch-radar-targets.mjs";
 import { createCanvasRadarGestures } from "./create-canvas-radar-gestures.mjs";

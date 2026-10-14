@@ -1,4 +1,4 @@
-import { projectAircraftPosition } from "./aircraft-space-position.mjs";
+import { projectWaterPaths } from "./project-water-paths.mjs";
 
 export function createWaterSceneLayer(THREE, scene, location, elevationFeet) {
   const material = new THREE.LineBasicMaterial({
@@ -14,24 +14,7 @@ export function createWaterSceneLayer(THREE, scene, location, elevationFeet) {
         scene.remove(line);
         line.geometry.dispose();
       }
-      const points = [];
-      for (const path of paths) {
-        const projected = path
-          .map((point) =>
-            projectAircraftPosition({ ...point, altitudeFeet: 0 }, location, elevationFeet),
-          )
-          .filter(Boolean);
-        for (let index = 1; index < projected.length; index += 1) {
-          points.push(
-            projected[index - 1].x,
-            projected[index - 1].y,
-            projected[index - 1].z,
-            projected[index].x,
-            projected[index].y,
-            projected[index].z,
-          );
-        }
-      }
+      const points = projectWaterPaths(paths, location, elevationFeet);
       if (!points.length) {
         line = null;
         return;

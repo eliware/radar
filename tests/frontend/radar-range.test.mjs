@@ -1,11 +1,9 @@
 import { expect, test } from "@jest/globals";
 import {
-  cameraDistanceToRange,
   clampRadarRange,
   getRadarLabelGapAngle,
   getRadarRingRanges,
   getRadarRingSpacing,
-  rangeToCameraDistance,
   selectDefaultRadarRange,
 } from "../../src/frontend/radar-range.mjs";
 
@@ -37,10 +35,4 @@ test("keeps label gaps within a ring and accepts zero-width labels", () => {
   expect(getRadarLabelGapAngle(10, 8, 0)).toBeCloseTo(2 * Math.asin(0.4));
   expect(getRadarLabelGapAngle(10, 0, 0)).toBe(0);
   expect(getRadarLabelGapAngle(1, 20, 0)).toBeCloseTo(2 * Math.asin(0.999));
-});
-
-test("converts between visible range and perspective camera distance", () => {
-  expect(cameraDistanceToRange(rangeToCameraDistance(20))).toBeCloseTo(20);
-  expect(cameraDistanceToRange(rangeToCameraDistance(1))).toBe(1);
-  expect(cameraDistanceToRange(rangeToCameraDistance(300))).toBe(300);
 });

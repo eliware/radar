@@ -58,6 +58,8 @@ export function registerAircraftSceneMocks(jest) {
   const selectDefaultRadarRange = jest.fn((distances) =>
     Math.max(20, ...distances.filter(Number.isFinite).map((distance) => distance + 5)),
   );
+  const updateAircraft = jest.fn();
+  const createAircraftSceneUpdater = jest.fn(() => updateAircraft);
   const orbitState = {
     northAngle: jest.fn(() => 0),
     onViewChange: jest.fn(() => jest.fn()),
@@ -74,6 +76,7 @@ export function registerAircraftSceneMocks(jest) {
     createAircraftDisplayOverlay: jest.fn(() => overlay),
     createAircraftRadarLoop: jest.fn(() => stopRadarLoops),
     createRadarReferenceStore: jest.fn(() => references),
+    createAircraftSceneUpdater,
   };
   const modules = {
     createRadarStage: "create-radar-stage",
@@ -86,6 +89,7 @@ export function registerAircraftSceneMocks(jest) {
     createAircraftDisplayOverlay: "aircraft-display-overlay",
     createAircraftRadarLoop: "create-aircraft-radar-loop",
     createRadarReferenceStore: "radar-reference-store",
+    createAircraftSceneUpdater: "update-aircraft-scene",
   };
   for (const [name, factory] of Object.entries(factories)) {
     const path = modules[name];
@@ -128,6 +132,7 @@ export function registerAircraftSceneMocks(jest) {
     factories,
     projectAircraftPosition,
     selectDefaultRadarRange,
+    updateAircraft,
     orbitState,
   };
 }

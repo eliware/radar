@@ -1,12 +1,7 @@
-import { drawAirspaceRings } from "./draw-airspace-rings.mjs";
-import { drawAirportRunways } from "./draw-airport-runways.mjs";
-
 const AIRPORT_COLOR = "#b8b8b8";
 
 export function drawAirportMarkers(context, airports, project, range) {
   context.save();
-  drawAirspaceRings(context, airports, project, range);
-  drawAirportRunways(context, airports, project, range);
   context.fillStyle = AIRPORT_COLOR;
   context.strokeStyle = AIRPORT_COLOR;
   context.font = "12px monospace";

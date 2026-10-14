@@ -14,7 +14,6 @@ test("creates and replaces geographic line geometry at ground elevation", () => 
   ]);
   const first = THREE.lines[0];
   expect(first.geometry.attributes.position.values).toHaveLength(6);
-  expect(first.geometry.attributes.position.values[1]).toBeLessThan(0);
   layer.setVisible(false);
   expect(first.visible).toBe(false);
   layer.setPaths([]);

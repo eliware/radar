@@ -1,4 +1,5 @@
 import { formatAircraftSpeed, formatAircraftTag } from "./aircraft-tag-data.mjs";
+import { buildFlightStripLayout } from "./flight-strip-layout.mjs";
 
 const fieldLabels = [
   "CALLSIGN",
@@ -11,16 +12,6 @@ const fieldLabels = [
   "ORIGIN",
   "DESTINATION",
 ];
-const twoRows = [
-  [0, 1, 2, 3, 4],
-  [5, 6, 7, 8],
-];
-const threeRows = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-];
-
 function valuesOf(aircraft) {
   const [callsign, altitude] = formatAircraftTag(aircraft);
   const speed = formatAircraftSpeed(aircraft);
@@ -45,39 +36,19 @@ function valuesOf(aircraft) {
   ];
 }
 
-function requiredWidth(group, values, columns) {
-  const chars = Math.max(4, ...group.flatMap((index) => values.map((row) => row[index].length)));
-  return columns * (chars * 8 + 10);
-}
-
 export function buildFlightStripData(aircraft, width) {
   const sorted = [...aircraft].sort(
     (left, right) =>
       (left.distanceNauticalMiles ?? Infinity) - (right.distanceNauticalMiles ?? Infinity),
   );
   const values = sorted.map(valuesOf);
-  const indexes = fieldLabels.map((_, index) => index);
-  const groups =
-    width >= requiredWidth(indexes, values, indexes.length)
-      ? [indexes]
-      : Math.max(...twoRows.map((group) => requiredWidth(group, values, 5))) <= width
-        ? twoRows
-        : threeRows;
-  const columnCount = Math.max(...groups.map((group) => group.length));
-  const alignedGroups = groups.map((group) =>
-    Array.from({ length: columnCount }, (_, index) => group[index] ?? null),
-  );
+  const layout = buildFlightStripLayout(values, width, fieldLabels);
   return {
-    aircraft: sorted.map((item, row) => ({
+    aircraft: sorted.map((item, index) => ({
       icao: item.icao ?? "",
-      groups: alignedGroups.map((group) =>
-        group.map((field) => (field === null ? "" : values[row][field])),
-      ),
-      labels: alignedGroups.map((group) =>
-        group.map((field) => (field === null ? "" : fieldLabels[field])),
-      ),
+      ...layout.rows[index],
     })),
-    weights: alignedGroups.map((group) => group.map(() => 1)),
+    weights: layout.alignedGroups.map((group) => group.map(() => 1)),
     count: sorted.length,
   };
 }

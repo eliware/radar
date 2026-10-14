@@ -11,7 +11,7 @@ const createView = () =>
 
 beforeEach(() => jest.clearAllMocks());
 
-test("wires scene services and reports connection changes", () => {
+test("wires scene services, reports connection changes, and publishes references", () => {
   const view = createView();
   const loop = mocks.factories.createAircraftRadarLoop.mock.calls[0][0];
   const cameraOptions = mocks.factories.createRadarCamera.mock.calls[0][0];
@@ -32,6 +32,18 @@ test("wires scene services and reports connection changes", () => {
   view.setConnected(true);
   expect(mocks.homeConnected).toHaveBeenCalledWith(true);
   expect(loop.isConnected()).toBe(true);
+  view.updateAirports([]);
+  view.updateNavaids([]);
+  view.updateBoundaries([]);
+  expect(mocks.referenceUpdates.updateAirports).toHaveBeenCalledWith([]);
+  expect(mocks.airspace.update).toHaveBeenCalledWith([]);
+  expect(mocks.referenceUpdates.updateNavaids).toHaveBeenCalledWith([]);
+  expect(mocks.referenceUpdates.updateBoundaries).toHaveBeenCalledWith([]);
+  const listener = jest.fn();
+  const detach = view.onViewChange(listener);
+  expect(mocks.orbitState.onViewChange).toHaveBeenCalledWith(listener);
+  expect(detach).toEqual(expect.any(Function));
+  detach();
   cameraOptions.onRangeChange(40);
   expect(mocks.updateRings).toHaveBeenCalledWith(40);
   cameraOptions.onManualZoom();
@@ -54,48 +66,35 @@ test("uses the browser window when no window reference is passed", () => {
   }
 });
 
-test("updates targets and applies auto-zoom only to valid aircraft", () => {
+test("wires aircraft updates to the scene update workflow", () => {
   const view = createView();
   const aircraft = { icao: "ABC123", latitude: 43.1, longitude: -70 };
-  mocks.targets.distances.mockReturnValue([30]);
+  const options = mocks.factories.createAircraftSceneUpdater.mock.calls[0][0];
+  expect(options).toEqual(
+    expect.objectContaining({
+      location,
+      elevationFeet: 300,
+      targets: mocks.targets,
+      trails: mocks.trails,
+      radarCamera: mocks.radarCamera,
+    }),
+  );
+  expect(options.isAutoZoom()).toBe(true);
   view.update(aircraft);
-  expect(mocks.targets.update).toHaveBeenCalledWith(aircraft, expect.any(Number));
-  expect(mocks.trails.add).toHaveBeenCalledWith("ABC123", expect.any(Object));
-  expect(mocks.radarCamera.setRange).toHaveBeenLastCalledWith(35);
-  view.update({ ...aircraft, icao: "ABC124" });
-  expect(mocks.radarCamera.setRange).toHaveBeenCalledTimes(2);
-  expect(view.update({ icao: "BAD000", latitude: undefined, longitude: -70 })).toBeUndefined();
-  expect(mocks.targets.update).toHaveBeenCalledTimes(2);
-  const loop = mocks.factories.createAircraftRadarLoop.mock.calls.at(-1)[0];
-  mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
-  mocks.targets.distances.mockReturnValue([70]);
-  view.update({ icao: "DEF456", latitude: 43.2, longitude: -70 });
-  expect(loop.isAutoZoom()).toBe(false);
-  expect(mocks.radarCamera.setRange).toHaveBeenCalledTimes(2);
+  expect(mocks.updateAircraft).toHaveBeenCalledWith(aircraft);
 });
 
-test("publishes reference updates and restores auto-zoom on reset", () => {
+test("restores auto-zoom when the view resets", () => {
   const view = createView();
-  view.updateAirports([]);
-  view.updateNavaids([]);
-  view.updateBoundaries([]);
-  expect(mocks.referenceUpdates.updateAirports).toHaveBeenCalledWith([]);
-  expect(mocks.airspace.update).toHaveBeenCalledWith([]);
-  expect(mocks.referenceUpdates.updateNavaids).toHaveBeenCalledWith([]);
-  expect(mocks.referenceUpdates.updateBoundaries).toHaveBeenCalledWith([]);
-  const listener = jest.fn();
-  const detach = view.onViewChange(listener);
-  expect(mocks.orbitState.onViewChange).toHaveBeenCalledWith(listener);
-  expect(detach).toEqual(expect.any(Function));
-  detach();
+  const loop = mocks.factories.createAircraftRadarLoop.mock.calls.at(-1)[0];
+  mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
+  expect(loop.isAutoZoom()).toBe(false);
   mocks.scene.rotation.y = 2;
   mocks.targets.distances.mockReturnValue([40]);
   view.reset();
   expect(mocks.scene.rotation.y).toBe(0);
   expect(mocks.radarCamera.setRange).toHaveBeenLastCalledWith(45);
-  mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
-  view.reset();
-  expect(mocks.factories.createAircraftRadarLoop.mock.calls[0][0].isAutoZoom()).toBe(true);
+  expect(loop.isAutoZoom()).toBe(true);
 });
 
 test("releases scene resources", () => {

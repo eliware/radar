@@ -22,23 +22,8 @@ test("maps operational approaches in a requested distance band", () => {
     longitude: -70,
     glideSlopeDegrees: 3,
   };
-  const marker = {
-    faaId: "PWM",
-    runwayEnd: "11",
-    identifier: "PWM",
-    systemType: "LD",
-    latitude: 43.01,
-    longitude: -70,
-  };
   const statement = { all: jest.fn(() => [row, { ...row, latitude: Number.NaN }]) };
-  const markerStatement = {
-    all: jest.fn(() => [
-      { ...marker, componentType: "IM" },
-      { ...marker, componentType: "OM" },
-      { ...marker, latitude: Number.NaN },
-      { ...marker, latitude: 43, longitude: Number.NaN },
-    ]),
-  };
+  const markerStatement = { all: jest.fn(() => []) };
   const database = {
     prepare: jest.fn((query) => (query === ILS_MARKER_QUERY ? markerStatement : statement)),
   };
@@ -47,10 +32,7 @@ test("maps operational approaches in a requested distance band", () => {
     {
       ...row,
       rangeNm: 0,
-      markers: expect.arrayContaining([
-        expect.objectContaining({ componentType: "IM", rangeNm: expect.any(Number) }),
-        expect.objectContaining({ componentType: "OM", rangeNm: expect.any(Number) }),
-      ]),
+      markers: [],
     },
   ]);
   expect(markerStatement.all).toHaveBeenCalledWith(

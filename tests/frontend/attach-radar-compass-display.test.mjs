@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
 import { expect, jest, test } from "@jest/globals";
+import { readFileSync } from "node:fs";
 import { attachRadarCompassDisplay } from "../../src/frontend/attach-radar-compass-display.mjs";
 
 function makeDocument(missing) {
@@ -72,7 +72,7 @@ test("does nothing when the document is absent", () => {
   expect(() => attachRadarCompassDisplay(null, {})()).not.toThrow();
 });
 
-test("defines a passive 16-point compass with four labels and no buttons", () => {
+test("defines a passive 16-point compass with four labels and no controls", () => {
   const markup = readFileSync(new URL("../../public/index.html", import.meta.url), "utf8");
   const rose = markup.match(/<g data-compass-rose[\s\S]*?<\/g>/)?.[0] ?? "";
   expect(rose.match(/<use /g)).toHaveLength(16);

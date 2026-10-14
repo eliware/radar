@@ -3,6 +3,9 @@ import { connectWebSocketFeed } from "./websocket-feed.mjs";
 import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
 import { createFlightStripView } from "./flight-strips.mjs";
 import { startMetarRefresh } from "./start-metar-refresh.mjs";
+import { handleDashboardFeedUpdate } from "./handle-dashboard-feed-update.mjs";
+import { dashboardWebSocketUrl } from "./dashboard-websocket-url.mjs";
+import { attachDashboardPagehide } from "./attach-dashboard-pagehide.mjs";
 
 export async function startDashboard({
   document,
@@ -17,9 +20,10 @@ export async function startDashboard({
     document.querySelector("[data-flight-strips]"),
     windowRef,
   );
+  let metarTimer;
   try {
     const config = await readJson(fetchData, "/api/config");
-    startMetarRefresh({
+    metarTimer = startMetarRefresh({
       fetchData,
       panel: document.querySelector("[data-metar-reports]"),
       ticker: document.querySelector("[data-metar-ticker]"),
@@ -36,7 +40,8 @@ export async function startDashboard({
       onMode: (mode) =>
         document.querySelector("[data-metar]").setAttribute("data-radar-mode", mode),
     });
-    attachRadarCompassDisplay(document, scene);
+    const detachCompass = attachRadarCompassDisplay(document, scene);
+    let detachReferences = () => {};
     const referenceLoader =
       scene.updateAirports &&
       scene.updateNavaids &&
@@ -47,16 +52,17 @@ export async function startDashboard({
         ? createRadarReferenceLoader(fetchData, scene)
         : null;
     if (referenceLoader)
-      scene.onViewChange((range) => referenceLoader.load(range ?? scene.range()));
+      detachReferences =
+        scene.onViewChange((range) => referenceLoader.load(range ?? scene.range())) ?? (() => {});
     if (referenceLoader) referenceLoader.load(scene.range());
     const aircraft = await readJson(fetchData, "/api/aircraft");
     flightStrips.update(aircraft);
     aircraft.forEach((item) => scene.update(item));
     const feed = connectWebSocketFeed({
       WebSocketClass,
-      url: webSocketUrl(document.location),
+      url: dashboardWebSocketUrl(document.location),
       onState: (connected) => scene.setConnected?.(connected),
-      onMessage: (data) => updateScene(scene, data, flightStrips),
+      onMessage: (data) => handleDashboardFeedUpdate(scene, flightStrips, data),
       onOpen: async () => {
         try {
           const latest = await readJson(fetchData, "/api/aircraft");
@@ -68,8 +74,18 @@ export async function startDashboard({
       },
     });
     const reset = document.querySelector("[data-reset]");
-    reset?.addEventListener("click", () => scene.reset());
-    return { scene, socket: feed.socket, feed, flightStrips };
+    const resetView = () => scene.reset();
+    reset?.addEventListener("click", resetView);
+    const destroy = attachDashboardPagehide(windowRef, () => {
+      detachCompass();
+      detachReferences();
+      reset?.removeEventListener?.("click", resetView);
+      if (metarTimer !== null && metarTimer !== undefined) windowRef?.clearInterval?.(metarTimer);
+      feed.close();
+      flightStrips.destroy();
+      scene.destroy?.();
+    });
+    return { scene, socket: feed.socket, feed, flightStrips, destroy };
   } catch {
     flightStrips.destroy();
     return null;
@@ -80,20 +96,4 @@ async function readJson(fetchData, path) {
   const response = await fetchData(path);
   if (!response.ok) throw new Error(`Request failed: ${path}`);
   return response.json();
-}
-
-function webSocketUrl(location) {
-  const protocol = location.protocol === "https:" ? "wss:" : "ws:";
-  return `${protocol}//${location.host}/ws`;
-}
-
-function updateScene(scene, data, flightStrips) {
-  let aircraft;
-  try {
-    aircraft = JSON.parse(data);
-  } catch {
-    return;
-  }
-  scene.update(aircraft);
-  flightStrips.update(aircraft);
 }

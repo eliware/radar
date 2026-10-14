@@ -2,7 +2,6 @@ export const MIN_RADAR_RANGE = 1;
 export const MAX_RADAR_RANGE = 300;
 export const DEFAULT_RADAR_RANGE = 20;
 export const RADAR_RANGE_MARGIN = 5;
-export const RADAR_FIELD_OF_VIEW_DEGREES = 48;
 export const RADAR_SCOPE_RADIUS_RATIO = 0.44;
 export const RADAR_TARGET_STALE_MS = 120_000;
 
@@ -31,14 +30,4 @@ export function getRadarRingSpacing(range) {
 export function getRadarLabelGapAngle(radius, labelWidth, padding = 4) {
   const halfWidth = (labelWidth / 2 + padding) / radius;
   return 2 * Math.asin(Math.min(0.999, Math.max(0, halfWidth)));
-}
-
-export function rangeToCameraDistance(range) {
-  const halfAngle = (RADAR_FIELD_OF_VIEW_DEGREES * Math.PI) / 360;
-  return clampRadarRange(range) / (2 * RADAR_SCOPE_RADIUS_RATIO * Math.tan(halfAngle));
-}
-
-export function cameraDistanceToRange(distance) {
-  const halfAngle = (RADAR_FIELD_OF_VIEW_DEGREES * Math.PI) / 360;
-  return clampRadarRange(distance * 2 * RADAR_SCOPE_RADIUS_RATIO * Math.tan(halfAngle));
 }

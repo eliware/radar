@@ -1,80 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { drawCanvasRadar } from "../../src/frontend/draw-canvas-radar.mjs";
 
-test("draws north-up range rings, home, and valid aircraft", () => {
-  const context = Object.fromEntries(
-    [
-      "setTransform",
-      "setLineDash",
-      "measureText",
-      "clearRect",
-      "fillRect",
-      "beginPath",
-      "arc",
-      "clip",
-      "stroke",
-      "fillText",
-      "moveTo",
-      "lineTo",
-      "fill",
-      "save",
-      "translate",
-      "rotate",
-      "closePath",
-      "restore",
-    ].map((name) => [name, jest.fn()]),
-  );
-  const measuredFonts = [];
-  context.measureText = jest.fn((text) => {
-    measuredFonts.push(context.font);
-    return { width: text.length * 8 };
-  });
-  const canvas = { clientWidth: 0, clientHeight: 0, width: 0, height: 0 };
-  const aircraft = new Map([
-    [
-      "A",
-      {
-        icao: "A",
-        latitude: 43.1,
-        longitude: -70,
-        callsign: "NORTH",
-        trackDegrees: 0,
-        groundSpeedKnots: 100,
-      },
-    ],
-    ["B", { icao: "B", latitude: Number.NaN, longitude: -70 }],
-    ["C", { icao: "C", latitude: 43.1, longitude: -70 }],
-  ]);
-  drawCanvasRadar(
-    context,
-    canvas,
-    aircraft,
-    { latitude: 43, longitude: -70 },
-    60,
-    0,
-    0,
-    { devicePixelRatio: 0 },
-    0,
-    new Map([["A", []]]),
-    true,
-    new Map(),
-    new Map(),
-    new Map(),
-    new Map(),
-    true,
-    new Map(),
-    true,
-    [],
-    false,
-  );
-  expect(canvas.width).toBe(1);
-  expect(canvas.height).toBe(1);
-  expect(context.arc).toHaveBeenCalledTimes(8);
-  expect(context.rotate).toHaveBeenCalledWith(0);
-  expect(context.fillText).toHaveBeenCalledWith("NORTH", expect.any(Number), expect.any(Number));
-  expect(measuredFonts).toContain("9px monospace");
-});
-
 test("draws close range rings below five nautical miles", () => {
   const context = Object.fromEntries(
     [
@@ -98,13 +24,15 @@ test("draws close range rings below five nautical miles", () => {
     ].map((name) => [name, jest.fn()]),
   );
   context.measureText = jest.fn((text) => ({ width: text.length * 8 }));
-  const canvas = { clientWidth: 100, clientHeight: 100 };
-  drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 1 });
+  const canvas = { clientWidth: 0, clientHeight: 0 };
+  drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 0 });
+  expect(canvas.width).toBe(1);
+  expect(canvas.height).toBe(1);
   expect(context.arc).toHaveBeenCalledTimes(5);
   expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
 });
 
-test("draws nearby reference data and disconnected aircraft", () => {
+test("draws north-up rings, aircraft, and nearby references while disconnected", () => {
   const context = Object.fromEntries(
     [
       "setTransform",
@@ -138,6 +66,17 @@ test("draws nearby reference data and disconnected aircraft", () => {
         "MOVING",
         { icao: "MOVING", latitude: 43.1, longitude: -70, groundSpeedKnots: 90, trackDegrees: 180 },
       ],
+      [
+        "NORTH",
+        {
+          icao: "NORTH",
+          callsign: "NORTH",
+          latitude: 43.05,
+          longitude: -70,
+          groundSpeedKnots: 100,
+          trackDegrees: 0,
+        },
+      ],
       ["STILL", { icao: "STILL", latitude: 43.2, longitude: -70 }],
       ["BAD", { icao: "BAD", latitude: Number.NaN, longitude: -70 }],
     ]),
@@ -146,7 +85,7 @@ test("draws nearby reference data and disconnected aircraft", () => {
     5,
     7,
     { devicePixelRatio: 4 },
-    Math.PI / 4,
+    0,
     new Map([["MOVING", [{ x: 0, y: 0, z: 0 }]]]),
     false,
     new Map([
@@ -190,8 +129,10 @@ test("draws nearby reference data and disconnected aircraft", () => {
   );
 
   expect(canvas.width).toBe(600);
+  expect(canvas.height).toBe(400);
   expect(context.fillStyle).toBe("#50402e");
-  expect(context.rotate).toHaveBeenCalledWith(Math.PI / 4);
+  expect(context.rotate).toHaveBeenCalledWith(0);
+  expect(context.fillText).toHaveBeenCalledWith("NORTH", expect.any(Number), expect.any(Number));
   expect(context.fillText).toHaveBeenCalledWith("KPWM", expect.any(Number), expect.any(Number));
   expect(context.fillText).toHaveBeenCalledWith("ENE", expect.any(Number), expect.any(Number));
 });

@@ -2,10 +2,9 @@ import {
   DEFAULT_RADAR_RANGE,
   MAX_RADAR_RANGE,
   MIN_RADAR_RANGE,
-  cameraDistanceToRange,
   clampRadarRange,
-  rangeToCameraDistance,
 } from "./radar-range.mjs";
+import { cameraDistanceToRange, rangeToCameraDistance } from "./radar-camera-range.mjs";
 import { configureMobileRadarControls } from "./mobile-radar-gestures.mjs";
 
 export function createRadarCamera({

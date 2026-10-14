@@ -1,9 +1,12 @@
+import { clipProcedureSegment } from "./clip-procedure-segment.mjs";
+import { clipRadarScope } from "./clip-radar-scope.mjs";
+
 const COLORS = { SID: "#2b3d4d", STAR: "#50402e" };
 
 export function drawProcedures(context, procedures, project, range, visible = true, scope = null) {
   if (!visible) return;
   context.save();
-  clipScope(context, scope);
+  clipRadarScope(context, scope);
   context.lineWidth = 1;
   context.font = "10px monospace";
   context.textAlign = "center";
@@ -11,15 +14,6 @@ export function drawProcedures(context, procedures, project, range, visible = tr
   for (const procedure of procedures.values()) drawProcedure(context, procedure, project, range);
   context.setLineDash([]);
   context.restore();
-}
-
-function clipScope(context, scope) {
-  if (!Array.isArray(scope) || scope.length < 3 || scope.some((point) => !valid(point))) return;
-  context.beginPath();
-  context.moveTo(scope[0].x, scope[0].y);
-  for (const point of scope.slice(1)) context.lineTo(point.x, point.y);
-  context.closePath();
-  context.clip();
 }
 
 function drawProcedure(context, procedure, project, range) {
@@ -41,26 +35,13 @@ function drawRoute(context, points, range) {
     const from = points[index - 1];
     const to = points[index];
     if (!valid(from.screen) || !valid(to.screen)) continue;
-    const segment = clipSegment(from, to, range);
+    const segment = clipProcedureSegment(from, to, range);
     if (!segment) continue;
     context.beginPath();
     context.moveTo(segment.from.x, segment.from.y);
     context.lineTo(segment.to.x, segment.to.y);
     context.stroke();
   }
-}
-
-function clipSegment(from, to, range) {
-  const fromInside = from.rangeNm <= range;
-  const toInside = to.rangeNm <= range;
-  if (fromInside && toInside) return { from: from.screen, to: to.screen };
-  if (!fromInside && !toInside) return null;
-  const fraction = (range - from.rangeNm) / (to.rangeNm - from.rangeNm);
-  const edge = {
-    x: from.screen.x + (to.screen.x - from.screen.x) * fraction,
-    y: from.screen.y + (to.screen.y - from.screen.y) * fraction,
-  };
-  return fromInside ? { from: from.screen, to: edge } : { from: edge, to: to.screen };
 }
 
 function drawPyramid(context, point) {

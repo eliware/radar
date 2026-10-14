@@ -1,11 +1,10 @@
-import { projectAircraftPosition } from "./aircraft-space-position.mjs";
-import { formatAircraftTag } from "./aircraft-tag-data.mjs";
 import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
-import { predictAircraftPosition } from "./predict-aircraft-position.mjs";
 import { RADAR_SCOPE_RADIUS_RATIO } from "./radar-range.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 import { drawRadarReferences } from "./draw-radar-references.mjs";
 import { createRadarScopePath } from "./create-radar-scope-path.mjs";
+import { projectAircraftDisplayItems } from "./project-aircraft-display-items.mjs";
+import { projectRadarReference } from "./project-radar-reference.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
@@ -45,15 +44,14 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     drawRadarReferences(
       context,
       { airports, navaids, boundaries, ilsApproaches, procedures },
-      (point) => projectAirport(point),
+      (point) => projectRadarReference(point, location, elevationFeet, project),
       range,
       ilsVisible,
       proceduresVisible,
       createRadarScopePath(range, (position) => project(position)),
     );
-    const items = [];
-    for (const item of aircraft.values()) items.push(projectItem(item));
-    drawAircraftDisplay(context, items.filter(Boolean), 18, width, height, connected);
+    const items = projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project);
+    drawAircraftDisplay(context, items, 18, width, height, connected);
     drawRadarScaleLegend(
       context,
       width,
@@ -64,35 +62,9 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       ilsVisible,
     );
 
-    function projectItem(item) {
-      const position = projectAircraftPosition(item, location, elevationFeet);
-      if (!position) return null;
-      const marker = project(position);
-      const prediction = predictAircraftPosition(position, item);
-      const future = prediction ? project(prediction) : null;
-      const history = (trails.get(item.icao) ?? []).map(project);
-      return {
-        ...marker,
-        receivedAt: item.receivedAt,
-        futureX: future?.x,
-        futureY: future?.y,
-        lines: formatAircraftTag(item),
-        history,
-      };
-    }
-
     function project(position) {
       const point = new THREE.Vector3(position.x, position.y, position.z).project(camera);
       return { x: ((point.x + 1) * width) / 2, y: ((1 - point.y) * height) / 2 };
-    }
-
-    function projectAirport(airport) {
-      const position = projectAircraftPosition(
-        { ...airport, altitudeFeet: airport.elevationFeet },
-        location,
-        elevationFeet,
-      );
-      return position ? project(position) : null;
     }
   }
 

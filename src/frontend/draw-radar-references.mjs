@@ -1,4 +1,6 @@
 import { drawAirportMarkers } from "./draw-airport-markers.mjs";
+import { drawAirspaceRings } from "./draw-airspace-rings.mjs";
+import { drawAirportRunways } from "./draw-airport-runways.mjs";
 import { drawNavaidMarkers } from "./draw-navaid-markers.mjs";
 import { drawArtccBoundaries } from "./draw-artcc-boundaries.mjs";
 import { drawIlsApproaches } from "./draw-ils-approaches.mjs";
@@ -13,7 +15,10 @@ export function drawRadarReferences(
   proceduresVisible = true,
   scope = null,
 ) {
-  drawAirportMarkers(context, references.airports ?? new Map(), project, range);
+  const airports = references.airports ?? new Map();
+  drawAirspaceRings(context, airports, project, range);
+  drawAirportRunways(context, airports, project, range);
+  drawAirportMarkers(context, airports, project, range);
   drawNavaidMarkers(context, references.navaids ?? new Map(), project, range);
   drawArtccBoundaries(context, references.boundaries ?? new Map(), project);
   drawIlsApproaches(context, references.ilsApproaches ?? new Map(), project, range, ilsVisible);

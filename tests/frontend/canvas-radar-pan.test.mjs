@@ -24,6 +24,7 @@ test("pans with mouse and ignores touch drag", () => {
   listeners.get("pointerup")(event("mouse", 1, 20, 35));
   listeners.get("pointerdown")(event("touch", 2, 0, 0));
   listeners.get("pointermove")(event("touch", 2, 30, 30));
+  listeners.get("pointerup")(event("touch", 2, 30, 30));
   expect(onPan).toHaveBeenCalledTimes(1);
   detach();
   expect(canvas.removeEventListener).toHaveBeenCalledTimes(4);

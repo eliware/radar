@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { attachIlsToggleKey } from "../../src/frontend/attach-ils-toggle-key.mjs";
+import { createIlsVisibility } from "../../src/frontend/create-ils-visibility.mjs";
 
 function setup() {
   const listeners = new Map();
@@ -12,13 +13,14 @@ function setup() {
 
 test("toggles ILS on an I key and removes its listener", () => {
   const { documentRef, send } = setup();
-  const toggle = jest.fn();
-  const detach = attachIlsToggleKey(documentRef, toggle);
+  const changes = [];
+  const visibility = createIlsVisibility(documentRef, (value) => changes.push(value));
   const preventDefault = jest.fn();
   send({ key: "i", preventDefault });
-  expect(toggle).toHaveBeenCalledTimes(1);
+  expect(visibility.isVisible()).toBe(false);
+  expect(changes).toEqual([false]);
   expect(preventDefault).toHaveBeenCalledTimes(1);
-  detach();
+  visibility.destroy();
   expect(documentRef.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
 });
 
