@@ -38,6 +38,59 @@ test("does not publish stale results after cancel", async () => {
   expect(onChange).not.toHaveBeenCalled();
 });
 
+test("aborts obsolete tile requests and avoids caching their results", async () => {
+  const calls = [];
+  const fetchRef = jest.fn((url, options = {}) => {
+    if (url.endsWith("/planet"))
+      return Promise.resolve(response({ tiles: ["https://tile/{z}/{x}/{y}"] }));
+    calls.push({ url, signal: options.signal });
+    if (calls.length <= 10) {
+      return new Promise((resolve, reject) => {
+        options.signal?.addEventListener("abort", () => reject(new Error("aborted")), {
+          once: true,
+        });
+        if (options.signal?.aborted) reject(new Error("aborted"));
+        setTimeout(() => resolve(response(null, new ArrayBuffer(0))), 100);
+      });
+    }
+    return Promise.resolve(response(null, new ArrayBuffer(0)));
+  });
+  const loader = createWaterOutlineLoader(fetchRef);
+  const oldView = loader.load({ latitude: 43, longitude: -70 }, 1, jest.fn());
+  while (!calls.length) await Promise.resolve();
+  const oldTileCalls = calls.length;
+  const newView = loader.load({ latitude: 10, longitude: 10 }, 1, jest.fn());
+  await Promise.all([oldView, newView]);
+  expect(calls.slice(0, oldTileCalls).every(({ signal }) => signal.aborted)).toBe(true);
+  const oldUrls = new Set(calls.slice(0, oldTileCalls).map(({ url }) => url));
+  const beforeRetry = calls.length;
+  await loader.load({ latitude: 43, longitude: -70 }, 1, jest.fn());
+  expect(calls.slice(beforeRetry).some(({ url }) => oldUrls.has(url))).toBe(true);
+});
+
+test("shares pending tile requests for identical views", async () => {
+  let tileCalls = 0;
+  const releases = [];
+  const fetchRef = jest.fn((url) => {
+    if (url.endsWith("/planet"))
+      return Promise.resolve(response({ tiles: ["https://tile/{z}/{x}/{y}"] }));
+    tileCalls += 1;
+    return new Promise((resolve) =>
+      releases.push(() => resolve(response(null, new ArrayBuffer(0)))),
+    );
+  });
+  const loader = createWaterOutlineLoader(fetchRef);
+  const center = { latitude: 43, longitude: -70 };
+  const first = loader.load(center, 1, jest.fn());
+  while (!tileCalls) await Promise.resolve();
+  const count = tileCalls;
+  const second = loader.load(center, 1, jest.fn());
+  for (let turn = 0; turn < 5; turn += 1) await Promise.resolve();
+  expect(tileCalls).toBe(count);
+  releases.forEach((release) => release());
+  await Promise.all([first, second]);
+});
+
 test("reuses pending tile requests and ignores failed tile responses", async () => {
   let tileCalls = 0;
   const fetchRef = jest.fn(async (url) => {

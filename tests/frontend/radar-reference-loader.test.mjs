@@ -103,3 +103,29 @@ test("extends the requested band while the previous band is still loading", asyn
   expect(fetchData).toHaveBeenCalledTimes(10);
   expect(loader.loadedThrough()).toBe(20);
 });
+
+test("keeps a newer range request when the in-flight band fails", async () => {
+  let failFirst;
+  const requests = [];
+  const fetchData = jest.fn((url) => {
+    requests.push(url);
+    if (url.includes("/api/airports?") && url.endsWith("maxRangeNm=10")) {
+      return new Promise((resolve) => (failFirst = () => resolve({ ok: false })));
+    }
+    return Promise.resolve(response());
+  });
+  const scene = {
+    updateAirports: jest.fn(),
+    updateNavaids: jest.fn(),
+    updateBoundaries: jest.fn(),
+    updateIls: jest.fn(),
+    updateProcedures: jest.fn(),
+  };
+  const loader = createRadarReferenceLoader(fetchData, scene);
+  const pending = loader.load(10);
+  loader.load(20);
+  failFirst();
+  await pending;
+  expect(requests).toContain("/api/airports?minRangeNm=0&maxRangeNm=20");
+  expect(loader.loadedThrough()).toBe(20);
+});

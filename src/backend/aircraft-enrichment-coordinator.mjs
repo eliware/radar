@@ -1,4 +1,4 @@
-import { hasUsefulCallsign } from "../shared/aircraft-callsign.mjs";
+import { hasUsefulCallsign, retainUsefulCallsign } from "../shared/aircraft-callsign.mjs";
 import {
   createAircraftMetadataStore,
   normalizeAircraftMetadataKey,
@@ -19,8 +19,15 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     if (closed || !aircraft?.icao) return;
     const icao = normalizeAircraftMetadataKey(aircraft.icao);
     const callsign = normalizeAircraftMetadataKey(aircraft.callsign);
-    lastAircraft.set(icao, aircraft);
-    publish(metadata.enrich(aircraft));
+    const latest = { ...lastAircraft.get(icao), ...aircraft };
+    const usefulCallsign = retainUsefulCallsign(
+      lastAircraft.get(icao)?.callsign,
+      aircraft.callsign,
+    );
+    if (usefulCallsign === null || usefulCallsign === undefined) delete latest.callsign;
+    else latest.callsign = usefulCallsign;
+    lastAircraft.set(icao, latest);
+    publish(metadata.enrich(latest));
     lookup
       .getAircraftType(icao)
       .then((result) => publishIfChanged(icao, metadata.updateType(icao, result), publish))

@@ -22,11 +22,15 @@ export function createRadarReferenceLoader(fetchData, scene) {
         scene.updateIls,
         scene.updateProcedures,
       ];
-      const collections = await Promise.all(
-        paths.map((path) => loadCollection(fetchData, path, start, end)),
-      );
-      collections.forEach((items, index) => updates[index](items));
-      loadedThrough = end;
+      try {
+        const collections = await Promise.all(
+          paths.map((path) => loadCollection(fetchData, path, start, end)),
+        );
+        collections.forEach((items, index) => updates[index](items));
+        loadedThrough = end;
+      } catch (error) {
+        if (requestedThrough <= end) throw error;
+      }
     }
   }
   return {
@@ -35,9 +39,7 @@ export function createRadarReferenceLoader(fetchData, scene) {
       requestedThrough = Math.max(requestedThrough, Math.min(MAX_RADAR_RANGE, range));
       if (!loading && loadedThrough < requestedThrough) {
         loading = loadNextRanges()
-          .catch(() => {
-            requestedThrough = loadedThrough;
-          })
+          .catch(() => undefined)
           .finally(() => (loading = null));
       }
       return loading ?? Promise.resolve();
