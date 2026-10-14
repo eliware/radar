@@ -24,6 +24,20 @@ git lfs pull
 
 Copy `.env.example` to `.env` and set `MY_LOCATION`, `MY_ELEVATION`, and any view defaults. The Compose file supplies `ADSB_HOST=readsb` and `ADSB_PORT=30003`; no host port is published for the feed. By default, Radar is available at `http://<server-ip>:3000` on the LAN.
 
+## Develop and validate
+
+Use Node.js 26 or later for repository development. From `/opt/radar`, install the locked dependencies and run the project checks:
+
+```sh
+npm ci
+npm test
+npm run lint
+npm run format:check
+npm run build
+```
+
+Keep changes in this checkout. To build and run the current source through Compose, use `docker compose up -d --build` after making changes.
+
 Build and start both services:
 
 ```sh
