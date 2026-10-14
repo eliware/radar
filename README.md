@@ -95,7 +95,7 @@ Run `npm run build` to build the browser app.
 
 ## Deployment
 
-The dev workflow updates the checkout and runs validation. It does not start or publish the app.
+On each push, the dev workflow pulls main, installs dependencies with `npm ci`, and runs `npm test`. It does not start or publish the app.
 
 ## Support
 

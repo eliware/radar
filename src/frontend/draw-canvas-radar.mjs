@@ -48,6 +48,10 @@ export function drawCanvasRadar(
     x: centerX + (point.x / range) * radius * cosine - (point.z / range) * radius * sine,
     y: centerY + (point.x / range) * radius * sine + (point.z / range) * radius * cosine,
   });
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+  ctx.clip();
   if (waterVisible) drawWaterOutlines(ctx, waterPaths, project, location);
   ctx.save();
   ctx.translate(centerX, centerY);
@@ -66,6 +70,7 @@ export function drawCanvasRadar(
       y: centerY + (point.z / range) * radius,
     })),
   );
+  ctx.restore();
   const display = projectAircraftDisplayItems(aircraft, trails, location, 0, project);
   drawAircraftDisplay(ctx, display, 9, width, height, connected);
   ctx.fillStyle = palette.bright;
