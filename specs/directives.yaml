@@ -119,6 +119,8 @@ directives:
       - Use pinch gestures to zoom on mobile.
       - Use two-finger twist gestures to rotate the radar on mobile.
       - Use Up and Down arrow keys to zoom in and out. Use Left and Right arrow keys to rotate by 15 degrees.
+      - Place the METAR display at the top center of the radar view. Use larger text for the decoded table and ticker.
+      - Keep the home location below the METAR ticker on narrow layouts.
       - Do not show gesture instructions or text connection status on the radar view.
       - Show the home location at the top left of the radar view. Do not show a view title.
       - Use a black background for the page and radar scope.

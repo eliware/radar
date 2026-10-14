@@ -66,7 +66,7 @@ NASR has no local approach-control boundary shapes. The radar can show FAA ARTCC
 
 The flight strips sit beside the radar in landscape view and below it in portrait view. They sort aircraft by distance, closest first. They show callsign, altitude with vertical trend, type, heading with speed, squawk, bearing with rounded range, origin, and destination. They omit field headers and units. Narrow layouts wrap data into aligned rows. The panel uses white text on black with double outside borders and single row dividers. It supports scrolling without visible scrollbars.
 
-The 3D view shows a decoded VATSIM METAR table. Its fields are automation status, airport, age, wind direction, wind speed, visibility, weather, sky, temperature, dew point, and altimeter setting. The 2D view and narrow layouts show a one-line raw report ticker.
+The 3D view shows a decoded VATSIM METAR table at the top center of the radar. Its fields are automation status, airport, age, wind direction, wind speed, visibility, weather, sky, temperature, dew point, and altimeter setting. The 2D view and narrow layouts show a larger one-line raw report ticker.
 
 Set `METAR_STATIONS` to a comma-separated list of ICAO airport codes. The default list is `KLEW,KPWM,KBXM`. The service refreshes reports from VATSIM and caches them for five minutes.
 
