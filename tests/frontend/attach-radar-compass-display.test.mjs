@@ -75,9 +75,13 @@ test("does nothing when the document is absent", () => {
 test("defines a clickable 16-point compass with four labels and reset access", () => {
   const markup = readFileSync(new URL("../../public/index.html", import.meta.url), "utf8");
   const rose = markup.match(/<g data-compass-rose[\s\S]*?<\/g>/)?.[0] ?? "";
-  expect(rose.match(/<use /g)).toHaveLength(16);
+  expect(rose.match(/<use\b/g)).toHaveLength(16);
+  expect(rose.match(/class="compass-intercardinal"/g)).toHaveLength(8);
   expect(rose.match(/class="compass-label(?: compass-label-north)?"/g)).toHaveLength(4);
   expect(markup).toContain('data-compass-heading x="58" y="58">000</text>');
+  const stylesheet = readFileSync(new URL("../../public/style.css", import.meta.url), "utf8");
+  expect(stylesheet).toContain("bold 20px Consolas");
+  expect(stylesheet).toContain(".radar-compass .compass-intercardinal");
   expect(markup).toContain('role="button"');
   expect(markup).toContain('tabindex="0"');
   expect(markup).not.toContain("data-reset");

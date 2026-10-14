@@ -65,8 +65,28 @@ p {
 .radar-compass use {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.4;
+  stroke-width: 1.6;
   stroke-linecap: round;
+}
+.compass-ring {
+  fill: #000;
+  fill-opacity: 0.55;
+  stroke: currentColor;
+  stroke-opacity: 0.65;
+  stroke-width: 1;
+}
+.radar-compass .compass-north {
+  stroke-width: 2.6;
+}
+.radar-compass .compass-cardinal {
+  stroke-width: 2.2;
+}
+.radar-compass .compass-diagonal {
+  stroke-width: 1.9;
+}
+.radar-compass .compass-intercardinal {
+  stroke-width: 1.8;
+  stroke-opacity: 0.9;
 }
 .compass-label {
   fill: currentColor;
@@ -83,13 +103,18 @@ p {
 .radar-compass [data-compass-heading] {
   fill: currentColor;
   font:
-    bold 10px Consolas,
+    bold 20px Consolas,
     monospace;
   text-anchor: middle;
   dominant-baseline: middle;
   paint-order: stroke;
   stroke: #000;
-  stroke-width: 3px;
+  stroke-width: 4px;
+}
+.compass-hub {
+  fill: #000;
+  stroke: currentColor;
+  stroke-width: 1;
 }
 .compass-follow {
   display: none;
