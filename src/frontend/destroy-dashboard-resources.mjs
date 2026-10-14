@@ -1,4 +1,5 @@
 export function destroyDashboardResources(resources) {
+  resources.detachFlightStripsToggle?.();
   resources.detachCompass?.();
   resources.detachMobileCompass?.();
   resources.detachReset?.();

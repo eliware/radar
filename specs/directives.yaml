@@ -205,6 +205,7 @@ directives:
       - Wrap flight strip fields into two rows, then three rows as width decreases.
       - Use equal column widths in each wrapped flight strip row.
       - Hide flight strip scrollbars while keeping the aircraft list scrollable.
+      - Press F to show or hide flight strips. Expand the radar panel to full page width when strips are hidden.
       - Fade each flight strip from full brightness to hidden as its data ages. Remove it at the aircraft timeout.
       - Keep the flight strip scroll position during each data refresh.
       - Use a black background, white text, a double outer border, and single aircraft dividers in flight strips.

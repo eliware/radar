@@ -329,3 +329,14 @@ p {
     padding: 8px;
   }
 }
+
+.dashboard.flight-strips-hidden {
+  grid-template-columns: minmax(0, 100vw);
+  grid-template-rows: minmax(0, 100vh);
+  grid-template-rows: minmax(0, 100dvh);
+}
+.dashboard.flight-strips-hidden .scene-panel {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}

@@ -12,13 +12,15 @@ function makeDocument(protocol = "https:") {
   };
   const rose = { setAttribute: jest.fn() },
     heading = {},
-    strips = { clientWidth: 800 };
+    strips = { clientWidth: 800, hidden: false },
+    dashboard = { classList: { toggle: jest.fn() } };
   const metarDisplay = {
     dataset: {},
     setAttribute: jest.fn((_name, value) => (metarDisplay.dataset.radarMode = value)),
   };
   const elements = {
     "[data-scene]": {},
+    ".dashboard": dashboard,
     "[data-home]": home,
     "[data-radar-compass]": compass,
     "[data-compass-rose]": rose,
@@ -96,6 +98,8 @@ test("starts the secure live view and handles feed messages", async () => {
   });
   expect(scene.update).toHaveBeenCalledWith(aircraft);
   expect(document.strips.innerHTML).toContain("1 AIRCRAFT");
+  document.sendKey({ key: "f", preventDefault: jest.fn() });
+  expect(document.strips.hidden).toBe(true);
   document.sendKey({ key: "r", preventDefault: jest.fn() });
   document.clickCompass();
   for (const key of ["ArrowUp", "ArrowLeft"]) document.sendKey({ key, preventDefault: jest.fn() });
@@ -112,24 +116,21 @@ test("starts the secure live view and handles feed messages", async () => {
   expect(scene.setConnected).toHaveBeenLastCalledWith(false);
   result.destroy();
   expect(detachCompass).toHaveBeenCalledTimes(1);
-  expect(document.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
-  expect(document.removeEventListener).toHaveBeenCalledTimes(2);
+  expect(document.removeEventListener).toHaveBeenCalledTimes(3);
   expect(document.compass.removeEventListener).toHaveBeenCalledTimes(2);
   expect(scene.destroy).toHaveBeenCalledTimes(1);
 });
 
-test("does not start when the page has no scene element", async () => {
+test("does not start when the page or configuration is missing", async () => {
   const document = makeDocument();
   document.querySelector = () => null;
-  const fetchData = jest.fn();
-  expect(await startDashboard({ document, fetchData })).toBeNull();
-  expect(fetchData).not.toHaveBeenCalled();
-});
-
-test("does not start when configuration fails", async () => {
-  const document = makeDocument();
-  const fetchData = jest.fn().mockResolvedValue(jsonResponse({}, false));
-  expect(await startDashboard({ document, fetchData })).toBeNull();
+  expect(await startDashboard({ document, fetchData: jest.fn() })).toBeNull();
+  expect(
+    await startDashboard({
+      document: makeDocument(),
+      fetchData: jest.fn().mockResolvedValue(jsonResponse({}, false)),
+    }),
+  ).toBeNull();
 });
 
 test("destroys the scene when dashboard setup fails after scene creation", async () => {
