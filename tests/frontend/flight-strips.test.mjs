@@ -7,7 +7,7 @@ function aircraft(icao, distance, callsign = "TEST") {
 
 test("renders white strips without field headers and sorts safe aircraft data", () => {
   const container = {};
-  renderFlightStrips(container, [aircraft("FAR", 9), aircraft("NEAR", 1, "<R&>\"'")], 3000);
+  renderFlightStrips(container, [aircraft("FAR", 9), aircraft("NEAR", 1, "<R&>\"'")], 3000, 1000);
   expect(container.innerHTML).toContain("FLIGHT STRIPS");
   expect(container.innerHTML).toContain("2 AIRCRAFT");
   expect(container.innerHTML.indexOf('data-icao="NEAR"')).toBeLessThan(
@@ -40,6 +40,29 @@ test("shows the empty state and accepts a missing container", () => {
   renderFlightStrips(container, [], 300);
   expect(container.innerHTML).toContain("Waiting for aircraft...");
   expect(() => renderFlightStrips(null, [], 300)).not.toThrow();
+});
+
+test("fades each strip as its update gets older", () => {
+  const container = {};
+  renderFlightStrips(container, [aircraft("AGING", 1)], 3000, 61000);
+  expect(container.innerHTML).toContain('data-icao="AGING" style="opacity:0.5"');
+});
+
+test("keeps the list scroll position when a refresh replaces its contents", () => {
+  const oldList = { scrollTop: 120 };
+  const newList = { scrollTop: 0 };
+  let html = "old";
+  const container = {
+    querySelector: jest.fn(() => (html === "old" ? oldList : newList)),
+    get innerHTML() {
+      return html;
+    },
+    set innerHTML(value) {
+      html = value;
+    },
+  };
+  renderFlightStrips(container, [aircraft("ONE", 1)], 3000, 1000);
+  expect(newList.scrollTop).toBe(120);
 });
 
 test("updates on resize and each second, then removes stale aircraft on destroy", () => {

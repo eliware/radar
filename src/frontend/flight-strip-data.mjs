@@ -46,6 +46,7 @@ export function buildFlightStripData(aircraft, width) {
   return {
     aircraft: sorted.map((item, index) => ({
       icao: item.icao ?? "",
+      lastSeen: item.lastSeen,
       ...layout.rows[index],
     })),
     weights: layout.alignedGroups.map((group) => group.map(() => 1)),

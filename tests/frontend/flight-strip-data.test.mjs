@@ -14,6 +14,7 @@ const fullAircraft = {
   bearingDegrees: 7,
   origin: "KPWM",
   destination: "KBOS",
+  lastSeen: 1000,
 };
 
 test("sorts aircraft and formats the nine aligned fields", () => {
@@ -32,6 +33,7 @@ test("sorts aircraft and formats the nine aligned fields", () => {
     "KPWM",
     "KBOS",
   ]);
+  expect(result.aircraft[0].lastSeen).toBe(1000);
 });
 
 test("shows optional type, range, origin, and destination values", () => {

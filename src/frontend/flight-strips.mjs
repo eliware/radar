@@ -1,4 +1,5 @@
 import { buildFlightStripData } from "./flight-strip-data.mjs";
+import { getAircraftAgeBrightness } from "./aircraft-age-brightness.mjs";
 
 function escapeHtml(value) {
   return String(value).replace(
@@ -26,18 +27,22 @@ function rowMarkup(values, weights, labels) {
   return `<div class="flight-strip-row" style="grid-template-columns:${columns}">${cells}</div>`;
 }
 
-export function renderFlightStrips(container, aircraft, width) {
+export function renderFlightStrips(container, aircraft, width, now = Date.now()) {
   if (!container) return;
+  const scrollTop = container.querySelector?.(".flight-strip-list")?.scrollTop ?? 0;
   const data = buildFlightStripData(aircraft, width);
   const rows = data.aircraft
     .map((item) => {
       const body = item.groups
         .map((row, index) => rowMarkup(row, data.weights[index], item.labels[index]))
         .join("");
-      return `<div class="flight-strip-aircraft" data-icao="${escapeHtml(item.icao)}">${body}</div>`;
+      const opacity = getAircraftAgeBrightness(item.lastSeen, now);
+      return `<div class="flight-strip-aircraft" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
     })
     .join("");
   container.innerHTML = `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;
+  const nextList = container.querySelector?.(".flight-strip-list");
+  if (nextList) nextList.scrollTop = scrollTop;
 }
 
 export function createFlightStripView(container, windowRef, clock = Date.now) {
@@ -47,7 +52,12 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
     for (const [icao, item] of aircraft) {
       if (Number.isFinite(item.lastSeen) && now - item.lastSeen > 120000) aircraft.delete(icao);
     }
-    renderFlightStrips(container, [...aircraft.values()], availableWidth(container, windowRef));
+    renderFlightStrips(
+      container,
+      [...aircraft.values()],
+      availableWidth(container, windowRef),
+      now,
+    );
   };
   windowRef?.addEventListener?.("resize", render);
   const timer = windowRef?.setInterval?.(render, 1000);
