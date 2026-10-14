@@ -1,7 +1,7 @@
 export function destroyDashboardResources(resources) {
   resources.detachCompass?.();
+  resources.detachReset?.();
   resources.detachReferences?.();
-  resources.reset?.removeEventListener?.("click", resources.resetView);
   if (resources.metarTimer !== null && resources.metarTimer !== undefined) {
     resources.windowRef?.clearInterval?.(resources.metarTimer);
   }

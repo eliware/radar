@@ -12,7 +12,7 @@ export function attachRadarCompassDisplay(documentRef, view) {
     const value = String(degrees).padStart(3, "0");
     rose.setAttribute("transform", `rotate(${degrees} 58 58)`);
     heading.textContent = value;
-    compass.setAttribute("aria-label", `Radar heading ${value} degrees`);
+    compass.setAttribute("aria-label", `Reset view. Radar heading ${value} degrees`);
   };
 
   const unsubscribe = view.onViewChange?.(render) ?? (() => {});

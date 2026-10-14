@@ -1,4 +1,5 @@
 import { attachRadarCompassDisplay } from "./attach-radar-compass-display.mjs";
+import { attachRadarResetControls } from "./attach-radar-reset-controls.mjs";
 import { connectWebSocketFeed } from "./websocket-feed.mjs";
 import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
 import { createFlightStripView } from "./flight-strips.mjs";
@@ -44,6 +45,7 @@ export async function startDashboard({
     resources.scene = scene;
     const detachCompass = attachRadarCompassDisplay(document, scene);
     resources.detachCompass = detachCompass;
+    resources.detachReset = attachRadarResetControls(document, scene);
     let detachReferences = () => {};
     const referenceLoader =
       scene.updateAirports &&
@@ -78,11 +80,6 @@ export async function startDashboard({
       },
     });
     resources.feed = feed;
-    const reset = document.querySelector("[data-reset]");
-    const resetView = () => scene.reset();
-    reset?.addEventListener("click", resetView);
-    resources.reset = reset;
-    resources.resetView = resetView;
     const destroy = attachDashboardPagehide(windowRef, () => destroyDashboardResources(resources));
     return { scene, socket: feed.socket, feed, flightStrips, destroy };
   } catch {

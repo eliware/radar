@@ -130,6 +130,7 @@ directives:
       - Set radar range from 1 through 300 nautical miles in both views.
       - Set the default range to 20 nautical miles or 5 miles past the furthest live target, whichever is larger.
       - Keep auto-zoom active until the user changes the view. Resume auto-zoom after reset.
+      - Reset the radar to north and the default range when users press R or click the compass.
       - Remove aircraft targets after 120 seconds without an update.
       - Fade aircraft markers and labels from full brightness to invisible over 120 seconds without updates.
       - Keep range limits, auto-zoom, and ring spacing the same in 3D and Canvas views.

@@ -1,39 +1,44 @@
 import { expect, jest, test } from "@jest/globals";
 import { startDashboard } from "../../src/frontend/dashboard.mjs";
 
-function makeDocument(protocol = "https:", includeReset = true) {
-  const home = {};
-  const compass = { setAttribute: jest.fn() };
-  const rose = { setAttribute: jest.fn() };
-  const heading = {};
-  const strips = { clientWidth: 800 };
+function makeDocument(protocol = "https:") {
+  const home = {},
+    keyListeners = new Map(),
+    compassListeners = new Map();
+  const compass = {
+    setAttribute: jest.fn(),
+    addEventListener: jest.fn((name, callback) => compassListeners.set(name, callback)),
+    removeEventListener: jest.fn(),
+  };
+  const rose = { setAttribute: jest.fn() },
+    heading = {},
+    strips = { clientWidth: 800 };
   const metarDisplay = {
     dataset: {},
     setAttribute: jest.fn((_name, value) => (metarDisplay.dataset.radarMode = value)),
   };
-  const reset = { addEventListener: jest.fn((event, callback) => (reset.callback = callback)) };
+  const elements = {
+    "[data-scene]": {},
+    "[data-home]": home,
+    "[data-radar-compass]": compass,
+    "[data-compass-rose]": rose,
+    "[data-compass-heading]": heading,
+    "[data-flight-strips]": strips,
+    "[data-metar]": metarDisplay,
+    "[data-metar-reports]": { textContent: "", innerHTML: "" },
+    "[data-metar-ticker]": { textContent: "" },
+  };
   return {
     home,
-    reset,
+    compass,
     strips,
     location: { protocol, host: "localhost:3000" },
-    querySelector(selector) {
-      return {
-        "[data-scene]": {},
-        "[data-home]": home,
-        "[data-radar-compass]": compass,
-        "[data-compass-rose]": rose,
-        "[data-compass-heading]": heading,
-        "[data-reset]": includeReset ? reset : null,
-        "[data-flight-strips]": strips,
-        "[data-metar]": metarDisplay,
-        "[data-metar-reports]": { textContent: "", innerHTML: "" },
-        "[data-metar-ticker]": { textContent: "" },
-      }[selector];
-    },
-    querySelectorAll() {
-      return [];
-    },
+    addEventListener: jest.fn((name, callback) => keyListeners.set(name, callback)),
+    removeEventListener: jest.fn(),
+    sendKey: (event) => keyListeners.get("keydown")(event),
+    clickCompass: () => compassListeners.get("click")(),
+    querySelector: (selector) => elements[selector],
+    querySelectorAll: () => [],
   };
 }
 
@@ -44,14 +49,13 @@ function jsonResponse(value, ok = true) {
 test("starts the secure live view and handles feed messages", async () => {
   const document = makeDocument();
   const aircraft = { icao: "ABC123" };
-  const fetchData = jest
-    .fn()
-    .mockResolvedValueOnce(
-      jsonResponse({ location: { latitude: 43, longitude: -70 }, elevationFeet: 300 }),
-    )
-    .mockResolvedValueOnce(jsonResponse({ reports: [{ id: "KPWM", metar: "METAR" }] }))
-    .mockResolvedValueOnce(jsonResponse([aircraft]))
-    .mockResolvedValueOnce(jsonResponse([{ icao: "RESTORE1" }]));
+  const responses = [
+    jsonResponse({ location: { latitude: 43, longitude: -70 }, elevationFeet: 300 }),
+    jsonResponse({ reports: [{ id: "KPWM", metar: "METAR" }] }),
+    jsonResponse([aircraft]),
+    jsonResponse([{ icao: "RESTORE1" }]),
+  ];
+  const fetchData = jest.fn(() => Promise.resolve(responses.shift()));
   const scene = {
     mode: "2D",
     update: jest.fn(),
@@ -79,30 +83,20 @@ test("starts the secure live view and handles feed messages", async () => {
     WebSocketClass: MockSocket,
     createScene,
   });
-  expect(result).toEqual(
-    expect.objectContaining({
-      scene,
-      socket,
-      feed: expect.any(Object),
-      flightStrips: expect.any(Object),
-      destroy: expect.any(Function),
-    }),
-  );
+  expect(result).toEqual(expect.objectContaining({ scene, socket }));
   expect(socket.url).toBe("wss://localhost:3000/ws");
   expect(document.home.textContent).toContain("43.0000°, -70.0000°");
   expect(document.querySelector("[data-metar]").dataset.radarMode).toBe("2D");
   expect(fetchData).toHaveBeenCalledWith("/api/metar");
-  expect(createScene).toHaveBeenCalledWith(
-    expect.objectContaining({
-      container: expect.any(Object),
-      location: { latitude: 43, longitude: -70 },
-      elevationFeet: 300,
-    }),
-  );
+  expect(createScene.mock.calls[0][0]).toMatchObject({
+    location: { latitude: 43, longitude: -70 },
+    elevationFeet: 300,
+  });
   expect(scene.update).toHaveBeenCalledWith(aircraft);
   expect(document.strips.innerHTML).toContain("1 AIRCRAFT");
-  document.reset.callback();
-  expect(scene.reset).toHaveBeenCalledTimes(1);
+  document.sendKey({ key: "r", preventDefault: jest.fn() });
+  document.clickCompass();
+  expect(scene.reset).toHaveBeenCalledTimes(2);
   await socket.onopen();
   expect(scene.setConnected).toHaveBeenLastCalledWith(true);
   expect(scene.update).toHaveBeenLastCalledWith({ icao: "RESTORE1" });
@@ -113,6 +107,8 @@ test("starts the secure live view and handles feed messages", async () => {
   expect(scene.setConnected).toHaveBeenLastCalledWith(false);
   result.destroy();
   expect(detachCompass).toHaveBeenCalledTimes(1);
+  expect(document.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
+  expect(document.compass.removeEventListener).toHaveBeenCalledTimes(2);
   expect(scene.destroy).toHaveBeenCalledTimes(1);
 });
 

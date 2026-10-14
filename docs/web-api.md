@@ -48,7 +48,7 @@ The 3D view uses Three.js. If WebGL cannot start, the app uses a 2D Canvas view.
 
 On desktop, drag to rotate the view. Right-drag to pan. Use the scroll wheel to zoom. On mobile, keep home centered. Pinch to zoom and twist two fingers to rotate. Panning is disabled on mobile.
 
-The compass shows current rotation. It does not respond to clicks or touch. It shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`. Select **Reset view** to face north and restore the default range.
+The compass shows current rotation. Click it or press R to face north and restore the default range. Press Enter or Space when the compass has focus. The compass shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`.
 
 Press W to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows map data attribution.
 

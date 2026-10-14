@@ -9,7 +9,6 @@
   <body>
     <main class="dashboard">
       <section class="scene-panel" aria-label="Aircraft radar view">
-        <button class="reset-view" data-reset type="button">Reset view</button>
         <a
           class="map-attribution"
           href="https://www.openstreetmap.org/copyright"
@@ -21,8 +20,9 @@
         <div
           class="radar-compass"
           data-radar-compass
-          role="img"
-          aria-label="Radar heading 000 degrees"
+          role="button"
+          tabindex="0"
+          aria-label="Reset view. Radar heading 000 degrees"
         >
           <svg viewBox="0 0 116 116" aria-hidden="true">
             <g data-compass-rose transform="rotate(0 58 58)">

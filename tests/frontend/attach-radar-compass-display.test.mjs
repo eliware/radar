@@ -37,7 +37,7 @@ test("rotates the rose and shows the upright heading from view changes", () => {
   expect(doc.heading.textContent).toBe("359");
   expect(doc.compass.setAttribute).toHaveBeenLastCalledWith(
     "aria-label",
-    "Radar heading 359 degrees",
+    "Reset view. Radar heading 359 degrees",
   );
   angle = 2 * Math.PI;
   render();
@@ -72,12 +72,15 @@ test("does nothing when the document is absent", () => {
   expect(() => attachRadarCompassDisplay(null, {})()).not.toThrow();
 });
 
-test("defines a passive 16-point compass with four labels and no controls", () => {
+test("defines a clickable 16-point compass with four labels and reset access", () => {
   const markup = readFileSync(new URL("../../public/index.html", import.meta.url), "utf8");
   const rose = markup.match(/<g data-compass-rose[\s\S]*?<\/g>/)?.[0] ?? "";
   expect(rose.match(/<use /g)).toHaveLength(16);
   expect(rose.match(/class="compass-label(?: compass-label-north)?"/g)).toHaveLength(4);
   expect(markup).toContain('data-compass-heading x="58" y="58">000</text>');
+  expect(markup).toContain('role="button"');
+  expect(markup).toContain('tabindex="0"');
+  expect(markup).not.toContain("data-reset");
   expect(markup).not.toContain("data-radar-control");
   expect(markup).not.toContain("data-compass-joystick");
 });
