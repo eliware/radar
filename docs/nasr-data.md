@@ -1,19 +1,25 @@
-# FAA NASR Data
+# FAA NASR data
 
-Radar reads airport and runway records from the FAA NASR SQLite database. The server opens the database in read-only mode.
+Radar reads the FAA NASR SQLite database in read-only mode. The package includes `nasr/NASR_2026_10_01.sqlite`. Set `NASR_DATABASE_PATH` to use another database file.
 
-The package includes `nasr/NASR_2026_10_01.sqlite` in Git LFS. Radar opens this file by default. Set `NASR_DATABASE_PATH` in `.env` to use another file.
+## Airports and runways
 
-The server reads airport records from `APT_BASE`, runway ends from `APT_RWY_END`, airport class flags from `CLS_ARSP`, VOR records from `NAV_BASE`, and ARTCC boundary points from `ARB_SEG`. It serves airports, navaids, and ARTCC paths by distance band. Each route needs `MY_LOCATION`.
+Radar loads airport data by distance from `MY_LOCATION`. It requests the visible range at startup. It requests only the new distance band when you zoom out. It keeps loaded data in browser memory. It does not load the full 300 nautical mile area at startup.
 
-The browser loads airports from 0 to 20 nautical miles when it starts. It asks only for the next distance band after a zoom-out. It keeps each result in memory. It does not load the full 300-mile area at startup.
+Radar shows public-use airports with a four-character ICAO code that starts with `K`. Each displayed airport must have an asphalt or concrete runway longer than 1,000 feet. Radar draws only runways that meet these rules.
 
-The radar shows public-use airports with a four-character ICAO code that starts with K. Each airport must have an asphalt or concrete runway over 1,000 feet long. It draws only qualifying runways. Airport labels sit above their marker dots. Runway lines use each runway end's NASR elevation. Each dark gray dotted centerline extension runs 10 nautical miles and rises to 3,000 feet above its runway end. Each dotted base leg sits at that extension's end altitude.
+Airport markers use the airport location and elevation. Runway ends use their NASR coordinates and elevations. Radar draws a dotted runway centerline extension that reaches 10 nautical miles from each end. The line reaches 3,000 feet above the runway end. Radar draws dotted base legs at the same altitude.
 
-VOR, VOR/DME, and VORTAC symbols and identifiers use blue.
+## Navigation aids and airspace
 
-NASR has flags for Class B, C, and D airports, but it has no class boundary geometry. The 3D radar shows approximate layered shapes. Class B uses 10, 20, and 30-mile layers up to 10,000 feet MSL. Class C uses a 5-mile core and a 5-to-10-mile shelf. Class D uses a 5-mile radius up to 2,500 feet above the airport. These shapes are visual guides, not official boundaries. NASR has actual ARTCC boundary points in `ARB_SEG`. It does not have Portland approach or A90 boundary points.
+Radar shows VOR, VOR/DME, and VORTAC symbols in blue. It shows FAA ARTCC boundary paths from the NASR `ARB_SEG` table.
 
-NASR lists active ILS localizer courses and glide-slope angles. Radar draws a 10-nautical-mile dotted dim-orange course guide from the glide-slope site without text labels. It draws marker beacon locations as small hollow dim-orange circles. The 3D view follows the published glide-slope angle. The Canvas view keeps the line flat. The database does not give every leg of an instrument approach, so these lines are visual guides.
+NASR has airport flags for Class B, C, and D service. It does not have these airspace boundary shapes. Radar draws approximate 3D shapes from common class dimensions. These shapes are visual guides, not official boundaries. NASR does not provide A90 approach boundaries.
 
-NASR lists SID and STAR fixes in `DP_RTE` and `STAR_RTE`. Radar loads routes by distance band through `GET /api/procedures`. SIDs use dotted dim-blue lines. STARs use dotted dim-orange lines. Each fix uses a small hollow pyramid. SID labels show the route endpoint. STAR labels show transition entries, common arrival fixes, and route endpoints. These lines use similar brightness, slightly above the dark-gray runway guides. The database does not list crossing altitudes, so Radar draws these routes at the home altitude in 3D.
+## ILS, SID, and STAR data
+
+NASR provides active ILS localizer and glide-slope data. It also provides marker beacon locations when available. Radar draws a dotted dim-orange course guide and small hollow marker circles. It does not draw text labels for the ILS guides. The 3D view follows the published glide-slope angle. The 2D view draws the course on a flat plane.
+
+NASR lists SID and STAR routes and fixes. Radar draws dotted blue SID paths and dotted dim-orange STAR paths. Hollow pyramids mark route fixes. Radar labels selected transition and route end fixes. The database does not provide crossing altitudes for every fix. Radar draws these paths at home elevation in 3D.
+
+These procedure lines are visual references. They do not replace official charts or navigation data.

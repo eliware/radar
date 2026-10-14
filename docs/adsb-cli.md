@@ -1,29 +1,37 @@
-# ADS-B command
+# ADS-B command-line tool
 
-The `radar-adsb` command reads decoded SBS/BaseStation records from an RTL1090 TCP feed. It shows live flight strips in the terminal. It keeps recent aircraft fields when later records omit them.
+The `radar-adsb` command reads decoded SBS/BaseStation records from a TCP feed. It shows aircraft data in a terminal. It does not decode radio signals.
 
-## Start
+## Start the command
 
-Run `radar-adsb` after npm installation. From a checkout, run `node bin/adsb.mjs`. The default feed address is `127.0.0.1:30003`.
+Run `radar-adsb` after you install the npm package. From a source checkout, run `node bin/adsb.mjs`. The default feed address is `127.0.0.1:30003`.
 
-Run `radar-adsb --host 127.0.0.1 --port 30003` to set the feed address. You can set `ADSB_HOST` and `ADSB_PORT` in an untracked `.env` file.
+Use `--host HOST` and `--port PORT` to select a feed. Set `ADSB_HOST` and `ADSB_PORT` to set default values. A CLI option takes priority over an environment value.
 
-Set `MY_LOCATION` in `.env` as decimal latitude, then longitude. The CLI uses this point to calculate distance and bearing.
+The command accepts no positional arguments. Set a port from 1 through 65535. The command supports Windows and Linux with Node.js 26. macOS support is inferred from Node.js TCP APIs and is not tested directly.
 
-## Output
+Set `MY_LOCATION` as decimal latitude and longitude, separated by a comma. The CLI uses this point to calculate range and bearing.
 
-The table fills the terminal width. It shows callsign, ICAO address, altitude, speed, heading, vertical rate, squawk, position, distance, bearing, and age. The CLI keeps all 22 SBS fields in memory. It sorts aircraft by distance, closest first. The table redraws every second to update aircraft age. Resize the terminal to redraw the table. The table uses short headers, then two or three value rows, as the terminal gets narrow. Aircraft rows show values only.
+## Read the table
 
-Run `radar-adsb --debug` to print one JSON object per aircraft update. This mode does not draw the table.
+The CLI sorts aircraft by range. The closest aircraft appear first. The table uses the full terminal width and redraws every second. Resize the terminal to update the layout.
 
-Distance uses nautical miles. Bearing uses degrees clockwise from north. The feed does not provide aircraft type or destination.
+The table shows callsign, ICAO address, altitude, speed, heading, vertical rate, squawk, position, range, bearing, and age. It uses shorter headers and extra value rows when the terminal gets narrow.
 
-The aircraft list keeps the last non-empty value when a later record has an empty column. It removes aircraft after two minutes without an update.
+The CLI keeps the last valid callsign if a later feed record has no callsign or a placeholder. It shows the ICAO address until it receives a valid callsign. It removes aircraft after two minutes without an update.
 
-RTL1090 sends changed aircraft messages in Flight Table mode, at up to one update per aircraft every two seconds. Its manual lists only `RM`, `OK`, and `AD` status records. The receiver can limit which messages it sends.
+Range uses nautical miles. Bearing uses degrees clockwise from north. The feed does not provide an aircraft type or route.
 
-## Help and errors
+## Read JSON updates
 
-Run `radar-adsb --help` for usage. Run `radar-adsb --version` for the package version. Run `radar-adsb --debug` for JSON output. The command retries TCP feed errors after two seconds and writes each error to standard error. It uses exit code 0 after help, version, or signal shutdown; 1 for a fatal runtime error; and 2 for invalid options.
+Run `radar-adsb --debug` to print one JSON object for each aircraft update. This mode does not draw the table.
 
-RTL1090 must enable SBS/BaseStation TCP output. The command does not read raw SDR samples or change receiver settings.
+## Options and errors
+
+Run `radar-adsb --help` to show command help. Run `radar-adsb --version` to show the package version.
+
+The command writes feed errors to standard error. It retries after two seconds. It exits with code 0 after help, version, or signal shutdown. It exits with code 1 after a fatal error. It exits with code 2 after invalid options.
+
+## Receiver requirements
+
+Enable SBS/BaseStation TCP output in RTL1090. Use port `30003` unless you set another port. Select RTL1090's Table tab and close it normally if the feed sends no aircraft. Read the [RTL1090 task guide](rtl1090-background.md) for setup steps.
