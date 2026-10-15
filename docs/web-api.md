@@ -8,7 +8,7 @@ Run `npm run build` to build browser files. Run `node bin/radar.mjs` to start th
 
 Open `http://localhost:3000` on the server computer. Find its Wi-Fi address with `ipconfig` on Windows. Open `http://<computer-ip>:3000` on a device on the same network.
 
-Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. The defaults are `3000`, `127.0.0.1`, and `30003`. Set `MY_LOCATION` as decimal latitude and longitude. Set `MY_ELEVATION` in feet above mean sea level. The default elevation is 300 feet. Set `RADAR_DEFAULT_RANGE_NM` from 1 through 300 to change the default range. Set `RADAR_DEFAULT_ROTATION` from 0 through 359 to change the default rotation in degrees. Their defaults are 20 nautical miles and north-up.
+Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. The defaults are `3000`, `127.0.0.1`, and `30003`. Set `ADSB_LAT` and `ADSB_LON` as decimal latitude and longitude, and `ADSB_ALT` in feet above mean sea level. The default elevation is 300 feet. Set `RADAR_DEFAULT_RANGE_NM` from 1 through 300 to change the default range. Set `RADAR_DEFAULT_ROTATION` from 0 through 359 to change the default rotation in degrees. Their defaults are 20 nautical miles and north-up.
 
 ## REST routes
 

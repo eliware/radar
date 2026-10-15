@@ -4,7 +4,7 @@ Radar reads the FAA NASR SQLite database in read-only mode. The repository track
 
 ## Airports and runways
 
-Radar loads airport data by distance from `MY_LOCATION`. It requests the visible range at startup. It requests only the new distance band when you zoom out. It keeps loaded data in browser memory. It does not load the full 300 nautical mile area at startup.
+Radar loads airport data by distance from `ADSB_LAT` and `ADSB_LON`. It requests the visible range at startup. It requests only the new distance band when you zoom out. It keeps loaded data in browser memory. It does not load the full 300 nautical mile area at startup.
 
 Radar shows public-use airports with a four-character ICAO code that starts with `K`. Each displayed airport must have an asphalt or concrete runway longer than 1,000 feet. Radar draws only runways that meet these rules.
 

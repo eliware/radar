@@ -6,8 +6,9 @@ afterEach(() => {
     "PORT",
     "ADSB_PORT",
     "ADSB_HOST",
-    "MY_LOCATION",
-    "MY_ELEVATION",
+    "ADSB_LAT",
+    "ADSB_LON",
+    "ADSB_ALT",
     "RADAR_DEFAULT_RANGE_NM",
     "RADAR_DEFAULT_ROTATION",
     "NASR_DATABASE_PATH",
@@ -44,7 +45,7 @@ function dependencies() {
       createMetarLookup: jest.fn((stations) => ({ stations, get: jest.fn() })),
       createAirportDatabase: jest.fn(() => null),
       createRadarServer: jest.fn(async () => app),
-      parseAdsbLocation: (value) => (value ? { latitude: 43, longitude: -70 } : null),
+      parseAdsbLocation: (latitude) => (latitude ? { latitude: 43, longitude: -70 } : null),
     },
   };
 }
@@ -53,14 +54,20 @@ test("starts Fastify and closes the feed after a signal", async () => {
   process.env.PORT = "8080";
   process.env.ADSB_PORT = "30004";
   process.env.ADSB_HOST = "receiver";
-  process.env.MY_LOCATION = "43, -70";
-  process.env.MY_ELEVATION = "320";
+  process.env.ADSB_LAT = "43";
+  process.env.ADSB_LON = "-70";
+  process.env.ADSB_ALT = "320";
   process.env.RADAR_DEFAULT_RANGE_NM = "25";
   process.env.RADAR_DEFAULT_ROTATION = "140";
   const deps = dependencies();
   const runtime = await startWebApplication(deps.values);
   expect(deps.values.createAircraftFeed).toHaveBeenCalledWith(
-    expect.objectContaining({ host: "receiver", port: 30004, locationText: "43, -70" }),
+    expect.objectContaining({
+      host: "receiver",
+      port: 30004,
+      locationLatitude: "43",
+      locationLongitude: "-70",
+    }),
   );
   expect(deps.values.createRadarServer).toHaveBeenCalledWith({
     feed: deps.values.createAircraftEnrichmentFeed.mock.results[0].value,
@@ -102,7 +109,7 @@ test("uses default web and feed settings", async () => {
 test.each([
   ["PORT", "bad"],
   ["ADSB_PORT", "65536"],
-  ["MY_ELEVATION", "bad"],
+  ["ADSB_ALT", "bad"],
   ["RADAR_DEFAULT_RANGE_NM", "301"],
   ["RADAR_DEFAULT_ROTATION", "360"],
 ])("rejects invalid %s before it starts the feed", async (key, value) => {
@@ -110,7 +117,7 @@ test.each([
   const deps = dependencies();
   const message =
     {
-      MY_ELEVATION: "MY_ELEVATION must be a number of feet.",
+      ADSB_ALT: "ADSB_ALT must be a number of feet.",
       RADAR_DEFAULT_RANGE_NM: "RADAR_DEFAULT_RANGE_NM must be a number from 1 through 300.",
       RADAR_DEFAULT_ROTATION: "RADAR_DEFAULT_ROTATION must be an integer from 0 through 359.",
     }[key] ?? `${key} must be an integer from 1 through 65535`;

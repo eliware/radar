@@ -11,6 +11,8 @@ This guide runs Radar and readsb together on a Linux host with an RTL-SDR receiv
 
 The Compose service binds `/dev/bus/usb` into readsb and grants access to USB character devices (major 189). This lets the container see device nodes when the receiver is re-enumerated. The container is not privileged. Keep the host USB device permissions and Docker access limited to trusted administrators.
 
+The optional ADS-B Exchange feeder container reads readsb's Beast output on private port `30005`. It does not access the SDR and does not change Radar's SBS connection on port `30003`. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` in `.env` to the antenna latitude, longitude, and altitude in feet above sea level. Both Radar and the feeder use these settings. Set `ADSBX_SITENAME` for the feeder label and generate one persistent `ADSBX_UUID` with `uuidgen`. The UUID is a feeder identifier you generate, not an account credential assigned by ADS-B Exchange. Compose pulls the third-party feeder image from GHCR; the Radar and readsb images are still built locally.
+
 ## Configure and start
 
 Clone the repository with Git LFS enabled, then enter the checkout:
@@ -22,7 +24,7 @@ cd radar
 git lfs pull
 ```
 
-Copy `.env.example` to `.env` and set `MY_LOCATION`, `MY_ELEVATION`, and any view defaults. The Compose file supplies `ADSB_HOST=readsb` and `ADSB_PORT=30003`; no host port is published for the feed. By default, Radar is available at `http://<server-ip>:3000` on the LAN.
+Copy `.env.example` to `.env` and set `ADSB_LAT`, `ADSB_LON`, `ADSB_ALT`, and any view defaults. Set `ADSBX_UUID` to a generated persistent UUID and `ADSBX_SITENAME` to identify the site. The Compose file supplies `ADSB_HOST=readsb` and `ADSB_PORT=30003`; no host port is published for the feed. By default, Radar is available at `http://<server-ip>:3000` on the LAN.
 
 ## Develop and validate
 

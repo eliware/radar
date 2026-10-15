@@ -10,7 +10,7 @@ Use `--host HOST` and `--port PORT` to select a feed. Set `ADSB_HOST` and `ADSB_
 
 The command accepts no positional arguments. Set a port from 1 through 65535. The command supports Windows and Linux with Node.js 26. macOS support is inferred from Node.js TCP APIs and is not tested directly.
 
-Set `MY_LOCATION` as decimal latitude and longitude, separated by a comma. The CLI uses this point to calculate range and bearing.
+Set `ADSB_LAT` and `ADSB_LON` as decimal latitude and longitude. The CLI uses this point to calculate range and bearing.
 
 ## Read the table
 

@@ -1,10 +1,12 @@
-export function parseAdsbLocation(value) {
-  if (value === undefined || value.trim() === "") return null;
-  const parts = value.split(",").map((part) => part.trim());
-  if (parts.length !== 2 || parts.some((part) => part === "")) {
-    throw new Error('MY_LOCATION must use "latitude, longitude".');
+export function parseAdsbLocation(latitudeValue, longitudeValue) {
+  const hasLatitude = latitudeValue !== undefined && latitudeValue.trim() !== "";
+  const hasLongitude = longitudeValue !== undefined && longitudeValue.trim() !== "";
+  if (!hasLatitude && !hasLongitude) return null;
+  if (!hasLatitude || !hasLongitude) {
+    throw new Error("ADSB_LAT and ADSB_LON must both be set.");
   }
-  const [latitude, longitude] = parts.map(Number);
+  const latitude = Number(latitudeValue);
+  const longitude = Number(longitudeValue);
   if (
     !Number.isFinite(latitude) ||
     !Number.isFinite(longitude) ||
@@ -13,7 +15,7 @@ export function parseAdsbLocation(value) {
     longitude < -180 ||
     longitude > 180
   ) {
-    throw new Error("MY_LOCATION must use valid latitude and longitude values.");
+    throw new Error("ADSB_LAT and ADSB_LON must be valid coordinates.");
   }
   return { latitude, longitude };
 }

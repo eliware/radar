@@ -15,11 +15,12 @@ export const aircraftFeedDependencies = {
 export function createAircraftFeed({
   host = process.env.ADSB_HOST ?? "127.0.0.1",
   port = Number(process.env.ADSB_PORT ?? 30003),
-  locationText = process.env.MY_LOCATION,
+  locationLatitude = process.env.ADSB_LAT,
+  locationLongitude = process.env.ADSB_LON,
   onError = () => undefined,
   dependencies = aircraftFeedDependencies,
 }) {
-  const location = dependencies.parseAdsbLocation(locationText);
+  const location = dependencies.parseAdsbLocation(locationLatitude, locationLongitude);
   const aircraftList = dependencies.createAircraftList();
   const subscribers = new Set();
   const connection = dependencies.connectSbsFeed({

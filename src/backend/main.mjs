@@ -4,8 +4,8 @@ export async function startWebApplication(dependencies) {
   dependencies.loadEnvironment({ quiet: true });
   const port = validPort(process.env.PORT ?? "3000", "PORT");
   const feedPort = validPort(process.env.ADSB_PORT ?? "30003", "ADSB_PORT");
-  const location = dependencies.parseAdsbLocation(process.env.MY_LOCATION);
-  const elevationFeet = validElevation(process.env.MY_ELEVATION ?? "300");
+  const location = dependencies.parseAdsbLocation(process.env.ADSB_LAT, process.env.ADSB_LON);
+  const elevationFeet = validElevation(process.env.ADSB_ALT ?? "300");
   const radarViewSettings = parseRadarViewSettings(process.env);
   const airportDatabase = dependencies.createAirportDatabase(process.env.NASR_DATABASE_PATH);
   const metarLookup = dependencies.createMetarLookup(
@@ -16,7 +16,8 @@ export async function startWebApplication(dependencies) {
   const feed = dependencies.createAircraftFeed({
     host: process.env.ADSB_HOST ?? "127.0.0.1",
     port: feedPort,
-    locationText: process.env.MY_LOCATION,
+    locationLatitude: process.env.ADSB_LAT,
+    locationLongitude: process.env.ADSB_LON,
     onError: (error) => log.warn(`ADS-B feed error: ${error.message}`),
   });
   const enrichedFeed = dependencies.createAircraftEnrichmentFeed(
@@ -55,6 +56,6 @@ function validPort(value, name) {
 
 function validElevation(value) {
   const elevation = Number(value);
-  if (!Number.isFinite(elevation)) throw new Error("MY_ELEVATION must be a number of feet.");
+  if (!Number.isFinite(elevation)) throw new Error("ADSB_ALT must be a number of feet.");
   return elevation;
 }

@@ -4,7 +4,8 @@ import { aircraftFeedDependencies, createAircraftFeed } from "../../src/backend/
 afterEach(() => {
   delete process.env.ADSB_HOST;
   delete process.env.ADSB_PORT;
-  delete process.env.MY_LOCATION;
+  delete process.env.ADSB_LAT;
+  delete process.env.ADSB_LON;
   jest.restoreAllMocks();
 });
 
@@ -26,7 +27,8 @@ function setup(overrides = {}) {
   const feed = createAircraftFeed({
     host: "localhost",
     port: 30003,
-    locationText: "43, -70",
+    locationLatitude: "43",
+    locationLongitude: "-70",
     dependencies,
   });
   return { feed, feedOptions, dependencies, aircraft, aircraftList };
@@ -63,7 +65,7 @@ test("adds range fields when the aircraft has a position", () => {
 
 test("reads the configured origin before it opens the feed", () => {
   const state = setup();
-  expect(state.dependencies.parseAdsbLocation).toHaveBeenCalledWith("43, -70");
+  expect(state.dependencies.parseAdsbLocation).toHaveBeenCalledWith("43", "-70");
   expect(state.dependencies.createAircraftList).toHaveBeenCalledTimes(1);
 });
 

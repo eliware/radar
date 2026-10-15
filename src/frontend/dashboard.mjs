@@ -37,7 +37,7 @@ export async function startDashboard({
     const home = document.querySelector("[data-home]");
     home.textContent = config.location
       ? `${config.location.latitude.toFixed(4)}°, ${config.location.longitude.toFixed(4)}° · ${config.elevationFeet} ft MSL`
-      : `Set MY_LOCATION in .env · ${config.elevationFeet} ft MSL`;
+      : `Set ADSB_LAT and ADSB_LON in .env · ${config.elevationFeet} ft MSL`;
     const scene = await createScene({
       container,
       location: config.location,

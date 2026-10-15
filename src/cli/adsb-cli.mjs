@@ -24,7 +24,8 @@ export function startAdsbCli({
   writeError,
   setExitCode,
   getTerminalWidth = () => 125,
-  locationText = process.env.MY_LOCATION,
+  locationLatitude = process.env.ADSB_LAT,
+  locationLongitude = process.env.ADSB_LON,
   dependencies = adsbCliDependencies,
 }) {
   let options;
@@ -47,7 +48,7 @@ export function startAdsbCli({
 
   let location;
   try {
-    location = dependencies.parseAdsbLocation(locationText);
+    location = dependencies.parseAdsbLocation(locationLatitude, locationLongitude);
   } catch (error) {
     writeError(error.message);
     setExitCode(2);

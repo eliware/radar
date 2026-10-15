@@ -10,9 +10,9 @@ directives:
       - Keep the CLI table as the default output. Redraw it every second.
       - Print one aircraft JSON object per feed update with `--debug`.
       - Retry feed errors after two seconds. Write errors to standard error.
-      - Sort aircraft by distance from `MY_LOCATION`, with the closest aircraft first.
-      - Calculate distance and bearing from decimal coordinates in `MY_LOCATION`.
-      - Read `MY_LOCATION` and `MY_ELEVATION` from `.env`. Default elevation to 300 feet.
+      - Sort aircraft by distance from `ADSB_LAT` and `ADSB_LON`, with the closest aircraft first.
+      - Calculate distance and bearing from decimal coordinates in `ADSB_LAT` and `ADSB_LON`.
+      - Read `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` from `.env`. Default elevation to 300 feet.
       - Read `RADAR_DEFAULT_RANGE_NM` and `RADAR_DEFAULT_ROTATION` from `.env`.
       - Default to a 20-nautical-mile range and north-up rotation.
       - Reset both radar views to the configured range and rotation.
@@ -120,7 +120,7 @@ directives:
       - Keep the water layer flat at zero feet MSL and omit fills, rivers, and streams.
       - Show small map data attribution at the bottom left. Let users toggle water with W.
       - Show a 2D Canvas radar when WebGL cannot start. Keep the 3D radar when WebGL works.
-      - Place the home marker at the `MY_LOCATION` origin and the `MY_ELEVATION` height.
+      - Place the home marker at the `ADSB_LAT` and `ADSB_LON` origin and the `ADSB_ALT` height.
       - Place aircraft by their coordinates and feed altitude relative to the home height.
       - Set the default camera to a top-down view centered on home. Keep north at the top.
       - On mobile, keep home centered and disable panning.
