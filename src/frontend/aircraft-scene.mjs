@@ -29,7 +29,7 @@ export function createAircraftScene({
   const updateRings = createRadarSceneOverlays(THREE, scene);
   const airspace = createAirspaceVolumes(THREE, scene, location, elevationFeet);
   const setRadarConnected = createRadarHome(THREE, scene, updateRings);
-  const controls = createRadarControls(camera, renderer.domElement);
+  const controls = createRadarControls(camera, renderer.domElement, elevationFeet);
   const water = createSceneWater(THREE, scene, location, elevationFeet, controls, windowRef);
   const connection = createRadarConnectionState(setRadarConnected);
   const targets = createRadarTargets();

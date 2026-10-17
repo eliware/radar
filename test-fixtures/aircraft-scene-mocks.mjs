@@ -4,6 +4,7 @@ export function registerAircraftSceneMocks(jest) {
   registerThreeSceneMocks(jest);
   const scene = { rotation: {} };
   const camera = {
+    position: { x: 0, y: 0, z: 0 },
     up: {
       x: 0,
       y: 0,
@@ -17,7 +18,14 @@ export function registerAircraftSceneMocks(jest) {
   const renderer = { domElement: {}, dispose: jest.fn() };
   const controlsDispose = jest.fn();
   const controls = {
-    target: { set: jest.fn() },
+    target: {
+      x: 0,
+      y: 0,
+      z: 0,
+      set(x, y, z) {
+        Object.assign(this, { x, y, z });
+      },
+    },
     update: jest.fn(),
     dispose: controlsDispose,
     addEventListener: jest.fn(),

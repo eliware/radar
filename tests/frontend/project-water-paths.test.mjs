@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { projectWaterPaths } from "../../src/frontend/project-water-paths.mjs";
 
-test("projects water vertices to home-relative ground coordinates", () => {
+test("projects water vertices to MSL zero relative to home elevation", () => {
   const vertices = projectWaterPaths(
     [
       [
