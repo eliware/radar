@@ -33,7 +33,7 @@ test("tracks iOS compass heading and stops on the next tap", async () => {
   await state.click();
   state.send({ webkitCompassHeading: 140, alpha: 3, absolute: false });
   expect(state.view.setRotation).toHaveBeenCalledWith((140 * Math.PI) / 180);
-  expect(state.button.textContent).toBe("FOLLOWING PHONE");
+  expect(state.button.textContent).toBe("PHONE ACTIVE");
   await state.click();
   expect(state.windowRef.removeEventListener).toHaveBeenCalledWith(
     "deviceorientation",

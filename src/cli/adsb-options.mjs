@@ -32,12 +32,12 @@ export function parseAdsbOptions(args) {
     }
     options.port = Number(value);
     if (!Number.isInteger(options.port) || options.port < 1 || options.port > 65535) {
-      throw new Error("Port must be an integer from 1 through 65535");
+      throw new Error("TCP endpoint number must be an integer from 1 through 65535");
     }
   }
 
   if (!Number.isInteger(options.port) || options.port < 1 || options.port > 65535) {
-    throw new Error("Port must be an integer from 1 through 65535");
+    throw new Error("TCP endpoint number must be an integer from 1 through 65535");
   }
   return options;
 }

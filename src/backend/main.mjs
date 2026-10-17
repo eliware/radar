@@ -18,7 +18,7 @@ export async function startWebApplication(dependencies) {
     port: feedPort,
     locationLatitude: process.env.ADSB_LAT,
     locationLongitude: process.env.ADSB_LON,
-    onError: (error) => log.warn(`ADS-B feed error: ${error.message}`),
+    onError: (error) => log.warn(`ADS-B stream error: ${error.message}`),
   });
   const enrichedFeed = dependencies.createAircraftEnrichmentFeed(
     feed,
@@ -42,7 +42,7 @@ export async function startWebApplication(dependencies) {
   };
   dependencies.registerSignals({ log, shutdownHook: shutdown });
   await app.listen({ host: "0.0.0.0", port });
-  log.info(`Web application listening on port ${port}`);
+  log.info(`Web application listening at TCP endpoint ${port}`);
   return { app, feed: enrichedFeed, shutdown };
 }
 

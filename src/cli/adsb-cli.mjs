@@ -85,7 +85,7 @@ export function startAdsbCli({
       refresh();
     },
     onError(error) {
-      writeError(`ADS-B feed error: ${error.message}. Retrying in 2 seconds.`);
+      writeError(`ADS-B stream error: ${error.message}. Retrying in 2 seconds.`);
     },
   });
   return { close: () => feed.close(), refresh, table: !options.debug };

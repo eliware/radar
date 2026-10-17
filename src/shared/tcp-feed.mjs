@@ -44,7 +44,7 @@ export function connectSbsFeed({
       connected = true;
     });
     socket.on("error", retry);
-    socket.on("close", () => retry(new Error("SBS feed connection closed")));
+    socket.on("close", () => retry(new Error("SBS data connection closed")));
   }
 
   connect();

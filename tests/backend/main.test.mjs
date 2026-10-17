@@ -80,7 +80,7 @@ test("starts Fastify and closes the feed after a signal", async () => {
   });
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 8080 });
   deps.values.createAircraftFeed.mock.calls[0][0].onError(new Error("offline"));
-  expect(deps.log.warn).toHaveBeenCalledWith("ADS-B feed error: offline");
+  expect(deps.log.warn).toHaveBeenCalledWith("ADS-B stream error: offline");
   await deps.signals.shutdownHook();
   await deps.signals.shutdownHook();
   expect(deps.feed.close).toHaveBeenCalledTimes(1);

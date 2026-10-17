@@ -53,7 +53,7 @@ Run `npm test` to validate the repository.
 
 ## Troubleshooting
 
-Use the [user guides](docs/README.md) to check the feed, web app, and receiver.
+Use the [user guides](docs/README.md) to check incoming aircraft data, the web app, and receiver.
 
 ## Security
 
@@ -75,11 +75,11 @@ For the Linux Docker deployment, read the [Linux Compose guide](docs/linux-compo
 
 ## Exit codes
 
-The CLI returns code 0 after help, version, or signal shutdown. It returns code 1 after a fatal error. It returns code 2 after invalid options.
+The CLI returns code 0 after help, version, or signal shutdown. It returns code 1 after an unrecoverable error. It returns code 2 after invalid options.
 
 ## Routes
 
-Read the [web guide](docs/web-api.md) for the REST and WebSocket routes.
+Read the [web guide](docs/web-api.md) for HTTP and WebSocket endpoints.
 
 ## Assets
 

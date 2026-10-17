@@ -55,7 +55,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       airwayVisibility,
       runwayVisibility,
       referenceVisibility,
-      // The 3D shell supplies airspace geometry; flat rings would duplicate its ground edges.
+      // The 3D shell supplies airspace geometry. Skip flat rings to prevent duplicate ground edges.
       false,
     );
     const items = projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project);

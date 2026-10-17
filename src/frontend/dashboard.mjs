@@ -79,7 +79,8 @@ export async function startDashboard({
           flightStrips.update(latest);
           latest.forEach((item) => scene.update(item));
         } catch {
-          // Keep the WebSocket active. The next connection will request a fresh snapshot.
+          // Keep WebSocket open.
+          // Reconnection requests the current snapshot.
         }
       },
     });

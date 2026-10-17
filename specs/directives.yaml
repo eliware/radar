@@ -3,42 +3,43 @@ description: Repository-specific guidance for the Eliware Radar.
 directives:
   - id: E-1390.0
     dos:
-      - Build an aviation app that reads decoded ADS-B records from one RTL1090 TCP feed.
+      - Build an aviation app that reads decoded ADS-B records from one RTL1090 TCP stream.
       - Keep the second SDR available to other apps.
       - Keep recent aircraft data in memory. Do not write aircraft data to files.
-      - Parse all available feed fields into named values. Do not keep a rawLine field.
+      - Parse all available stream fields into named values. Do not keep a rawLine field.
       - Keep the CLI table as the default output. Redraw it every second.
-      - Print one aircraft JSON object per feed update with `--debug`.
-      - Retry feed errors after two seconds. Write errors to standard error.
+      - Print one aircraft JSON object for each stream update with `--debug`.
+      - Retry stream errors after two seconds. Write errors to standard error.
       - Sort aircraft by distance from `ADSB_LAT` and `ADSB_LON`, with the closest aircraft first.
       - Calculate distance and bearing from decimal coordinates in `ADSB_LAT` and `ADSB_LON`.
       - Read `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` from `.env`. Default elevation to 300 feet.
       - Read `RADAR_DEFAULT_RANGE_NM` and `RADAR_DEFAULT_ROTATION` from `.env`.
-      - Default to a 20-nautical-mile range and north-up rotation.
-      - Reset both radar views to the configured range and rotation.
+      - Default to a 20-nautical-mile range and north-up heading.
+      - Restore both radar views to the configured range and heading.
       - Let mobile users opt in to phone compass tracking.
       - Request compass access after a user action when the browser requires permission.
       - Apply phone compass headings to both radar views.
-      - Require HTTPS for mobile compass tracking outside secure local origins.
-      - Keep manual rotation available when phone compass tracking is off.
+      - Require HTTPS for mobile compass tracking outside trusted local origins.
+      - Keep manual heading available when phone compass tracking is off.
       - Load `.env` settings with `dotenv`.
-      - Use the full terminal width for the CLI table. Space each field evenly.
-      - Use full field names on wide terminals. Use short names when the width is limited.
+      - Use the full terminal width for the CLI table. Give each field equal width.
+      - Use full field names on wide terminals. Use short names when the width is narrow.
       - Use short headers to keep data on one line before wrapping fields.
-      - Use two lines when short headers do not fit. Use three only when two lines do not fit.
+      - Use two header lines when short headers require more width. Add a third only if needed.
       - Allow no more than three lines for each header or aircraft row.
       - Show table headers once. Do not repeat headers in aircraft rows.
       - Keep all table borders and column dividers aligned at each terminal width.
-      - Align the aircraft count divider with the last column divider below it.
-      - Use a double outer border and a double divider below the title row.
+      - Align the aircraft count divider with the last column divider under it.
+      - Use a double outer border and a double divider under the title row.
       - Use Unicode box drawing lines.
       - Show the aircraft count at the right side of the title row.
-      - Use single horizontal dividers between aircraft rows and single column dividers in aircraft rows.
-      - Put CLI code in `src/cli/`, browser code in `src/frontend/`, server code in `src/backend/`, and shared code in `src/shared/`.
+      - Use single horizontal rules between aircraft rows and single column dividers.
+      - Keep CLI code in `src/cli/` and browser code in `src/frontend/`.
+      - Keep server code in `src/backend/` and shared code in `src/shared/`.
       - Add one matching test for each source module.
-      - Use Fastify for the web server. Provide REST routes and a WebSocket feed.
+      - Use Fastify for the web server. Provide HTTP routes and a WebSocket stream.
       - Provide `GET /health`, `GET /api/config`, and `GET /api/aircraft`.
-      - Send the same aircraft JSON schema over `/ws` that `--debug` prints.
+      - Send the same aircraft JSON schema on `/ws` that `--debug` prints.
       - Read FAA NASR airport and runway data from SQLite in read-only mode.
       - Return airports by distance band through `GET /api/airports`.
       - Return VOR, VOR/DME, and VORTAC records by distance band through `GET /api/navaids`.
@@ -51,189 +52,199 @@ directives:
       - Keep fetched airport and runway data in browser memory.
       - Keep fetched ILS data in browser memory. Request only the new outer distance band.
       - Keep fetched SID and STAR paths in browser memory. Request only the new outer distance band.
-      - Read METAR station ICAO codes from the comma-delimited `METAR_STATIONS` setting.
+      - Read ICAO codes for METAR reports from the comma-delimited `METAR_STATIONS` variable.
       - Default `METAR_STATIONS` to `KLEW,KPWM,KBXM`.
       - Fetch METAR reports from the public VATSIM METAR API through the server.
       - Cache METAR reports in server memory for five minutes.
       - Show decoded METAR reports in a table at the top center of the radar.
-      - Show one METAR report per table row on desktop screens.
-      - Size the decoded METAR table to fit its content.
+      - Show one METAR report in each desktop table row.
+      - Set decoded METAR table dimensions to match its contents.
       - Show METAR report age as minutes or hours and minutes.
       - Omit KT, SM, and inHg unit labels from decoded METAR values.
       - Show METAR wind speed without the KT label.
       - Show METAR visibility without the SM label.
       - Show altimeter pressure with two decimal places and no unit label.
-      - Convert METAR temperature and dew point to rounded whole degrees Fahrenheit.
+      - Convert METAR temperature and dew point to rounded integer degrees Fahrenheit.
       - Show temperature and dew point in separate table fields.
       - Name the METAR cloud field SKY.
       - Show an A in an unlabeled first table column when the METAR has the AUTO modifier.
-      - Leave the first table column blank when the METAR has no AUTO modifier.
-      - Name the METAR station column APT.
+      - Keep the first table column blank when the METAR has no AUTO modifier.
+      - Name the METAR airport code column APT.
       - Split METAR wind direction and speed into separate columns, in that order.
       - Merge wind direction and speed under one WIND header.
       - Right-align METAR age, wind direction, temperature, and dew point values.
       - Center the WX and SKY headers. Keep weather values right-aligned.
-      - Right-align the AGE header. Center the WIND header over both wind columns.
+      - Right-align the AGE header. Center the WIND header above both wind columns.
       - Name the METAR temperature column TMP.
       - Show the decoded METAR table only in 3D mode on screens wider than 900 pixels.
       - Show a raw one-line METAR ticker in 2D mode and on screens 900 pixels wide or less.
       - Show only public-use airports with a four-character ICAO code that starts with K.
-      - Show airports only when they have an asphalt or concrete runway over 1,000 feet long.
-      - Draw only qualifying asphalt and concrete runways.
-      - Draw airport markers and codes in light gray.
+      - Show airports only when they have an asphalt or concrete runway more than 1,000 feet long.
+      - Make only qualifying asphalt and concrete runways.
+      - Make airport markers and codes pale gray.
       - Center airport labels above their marker dots.
-      - Draw runways as solid gray lines.
-      - Draw runway geometry at each runway end's NASR elevation.
-      - Draw much darker gray dotted 10-nautical-mile runway centerline extensions from both runway ends.
-      - Raise each extended centerline to 3,000 feet above its runway end elevation.
-      - Draw much darker gray dotted 10-nautical-mile perpendicular base-leg marks at extension ends.
-      - Draw each base leg at the altitude of its extended centerline endpoint.
-      - Draw VOR symbols and identifiers in blue.
-      - Show ILS course guides by default in both radar views. Press I to toggle them.
-      - Draw dotted dim-orange ILS course guides for 10 nautical miles from each glide-slope site.
-      - Draw NASR ILS marker beacons as small hollow dim-orange circles at their coordinates.
+      - Make runways solid gray lines.
+      - Make runway geometry follow each runway end's NASR elevation.
+      - Make dark gray dotted runway extensions 10 nautical miles long.
+      - Lift each extended centerline to 3,000 feet above its runway end elevation.
+      - Make dark gray dotted perpendicular base-leg marks 10 nautical miles from extension ends.
+      - Make each perpendicular leg match the altitude of its centerline endpoint.
+      - Make VOR symbols and identifiers blue.
+      - Show ILS course guides by default in both radar views. Use I to toggle them.
+      - Make dotted muted-orange ILS course guides 10 nautical miles long from each glide-slope site.
+      - Make NASR ILS marker beacons small hollow muted-orange circles at their coordinates.
       - Do not show text labels on ILS guides.
-      - Extend ILS course guides away from the runway on the reciprocal of the corrected true approach course.
-      - Follow the NASR glide-slope angle in 3D. Draw ILS course guides flat in Canvas.
-      - Treat ILS course guides as visual guides. Do not present them as complete approach paths.
-      - Show SIDs and STARs by default in both radar views. Press S to toggle them.
-      - Draw SID paths as dotted dim-blue lines.
-      - Draw STAR paths as dotted dim-orange lines, like ILS guides.
-      - Keep SID, STAR, and ILS line brightness slightly above the dark-gray runway guides.
-      - Draw a small hollow pyramid at each SID and STAR fix.
-      - Label SID endpoints, STAR transition entries, common STAR fixes, and STAR route endpoints.
-      - Do not show labels for other SID or STAR fixes.
-      - Draw SID and STAR paths at the radar baseline. Do not invent crossing altitudes.
-      - Draw approximate 5- and 10-mile rings around airports with the NASR Class C flag.
+      - Extend ILS guides from the runway along the reciprocal corrected true landing course.
+      - Follow the NASR glide-slope angle in 3D. Make ILS course guides flat in Canvas.
+      - Use ILS course guides only as visual references. They do not show full landing paths.
+      - Show SIDs and STARs by default in both radar views. use S to toggle them.
+      - Make SID paths dotted muted-blue lines.
+      - Make STAR paths dotted muted-orange lines, like ILS guides.
+      - Keep SID, STAR, and ILS line brightness marginally above the dark-gray runway guides.
+      - Make a small hollow pyramid at each SID and STAR waypoint.
+      - Label SID endpoints, STAR route entries, shared STAR waypoints, and STAR route endpoints.
+      - Do not show labels for other SID or STAR waypoints.
+      - Make SID and STAR paths at radar reference altitude. Do not invent crossing altitudes.
+      - Make approximate 5- and 10-mile rings around airports with the NASR Class C flag.
       - Identify approximate Class C rings as visual guides, not official boundaries.
-      - Draw gray approximate Class B, C, and D altitude shells in the 3D view.
+      - Make approximate gray Class B, C, and D altitude shells in the 3D view.
       - Use typical layered Class B, C, and D altitudes when NASR has only a class flag.
       - Mark all class-based airspace shells as approximate, not official boundaries.
-      - Draw actual ARTCC boundary paths from NASR `ARB_SEG` points.
-      - Do not present ARTCC boundaries as approach control boundaries.
-      - Do not require authentication for local REST or WebSocket access.
-      - Serve the local page, CSS, and built JavaScript from the web server.
+      - Make ARTCC boundary paths from NASR `ARB_SEG` points.
+      - Do not show ARTCC boundaries as terminal control boundaries.
+      - Do not require authentication for local HTTP or WebSocket access.
+      - Host the local page, CSS, and built JavaScript on the web server.
       - Keep Three.js as the primary 3D radar renderer.
-      - Offer an optional runtime vector-tile layer for faint gray lake and ocean outlines.
-      - Load only the vector tiles that cover the current radar view. Keep tile data in browser memory.
-      - Draw the same geographic water outlines in the Three.js and Canvas radar views.
+      - Offer an optional runtime vector-tile layer for muted gray lake and ocean outlines.
+      - Load vector tiles that cover the current radar view.
+      - Keep tile data in browser memory.
+      - Make geographic water outlines match in the Three.js and Canvas radar views.
       - Keep the water layer flat at zero feet MSL and omit fills, rivers, and streams.
-      - Show small map data attribution at the bottom left. Let users toggle water with W.
+      - Show small map data attribution at lower left. Let users toggle water with W.
       - Show a 2D Canvas radar when WebGL cannot start. Keep the 3D radar when WebGL works.
-      - Place the home marker at the `ADSB_LAT` and `ADSB_LON` origin and the `ADSB_ALT` height.
-      - Place aircraft by their coordinates and feed altitude relative to the home height.
+      - Put the home marker at the `ADSB_LAT` and `ADSB_LON` departure and the `ADSB_ALT` height.
+      - Put aircraft by their coordinates and stream altitude relative to the home height.
       - Set the default camera to a top-down view centered on home. Keep north at the top.
       - On mobile, keep home centered and disable panning.
       - Use pinch gestures to zoom on mobile.
-      - Use two-finger twist gestures to rotate the radar on mobile.
-      - Use Up and Down arrow keys to zoom in and out. Use Left and Right arrow keys to rotate by 15 degrees.
-      - Place the METAR display at the top center of the radar view. Use larger text for the decoded table and ticker.
-      - Keep the home location below the METAR ticker on narrow layouts.
+      - Use two-finger twist gestures to turn the radar on mobile.
+      - Use Up and Down to zoom. Use Left and Right to turn by 15 degrees.
+      - Put METAR at the radar top center. Increase text dimensions in the decoded table and ticker.
+      - Keep the home location under the METAR ticker on narrow layouts.
       - Do not show gesture instructions or text connection status on the radar view.
       - Show the home location at the top left of the radar view. Do not show a view title.
       - Use a black background for the page and radar scope.
       - Use green radar text, markers, paths, and axes on black.
       - Use darker green for minor rings and aircraft history marks.
-      - Show the radar in dark gray while the aircraft feed is disconnected. Show it in green while connected.
-      - Retry the WebSocket feed after a disconnect. Start with a one-second delay and double it to a 30-second maximum.
+      - Show the radar in dark gray while disconnected and green while connected.
+      - Retry the WebSocket stream after disconnects.
+      - Start retries after one second. Double the interval to a maximum of 30 seconds.
       - Refresh the aircraft list after each WebSocket connection.
       - Keep the radar scope borderless.
       - Set radar range from 1 through 300 nautical miles in both views.
-      - Set the default range to 20 nautical miles or 5 miles past the furthest live target, whichever is larger.
-      - Allow the default range and rotation to be set with RADAR_DEFAULT_RANGE_NM and RADAR_DEFAULT_ROTATION in `.env`.
-      - Keep auto-zoom active until the user changes the view. Resume auto-zoom after reset.
-      - Reset the radar to its configured default rotation and range when users press R or click the compass.
+      - Set the default range to 20 nautical miles or 5 miles farther than the furthest live target.
+      - Use the larger range.
+      - Set `RADAR_DEFAULT_RANGE_NM` and `RADAR_DEFAULT_ROTATION` in `.env`.
+      - Keep auto-zoom active until the user changes the view. Continue after restoring defaults.
+      - Use R or click the compass to restore the configured defaults.
       - Remove aircraft targets after 120 seconds without an update.
-      - Fade aircraft markers and labels from full brightness to invisible over 120 seconds without updates.
-      - Keep range limits, auto-zoom, and ring spacing the same in 3D and Canvas views.
-      - "Show each aircraft label as three lines: callsign, altitude, then speed and aircraft type code when known."
+      - Fade aircraft markers and labels to invisible after 120 seconds without updates.
+      - Keep range limits, auto-zoom, and ring intervals the same in 3D and Canvas views.
+      - "Show each aircraft label on three lines: callsign, altitude, then speed and known type code."
       - Show the ICAO code when callsign is blank or unknown, or equals `AD`, `OK`, or `RM`.
-      - Keep a useful callsign when later updates contain only a blank, unknown, `AD`, `OK`, or `RM` value.
+      - Keep the last useful callsign if updates contain a blank or unknown value.
+      - Keep it when updates contain `AD`, `OK`, or `RM`.
       - Show altitude in hundreds of feet.
-      - Pad altitude below 10,000 feet to three digits with leading zeroes.
-      - Add C when vertical rate stays within ±100 feet per minute.
-      - Otherwise, add the signed vertical rate in hundreds of feet per minute.
-      - Spread labels to reduce overlap. Draw a leader line from each label to its aircraft.
-      - Draw upright hollow green diamond aircraft markers in both radar views.
-      - Draw a forward path to each aircraft's estimated position 60 seconds later.
+      - Pad altitude under 10,000 feet to three digits with leading zeroes.
+      - Add C when vertical rate stays between -100 and +100 feet each minute.
+      - When outside that range, add the signed vertical rate in hundreds of feet each minute.
+      - Give labels distinct spots. Make a leader line from each label to its aircraft.
+      - Make upright hollow green diamond aircraft markers in both radar views.
+      - Make a forward path to each aircraft's estimated location 60 seconds later.
       - Show aircraft history as dark-green backslash marks at earlier positions.
       - Show no more than 60 seconds of aircraft history marks.
-      - Draw aircraft history marks at half the size of the aircraft labels.
-      - Leave a 9-pixel gap between each aircraft diamond and its leader line.
-      - Leave a 7-pixel gap between each leader line and the label text.
+      - Make aircraft history marks half as large as the aircraft labels.
+      - Keep a 9-pixel opening between each aircraft diamond and its leader line.
+      - Keep a 7-pixel opening between each leader line and the label text.
       - Show range values without unit text on rings in both radar views.
-      - Anchor each range label at the ring it names.
-      - Place range labels due north of home in both radar views.
+      - Attach each range label at the ring it names.
+      - Put range labels due north of home in both radar views.
       - Center each range label vertically on its ring.
-      - Leave a small ring gap behind each range label.
+      - Keep a small ring opening behind each range label.
       - Show a nautical mile scale and a symbol legend at the lower left of both radar views.
       - Keep the radar legend background transparent. Align each symbol with its label in a table.
       - Use two legend columns on wide views and one column on narrow views.
-      - Place the second legend column next to the first column.
+      - Put the second legend column beside the first column.
       - Show aircraft, vectors, history, home, airports, VORs, runways, and runway guides in the legend.
       - Show I for ILS, S for SID and STAR, and W for water in the legend.
       - Use 18-pixel aircraft labels in 3D and 9-pixel labels in Canvas.
-      - Keep 3D aircraft labels twice the size of Canvas labels.
-      - Scale 3D range ring thickness with zoom range to keep its screen thickness steady.
-      - Draw solid major rings every 10 nautical miles below 60 miles, every 20 below 150 miles, then every 50 miles.
-      - Draw darker solid rings halfway between each major ring.
-      - Label major range rings only. Keep labels and ring spacing the same in both radar views.
-      - Draw range rings through 300 nautical miles.
-      - Allow full camera rotation, tilt, pan, zoom, and a reset to the default view.
-      - Describe feed altitude as barometric altitude. Do not claim it always equals true MSL altitude.
-      - Keep the dashboard focused on the 3D view, flight strips, and aircraft details.
+      - Make 3D aircraft labels two times the dimension of Canvas labels.
+      - Scale 3D range ring thickness with zoom range to keep its screen thickness stable.
+      - Make solid major rings every 10 nautical miles under 60 miles.
+      - Use 20-mile intervals under 150 miles, then 50-mile intervals.
+      - Make less bright solid rings halfway between each major ring.
+      - Label major range rings only. Keep labels and ring intervals the same in both radar views.
+      - Make range rings through 300 nautical miles.
+      - Allow full camera heading, tilt, pan, zoom, and a return to the default view.
+      - Describe stream altitude as barometric altitude. Do not claim it always equals true MSL altitude.
+      - Keep the dashboard focused on the 3D view, flight cards, and aircraft details.
       - Keep the radar view square and align it to the top left of the page.
-      - Size the radar view to the shorter viewport dimension.
-      - Reserve space to the right of the radar view in landscape layout for flight strips.
-      - Reserve space below the radar view in portrait layout for flight strips.
-      - Show aircraft flight strips beside the radar in landscape layout and below it in portrait layout.
-      - Sort web flight strips by distance from home, with the closest aircraft first.
-      - Show callsign, combined altitude and vertical rate, aircraft type code, combined heading and speed, squawk, a blank field, combined bearing and range, origin, and destination in flight strips.
-      - Format flight strip altitude and vertical rate as the aircraft radar labels do.
-      - Omit ICAO, position, and age from flight strips.
-      - Omit units from flight strip values. Keep the degree sign on headings.
-      - Put the aircraft type code after the speed on the third radar label line, separated by one space.
-      - Put the aircraft type code in the speed field position in flight strips.
-      - Keep a blank field in the former aircraft type code position in flight strips.
-      - Combine flight strip heading and speed as three-digit heading, degree sign, and speed.
-      - Combine flight strip bearing and range as three-digit bearing, degree sign, and rounded whole nautical miles.
-      - Put origin and destination airport codes in the last two flight strip fields when known.
+      - Set radar view dimensions to the shorter viewport dimension.
+      - Reserve whitespace to the right of the radar view in landscape layout for flight cards.
+      - Reserve whitespace under the radar view in portrait layout for flight cards.
+      - Show aircraft flight cards beside the radar in landscape layout and under it in portrait layout.
+      - Sort web flight cards by distance from home, with the closest aircraft first.
+      - Show callsign, altitude and vertical rate, type code, heading and speed, and squawk.
+      - Add blank, bearing, range, departure, and destination fields.
+      - Format flight card altitude and vertical rate as the aircraft radar labels do.
+      - Omit ICAO, location, and age from flight cards.
+      - Omit units from flight card values. Keep the degree sign on headings.
+      - Put the aircraft type code after speed on radar label line three.
+      - Separate them with one blank.
+      - Put the aircraft type code in the speed field location in flight cards.
+      - Keep a blank field in the former aircraft type code location in flight cards.
+      - Combine flight card heading and speed as three-digit heading, degree sign, and speed.
+      - Show flight card bearing as three digits followed by a degree sign.
+      - Follow it with rounded integer nautical miles.
+      - Put departure and destination airport codes in the last two flight card fields when known.
       - Use ADSB.lol v2 hex lookup by ICAO address for aircraft type codes.
-      - Use ADSB.lol route JSON by callsign for origin and destination airport codes.
+      - Use ADSB.lol route JSON by callsign for departure and destination airport codes.
       - Cache ADSB.lol lookups in server memory by ICAO address and callsign.
-      - Do not show field header rows in flight strips.
-      - Wrap flight strip fields into two rows, then three rows as width decreases.
-      - Use equal column widths in each wrapped flight strip row.
-      - Hide flight strip scrollbars while keeping the aircraft list scrollable.
-      - Press F to show or hide flight strips. Expand the radar panel to full page width when strips are hidden.
-      - Fade each flight strip from full brightness to hidden as its data ages. Remove it at the aircraft timeout.
-      - Keep the flight strip scroll position during each data refresh.
-      - Use a black background, white text, a double outer border, and single aircraft dividers in flight strips.
+      - Do not show field header rows in flight cards.
+      - Reflow flight card fields into two rows, then three rows as width decreases.
+      - Use equal column widths in each wrapped flight card row.
+      - Hide flight card scrollbars while keeping the aircraft list scrollable.
+      - Use F to show or hide flight cards.
+      - Expand the radar panel to full page width when strips are hidden.
+      - Fade each flight card as its data ages. Remove it at the aircraft timeout.
+      - Keep the flight card scroll location during each data refresh.
+      - Use a black background and white text in flight cards.
+      - Use a double outer border and single aircraft dividers.
       - Remove the page header and footer.
-      - Place the reset control at the top right over the radar view.
+      - Put the Restore control at the top right above the radar view.
       - Show a passive 16-point compass at the lower right of both radar views.
       - Make the north point 1.5 times as long as the south, east, and west points.
-      - Make the northeast, northwest, southeast, and southwest points half as long as the cardinal points.
+      - Make diagonal compass points half as long as cardinal points.
       - Make the other eight points half as long as the diagonal points.
-      - Label only north, south, east, and west. Make the north label slightly more prominent.
-      - Rotate the compass star and labels with the radar view.
-      - Show the rotation as an upright three-digit value from 000 through 359 at the compass center.
+      - Label only north, south, east, and west. Make the north label marginally more prominent.
+      - Turn the compass star and labels with the radar view.
+      - Show upright three-digit heading values from 000 through 359 at compass center.
       - Do not let compass clicks or touches change the radar view.
-      - Show selected aircraft fields in flight strips and aircraft details.
-      - Mark missing flight strip values with a dash.
-      - Draw FAA ARTCC boundary paths in gray when the NASR data provides them.
-      - Do not label ARTCC paths as Portland or A90 approach boundaries.
+      - Show selected aircraft fields in flight cards and aircraft details.
+      - Mark missing flight card values with a dash.
+      - Make FAA ARTCC boundary paths gray when NASR data has them.
+      - Do not label ARTCC paths as Portland or A90 terminal boundaries.
       - Load airport, navaid, airspace, and boundary data only through the current zoom range.
       - Load ILS data only through the current zoom range.
       - Load SID and STAR data only through the current zoom range.
-      - Leave radio controls out of the dashboard until requested.
+      - Keep radio controls out of the dashboard until requested.
       - Document the RTL1090 background and foreground procedures in `docs/`.
       - Provide browser assets, documented routes, and mirrored tests.
-      - Keep package names and image names consistent with Radar.
+      - Keep package names and image names the same as Radar.
     donts:
       - Read or decode raw SDR samples in the Radar app.
-      - Write an aircraft JSON file for another app to watch.
+      - Write an aircraft JSON file for second app to monitor.
       - Print the flight table in `--debug` mode.
-      - Use more than three display lines for a table header or aircraft row.
+      - Use more than three view lines for a table header or aircraft row.
       - Replace the Three.js radar scene with a map renderer.
-      - Add a server proxy or persistent tile store for map requests.
+      - Add a server proxy or stable tile store for map requests.

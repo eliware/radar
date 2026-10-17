@@ -51,7 +51,9 @@ test("renders the current aircraft list after each aircraft update", () => {
   );
   expect(deps.writeError).not.toHaveBeenCalled();
   feedOptions.onError(new Error("offline"));
-  expect(deps.writeError).toHaveBeenCalledWith("ADS-B feed error: offline. Retrying in 2 seconds.");
+  expect(deps.writeError).toHaveBeenCalledWith(
+    "ADS-B stream error: offline. Retrying in 2 seconds.",
+  );
   expect(deps.setExitCode).not.toHaveBeenCalled();
   cli.close();
 });

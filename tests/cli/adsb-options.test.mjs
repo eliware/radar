@@ -48,11 +48,13 @@ test.each([["--other"], ["--host"], ["--port"], ["--host", "--help"]])(
 
 test.each(["nope", "0", "65536", "1.5"])("rejects invalid port %s", (port) => {
   expect(() => parseAdsbOptions(["--port", port])).toThrow(
-    "Port must be an integer from 1 through 65535",
+    "TCP endpoint number must be an integer from 1 through 65535",
   );
 });
 
 test("rejects an invalid port from the environment", () => {
   process.env.ADSB_PORT = "bad";
-  expect(() => parseAdsbOptions([])).toThrow("Port must be an integer from 1 through 65535");
+  expect(() => parseAdsbOptions([])).toThrow(
+    "TCP endpoint number must be an integer from 1 through 65535",
+  );
 });

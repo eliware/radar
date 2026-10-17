@@ -37,7 +37,7 @@ export function attachMobileCompassTracking(documentRef, windowRef, view) {
       }
     }
     active = true;
-    setStatus("FOLLOWING PHONE");
+    setStatus("PHONE ACTIVE");
     windowRef.addEventListener("deviceorientation", onHeading);
   };
   const onClick = () => (active ? stop() : start());

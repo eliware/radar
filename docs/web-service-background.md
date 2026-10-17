@@ -8,7 +8,7 @@ Create a task named `Radar Web`. Run these steps with administrator rights.
 
 1. Select **Create Task**.
 2. Set the task account to `SYSTEM`.
-3. Select **Run whether user is logged on or not**.
+3. Select `Run whether user is logged on or not`.
 4. Select **Run with highest privileges**.
 5. Add an **At startup** trigger.
 6. Add an action that starts Node.js with `bin/radar.mjs` as its argument.
@@ -35,4 +35,4 @@ Run this command to check server status:
 curl.exe http://127.0.0.1:3000/health
 ```
 
-Run `ipconfig` to find the computer's Wi-Fi IPv4 address. Open `http://<computer-ip>:3000` on another device on the same network. Allow inbound TCP port `3000` in Windows Firewall for the trusted local network.
+Run `ipconfig` to find the computer's Wi-Fi IPv4 address. Open `http://<computer-ip>:3000` on a second device on the same network. Allow inbound TCP endpoint `3000` in Windows Firewall for the trusted local network.

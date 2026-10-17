@@ -15,7 +15,7 @@ export function attachRadarCompassDisplay(documentRef, view) {
     heading.textContent = value;
     compass.setAttribute(
       "aria-label",
-      `Reset view. N E S W ${value}. Radar heading ${value} degrees`,
+      `Restore view. N E S W ${value}. Radar heading ${value} degrees`,
     );
   };
 

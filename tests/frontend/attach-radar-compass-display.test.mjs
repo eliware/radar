@@ -37,7 +37,7 @@ test("rotates the rose and shows the upright heading from view changes", () => {
   expect(doc.heading.textContent).toBe("045");
   expect(doc.compass.setAttribute).toHaveBeenLastCalledWith(
     "aria-label",
-    "Reset view. N E S W 045. Radar heading 045 degrees",
+    "Restore view. N E S W 045. Radar heading 045 degrees",
   );
   angle = 2 * Math.PI;
   render();
