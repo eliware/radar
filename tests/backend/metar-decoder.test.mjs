@@ -18,7 +18,7 @@ test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
       visibility: "10",
       flightCategory: "VFR",
       conditions: "-RA",
-      clouds: "FEW 4500 BKN 8000",
+      clouds: "FEW 045 BKN 080",
       temperature: "64°F",
       dewPoint: "45°F",
       altimeter: "29.92",

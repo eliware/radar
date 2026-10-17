@@ -21,7 +21,7 @@ function headers() {
     "<th>FLT</th>",
     '<th class="metar-age-header">AGE</th>',
     '<th class="metar-wind-header" colspan="2">WIND</th>',
-    "<th>VIS</th>",
+    '<th class="metar-vis-header">VIS</th>',
     '<th class="metar-wx-header">WX</th>',
     '<th class="metar-sky-header">SKY</th>',
     "<th>TMP</th>",
@@ -50,6 +50,8 @@ function reportRow({ id, metar, decoded }) {
   return `<tr>${values
     .map((value, index) => {
       if (index === 2) return `<td>${categoryLabel(value)}</td>`;
+      if (index === 6) return `<td class="metar-visibility">${escapeText(value)}</td>`;
+      if (index === 8) return `<td class="metar-sky">${escapeText(value)}</td>`;
       return `<td${index === 7 ? ' class="metar-weather"' : ""}>${escapeText(value)}</td>`;
     })
     .join("")}</tr>`;

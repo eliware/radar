@@ -156,7 +156,7 @@ p {
   left: 50%;
   width: max-content;
   max-width: calc(100% - 220px);
-  max-height: 118px;
+  max-height: 190px;
   overflow: hidden;
   transform: translateX(-50%);
   color: #ddd;
@@ -196,6 +196,7 @@ p {
   color: #aaa;
   text-align: left;
 }
+.metar-reports th.metar-vis-header,
 .metar-reports th.metar-wx-header,
 .metar-reports th.metar-sky-header {
   text-align: center;
@@ -212,8 +213,10 @@ p {
 .metar-reports td:nth-child(10) {
   text-align: right;
 }
-.metar-reports td.metar-weather {
-  text-align: right;
+.metar-reports td.metar-visibility,
+.metar-reports td.metar-weather,
+.metar-reports td.metar-sky {
+  text-align: center;
 }
 .flight-category {
   font-weight: 700;
