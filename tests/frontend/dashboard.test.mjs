@@ -149,7 +149,7 @@ test("destroys the scene when dashboard setup fails after scene creation", async
   expect(result).toBeNull();
   expect(scene.destroy).toHaveBeenCalledTimes(1);
 });
-test("loads reference data only for each new view range", async () => {
+test("loads reference data to the maximum range independent of zoom", async () => {
   const document = makeDocument();
   const requested = [];
   const fetchData = jest.fn(async (path) => {
@@ -190,11 +190,9 @@ test("loads reference data only for each new view range", async () => {
   changeView(30);
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(scene.onViewChange).toHaveBeenCalledTimes(2);
-  expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=20");
-  expect(requested).toContain("/api/navaids?minRangeNm=20&maxRangeNm=30");
-  expect(requested).toContain("/api/airspace-boundaries?minRangeNm=20&maxRangeNm=30");
-  expect(requested).toContain("/api/ils?minRangeNm=20&maxRangeNm=30");
-  expect(requested).toContain("/api/airways?minRangeNm=20&maxRangeNm=30");
+  expect(requested.filter((path) => path.includes("maxRangeNm=300"))).toHaveLength(6);
+  expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=300");
+  expect(requested.some((path) => path.includes("minRangeNm=20&maxRangeNm=30"))).toBe(false);
   result.destroy();
   expect(windowRef.clearInterval).toHaveBeenCalledWith("metar");
 });

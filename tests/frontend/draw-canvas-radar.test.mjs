@@ -28,8 +28,8 @@ test("draws close range rings below five nautical miles", () => {
   drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 0 });
   expect(canvas.width).toBe(1);
   expect(canvas.height).toBe(1);
-  expect(context.arc).toHaveBeenCalledTimes(7);
-  expect(context.clip).toHaveBeenCalledTimes(3);
+  expect(context.arc).toHaveBeenCalledTimes(6);
+  expect(context.clip).not.toHaveBeenCalled();
   expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
 });
 

@@ -5,7 +5,7 @@ function response(rows = []) {
   return { ok: true, json: async () => rows };
 }
 
-test("requests all reference data by new range band only", async () => {
+test("loads reference data through the maximum radar range on first request", async () => {
   const fetchData = jest.fn().mockResolvedValue(response());
   const scene = {
     updateAirports: jest.fn(),
@@ -19,21 +19,15 @@ test("requests all reference data by new range band only", async () => {
   await loader.load(20);
   await loader.load(30);
   expect(fetchData.mock.calls.map(([url]) => url)).toEqual([
-    "/api/airports?minRangeNm=0&maxRangeNm=20",
-    "/api/navaids?minRangeNm=0&maxRangeNm=20",
-    "/api/airspace-boundaries?minRangeNm=0&maxRangeNm=20",
-    "/api/ils?minRangeNm=0&maxRangeNm=20",
-    "/api/procedures?minRangeNm=0&maxRangeNm=20",
-    "/api/airways?minRangeNm=0&maxRangeNm=20",
-    "/api/airports?minRangeNm=20&maxRangeNm=30",
-    "/api/navaids?minRangeNm=20&maxRangeNm=30",
-    "/api/airspace-boundaries?minRangeNm=20&maxRangeNm=30",
-    "/api/ils?minRangeNm=20&maxRangeNm=30",
-    "/api/procedures?minRangeNm=20&maxRangeNm=30",
-    "/api/airways?minRangeNm=20&maxRangeNm=30",
+    "/api/airports?minRangeNm=0&maxRangeNm=300",
+    "/api/navaids?minRangeNm=0&maxRangeNm=300",
+    "/api/airspace-boundaries?minRangeNm=0&maxRangeNm=300",
+    "/api/ils?minRangeNm=0&maxRangeNm=300",
+    "/api/procedures?minRangeNm=0&maxRangeNm=300",
+    "/api/airways?minRangeNm=0&maxRangeNm=300",
   ]);
-  expect(scene.updateBoundaries).toHaveBeenCalledTimes(2);
-  expect(loader.loadedThrough()).toBe(30);
+  expect(scene.updateBoundaries).toHaveBeenCalledTimes(1);
+  expect(loader.loadedThrough()).toBe(300);
 });
 
 test("ignores invalid ranges and caps requested data at the radar limit", async () => {
@@ -59,7 +53,7 @@ test("ignores invalid ranges and caps requested data at the radar limit", async 
   expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("maxRangeNm=300"));
 });
 
-test("resets the requested range after a failed API response so callers can retry", async () => {
+test("retries loading the maximum range after a failed API response", async () => {
   const fetchData = jest
     .fn()
     .mockResolvedValueOnce({ ok: false })
@@ -78,11 +72,11 @@ test("resets the requested range after a failed API response so callers can retr
   expect(loader.loadedThrough()).toBe(0);
   await loader.load(10);
 
-  expect(loader.loadedThrough()).toBe(10);
+  expect(loader.loadedThrough()).toBe(300);
   expect(scene.updateAirports).toHaveBeenCalledWith(["loaded"]);
 });
 
-test("extends the requested band while the previous band is still loading", async () => {
+test("coalesces zoom changes while the maximum range is loading", async () => {
   const pending = [];
   const fetchData = jest.fn(
     () => new Promise((resolve) => pending.push(() => resolve(response()))),
@@ -100,22 +94,21 @@ test("extends the requested band while the previous band is still loading", asyn
   const second = loader.load(20);
   expect(first).toBe(second);
 
-  while (pending.length || loader.loadedThrough() < 20) {
-    while (pending.length) pending.shift()();
-    await Promise.resolve();
-  }
+  while (pending.length) pending.shift()();
   await first;
 
-  expect(fetchData).toHaveBeenCalledTimes(12);
-  expect(loader.loadedThrough()).toBe(20);
+  expect(fetchData).toHaveBeenCalledTimes(6);
+  expect(loader.loadedThrough()).toBe(300);
 });
 
-test("keeps a newer range request when the in-flight band fails", async () => {
+test("retries the fixed maximum range after an in-flight request fails", async () => {
   let failFirst;
+  let shouldFail = true;
   const requests = [];
   const fetchData = jest.fn((url) => {
     requests.push(url);
-    if (url.includes("/api/airports?") && url.endsWith("maxRangeNm=10")) {
+    if (shouldFail && url.includes("/api/airports?") && url.endsWith("maxRangeNm=300")) {
+      shouldFail = false;
       return new Promise((resolve) => (failFirst = () => resolve({ ok: false })));
     }
     return Promise.resolve(response());
@@ -133,6 +126,10 @@ test("keeps a newer range request when the in-flight band fails", async () => {
   loader.load(20);
   failFirst();
   await pending;
-  expect(requests).toContain("/api/airports?minRangeNm=0&maxRangeNm=20");
-  expect(loader.loadedThrough()).toBe(20);
+  expect(loader.loadedThrough()).toBe(0);
+  await loader.load(20);
+  expect(
+    requests.filter((url) => url === "/api/airports?minRangeNm=0&maxRangeNm=300"),
+  ).toHaveLength(2);
+  expect(loader.loadedThrough()).toBe(300);
 });

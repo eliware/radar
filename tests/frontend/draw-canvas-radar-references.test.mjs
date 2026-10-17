@@ -7,7 +7,7 @@ jest.unstable_mockModule("../../src/frontend/draw-radar-references.mjs", () => (
 const { drawCanvasRadarReferences } =
   await import("../../src/frontend/draw-canvas-radar-references.mjs");
 
-test("renders reference layers with shared visibility and clipped range scope", () => {
+test("renders reference layers with shared visibility and without a scope clip", () => {
   const options = {
     ctx: {},
     location: { latitude: 43, longitude: -70 },
@@ -33,13 +33,10 @@ test("renders reference layers with shared visibility and clipped range scope", 
     options.ctx,
     expect.objectContaining({ airports: options.airports, airways: options.airways }),
     expect.any(Function),
-    options.range,
     true,
     options.procedureVisibility,
-    expect.any(Array),
     options.airwayVisibility,
     options.runwayVisibility,
     options.referenceVisibility,
   );
-  expect(drawRadarReferences.mock.calls[0][6]).toHaveLength(64);
 });

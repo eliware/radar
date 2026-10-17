@@ -32,7 +32,7 @@ jest.unstable_mockModule("../../src/frontend/draw-procedures.mjs", () => ({ draw
 jest.unstable_mockModule("../../src/frontend/draw-airways.mjs", () => ({ drawAirways }));
 const { drawRadarReferences } = await import("../../src/frontend/draw-radar-references.mjs");
 
-test("routes each reference layer in draw order with visibility and scope", () => {
+test("routes each reference layer in draw order with visibility", () => {
   const context = {};
   const project = jest.fn();
   const airports = new Map();
@@ -41,10 +41,9 @@ test("routes each reference layer in draw order with visibility and scope", () =
   const ilsApproaches = new Map();
   const procedures = new Map();
   const airways = new Map();
-  const scope = [{ x: 0, y: 0 }];
   const references = { airports, navaids, boundaries, ilsApproaches, procedures, airways };
 
-  drawRadarReferences(context, references, project, 20, false, false, scope);
+  drawRadarReferences(context, references, project, false, false);
 
   expect(calls.map(([name]) => name)).toEqual([
     "airspace-rings",
@@ -56,33 +55,26 @@ test("routes each reference layer in draw order with visibility and scope", () =
     "procedures",
     "airways",
   ]);
-  expect(drawAirspaceRings).toHaveBeenCalledWith(context, airports, project, 20);
-  expect(drawAirportRunways).toHaveBeenCalledWith(context, airports, project, 20, true, true);
-  expect(drawAirportMarkers).toHaveBeenCalledWith(context, airports, project, 20);
-  expect(drawNavaidMarkers).toHaveBeenCalledWith(context, navaids, project, 20);
+  expect(drawAirspaceRings).toHaveBeenCalledWith(context, airports, project, 300);
+  expect(drawAirportRunways).toHaveBeenCalledWith(context, airports, project, 300, true, true);
+  expect(drawAirportMarkers).toHaveBeenCalledWith(context, airports, project, 300);
+  expect(drawNavaidMarkers).toHaveBeenCalledWith(context, navaids, project, 300);
   expect(drawArtccBoundaries).toHaveBeenCalledWith(context, boundaries, project);
-  expect(drawIlsApproaches).toHaveBeenCalledWith(context, ilsApproaches, project, 20, false);
-  expect(drawProcedures).toHaveBeenCalledWith(
-    context,
-    procedures,
-    project,
-    20,
-    { sidVisible: false, starVisible: false },
-    scope,
-  );
-  expect(drawAirways).toHaveBeenCalledWith(
-    context,
-    airways,
-    project,
-    20,
-    { Q: true, J: true, V: true },
-    scope,
-  );
+  expect(drawIlsApproaches).toHaveBeenCalledWith(context, ilsApproaches, project, 300, false);
+  expect(drawProcedures).toHaveBeenCalledWith(context, procedures, project, 300, {
+    sidVisible: false,
+    starVisible: false,
+  });
+  expect(drawAirways).toHaveBeenCalledWith(context, airways, project, 300, {
+    Q: true,
+    J: true,
+    V: true,
+  });
 });
 
 test("uses empty layer maps when reference data is missing", () => {
   calls.length = 0;
-  drawRadarReferences({}, {}, () => null, 10);
+  drawRadarReferences({}, {}, () => null);
   expect(drawAirportMarkers.mock.calls.at(-1)[1]).toEqual(new Map());
   expect(drawNavaidMarkers.mock.calls.at(-1)[1]).toEqual(new Map());
   expect(drawArtccBoundaries.mock.calls.at(-1)[1]).toEqual(new Map());
@@ -101,10 +93,8 @@ test("hides airport, airspace, VOR and runway layers with airport and VOR switch
     {},
     {},
     () => null,
-    10,
     true,
     { sidVisible: true, starVisible: true },
-    null,
     { Q: true, J: true, V: true },
     { runwaysVisible: true, extensionsVisible: true },
     { airportsVisible: false, navaidsVisible: false },
@@ -116,7 +106,7 @@ test("hides airport, airspace, VOR and runway layers with airport and VOR switch
     expect.anything(),
     expect.anything(),
     expect.anything(),
-    10,
+    300,
     false,
     false,
   );
@@ -130,10 +120,8 @@ test("can omit flat airspace rings while retaining airport references", () => {
     {},
     { airports: new Map() },
     () => null,
-    20,
     true,
     undefined,
-    null,
     undefined,
     undefined,
     undefined,

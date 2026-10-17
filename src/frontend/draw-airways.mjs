@@ -1,10 +1,7 @@
-import { clipRadarScope } from "./clip-radar-scope.mjs";
-
 const COLORS = { Q: "#31534d", J: "#54394b", V: "#4f4d32" };
 
-export function drawAirways(context, airways, project, range, visibility, scope) {
+export function drawAirways(context, airways, project, range, visibility) {
   context.save();
-  clipRadarScope(context, scope);
   context.font = "10px monospace";
   context.textAlign = "center";
   for (const airway of airways.values()) {

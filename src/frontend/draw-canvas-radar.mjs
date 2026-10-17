@@ -40,10 +40,6 @@ export function drawCanvasRadar(
   const centerX = width / 2 + panX;
   const centerY = height / 2 + panY;
   const project = createCanvasRadarProjector(centerX, centerY, radius, range, rotation);
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-  ctx.clip();
   if (waterVisible) drawWaterOutlines(ctx, waterPaths, project, location);
   ctx.save();
   ctx.translate(centerX, centerY);
@@ -70,7 +66,6 @@ export function drawCanvasRadar(
     runwayVisibility,
     referenceVisibility,
   });
-  ctx.restore();
   const display = projectAircraftDisplayItems(
     aircraft,
     trails,

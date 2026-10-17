@@ -1,5 +1,4 @@
 import { clipProcedureSegment } from "./clip-procedure-segment.mjs";
-import { clipRadarScope } from "./clip-radar-scope.mjs";
 
 const COLORS = { SID: "#2b3d4d", STAR: "#50402e" };
 
@@ -9,11 +8,9 @@ export function drawProcedures(
   project,
   range,
   visibility = { sidVisible: true, starVisible: true },
-  scope = null,
 ) {
   if (visibility === false) return;
   context.save();
-  clipRadarScope(context, scope);
   context.lineWidth = 1;
   context.font = "10px monospace";
   context.textAlign = "center";

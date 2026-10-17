@@ -2,7 +2,6 @@ import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
 import { RADAR_SCOPE_RADIUS_RATIO } from "./radar-range.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
 import { drawRadarReferences } from "./draw-radar-references.mjs";
-import { createRadarScopePath } from "./create-radar-scope-path.mjs";
 import { projectAircraftDisplayItems } from "./project-aircraft-display-items.mjs";
 import { projectRadarReference } from "./project-radar-reference.mjs";
 import { drawCameraReadout } from "./draw-camera-readout.mjs";
@@ -51,10 +50,8 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       context,
       { airports, navaids, boundaries, ilsApproaches, procedures, airways },
       (point) => projectRadarReference(point, location, elevationFeet, project),
-      range,
       ilsVisible,
       procedureVisibility,
-      createRadarScopePath(range, (position) => project(position)),
       airwayVisibility,
       runwayVisibility,
       referenceVisibility,

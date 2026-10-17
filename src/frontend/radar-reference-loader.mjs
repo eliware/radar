@@ -24,21 +24,17 @@ export function createRadarReferenceLoader(fetchData, scene) {
         scene.updateProcedures,
         scene.updateAirways,
       ];
-      try {
-        const collections = await Promise.all(
-          paths.map((path) => loadCollection(fetchData, path, start, end)),
-        );
-        collections.forEach((items, index) => updates[index](items));
-        loadedThrough = end;
-      } catch (error) {
-        if (requestedThrough <= end) throw error;
-      }
+      const collections = await Promise.all(
+        paths.map((path) => loadCollection(fetchData, path, start, end)),
+      );
+      collections.forEach((items, index) => updates[index](items));
+      loadedThrough = end;
     }
   }
   return {
     load(range) {
       if (!Number.isFinite(range)) return Promise.resolve();
-      requestedThrough = Math.max(requestedThrough, Math.min(MAX_RADAR_RANGE, range));
+      requestedThrough = MAX_RADAR_RANGE;
       if (!loading && loadedThrough < requestedThrough) {
         loading = loadNextRanges()
           .catch(() => undefined)
