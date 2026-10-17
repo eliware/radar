@@ -20,7 +20,7 @@ const COLORS = {
   vor: "#4da3ff",
   runway: "#808080",
   extension: "#404040",
-  ils: "#c080ff",
+  ils: "#604080",
   sid: "#2b3d4d",
   star: "#50402e",
   water: "#7d7d7d",

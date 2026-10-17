@@ -1,6 +1,6 @@
 import { buildIlsCourseGeometry, safeIlsElevation } from "./ils-course-geometry.mjs";
 
-const ILS_COLOR = "#c080ff";
+const ILS_COLOR = "#604080";
 
 export function drawIlsApproaches(context, approaches, project, range, visible = true) {
   if (!visible) return;

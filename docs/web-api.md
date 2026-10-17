@@ -62,7 +62,7 @@ The radar legend has a transparent background. It aligns each symbol with its la
 
 The browser requests reference data for the current range. It requests only new distance bands as the range grows. It keeps results in browser memory.
 
-Airport markers use light gray. Labels sit above the markers. VOR symbols and labels use blue. Runway guides use dark gray dotted lines. ILS lines and markers use dim orange. SID lines use dim blue. STAR lines use dim orange. Press `I` to show or hide ILS paths. Press `S` to show or hide SID and STAR paths.
+Airport markers use light gray. Labels sit above the markers. VOR symbols and labels use blue. Runway guides use dark gray dotted lines. ILS lines and markers use dim purple, at about half the previous brightness. SID lines use dim blue. STAR lines use dim orange. Press `I` to show or hide ILS paths. Press `S` to show or hide SID and STAR paths.
 
 NASR has no local approach-control boundary shapes. The radar can show FAA ARTCC boundary points and approximate Class B, C, and D shapes. The class shapes are not official boundaries.
 
