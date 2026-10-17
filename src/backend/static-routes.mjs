@@ -1,5 +1,7 @@
 import { readFile } from "node:fs/promises";
 
+const appIcons = new Set(["radar-180.png", "radar-192.png", "radar-512.png"]);
+
 export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFile }) {
   app.get("/", async (_request, reply) =>
     sendAsset(reply, `${publicRoot}/index.html`, "text/html", read),
@@ -7,6 +9,14 @@ export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFi
   app.get("/style.css", async (_request, reply) =>
     sendAsset(reply, `${publicRoot}/style.css`, "text/css", read),
   );
+  app.get("/manifest.webmanifest", async (_request, reply) =>
+    sendAsset(reply, `${publicRoot}/manifest.webmanifest`, "application/manifest+json", read),
+  );
+  app.get("/icons/:filename", async (request, reply) => {
+    const { filename } = request.params;
+    if (!appIcons.has(filename)) return reply.code(404).send("Not found");
+    return sendAsset(reply, `${publicRoot}/icons/${filename}`, "image/png", read);
+  });
   app.get("/client.js", async (_request, reply) =>
     sendAsset(reply, `${buildRoot}/client.js`, "text/javascript", read),
   );

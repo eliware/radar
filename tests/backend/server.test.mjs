@@ -41,6 +41,8 @@ test("registers API and static routes with defaults", async () => {
     "/ws",
     "/",
     "/style.css",
+    "/manifest.webmanifest",
+    "/icons/:filename",
     "/client.js",
     "/chunks/:filename",
   ]);

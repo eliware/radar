@@ -7,4 +7,5 @@ Use these guides to install, configure, and run Radar.
 - [Linux Compose deployment](linux-compose.md) explains Docker setup, receiver access, service health, and operations.
 - [RTL1090 background task](rtl1090-background.md) explains receiver setup and Windows task control.
 - [Web API and radar display](web-api.md) explains the browser view, settings, routes, and network use.
+- [Home Screen app](pwa.md) explains adding Radar to a phone and its online-only behavior.
 - [Web background task](web-service-background.md) explains Windows startup tasks and health checks.
