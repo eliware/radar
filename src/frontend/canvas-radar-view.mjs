@@ -18,6 +18,7 @@ export function createCanvasRadarView({
   const canvas = documentRef.createElement("canvas");
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
+  const defaultRotationRadians = (-defaultRotationDegrees * Math.PI) / 180 || 0;
   const references = createRadarReferenceStore();
   const state = {
     range: defaultRangeNm,
@@ -25,8 +26,8 @@ export function createCanvasRadarView({
     autoZoom: true,
     offsetX: 0,
     offsetY: 0,
-    rotation: (defaultRotationDegrees * Math.PI) / 180,
-    defaultRotationRadians: (defaultRotationDegrees * Math.PI) / 180,
+    rotation: defaultRotationRadians,
+    defaultRotationRadians,
     connected: false,
     ilsVisible: true,
     proceduresVisible: true,

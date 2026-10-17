@@ -22,7 +22,7 @@ export function createCanvasRadarState(state, draw, distances, viewChanges) {
       draw();
     },
     setRotation(angle) {
-      state.rotation = angle;
+      state.rotation = -angle;
       draw();
     },
     onViewChange: (listener) => viewChanges.subscribe(listener),

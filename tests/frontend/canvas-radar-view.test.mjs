@@ -107,7 +107,7 @@ test("starts with the configured range and rotation", () => {
     defaultRotationDegrees: 140,
   });
   expect(view.range()).toBe(25);
-  expect(view.northAngle()).toBeCloseTo((140 * Math.PI) / 180);
+  expect(view.northAngle()).toBeCloseTo((-140 * Math.PI) / 180);
   view.destroy();
 });
 

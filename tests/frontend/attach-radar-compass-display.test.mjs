@@ -31,13 +31,13 @@ test("rotates the rose and shows the upright heading from view changes", () => {
   const detach = attachRadarCompassDisplay(doc, view);
   expect(doc.rose.setAttribute).toHaveBeenLastCalledWith("transform", "rotate(0 58 58)");
   expect(doc.heading.textContent).toBe("000");
-  angle = (359 * Math.PI) / 180;
+  angle = (315 * Math.PI) / 180;
   render();
-  expect(doc.rose.setAttribute).toHaveBeenLastCalledWith("transform", "rotate(359 58 58)");
-  expect(doc.heading.textContent).toBe("359");
+  expect(doc.rose.setAttribute).toHaveBeenLastCalledWith("transform", "rotate(315 58 58)");
+  expect(doc.heading.textContent).toBe("045");
   expect(doc.compass.setAttribute).toHaveBeenLastCalledWith(
     "aria-label",
-    "Reset view. N E S W 359. Radar heading 359 degrees",
+    "Reset view. N E S W 045. Radar heading 045 degrees",
   );
   angle = 2 * Math.PI;
   render();

@@ -41,12 +41,12 @@ test("resets to configured range and rotation", () => {
     autoZoom: false,
     rotation: 0,
     defaultRangeNm: 25,
-    defaultRotationRadians: (140 * Math.PI) / 180,
+    defaultRotationRadians: (-140 * Math.PI) / 180,
   };
   const view = createCanvasRadarState(state, jest.fn(), () => [], createViewChangeListeners());
   view.reset();
   expect(state.range).toBe(25);
-  expect(state.rotation).toBeCloseTo((140 * Math.PI) / 180);
+  expect(state.rotation).toBeCloseTo((-140 * Math.PI) / 180);
 });
 
 test("sets an absolute rotation and redraws", () => {
@@ -54,6 +54,6 @@ test("sets an absolute rotation and redraws", () => {
   const draw = jest.fn();
   const view = createCanvasRadarState(state, draw, () => [], createViewChangeListeners());
   view.setRotation((140 * Math.PI) / 180);
-  expect(state.rotation).toBeCloseTo((140 * Math.PI) / 180);
+  expect(state.rotation).toBeCloseTo((-140 * Math.PI) / 180);
   expect(draw).toHaveBeenCalledTimes(1);
 });
