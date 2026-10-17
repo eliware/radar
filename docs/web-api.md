@@ -48,7 +48,7 @@ The 3D view uses Three.js. If WebGL cannot start, the app uses a 2D Canvas view.
 
 On desktop, drag to rotate the view. Right-drag to pan. Use the scroll wheel to zoom. On mobile, keep home centered. Pinch to zoom and twist two fingers to rotate. Panning is disabled on mobile.
 
-The compass shows current rotation. Click it or press R to restore the configured default rotation and range. Press Enter or Space when the compass has focus. The compass shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`.
+The compass shows current rotation. Click it or press Home to restore the configured default rotation and range. Press Enter or Space when the compass has focus. The compass shows N, S, E, and W. The center shows a three-digit rotation from `000` to `359`.
 
 On mobile, select FOLLOW PHONE to rotate the radar with the device compass. Select it again to stop tracking. The browser may ask for sensor permission after the tap. Use HTTPS outside localhost. The radar shows a status when sensor access is unavailable or denied. Manual rotation remains available when tracking is off.
 
@@ -56,13 +56,13 @@ Use the Up and Down arrow keys to zoom in or out. Use the Left and Right arrow k
 
 Press W to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows small map data attribution at the bottom left.
 
-The radar legend has a transparent background. It aligns each symbol with its label. It uses two columns on wide views and one column on narrow views. The second column sits next to the first column. The legend shows aircraft, vectors, history, home, airports, VORs, runways, runway guides, ILS, SIDs, STARs, and water. Press I for ILS. Press S for SIDs and STARs. Press W for water.
+The radar legend has a transparent background. It aligns each symbol with its label. It uses two columns on wide views and one column on narrow views. The second column sits next to the first column. Press A for airports (and their Class B/C/D airspace, runways, and runway guides), N for VORs, R for runways, E for runway guides, I for ILS courses and approach markers, D for SIDs, S for STARs, Q for RNAV airways, J for Jet airways, V for Victor airways, and W for water. All reference layers start enabled.
 
 ## Airport and procedure layers
 
 The browser requests reference data for the current range. It requests only new distance bands as the range grows. It keeps results in browser memory.
 
-Airport markers use light gray. Labels sit above the markers. VOR symbols and labels use blue. Runway guides use dark gray dotted lines. ILS lines and markers use dim purple, at about half the previous brightness. SID lines use dim blue. STAR lines use dim orange. Press `I` to show or hide ILS paths. Press `S` to show or hide SID and STAR paths.
+Airport markers use light gray. Labels sit above the markers. VOR symbols and labels use blue. Runway guides use dark gray dotted lines. ILS lines and markers use dim purple, at about half the previous brightness. SID lines use dim blue. STAR lines use dim orange. Press `I` to show or hide ILS paths. Press `D` for SID paths and `S` for STAR paths.
 
 NASR has no local approach-control boundary shapes. The radar can show FAA ARTCC boundary points and approximate Class B, C, and D shapes. The class shapes are not official boundaries.
 

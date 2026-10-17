@@ -9,12 +9,25 @@ export function drawRadarScaleLegend(
   radius,
   connected = true,
   ilsVisible = true,
-  proceduresVisible = true,
+  procedureVisibility = { sidVisible: true, starVisible: true },
   waterVisible = true,
+  airwayVisibility = { Q: true, J: true, V: true },
+  runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
+  referenceVisibility = { airportsVisible: true, navaidsVisible: true },
 ) {
+  const procedures =
+    typeof procedureVisibility === "boolean"
+      ? { sidVisible: procedureVisibility, starVisible: procedureVisibility }
+      : procedureVisibility;
   drawRadarLegendTable(context, width, height, connected, {
     ilsVisible,
-    proceduresVisible,
+    ...procedures,
+    airwayQVisible: airwayVisibility.Q,
+    airwayJVisible: airwayVisibility.J,
+    airwayVVisible: airwayVisibility.V,
+    ...runwayVisibility,
+    airportVisible: referenceVisibility.airportsVisible,
+    navaidsVisible: referenceVisibility.navaidsVisible,
     waterVisible,
   });
   drawRadarScale(context, range, radius, height);

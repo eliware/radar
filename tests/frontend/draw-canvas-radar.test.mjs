@@ -29,7 +29,7 @@ test("draws close range rings below five nautical miles", () => {
   expect(canvas.width).toBe(1);
   expect(canvas.height).toBe(1);
   expect(context.arc).toHaveBeenCalledTimes(7);
-  expect(context.clip).toHaveBeenCalledTimes(2);
+  expect(context.clip).toHaveBeenCalledTimes(3);
   expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
 });
 

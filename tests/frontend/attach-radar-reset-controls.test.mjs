@@ -22,13 +22,13 @@ function setup() {
   };
 }
 
-test("resets with R, compass click, and accessible compass keys", () => {
+test("resets with Home, compass click, and accessible compass keys", () => {
   const state = setup();
   const view = { reset: jest.fn() };
   const preventDefault = jest.fn();
   const detach = attachRadarResetControls(state.documentRef, view);
 
-  state.sendKey({ key: "r", preventDefault });
+  state.sendKey({ key: "Home", preventDefault });
   state.clickCompass();
   state.sendCompassKey({ key: "Enter", preventDefault });
   state.sendCompassKey({ key: " ", preventDefault });
@@ -52,13 +52,14 @@ test("ignores other keys, modifiers, and editable targets", () => {
   for (const event of [
     {},
     { key: "x" },
-    { key: "r", altKey: true },
-    { key: "r", ctrlKey: true },
-    { key: "r", metaKey: true },
-    { key: "r", target: { tagName: "INPUT" } },
-    { key: "r", target: { tagName: "TEXTAREA" } },
-    { key: "r", target: { tagName: "SELECT" } },
-    { key: "r", target: { isContentEditable: true } },
+    { key: "r" },
+    { key: "Home", altKey: true },
+    { key: "Home", ctrlKey: true },
+    { key: "Home", metaKey: true },
+    { key: "Home", target: { tagName: "INPUT" } },
+    { key: "Home", target: { tagName: "TEXTAREA" } },
+    { key: "Home", target: { tagName: "SELECT" } },
+    { key: "Home", target: { isContentEditable: true } },
   ])
     state.sendKey(event);
 

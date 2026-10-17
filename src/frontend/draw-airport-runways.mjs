@@ -3,25 +3,33 @@ import { runwayDestination } from "./runway-destination.mjs";
 const EXTENSION_NM = 10;
 const EXTENSION_ALTITUDE_FEET = 3000;
 
-export function drawAirportRunways(context, airports, project, range) {
+export function drawAirportRunways(
+  context,
+  airports,
+  project,
+  range,
+  runwaysVisible = true,
+  extensionsVisible = true,
+) {
   context.strokeStyle = "#777777";
   context.lineWidth = 1.5;
   context.setLineDash([]);
   for (const airport of airports.values()) {
     if (airport.rangeNm > range) continue;
-    for (const runway of airport.runways ?? []) drawRunway(context, runway, airport, project);
+    for (const runway of airport.runways ?? [])
+      drawRunway(context, runway, airport, project, runwaysVisible, extensionsVisible);
   }
 }
 
-function drawRunway(context, runway, airport, project) {
+function drawRunway(context, runway, airport, project, runwaysVisible, extensionsVisible) {
   const ends = runway.map((end) => ({
     ...end,
     elevationFeet: Number.isFinite(end.elevationFeet) ? end.elevationFeet : airport.elevationFeet,
   }));
   const points = ends.map(project);
   if (points.some((point) => !validPoint(point))) return;
-  drawLine(context, points[0], points[1]);
-  for (const end of ends) drawRunwayExtension(context, end, project);
+  if (runwaysVisible) drawLine(context, points[0], points[1]);
+  if (extensionsVisible) for (const end of ends) drawRunwayExtension(context, end, project);
 }
 
 function drawRunwayExtension(context, end, project) {

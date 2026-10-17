@@ -3,21 +3,33 @@ import { clipRadarScope } from "./clip-radar-scope.mjs";
 
 const COLORS = { SID: "#2b3d4d", STAR: "#50402e" };
 
-export function drawProcedures(context, procedures, project, range, visible = true, scope = null) {
-  if (!visible) return;
+export function drawProcedures(
+  context,
+  procedures,
+  project,
+  range,
+  visibility = { sidVisible: true, starVisible: true },
+  scope = null,
+) {
+  if (visibility === false) return;
   context.save();
   clipRadarScope(context, scope);
   context.lineWidth = 1;
   context.font = "10px monospace";
   context.textAlign = "center";
   context.setLineDash([3, 3]);
-  for (const procedure of procedures.values()) drawProcedure(context, procedure, project, range);
+  for (const procedure of procedures.values()) {
+    if (procedure.type !== "SID" && procedure.type !== "STAR") continue;
+    const visible =
+      procedure.type === "SID" ? visibility.sidVisible !== false : visibility.starVisible !== false;
+    if (visible) drawProcedure(context, procedure, project, range);
+  }
   context.setLineDash([]);
   context.restore();
 }
 
 function drawProcedure(context, procedure, project, range) {
-  context.strokeStyle = COLORS[procedure.type] ?? COLORS.SID;
+  context.strokeStyle = COLORS[procedure.type];
   context.fillStyle = context.strokeStyle;
   const points = procedure.points.map((point) => ({ ...point, screen: project(point) }));
   drawRoute(context, points, range);

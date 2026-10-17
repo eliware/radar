@@ -3,6 +3,7 @@ import { registerNavaidRoutes } from "./navaid-routes.mjs";
 import { registerAirspaceBoundaryRoutes } from "./airspace-boundary-routes.mjs";
 import { registerIlsApproachRoutes } from "./ils-approach-routes.mjs";
 import { registerProcedureRoutes } from "./procedure-routes.mjs";
+import { registerAirwayRoutes } from "./airway-routes.mjs";
 import { registerMetarRoutes } from "./metar-routes.mjs";
 
 export function registerApiRoutes(
@@ -35,6 +36,7 @@ export function registerApiRoutes(
   registerAirspaceBoundaryRoutes(app, airportDatabase, location);
   registerIlsApproachRoutes(app, airportDatabase, location);
   registerProcedureRoutes(app, airportDatabase, location);
+  registerAirwayRoutes(app, airportDatabase, location);
   if (metarLookup) registerMetarRoutes(app, metarLookup);
   app.get("/ws", { websocket: true }, (socket) => {
     const unsubscribe = feed.subscribe((aircraft) => {

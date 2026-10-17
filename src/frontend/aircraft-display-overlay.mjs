@@ -33,8 +33,12 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     ilsApproaches = new Map(),
     ilsVisible = true,
     procedures = new Map(),
-    proceduresVisible = true,
+    procedureVisibility = { sidVisible: true, starVisible: true },
     waterVisible = true,
+    airways = new Map(),
+    airwayVisibility = { Q: true, J: true, V: true },
+    runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
+    referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   ) {
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
@@ -45,12 +49,15 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     context.clearRect(0, 0, width, height);
     drawRadarReferences(
       context,
-      { airports, navaids, boundaries, ilsApproaches, procedures },
+      { airports, navaids, boundaries, ilsApproaches, procedures, airways },
       (point) => projectRadarReference(point, location, elevationFeet, project),
       range,
       ilsVisible,
-      proceduresVisible,
+      procedureVisibility,
       createRadarScopePath(range, (position) => project(position)),
+      airwayVisibility,
+      runwayVisibility,
+      referenceVisibility,
     );
     const items = projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project);
     drawAircraftDisplay(context, items, 18, width, height, connected);
@@ -62,8 +69,11 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO,
       connected,
       ilsVisible,
-      proceduresVisible,
+      procedureVisibility,
       waterVisible,
+      airwayVisibility,
+      runwayVisibility,
+      referenceVisibility,
     );
     drawCameraReadout(context, camera, location, elevationFeet);
 

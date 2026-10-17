@@ -41,9 +41,9 @@ test("draws separate SID and STAR paths, hollow fix symbols, and selected labels
     project,
     10,
   );
-  expect(ctx.stroke).toHaveBeenCalledTimes(9);
+  expect(ctx.stroke).toHaveBeenCalledTimes(6);
   expect(ctx.fillText.mock.calls.map(([text]) => text)).toEqual(["LBSTA", "ENE"]);
-  expect(ctx.closePath).toHaveBeenCalledTimes(6);
+  expect(ctx.closePath).toHaveBeenCalledTimes(4);
   expect(ctx.save).toHaveBeenCalledTimes(1);
   expect(ctx.restore).toHaveBeenCalledTimes(1);
   expect(ctx.setLineDash).toHaveBeenNthCalledWith(1, [3, 3]);
@@ -77,4 +77,19 @@ test("keeps STAR routes in their existing color", () => {
     10,
   );
   expect(ctx.strokeStyle).toBe("#50402e");
+});
+
+test("can hide SIDs while keeping STAR routes visible", () => {
+  const ctx = context();
+  const routes = new Map([
+    ["sid", { type: "SID", points: [point("A", 1, 2, true), point("B", 2, 2)] }],
+    ["star", { type: "STAR", points: [point("C", 3, 2, true), point("D", 4, 2)] }],
+  ]);
+  drawProcedures(ctx, routes, (item) => ({ x: item.x, y: item.y }), 10, {
+    sidVisible: false,
+    starVisible: true,
+  });
+  expect(ctx.strokeStyle).toBe("#50402e");
+  expect(ctx.fillText).toHaveBeenCalledWith("C", 3, -3);
+  expect(ctx.fillText).not.toHaveBeenCalledWith("A", 1, -5);
 });

@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { createProcedureVisibility } from "../../src/frontend/create-procedure-visibility.mjs";
 
-test("starts visible, toggles with S, and accepts explicit visibility", () => {
+test("starts visible and toggles SID and STAR visibility independently", () => {
   let listener;
   const documentRef = {
     addEventListener: (_type, callback) => {
@@ -10,12 +10,20 @@ test("starts visible, toggles with S, and accepts explicit visibility", () => {
   };
   const onChange = jest.fn();
   const visibility = createProcedureVisibility(documentRef, onChange);
-  expect(visibility.isVisible()).toBe(true);
+  expect(visibility.isSidVisible()).toBe(true);
+  expect(visibility.isStarVisible()).toBe(true);
+  listener({ key: "d", target: {}, preventDefault() {} });
+  expect(visibility.isSidVisible()).toBe(false);
+  expect(visibility.isStarVisible()).toBe(true);
   listener({ key: "s", target: {}, preventDefault() {} });
-  expect(visibility.isVisible()).toBe(false);
-  visibility.setVisible(1);
-  expect(visibility.isVisible()).toBe(true);
-  expect(onChange.mock.calls.map(([value]) => value)).toEqual([false, true]);
+  expect(visibility.isStarVisible()).toBe(false);
+  visibility.setSidVisible(1);
+  expect(visibility.isSidVisible()).toBe(true);
+  expect(onChange.mock.calls.map(([value]) => value)).toEqual([
+    { sidVisible: false, starVisible: true },
+    { sidVisible: false, starVisible: false },
+    { sidVisible: true, starVisible: false },
+  ]);
 });
 
 test("removes its keyboard listener on destroy", () => {
@@ -30,7 +38,7 @@ test("removes its keyboard listener on destroy", () => {
 
 test("uses the default change callback when none is supplied", () => {
   const visibility = createProcedureVisibility(null);
-  visibility.setVisible(false);
-  expect(visibility.isVisible()).toBe(false);
+  visibility.setStarVisible(false);
+  expect(visibility.isStarVisible()).toBe(false);
   visibility.destroy();
 });

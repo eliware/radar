@@ -30,6 +30,13 @@ test("adds a bounded airspace shell once and disposes it", () => {
   const airport = { faaId: "PWM", latitude: 43, longitude: -70, classC: "Y", elevationFeet: 76 };
   volumes.update([airport, airport]);
   expect(scene.add).toHaveBeenCalledTimes(1);
+  const shape = scene.add.mock.calls[0][0];
+  volumes.setVisible(false);
+  expect(shape.visible).toBe(false);
+  volumes.setVisible({ airportsVisible: false });
+  expect(shape.visible).toBe(false);
+  volumes.setVisible(true);
+  expect(shape.visible).toBe(true);
   volumes.dispose();
   expect(scene.remove).toHaveBeenCalledTimes(1);
 });

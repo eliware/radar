@@ -1,0 +1,45 @@
+import { expect, jest, test } from "@jest/globals";
+
+const drawRadarReferences = jest.fn();
+jest.unstable_mockModule("../../src/frontend/draw-radar-references.mjs", () => ({
+  drawRadarReferences,
+}));
+const { drawCanvasRadarReferences } =
+  await import("../../src/frontend/draw-canvas-radar-references.mjs");
+
+test("renders reference layers with shared visibility and clipped range scope", () => {
+  const options = {
+    ctx: {},
+    location: { latitude: 43, longitude: -70 },
+    range: 20,
+    radius: 200,
+    centerX: 300,
+    centerY: 200,
+    project: jest.fn(),
+    airports: new Map(),
+    navaids: new Map(),
+    boundaries: new Map(),
+    ilsApproaches: new Map(),
+    procedures: new Map(),
+    airways: new Map(),
+    ilsVisible: true,
+    procedureVisibility: { sidVisible: true, starVisible: true },
+    airwayVisibility: { Q: true },
+    runwayVisibility: { runwaysVisible: false, extensionsVisible: true },
+    referenceVisibility: { airportsVisible: false, navaidsVisible: true },
+  };
+  drawCanvasRadarReferences(options);
+  expect(drawRadarReferences).toHaveBeenCalledWith(
+    options.ctx,
+    expect.objectContaining({ airports: options.airports, airways: options.airways }),
+    expect.any(Function),
+    options.range,
+    true,
+    options.procedureVisibility,
+    expect.any(Array),
+    options.airwayVisibility,
+    options.runwayVisibility,
+    options.referenceVisibility,
+  );
+  expect(drawRadarReferences.mock.calls[0][6]).toHaveLength(64);
+});

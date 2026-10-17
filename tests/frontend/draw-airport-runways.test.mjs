@@ -145,3 +145,25 @@ test("skips an extension when its projected points are invalid", () => {
   );
   expect(context.stroke).toHaveBeenCalledTimes(1);
 });
+
+test("can toggle runway geometry and extended centerlines independently", () => {
+  const runway = [
+    { latitude: 43, longitude: -70, elevationFeet: 50, alignmentDegrees: 10 },
+    { latitude: 43.01, longitude: -70, elevationFeet: 50, alignmentDegrees: 190 },
+  ];
+  const makeContext = () => ({
+    beginPath: jest.fn(),
+    lineTo: jest.fn(),
+    moveTo: jest.fn(),
+    setLineDash: jest.fn(),
+    stroke: jest.fn(),
+  });
+  const airports = new Map([["PWM", { rangeNm: 1, runways: [runway] }]]);
+  const project = (point) => ({ x: point.longitude, y: point.latitude });
+  const noRunways = makeContext();
+  drawAirportRunways(noRunways, airports, project, 20, false, true);
+  expect(noRunways.stroke).toHaveBeenCalledTimes(4);
+  const noExtensions = makeContext();
+  drawAirportRunways(noExtensions, airports, project, 20, true, false);
+  expect(noExtensions.stroke).toHaveBeenCalledTimes(1);
+});

@@ -7,6 +7,7 @@ const FEET_PER_NM = 6076.12;
 export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet) {
   const shapes = new Map();
   let material;
+  let visible = true;
   function update(airports) {
     for (const airport of airports) {
       const id = airport.faaId;
@@ -24,9 +25,14 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
       const geometry = new THREE.BufferGeometry();
       geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
       const lines = new THREE.LineSegments(geometry, material);
+      lines.visible = visible;
       scene.add(lines);
       shapes.set(id, lines);
     }
+  }
+  function setVisible(value) {
+    visible = Boolean(typeof value === "object" ? value.airportsVisible : value);
+    for (const shape of shapes.values()) shape.visible = visible;
   }
   function dispose() {
     for (const shape of shapes.values()) {
@@ -36,7 +42,7 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
     shapes.clear();
     material?.dispose();
   }
-  return { update, dispose };
+  return { update, setVisible, dispose };
 }
 
 function bandVertices(band, center, homeElevationFeet) {

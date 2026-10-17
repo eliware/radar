@@ -1,0 +1,11 @@
+export function prepareCanvasRadar(context, canvas, windowRef) {
+  const width = canvas.clientWidth || 1;
+  const height = canvas.clientHeight || 1;
+  const ratio = Math.min(windowRef.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(width * ratio);
+  canvas.height = Math.round(height * ratio);
+  context.setTransform(ratio, 0, 0, ratio, 0, 0);
+  context.fillStyle = "#000";
+  context.fillRect(0, 0, width, height);
+  return { width, height };
+}

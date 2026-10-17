@@ -4,6 +4,7 @@ export function createRadarReferenceStore() {
   const boundaries = new Map();
   const ilsApproaches = new Map();
   const procedures = new Map();
+  const airways = new Map();
   const updates = (onAirports = () => {}, onChange = () => {}) => ({
     updateAirports(items) {
       for (const item of items) airports.set(item.faaId, item);
@@ -26,6 +27,10 @@ export function createRadarReferenceStore() {
       for (const item of items) procedures.set(item.id, item);
       onChange();
     },
+    updateAirways(items) {
+      for (const item of items) airways.set(item.id, item);
+      onChange();
+    },
   });
   return {
     airports,
@@ -33,6 +38,7 @@ export function createRadarReferenceStore() {
     boundaries,
     ilsApproaches,
     procedures,
+    airways,
     ...updates(),
     updates,
   };

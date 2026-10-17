@@ -14,6 +14,7 @@ export function createRadarReferenceLoader(fetchData, scene) {
         "/api/airspace-boundaries",
         "/api/ils",
         "/api/procedures",
+        "/api/airways",
       ];
       const updates = [
         scene.updateAirports,
@@ -21,6 +22,7 @@ export function createRadarReferenceLoader(fetchData, scene) {
         scene.updateBoundaries,
         scene.updateIls,
         scene.updateProcedures,
+        scene.updateAirways,
       ];
       try {
         const collections = await Promise.all(

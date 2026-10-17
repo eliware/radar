@@ -35,8 +35,8 @@ export function createAircraftScene({
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
   const references = createRadarReferenceStore();
-  const layers = createRadarLayerVisibility(windowRef.document ?? globalThis.document);
   const documentRef = windowRef.document ?? globalThis.document;
+  const layers = createRadarLayerVisibility(documentRef, undefined, airspace.setVisible);
   const overlay = createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef });
   const radar = createAircraftRadarCamera({
     createCamera: createRadarCamera,
@@ -71,8 +71,7 @@ export function createAircraftScene({
     defaultRangeNm,
     isConnected: connection.isConnected,
     isAutoZoom,
-    ils: layers.ils,
-    procedures: layers.procedures,
+    layers,
     water,
     references,
   });

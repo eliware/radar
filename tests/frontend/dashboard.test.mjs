@@ -96,7 +96,7 @@ test("starts the secure live view and handles feed messages", async () => {
   expect(document.strips.innerHTML).toContain("1 AIRCRAFT");
   document.sendKey({ key: "f", preventDefault: jest.fn() });
   expect(document.strips.hidden).toBe(true);
-  document.sendKey({ key: "r", preventDefault: jest.fn() });
+  document.sendKey({ key: "Home", preventDefault: jest.fn() });
   document.clickCompass();
   for (const key of ["ArrowUp", "ArrowLeft"]) document.sendKey({ key, preventDefault: jest.fn() });
   expect(scene.reset).toHaveBeenCalledTimes(2);
@@ -167,6 +167,7 @@ test("loads reference data only for each new view range", async () => {
     updateBoundaries: jest.fn(),
     updateIls: jest.fn(),
     updateProcedures: jest.fn(),
+    updateAirways: jest.fn(),
     range: () => 20,
     onViewChange: jest.fn((listener) => {
       changeView = listener;
@@ -191,6 +192,7 @@ test("loads reference data only for each new view range", async () => {
   expect(requested).toContain("/api/navaids?minRangeNm=20&maxRangeNm=30");
   expect(requested).toContain("/api/airspace-boundaries?minRangeNm=20&maxRangeNm=30");
   expect(requested).toContain("/api/ils?minRangeNm=20&maxRangeNm=30");
+  expect(requested).toContain("/api/airways?minRangeNm=20&maxRangeNm=30");
   result.destroy();
   expect(windowRef.clearInterval).toHaveBeenCalledWith("metar");
 });

@@ -30,19 +30,19 @@ test("draws a transparent two-column legend with layer toggles", () => {
       "60s VECTOR",
       "HISTORY",
       "HOME",
-      "AIRPORT",
-      "VOR",
-      "RUNWAY",
-      "EXTENSION / BASE",
+      "A AIRPORT",
+      "N VOR",
+      "R RUNWAY",
+      "E ERCL",
       "I ILS",
-      "S SID",
+      "D SID",
       "S STAR",
       "W WATER",
     ]),
   );
   expect(context.fillRect).toBeUndefined();
-  expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 26, 946);
-  expect(context.fillText).toHaveBeenCalledWith("RUNWAY", 118, 946);
+  expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 26, 914);
+  expect(context.fillText).toHaveBeenCalledWith("R RUNWAY", 26, 1010);
   expect(context.closePath).toHaveBeenCalled();
   expect(context.fill).toHaveBeenCalled();
 });
@@ -50,7 +50,7 @@ test("draws a transparent two-column legend with layer toggles", () => {
 test("uses one column and dims hidden layers on narrow views", () => {
   const context = createContext();
   drawRadarScaleLegend(context, 320, 320, 1, 140.8, true, false, false, false);
-  expect(context.fillText).toHaveBeenCalledWith("I ILS", 26, 218);
+  expect(context.fillText).toHaveBeenCalledWith("I ILS", 26, 170);
   expect(context.fillText).toHaveBeenCalledWith("W WATER", 26, 266);
   expect(context.strokeStyle).toBe("#444444");
 });

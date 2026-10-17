@@ -5,13 +5,16 @@ const ENTRIES = [
   ["line", "60s VECTOR", "bright"],
   ["slash", "HISTORY", "trail"],
   ["circle", "HOME", "bright"],
-  ["circle", "AIRPORT", "airport"],
-  ["cross", "VOR", "vor"],
-  ["line", "RUNWAY", "runway"],
-  ["dash", "EXTENSION / BASE", "extension"],
+  ["circle", "A AIRPORT", "airport", "airportVisible"],
+  ["cross", "N VOR", "vor", "navaidsVisible"],
+  ["line", "R RUNWAY", "runway", "runwaysVisible"],
+  ["dash", "E ERCL", "extension", "extensionsVisible"],
   ["dash", "I ILS", "ils", "ilsVisible"],
-  ["dash", "S SID", "sid", "proceduresVisible"],
-  ["dash", "S STAR", "star", "proceduresVisible"],
+  ["dash", "D SID", "sid", "sidVisible"],
+  ["dash", "S STAR", "star", "starVisible"],
+  ["dash", "Q RNAV", "airwayQ", "airwayQVisible"],
+  ["dash", "J JET", "airwayJ", "airwayJVisible"],
+  ["dash", "V VICTOR", "airwayV", "airwayVVisible"],
   ["wave", "W WATER", "water", "waterVisible"],
 ];
 
@@ -23,6 +26,9 @@ const COLORS = {
   ils: "#604080",
   sid: "#2b3d4d",
   star: "#50402e",
+  airwayQ: "#31534d",
+  airwayJ: "#54394b",
+  airwayV: "#4f4d32",
   water: "#7d7d7d",
 };
 

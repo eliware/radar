@@ -23,7 +23,11 @@ export function createAircraftRadarLoop({
   ilsApproaches = new Map(),
   isIlsVisible = () => true,
   procedures = new Map(),
-  isProceduresVisible = () => true,
+  procedureVisibility = { sidVisible: true, starVisible: true },
+  airways = new Map(),
+  airwayVisibility = { isVisible: () => true },
+  runwayVisibility = { isRunwaysVisible: () => true, isExtensionsVisible: () => true },
+  referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   isWaterVisible = () => true,
 }) {
   const stopWatch = watchRadarTargets({
@@ -56,8 +60,17 @@ export function createAircraftRadarLoop({
         ilsApproaches,
         isIlsVisible(),
         procedures,
-        isProceduresVisible(),
+        procedureVisibility,
         isWaterVisible(),
+        airways,
+        Object.fromEntries(["Q", "J", "V"].map((type) => [type, airwayVisibility.isVisible(type)])),
+        {
+          runwaysVisible:
+            referenceVisibility.airportsVisible && runwayVisibility.isRunwaysVisible(),
+          extensionsVisible:
+            referenceVisibility.airportsVisible && runwayVisibility.isExtensionsVisible(),
+        },
+        referenceVisibility,
       ),
   });
   return () => {

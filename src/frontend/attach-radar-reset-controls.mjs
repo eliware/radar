@@ -4,7 +4,7 @@ export function attachRadarResetControls(documentRef, view) {
   const compass = documentRef?.querySelector?.("[data-radar-compass]");
   const reset = () => view.reset();
   const onKeyDown = (event) => {
-    if (event.key?.toLowerCase() !== "r" || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.key !== "Home" || event.altKey || event.ctrlKey || event.metaKey) return;
     const target = event.target;
     if (EDITABLE_TAGS.has(target?.tagName?.toLowerCase()) || target?.isContentEditable) return;
     event.preventDefault();

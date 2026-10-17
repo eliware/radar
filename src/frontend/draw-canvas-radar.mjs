@@ -1,13 +1,12 @@
 import { projectAircraftDisplayItems } from "./project-aircraft-display-items.mjs";
-import { projectRadarReference } from "./project-radar-reference.mjs";
 import { drawAircraftDisplay } from "./draw-aircraft-display.mjs";
 import { drawRadarScaleLegend } from "./draw-radar-scale-legend.mjs";
+import { drawCanvasRadarReferences } from "./draw-canvas-radar-references.mjs";
 import { getRadarPalette } from "./radar-palette.mjs";
 import { drawCanvasRings } from "./draw-canvas-rings.mjs";
-import { drawRadarReferences } from "./draw-radar-references.mjs";
-import { createRadarScopePath } from "./create-radar-scope-path.mjs";
 import { drawWaterOutlines } from "./draw-water-outlines.mjs";
-
+import { prepareCanvasRadar } from "./prepare-canvas-radar.mjs";
+import { createCanvasRadarProjector } from "./create-canvas-radar-projector.mjs";
 export function drawCanvasRadar(
   ctx,
   canvas,
@@ -26,29 +25,21 @@ export function drawCanvasRadar(
   ilsApproaches = new Map(),
   ilsVisible = true,
   procedures = new Map(),
-  proceduresVisible = true,
+  procedureVisibility = { sidVisible: true, starVisible: true },
   waterPaths = [],
   waterVisible = true,
   homeElevationFeet = 0,
+  airways = new Map(),
+  airwayVisibility = { Q: true, J: true, V: true },
+  runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
+  referenceVisibility = { airportsVisible: true, navaidsVisible: true },
 ) {
   const palette = getRadarPalette(connected);
-  const width = canvas.clientWidth || 1;
-  const height = canvas.clientHeight || 1;
-  const ratio = Math.min(windowRef.devicePixelRatio || 1, 2);
-  canvas.width = Math.round(width * ratio);
-  canvas.height = Math.round(height * ratio);
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-  ctx.fillStyle = "#000";
-  ctx.fillRect(0, 0, width, height);
+  const { width, height } = prepareCanvasRadar(ctx, canvas, windowRef);
   const radius = Math.max(1, Math.min(width, height) * 0.44);
   const centerX = width / 2 + panX;
   const centerY = height / 2 + panY;
-  const cosine = Math.cos(rotation);
-  const sine = Math.sin(rotation);
-  const project = (point) => ({
-    x: centerX + (point.x / range) * radius * cosine - (point.z / range) * radius * sine,
-    y: centerY + (point.x / range) * radius * sine + (point.z / range) * radius * cosine,
-  });
+  const project = createCanvasRadarProjector(centerX, centerY, radius, range, rotation);
   ctx.save();
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -59,18 +50,26 @@ export function drawCanvasRadar(
   ctx.rotate(rotation);
   drawCanvasRings(ctx, 0, 0, radius, range, palette, rotation);
   ctx.restore();
-  drawRadarReferences(
+  drawCanvasRadarReferences({
     ctx,
-    { airports, navaids, boundaries, ilsApproaches, procedures },
-    (item) => projectRadarReference(item, location, 0, project),
+    location,
     range,
+    radius,
+    centerX,
+    centerY,
+    project,
+    airports,
+    navaids,
+    boundaries,
+    ilsApproaches,
+    procedures,
+    airways,
     ilsVisible,
-    proceduresVisible,
-    createRadarScopePath(range, (point) => ({
-      x: centerX + (point.x / range) * radius,
-      y: centerY + (point.z / range) * radius,
-    })),
-  );
+    procedureVisibility,
+    airwayVisibility,
+    runwayVisibility,
+    referenceVisibility,
+  });
   ctx.restore();
   const display = projectAircraftDisplayItems(
     aircraft,
@@ -92,7 +91,10 @@ export function drawCanvasRadar(
     radius,
     connected,
     ilsVisible,
-    proceduresVisible,
+    procedureVisibility,
     waterVisible,
+    airwayVisibility,
+    runwayVisibility,
+    referenceVisibility,
   );
 }

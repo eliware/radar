@@ -7,6 +7,8 @@ import { createRadarReferenceStore } from "./radar-reference-store.mjs";
 import { attachCanvasRadarEvents } from "./attach-canvas-radar-events.mjs";
 import { createRadarLayerVisibility } from "./create-radar-layer-visibility.mjs";
 import { createCanvasRadarWater } from "./create-canvas-radar-water.mjs";
+import { syncCanvasRadarVisibility } from "./sync-canvas-radar-visibility.mjs";
+import { createCanvasRadarViewState } from "./create-canvas-radar-view-state.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -21,18 +23,7 @@ export function createCanvasRadarView({
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
   const defaultRotationRadians = (-defaultRotationDegrees * Math.PI) / 180 || 0;
   const references = createRadarReferenceStore();
-  const state = {
-    range: defaultRangeNm,
-    defaultRangeNm,
-    autoZoom: true,
-    offsetX: 0,
-    offsetY: 0,
-    rotation: defaultRotationRadians,
-    defaultRotationRadians,
-    connected: false,
-    ilsVisible: true,
-    proceduresVisible: true,
-  };
+  const state = createCanvasRadarViewState(defaultRangeNm, defaultRotationRadians);
   const viewChanges = createViewChangeListeners();
   canvas.setAttribute("aria-label", "Top-down 2D radar view");
   canvas.style.touchAction = "none";
@@ -63,11 +54,11 @@ export function createCanvasRadarView({
     boundaries: references.boundaries,
     ilsApproaches: references.ilsApproaches,
     procedures: references.procedures,
+    airways: references.airways,
     water: waterLayer.data,
   });
   draw = () => {
-    state.ilsVisible = layers.ils.isVisible();
-    state.proceduresVisible = layers.procedures.isVisible();
+    syncCanvasRadarVisibility(state, layers);
     drawRadar();
     waterLayer.update();
     viewChanges.emit(state.range);

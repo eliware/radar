@@ -14,6 +14,7 @@ export function createCanvasRadarDraw({
   boundaries,
   ilsApproaches,
   procedures,
+  airways,
   water = { paths: [], isVisible: () => false },
 }) {
   return () =>
@@ -35,9 +36,16 @@ export function createCanvasRadarDraw({
       ilsApproaches,
       state.ilsVisible,
       procedures,
-      state.proceduresVisible,
+      { sidVisible: state.sidVisible, starVisible: state.starVisible },
       water.paths,
       water.isVisible(),
       elevationFeet,
+      airways,
+      state.airwayVisibility,
+      {
+        runwaysVisible: state.airportsVisible && state.runwaysVisible,
+        extensionsVisible: state.airportsVisible && state.extensionsVisible,
+      },
+      { airportsVisible: state.airportsVisible, navaidsVisible: state.navaidsVisible },
     );
 }

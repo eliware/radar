@@ -3,6 +3,7 @@ import { createArtccBoundaryQuery } from "./artcc-boundary-query.mjs";
 import { createIlsApproachQuery } from "./ils-approach-query.mjs";
 import { createProcedureQuery } from "./procedure-query.mjs";
 import { createAirportReferenceQueries } from "./create-airport-reference-queries.mjs";
+import { createAirwayQuery } from "./airway-query.mjs";
 
 export function createAirportDatabase(path, options) {
   const database = openAirportDatabase(path, options);
@@ -11,6 +12,7 @@ export function createAirportDatabase(path, options) {
   const findBoundaries = createArtccBoundaryQuery(database);
   const findIlsApproaches = createIlsApproachQuery(database);
   const findProceduresBetween = createProcedureQuery(database);
+  const findAirwaysBetween = createAirwayQuery(database);
   let closed = false;
   const guard =
     (query) =>
@@ -23,6 +25,7 @@ export function createAirportDatabase(path, options) {
     findNavaidsBetween: guard(references.findNavaidsBetween),
     findIlsApproaches: guard(findIlsApproaches),
     findProceduresBetween: guard(findProceduresBetween),
+    findAirwaysBetween: guard(findAirwaysBetween),
     findBoundariesBetween: guard(findBoundaries),
     close() {
       if (closed) return;

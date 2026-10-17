@@ -5,7 +5,7 @@ function event(key, extra = {}) {
   return { key, target: {}, preventDefault: jest.fn(), ...extra };
 }
 
-test("toggles only for an unmodified S key outside editable elements", () => {
+test("toggles SIDs with D and STARs with S outside editable elements", () => {
   let listener;
   const documentRef = {
     addEventListener: jest.fn((type, callback) => {
@@ -13,19 +13,24 @@ test("toggles only for an unmodified S key outside editable elements", () => {
     }),
     removeEventListener: jest.fn(),
   };
-  const toggle = jest.fn();
-  const detach = attachProcedureToggleKey(documentRef, toggle);
+  const toggleSid = jest.fn();
+  const toggleStar = jest.fn();
+  const detach = attachProcedureToggleKey(documentRef, toggleSid, toggleStar);
   for (const value of [
     event("x"),
-    event("s", { ctrlKey: true }),
-    event("S", { target: { tagName: "INPUT" } }),
+    event("d", { ctrlKey: true }),
+    event("D", { target: { tagName: "INPUT" } }),
     event("s", { target: { isContentEditable: true } }),
   ])
     listener(value);
-  const accepted = event("S");
+  const accepted = event("D");
   listener(accepted);
-  expect(toggle).toHaveBeenCalledTimes(1);
+  const acceptedStar = event("S");
+  listener(acceptedStar);
+  expect(toggleSid).toHaveBeenCalledTimes(1);
+  expect(toggleStar).toHaveBeenCalledTimes(1);
   expect(accepted.preventDefault).toHaveBeenCalledTimes(1);
+  expect(acceptedStar.preventDefault).toHaveBeenCalledTimes(1);
   detach();
   expect(documentRef.removeEventListener).toHaveBeenCalledWith("keydown", listener);
 });
