@@ -14,9 +14,12 @@ export function createRadarRenderLoop({ renderer, scene, camera, container, wind
   };
   let frame = windowRef.requestAnimationFrame(animate);
   windowRef.addEventListener("resize", resize);
+  const resizeObserver = windowRef.ResizeObserver ? new windowRef.ResizeObserver(resize) : null;
+  resizeObserver?.observe(container);
   resize();
   return () => {
     windowRef.cancelAnimationFrame(frame);
     windowRef.removeEventListener("resize", resize);
+    resizeObserver?.disconnect();
   };
 }

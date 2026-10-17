@@ -17,3 +17,25 @@ test("draws after wheel input and detaches wheel and resize listeners", () => {
   expect(canvas.removeEventListener).toHaveBeenCalledWith("wheel", wheel);
   expect(windowRef.removeEventListener).toHaveBeenCalledWith("resize", draw);
 });
+
+test("redraws when the canvas resizes without a window resize", () => {
+  let onResize;
+  const observer = { observe: jest.fn(), disconnect: jest.fn() };
+  const canvas = { addEventListener: jest.fn(), removeEventListener: jest.fn() };
+  const windowRef = {
+    ResizeObserver: jest.fn((callback) => {
+      onResize = callback;
+      return observer;
+    }),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+  };
+  const draw = jest.fn();
+  const detach = attachCanvasRefresh(canvas, windowRef, draw, jest.fn());
+
+  expect(observer.observe).toHaveBeenCalledWith(canvas);
+  onResize();
+  expect(draw).toHaveBeenCalledTimes(1);
+  detach();
+  expect(observer.disconnect).toHaveBeenCalled();
+});

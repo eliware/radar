@@ -27,9 +27,10 @@ test("adds a bounded airspace shell once and disposes it", () => {
   };
   const scene = { add: jest.fn(), remove: jest.fn() };
   const volumes = createAirspaceVolumes(THREE, scene, { latitude: 43, longitude: -70 }, 300);
-  const airport = { faaId: "PWM", latitude: 43, longitude: -70, classC: "Y", elevationFeet: 76 };
-  volumes.update([airport, airport]);
-  expect(scene.add).toHaveBeenCalledTimes(1);
+  const airport = { faaId: "PWM", latitude: 43, longitude: -70, classC: "Y" };
+  const elevatedAirport = { ...airport, faaId: "BGR", classD: "Y", elevationFeet: 351 };
+  volumes.update([airport, airport, elevatedAirport]);
+  expect(scene.add).toHaveBeenCalledTimes(2);
   const shape = scene.add.mock.calls[0][0];
   volumes.setVisible(false);
   expect(shape.visible).toBe(false);
@@ -38,7 +39,7 @@ test("adds a bounded airspace shell once and disposes it", () => {
   volumes.setVisible(true);
   expect(shape.visible).toBe(true);
   volumes.dispose();
-  expect(scene.remove).toHaveBeenCalledTimes(1);
+  expect(scene.remove).toHaveBeenCalledTimes(2);
 });
 
 test("skips airports without airspace flags or usable positions", () => {
