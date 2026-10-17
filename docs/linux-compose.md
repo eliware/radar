@@ -60,6 +60,14 @@ curl -i http://127.0.0.1:3000/ready
 
 ## Operate
 
+After committing app changes, rebuild and restart the Compose services so the deployed app uses the committed version, then verify both endpoints:
+
+```sh
+docker compose up -d --build
+curl -i http://127.0.0.1:3000/health
+curl -i http://127.0.0.1:3000/ready
+```
+
 Follow service state and logs:
 
 ```sh

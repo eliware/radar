@@ -27,6 +27,7 @@ Keep secrets, tokens, private keys, and credentials out of source and package fi
 ## Changes
 
 Document supported workflows, runtime settings, startup, shutdown, and operation.
+After committing changes that affect the running app, rebuild and restart the active service. For the Linux Compose deployment, run `docker compose up -d --build` and verify `/health` and `/ready`. If the deployment is unavailable, report that it could not be restarted.
 
 ## Application
 

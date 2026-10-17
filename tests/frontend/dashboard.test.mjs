@@ -2,8 +2,7 @@ import { expect, jest, test } from "@jest/globals";
 import { startDashboard } from "../../src/frontend/dashboard.mjs";
 
 function makeDocument(protocol = "https:") {
-  const home = {},
-    keyListeners = new Map([["keydown", []]]),
+  const keyListeners = new Map([["keydown", []]]),
     compassListeners = new Map();
   const compass = {
     setAttribute: jest.fn(),
@@ -21,7 +20,6 @@ function makeDocument(protocol = "https:") {
   const elements = {
     "[data-scene]": {},
     ".dashboard": dashboard,
-    "[data-home]": home,
     "[data-radar-compass]": compass,
     "[data-compass-rose]": rose,
     "[data-compass-heading]": heading,
@@ -31,7 +29,6 @@ function makeDocument(protocol = "https:") {
     "[data-metar-ticker]": { textContent: "" },
   };
   return {
-    home,
     compass,
     strips,
     location: { protocol, host: "localhost:3000" },
@@ -89,7 +86,6 @@ test("starts the secure live view and handles feed messages", async () => {
   });
   expect(result).toEqual(expect.objectContaining({ scene, socket }));
   expect(socket.url).toBe("wss://localhost:3000/ws");
-  expect(document.home.textContent).toContain("43.0000°, -70.0000°");
   expect(document.querySelector("[data-metar]").dataset.radarMode).toBe("2D");
   expect(fetchData).toHaveBeenCalledWith("/api/metar");
   expect(createScene.mock.calls[0][0]).toMatchObject({

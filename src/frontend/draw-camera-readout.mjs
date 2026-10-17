@@ -26,10 +26,8 @@ export function drawCameraReadout(context, camera, location, elevationFeet) {
   context.fillStyle = "#00a832";
   context.textAlign = "left";
   context.textBaseline = "alphabetic";
-  context.fillText(
-    `CAM ${latitude.toFixed(4)}°, ${longitude.toFixed(4)}° · ${altitude} ft MSL`,
-    18,
-    50,
-  );
+  context.fillText(`LAT ${latitude.toFixed(4)}°`, 18, 30);
+  context.fillText(`LON ${longitude.toFixed(4)}°`, 18, 46);
+  context.fillText(`ALT ${altitude} ft MSL`, 18, 62);
   context.restore();
 }
