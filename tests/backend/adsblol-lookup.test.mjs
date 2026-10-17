@@ -6,6 +6,11 @@ const response = (body, status = 200) => ({
   status,
   json: async () => body,
 });
+const requestOptions = {
+  headers: {
+    "user-agent": "EliwareRadar/12.0.0 (+https://radar.purinton.us; contact: radar@eliware.org)",
+  },
+};
 
 test("looks up aircraft type by normalized hex and caches the result", async () => {
   const request = jest.fn(async () => response({ ac: [{ hex: "abc123", t: " B738 " }] }));
@@ -13,7 +18,7 @@ test("looks up aircraft type by normalized hex and caches the result", async () 
   await expect(lookup.getAircraftType(" abc123 ")).resolves.toEqual({ aircraftTypeCode: "B738" });
   await expect(lookup.getAircraftType("ABC123")).resolves.toEqual({ aircraftTypeCode: "B738" });
   expect(request).toHaveBeenCalledTimes(1);
-  expect(request).toHaveBeenCalledWith("https://api.adsb.lol/v2/hex/ABC123");
+  expect(request).toHaveBeenCalledWith("https://api.adsb.lol/v2/hex/ABC123", requestOptions);
 });
 
 test("returns null for missing, malformed, and failed aircraft lookups", async () => {
@@ -53,7 +58,10 @@ test("gets route JSON by normalized callsign and caches the result", async () =>
     destination: "KJFK",
   });
   expect(request).toHaveBeenCalledTimes(1);
-  expect(request).toHaveBeenCalledWith("https://vrs-standing-data.adsb.lol/routes/BA/BAW183.json");
+  expect(request).toHaveBeenCalledWith(
+    "https://vrs-standing-data.adsb.lol/routes/BA/BAW183.json",
+    requestOptions,
+  );
 });
 
 test("supports partial route records and ignores unusable airport codes", async () => {

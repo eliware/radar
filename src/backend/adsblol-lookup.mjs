@@ -3,6 +3,7 @@ import { createLookupCache } from "./lookup-cache.mjs";
 
 const apiRoot = "https://api.adsb.lol";
 const routeRoot = "https://vrs-standing-data.adsb.lol/routes";
+const userAgent = "EliwareRadar/12.0.0 (+https://radar.purinton.us; contact: radar@eliware.org)";
 
 export function createAdsbLolLookup({
   request = globalThis.fetch,
@@ -46,7 +47,7 @@ export function createAdsbLolLookup({
 }
 
 async function fetchJson(url, request) {
-  const response = await request(url);
+  const response = await request(url, { headers: { "user-agent": userAgent } });
   if (response.status === 404) return null;
   if (!response.ok) throw new Error("ADSB.lol request failed");
   return response.json();
