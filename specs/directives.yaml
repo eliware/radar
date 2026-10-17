@@ -150,7 +150,7 @@ directives:
       - Remove aircraft targets after 120 seconds without an update.
       - Fade aircraft markers and labels to invisible after 120 seconds without updates.
       - Keep range limits, auto-zoom, and ring intervals the same in 3D and Canvas views.
-      - "Show each aircraft label on three lines: callsign, altitude, then speed and known type code."
+      - "Show aircraft labels on three lines: callsign, altitude, then speed and known type code."
       - Show the ICAO code when callsign is blank or unknown, or equals `AD`, `OK`, or `RM`.
       - Keep the last useful callsign if updates contain a blank or unknown value.
       - Keep it when updates contain `AD`, `OK`, or `RM`.
