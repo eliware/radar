@@ -9,16 +9,16 @@ test("draws camera position and MSL altitude using the radar monospace font", ()
   };
   drawCameraReadout(
     context,
-    { position: { x: 1, y: 1, z: -1 } },
+    { position: { x: 1, y: 2, z: -1 } },
     { latitude: 43, longitude: -70 },
     300,
   );
   expect(context.font).toBe("12px monospace");
   expect(context.fillStyle).toBe("#00a832");
   expect(context.textAlign).toBe("left");
-  expect(context.fillText).toHaveBeenNthCalledWith(1, "LAT 43.0167°", 18, 30);
-  expect(context.fillText).toHaveBeenNthCalledWith(2, "LON -69.9772°", 18, 46);
-  expect(context.fillText).toHaveBeenNthCalledWith(3, "ALT 6376 ft MSL", 18, 62);
+  expect(context.fillText).toHaveBeenNthCalledWith(1, "LAT   43.0167°", 18, 30);
+  expect(context.fillText).toHaveBeenNthCalledWith(2, "LON  -69.9772°", 18, 46);
+  expect(context.fillText).toHaveBeenNthCalledWith(3, "ALT 12,500' MSL", 18, 62);
   expect(context.save).toHaveBeenCalled();
   expect(context.restore).toHaveBeenCalled();
 });
