@@ -18,7 +18,9 @@ NASR has airport flags for Class B, C, and D coverage. It has no boundary shapes
 
 ## ILS, SID, and STAR data
 
-NASR lists active ILS localizer and glide-slope data. It also lists marker beacon locations when available. Radar plots a dotted muted-purple course guide and small hollow marker circles. Their brightness is about half the former level and matches SID, STAR, and runway guides. ILS guides have no text labels. The 3D view follows the published glide-slope angle. The 2D view plots the course on a flat plane.
+NASR lists active ILS localizer and glide-slope data. It also lists marker beacon locations when available. Radar plots a dotted muted-purple course guide and small hollow marker circles. Their brightness is about half the former level and matches SID, STAR, and runway guides.
+
+ILS guides have no text labels. The 3D view follows the published glide-slope angle. The 2D view plots the course on a flat plane.
 
 NASR lists SID and STAR routes and waypoints. Radar plots dotted blue SID paths and dotted muted-orange STAR paths. Hollow pyramids mark route waypoints. Radar labels selected route-entry and route-end waypoints. The database has no crossing altitude for every waypoint. Radar plots these paths at home elevation in 3D.
 

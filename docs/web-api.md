@@ -8,7 +8,9 @@ Run `npm run build` to build browser files. Run `node bin/radar.mjs` to start th
 
 Open `http://localhost:3000` on the server computer. Find its Wi-Fi address with `ipconfig` on Windows. Open `http://<computer-ip>:3000` on a device on the same network.
 
-Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. The defaults are `3000`, `127.0.0.1`, and `30003`. Set `ADSB_LAT` and `ADSB_LON` as decimal latitude and longitude, and `ADSB_ALT` in feet above mean sea level. The default elevation is 300 feet. Set `RADAR_DEFAULT_RANGE_NM` from 1 through 300 to change the default range. Set `RADAR_DEFAULT_ROTATION` from 0 through 359 to change the default heading in degrees. The defaults are 20 nautical miles and north-up.
+Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. Their defaults are `3000`, `127.0.0.1`, and `30003`.
+
+Set `ADSB_LAT` and `ADSB_LON` as decimal coordinates. Set `ADSB_ALT` in feet above mean sea level. Default elevation is 300 feet. Set `RADAR_DEFAULT_RANGE_NM` from 1 through 300 to change the default range. Set `RADAR_DEFAULT_ROTATION` from 0 through 359 to change the default heading. Defaults are 20 nautical miles and north-up.
 
 ## HTTP endpoints
 
@@ -30,7 +32,11 @@ The server returns an error if the NASR database or home location is not availab
 
 Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each update uses the CLI debug fields and adds lookup fields when available.
 
-Radar enriches locally received aircraft with type data from the ADSB.lol v2 API by ICAO address and departure/arrival data from ADSB.lol route JSON by callsign. It stores lookup results in memory only. A lookup failure does not stop aircraft updates. Route data can be inaccurate or missing, especially when callsigns are reused, and unavailable values are left blank. These lookups enrich the local readsb data stream. Radar does not add aircraft from the ADSB.lol network through this mechanism.
+Radar adds aircraft type data from the ADSB.lol v2 API by ICAO address. It adds departure and arrival data from ADSB.lol route JSON by callsign.
+
+It stores lookup results in memory only. Lookup failures do not stop aircraft updates. Route data can be wrong or missing, especially when callsigns are reused. Unavailable fields stay blank.
+
+These lookups enrich local readsb data. They do not add remote ADSB.lol aircraft.
 
 The browser reconnects after a WebSocket failure. It waits one second before the first retry. It doubles the interval to a maximum of 30 seconds. After reconnecting, it requests the current aircraft list. The server retries the receiver connection after two seconds.
 
@@ -40,7 +46,11 @@ The radar is a black square, aligned to the top left. The default view is center
 
 The app renders rings every nautical mile under 10 miles. It renders rings every five miles under 60 miles, every 10 miles under 150 miles, and every 25 miles at greater ranges. Bold labels mark rings at 2, 10, 20, or 50-mile intervals. Dark minor rings sit halfway between. Ring labels omit units and sit along a northwest radial, leaving an opening in the rings without a radial line.
 
-The radar shows green symbols while connected. It shows dark gray symbols when the receiver connection drops. Aircraft symbols are hollow diamonds. Labels show callsign, altitude, vertical trend, speed, and type code when known. The label uses the ICAO address when the callsign is missing or is a placeholder. It fades aircraft marks and labels by age. It removes an aircraft after two minutes without an update. It shows a predicted path for 60 seconds and history marks for the last 60 seconds.
+The radar shows green symbols while connected. It shows dark gray symbols when the receiver connection drops. Aircraft symbols are hollow diamonds.
+
+Labels show callsign, altitude, vertical trend, speed, and known type. If callsign is missing or a placeholder, the label uses the ICAO address. Aircraft marks and labels fade with age. Targets disappear after two minutes without an update.
+
+A predicted path lasts 60 seconds. History marks cover the last 60 seconds.
 
 ADS-B altitude is barometric altitude. It may not match true altitude above mean sea level.
 
@@ -56,13 +66,13 @@ Use the Up and Down arrow keys to change range. Use the Left and Right arrow key
 
 Use W to show or hide muted lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. It does not use a Radar server proxy or save tiles to disk. Map data attribution appears at lower left.
 
-The radar legend has a transparent background and aligns each symbol with its label. Wide views use two columns; narrow views use one. The second column sits adjacent to the first.
+The radar legend has a transparent background and aligns each symbol with its label. Wide views use two columns. Narrow views use one. The second column sits adjacent to the first.
 
 - Key A toggles airports, their Class B/C/D airspace, runways, and runway guides.
 - Key N toggles VORs. Key R toggles runways. Key E toggles runway guides.
-- Key I toggles ILS courses and marker beacons. Key D toggles SIDs; key S toggles STARs.
+- Key I toggles ILS courses and marker beacons. Key D toggles SIDs. Key S toggles STARs.
 - Key Q toggles RNAV airways. Key J toggles Jet airways. Key V toggles Victor airways. Key W toggles water.
-- Key M toggles METARs; hidden METARs stop refreshing. Key F toggles flight strips.
+- Key M toggles METARs. Hidden METARs stop refreshing. Key F toggles flight strips.
 
 When flight strips are hidden, the radar fills the viewport and route lookups for ORIG/DEST pause. Browser local storage saves visibility choices and restores them on refresh.
 
@@ -70,13 +80,19 @@ When flight strips are hidden, the radar fills the viewport and route lookups fo
 
 The browser requests reference data for the current range. It requests only new distance bands as the range grows. It keeps results in browser memory.
 
-Airport markers use pale gray. Labels sit above the markers. VOR symbols and labels use blue. Runway guides use dark gray dotted lines. ILS lines and markers use subdued purple, at about half the previous brightness. SID lines use subdued blue. STAR lines use subdued orange. Use `I` to show or hide ILS paths. Use `D` for SID paths and `S` for STAR paths.
+Airport markers use pale gray. Labels sit above the markers. VOR symbols and labels use blue. Runway guides use dark gray dotted lines.
+
+ILS lines and markers use subdued purple, at about half the previous brightness. SID lines use subdued blue. STAR lines use subdued orange. Use `I` to show or hide ILS paths. Use `D` for SID paths and `S` for STAR paths.
 
 NASR has no local terminal-control boundary shapes. The radar can show FAA ARTCC boundary points and approximate Class B, C, and D shapes. The class shapes are not official boundaries.
 
 ## Flight strips and weather
 
-The flight-strip panels sit beside the radar in landscape view and under it in portrait view. Use F to hide or show them. The radar panel uses the full page width while they are hidden. They sort aircraft by distance, closest first. They list callsign, altitude with vertical trend, type, heading with speed, squawk, bearing with rounded range, departure, and destination. They omit field headers and units. Narrow layouts reflow data into aligned rows. The panel uses white text on black with double outer borders and single row dividers. Scrolling works without on-screen scrollbars. Each aircraft card fades as its data ages and disappears when the aircraft times out. Each refresh keeps the current scroll location.
+Flight-strip panels sit beside the radar in landscape and below it in portrait. Press F to hide or show them. The radar fills the page while strips are hidden. Aircraft sort by distance, closest first.
+
+Each strip shows callsign, altitude and trend, type, heading and speed, squawk, bearing and rounded range, departure, and destination. Field headers and units are omitted.
+
+Narrow layouts wrap fields into aligned rows. Cards use white text on black, with a double border and single row dividers. The list scrolls without visible scrollbars. Cards fade with age and disappear after aircraft timeout. Refreshes preserve the scroll position.
 
 The 3D view shows a decoded VATSIM METAR table at the top center of the radar. Its fields are automation status, airport, flight category, age, wind direction, wind speed, visibility, weather, sky, temperature, dew point, and altimeter pressure. Flight category appears between airport and age, using green for VFR, yellow for MVFR, orange for IFR, and red for LIFR. The 2D view and narrow layouts show a one-line raw report ticker with the same category label and colors.
 

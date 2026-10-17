@@ -7,6 +7,7 @@ const appIcons = new Set([
   "radar-maskable-512.png",
 ]);
 const pwaScreenshots = new Set(["radar-desktop.png", "radar-mobile.png"]);
+const charsetSeparator = String.fromCharCode(59);
 
 export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFile }) {
   app.get("/", async (_request, reply) =>
@@ -41,8 +42,8 @@ export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFi
 
 async function sendAsset(reply, file, type, read) {
   try {
-    return reply.type(`${type}; charset=utf-8`).send(await read(file));
+    return reply.type(`${type}${charsetSeparator} charset=utf-8`).send(await read(file));
   } catch {
-    return reply.code(404).type("text/plain; charset=utf-8").send("Not found");
+    return reply.code(404).type(`text/plain${charsetSeparator} charset=utf-8`).send("Not found");
   }
 }

@@ -11,13 +11,21 @@ This guide runs Radar and readsb together on a Linux host with an RTL-SDR receiv
 
 The Compose configuration binds `/dev/bus/usb` into readsb and grants access to USB character devices (major 189). This lets the container see device nodes when the receiver is re-enumerated. The container is not privileged. Keep host USB permissions and Docker access for trusted administrators only.
 
-The optional ADSBX container reads readsb Beast data at private TCP endpoint `30005`. It has no SDR access. Radar keeps its SBS connection at TCP endpoint `30003`. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` in `.env` to the antenna coordinates and altitude in feet above sea level. Radar and both feeders read these values. Set `ADSBX_SITENAME` as the receiver label. Create a stable `ADSBX_UUID` with `uuidgen`. This UUID identifies the receiver; it is not an account key. Compose downloads the third-party image from GHCR. Radar and readsb build locally.
+The optional ADSBX container reads readsb Beast data on private TCP port `30005`. It has no SDR access. Radar keeps its SBS connection on port `30003`. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` in `.env` for the antenna location and altitude in feet above sea level.
+
+Radar and both feeders read these values. Set `ADSBX_SITENAME` to label the receiver. Create a stable `ADSBX_UUID` with `uuidgen`. This UUID identifies the receiver. It is not an account key.
+
+Compose downloads the ADSBX image from GHCR. Radar and readsb build locally.
 
 The FlightAware PiAware container also reads Beast data at private TCP endpoint `30005` without SDR access. Its assigned `PIAWARE_FEEDER_ID` is in `.env`, keeping the site identity stable. Claim the receiver through FlightAware. Set its location and antenna altitude on the FlightAware stats page.
 
-Flightradar24 uses an optional Compose profile. Start the profile after obtaining a sharing key. Run `docker compose --profile fr24 run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Type the account email and antenna location. Select Beast TCP, host `readsb`, and endpoint `30005`. Disable MLAT. Save the issued key as `FR24_KEY` in `.env`. Then start it with `docker compose --profile fr24 up -d fr24`. MLAT stays disabled on this container, as recommended when sharing with multiple networks.
+Flightradar24 uses an optional Compose profile. Start the profile after getting a sharing key. Run `docker compose --profile fr24 run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Enter the account email and antenna location. Select Beast TCP, host `readsb`, and port `30005`. Disable MLAT.
 
-The ADSB.lol Ultrafeeder container runs in network-only mode. It relays readsb Beast data from TCP endpoint `30005` to ADSB.lol. It has no SDR access and leaves Radar's SBS connection unchanged. Set a stable `ADSBLOL_UUID` in `.env`. ADSB.lol does not require an assigned key. The container also sends MLAT data with receiver privacy enabled, hiding the receiver from the public MLAT map. Start it with `docker compose up -d adsblol`. Check `docker compose logs -f adsblol` for connection status.
+Save the issued key as `FR24_KEY` in `.env`. Start the service with `docker compose --profile fr24 up -d fr24`. Keep MLAT disabled when feeding multiple networks, as Flightradar24 recommends.
+
+The ADSB.lol Ultrafeeder container runs in network-only mode. It forwards readsb Beast data from port `30005` to ADSB.lol. It does not access the SDR or change Radar's SBS connection.
+
+Set a stable `ADSBLOL_UUID` in `.env`. ADSB.lol needs no assigned key. The container also sends MLAT data with receiver privacy enabled. This hides the receiver from the public MLAT map. Start it with `docker compose up -d adsblol`. Check `docker compose logs -f adsblol` for connection status.
 
 ## Configure and start
 
@@ -30,7 +38,9 @@ cd radar
 git lfs pull
 ```
 
-Copy `.env.example` to `.env`. Set `ADSB_LAT`, `ADSB_LON`, `ADSB_ALT`, and view defaults. Give `ADSBX_UUID` and `ADSBLOL_UUID` separate stable UUID values. Set `ADSBX_SITENAME` to label your ADSBX receiver. The Compose file supplies `ADSB_HOST=readsb` and `ADSB_PORT=30003`. The host does not publish this input endpoint. Radar is available at `http://<server-ip>:3000` on the LAN.
+Copy `.env.example` to `.env`. Set `ADSB_LAT`, `ADSB_LON`, `ADSB_ALT`, and view defaults. Give `ADSBX_UUID` and `ADSBLOL_UUID` separate stable UUID values. Set `ADSBX_SITENAME` to label your ADSBX receiver.
+
+Compose sets `ADSB_HOST=readsb` and `ADSB_PORT=30003`. It does not publish the host input endpoint. Open Radar at `http://<server-ip>:3000` on the LAN.
 
 ## Build and check
 
