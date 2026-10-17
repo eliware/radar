@@ -65,3 +65,12 @@ test("does not publish a type lookup after the source removes an aircraft", asyn
   expect(subscriber).toHaveBeenCalledTimes(1);
   expect(state.enriched.list()).toEqual([]);
 });
+
+test("exposes the route lookup pause control", () => {
+  const item = { icao: "ABC123", callsign: "BAW183" };
+  const state = setup([item]);
+  state.enriched.setRouteLookupsEnabled(false);
+  state.onUpdate(item);
+  expect(state.lookup.getAircraftType).toHaveBeenCalledWith("ABC123");
+  expect(state.lookup.getCallsignRoute).not.toHaveBeenCalled();
+});

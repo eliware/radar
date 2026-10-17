@@ -7,7 +7,7 @@ import { handleDashboardFeedUpdate } from "./handle-dashboard-feed-update.mjs";
 import { dashboardWebSocketUrl } from "./dashboard-websocket-url.mjs";
 import { attachDashboardPagehide } from "./attach-dashboard-pagehide.mjs";
 import { destroyDashboardResources } from "./destroy-dashboard-resources.mjs";
-import { attachFlightStripsToggle } from "./attach-flight-strips-toggle.mjs";
+import { attachDashboardDisplayToggles } from "./attach-dashboard-display-toggles.mjs";
 
 export async function startDashboard({
   document,
@@ -20,20 +20,23 @@ export async function startDashboard({
   if (!container) return null;
   const stripPanel = document.querySelector("[data-flight-strips]");
   const flightStrips = createFlightStripView(stripPanel, windowRef);
-  const detachFlightStripsToggle = attachFlightStripsToggle(
-    document,
-    document.querySelector(".dashboard"),
-    stripPanel,
+  const resources = {
+    windowRef,
+    flightStrips,
+  };
+  const displayToggles = attachDashboardDisplayToggles(document, fetchData, (enabled) =>
+    resources.metarRefresh?.setEnabled(enabled),
   );
-  const resources = { windowRef, flightStrips, detachFlightStripsToggle };
+  Object.assign(resources, displayToggles);
   try {
     const config = await readJson(fetchData, "/api/config");
     flightStrips.setHome(config.location, config.elevationFeet);
-    resources.metarTimer = startMetarRefresh({
+    resources.metarRefresh = startMetarRefresh({
       fetchData,
       panel: document.querySelector("[data-metar-reports]"),
       ticker: document.querySelector("[data-metar-ticker]"),
       timerHost: windowRef,
+      enabled: !displayToggles.panel?.hidden,
     });
     const scene = await createScene({
       container,

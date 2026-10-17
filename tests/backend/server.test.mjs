@@ -6,6 +6,7 @@ function createApp() {
   return {
     close: async () => Promise.all(hooks.map((hook) => hook())),
     get: jest.fn(),
+    post: jest.fn(),
     hooks,
     register: jest.fn(async () => undefined),
     addHook: jest.fn((_name, hook) => hooks.push(hook)),

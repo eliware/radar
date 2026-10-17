@@ -56,7 +56,7 @@ Use the Up and Down arrow keys to zoom in or out. Use the Left and Right arrow k
 
 Press W to show or hide faint lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. The browser does not use a Radar server proxy or save tiles to disk. The page shows small map data attribution at the bottom left.
 
-The radar legend has a transparent background. It aligns each symbol with its label. It uses two columns on wide views and one column on narrow views. The second column sits next to the first column. Press A for airports (and their Class B/C/D airspace, runways, and runway guides), N for VORs, R for runways, E for runway guides, I for ILS courses and approach markers, D for SIDs, S for STARs, Q for RNAV airways, J for Jet airways, V for Victor airways, and W for water. All reference layers start enabled.
+The radar legend has a transparent background. It aligns each symbol with its label. It uses two columns on wide views and one column on narrow views. The second column sits next to the first column. Press A for airports (and their Class B/C/D airspace, runways, and runway guides), N for VORs, R for runways, E for runway guides, I for ILS courses and approach markers, D for SIDs, S for STARs, Q for RNAV airways, J for Jet airways, V for Victor airways, and W for water. Press M to hide or show METARs; hidden METARs stop refreshing. Press F to hide or show flight strips. With strips hidden, the radar fills the viewport and route lookups for ORIG/DEST are paused. Visibility choices for these layers, METARs, and flight strips are saved in browser local storage and restored on refresh.
 
 ## Airport and procedure layers
 

@@ -53,6 +53,16 @@ test("ignores other keys, modifiers, and editable targets", () => {
   expect(panel.hidden).toBe(false);
 });
 
+test("notifies route lookup control when strip visibility changes", () => {
+  const { documentRef, send, dashboard, panel } = setup();
+  const onEnabledChange = jest.fn();
+  attachFlightStripsToggle(documentRef, dashboard, panel, onEnabledChange);
+  send({ key: "f", preventDefault: jest.fn() });
+  expect(onEnabledChange).toHaveBeenLastCalledWith(false);
+  send({ key: "f", preventDefault: jest.fn() });
+  expect(onEnabledChange).toHaveBeenLastCalledWith(true);
+});
+
 test("supports missing document, layout, and remove methods", () => {
   expect(() => attachFlightStripsToggle(null, {}, {})()).not.toThrow();
   expect(() => attachFlightStripsToggle({ addEventListener: jest.fn() }, {}, {})()).not.toThrow();

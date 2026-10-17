@@ -1,15 +1,26 @@
 import { updateMetarDisplay } from "./metar-display.mjs";
 
-export function startMetarRefresh({ fetchData, panel, ticker, timerHost }) {
+export function startMetarRefresh({ fetchData, panel, ticker, timerHost, enabled = true }) {
   const refresh = async () => {
+    if (!enabled) return;
     try {
       const response = await fetchData("/api/metar");
       if (!response.ok) throw new Error("METAR request failed.");
-      updateMetarDisplay(panel, ticker, await response.json());
+      const data = await response.json();
+      if (enabled) updateMetarDisplay(panel, ticker, data);
     } catch {
-      updateMetarDisplay(panel, ticker, { reports: [] });
+      if (enabled) updateMetarDisplay(panel, ticker, { reports: [] });
     }
   };
   refresh();
-  return timerHost?.setInterval?.(refresh, 300000) ?? null;
+  const timer = timerHost?.setInterval?.(refresh, 300000) ?? null;
+  return {
+    setEnabled(value) {
+      enabled = Boolean(value);
+      if (enabled) refresh();
+    },
+    destroy() {
+      if (timer !== null) timerHost?.clearInterval?.(timer);
+    },
+  };
 }

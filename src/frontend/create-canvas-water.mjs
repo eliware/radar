@@ -10,6 +10,7 @@ export function createCanvasWater(documentRef, windowRef, location, canvas, stat
     data.visible = visible;
     redraw();
   });
+  data.visible = visibility.isVisible();
   return {
     data,
     update: requester.update,

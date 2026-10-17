@@ -22,6 +22,7 @@ export function createAircraftEnrichmentFeed(feed, lookup) {
       return () => subscribers.delete(subscriber);
     },
     isReady: () => feed.isReady(),
+    setRouteLookupsEnabled: (enabled) => coordinator.setRouteLookupsEnabled(enabled),
     close() {
       if (closed) return;
       closed = true;

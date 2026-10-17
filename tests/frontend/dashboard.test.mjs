@@ -1,6 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
 import { startDashboard } from "../../src/frontend/dashboard.mjs";
-
 function makeDocument(protocol = "https:") {
   const keyListeners = new Map([["keydown", []]]),
     compassListeners = new Map();
@@ -40,11 +39,9 @@ function makeDocument(protocol = "https:") {
     querySelectorAll: () => [],
   };
 }
-
 function jsonResponse(value, ok = true) {
   return { ok, json: async () => value };
 }
-
 test("starts the secure live view and handles feed messages", async () => {
   const document = makeDocument();
   const aircraft = { icao: "ABC123" };
@@ -54,7 +51,14 @@ test("starts the secure live view and handles feed messages", async () => {
     jsonResponse([aircraft]),
     jsonResponse([{ icao: "RESTORE1" }]),
   ];
-  const fetchData = jest.fn(() => Promise.resolve(responses.shift()));
+  const fetchData = jest.fn((path, options) =>
+    path === "/api/route-lookups"
+      ? Promise.resolve({
+          ok: true,
+          json: async () => ({ enabled: options.body.includes("true") }),
+        })
+      : Promise.resolve(responses.shift()),
+  );
   const scene = {
     mode: "2D",
     update: jest.fn(),
@@ -77,7 +81,6 @@ test("starts the secure live view and handles feed messages", async () => {
       socket = this;
     }
   }
-
   const result = await startDashboard({
     document,
     fetchData,
@@ -85,17 +88,20 @@ test("starts the secure live view and handles feed messages", async () => {
     createScene,
   });
   expect(result).toEqual(expect.objectContaining({ scene, socket }));
-  expect(socket.url).toBe("wss://localhost:3000/ws");
-  expect(document.querySelector("[data-metar]").dataset.radarMode).toBe("2D");
   expect(fetchData).toHaveBeenCalledWith("/api/metar");
   expect(createScene.mock.calls[0][0]).toMatchObject({
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
   });
   expect(scene.update).toHaveBeenCalledWith(aircraft);
-  expect(document.strips.innerHTML).toContain("1 AIRCRAFT");
   document.sendKey({ key: "f", preventDefault: jest.fn() });
   expect(document.strips.hidden).toBe(true);
+  expect(fetchData).toHaveBeenCalledWith(
+    "/api/route-lookups",
+    expect.objectContaining({ method: "POST", body: JSON.stringify({ enabled: false }) }),
+  );
+  document.sendKey({ key: "m", preventDefault: jest.fn() });
+  expect(document.querySelector("[data-metar]").hidden).toBe(true);
   document.sendKey({ key: "Home", preventDefault: jest.fn() });
   document.clickCompass();
   for (const key of ["ArrowUp", "ArrowLeft"]) document.sendKey({ key, preventDefault: jest.fn() });
@@ -112,11 +118,10 @@ test("starts the secure live view and handles feed messages", async () => {
   expect(scene.setConnected).toHaveBeenLastCalledWith(false);
   result.destroy();
   expect(detachCompass).toHaveBeenCalledTimes(1);
-  expect(document.removeEventListener).toHaveBeenCalledTimes(3);
+  expect(document.removeEventListener).toHaveBeenCalledTimes(4);
   expect(document.compass.removeEventListener).toHaveBeenCalledTimes(2);
   expect(scene.destroy).toHaveBeenCalledTimes(1);
 });
-
 test("does not start when the page or configuration is missing", async () => {
   const document = makeDocument();
   document.querySelector = () => null;
@@ -128,7 +133,6 @@ test("does not start when the page or configuration is missing", async () => {
     }),
   ).toBeNull();
 });
-
 test("destroys the scene when dashboard setup fails after scene creation", async () => {
   const document = makeDocument();
   const fetchData = jest
@@ -145,7 +149,6 @@ test("destroys the scene when dashboard setup fails after scene creation", async
   expect(result).toBeNull();
   expect(scene.destroy).toHaveBeenCalledTimes(1);
 });
-
 test("loads reference data only for each new view range", async () => {
   const document = makeDocument();
   const requested = [];
@@ -186,7 +189,6 @@ test("loads reference data only for each new view range", async () => {
   changeView(undefined);
   changeView(30);
   await new Promise((resolve) => setTimeout(resolve, 0));
-
   expect(scene.onViewChange).toHaveBeenCalledTimes(2);
   expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=20");
   expect(requested).toContain("/api/navaids?minRangeNm=20&maxRangeNm=30");

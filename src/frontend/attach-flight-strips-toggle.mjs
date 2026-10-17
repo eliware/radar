@@ -1,6 +1,11 @@
 const EDITABLE_TAGS = new Set(["input", "textarea", "select"]);
 
-export function attachFlightStripsToggle(documentRef, dashboard, panel) {
+export function attachFlightStripsToggle(
+  documentRef,
+  dashboard,
+  panel,
+  onEnabledChange = () => {},
+) {
   if (!documentRef?.addEventListener || !dashboard?.classList || !panel) return () => {};
   const syncLayout = () => dashboard.classList.toggle("flight-strips-hidden", panel.hidden);
   syncLayout();
@@ -11,6 +16,7 @@ export function attachFlightStripsToggle(documentRef, dashboard, panel) {
     event.preventDefault();
     panel.hidden = !panel.hidden;
     syncLayout();
+    onEnabledChange(!panel.hidden);
   };
   documentRef.addEventListener("keydown", onKeyDown);
   return () => documentRef.removeEventListener?.("keydown", onKeyDown);

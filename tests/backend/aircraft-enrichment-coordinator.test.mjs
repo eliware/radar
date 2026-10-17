@@ -101,3 +101,23 @@ test("retains route data when a placeholder replaces a useful callsign", async (
     destination: "KBOS",
   });
 });
+
+test("pauses route lookups and ignores results started before they were disabled", async () => {
+  const state = createState();
+  let complete;
+  state.lookup.getCallsignRoute.mockImplementation(
+    () => new Promise((resolve) => (complete = resolve)),
+  );
+  const item = { icao: "ABC123", callsign: "BAW183" };
+  state.coordinator.update(item, state.publish);
+  state.coordinator.setRouteLookupsEnabled(false);
+  state.coordinator.setRouteLookupsEnabled(false);
+  complete({ origin: "EGLL", destination: "KBOS" });
+  await Promise.resolve();
+  expect(state.changes).toEqual([item]);
+  state.coordinator.update({ ...item, altitudeFeet: 10000 }, state.publish);
+  expect(state.lookup.getCallsignRoute).toHaveBeenCalledTimes(1);
+  state.coordinator.setRouteLookupsEnabled(true);
+  state.coordinator.update({ ...item, altitudeFeet: 11000 }, state.publish);
+  expect(state.lookup.getCallsignRoute).toHaveBeenCalledTimes(2);
+});

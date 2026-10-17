@@ -8,6 +8,8 @@ export function createAircraftEnrichmentCoordinator(lookup) {
   const metadata = createAircraftMetadataStore();
   const lastAircraft = new Map();
   let closed = false;
+  let routeLookupsEnabled = true;
+  let routeLookupVersion = 0;
 
   function publishIfChanged(icao, changed, publish) {
     const aircraft = lastAircraft.get(icao);
@@ -32,16 +34,25 @@ export function createAircraftEnrichmentCoordinator(lookup) {
       .getAircraftType(icao)
       .then((result) => publishIfChanged(icao, metadata.updateType(icao, result), publish))
       .catch(() => undefined);
-    if (!hasUsefulCallsign(callsign)) return;
+    if (!routeLookupsEnabled || !hasUsefulCallsign(callsign)) return;
+    const version = routeLookupVersion;
     lookup
       .getCallsignRoute(callsign)
-      .then((result) => publishIfChanged(icao, metadata.updateRoute(callsign, result), publish))
+      .then((result) => {
+        if (version === routeLookupVersion && routeLookupsEnabled)
+          publishIfChanged(icao, metadata.updateRoute(callsign, result), publish);
+      })
       .catch(() => undefined);
   }
 
   return {
     update,
     enrich: (aircraft) => metadata.enrich(aircraft),
+    setRouteLookupsEnabled(value) {
+      const enabled = Boolean(value);
+      if (enabled !== routeLookupsEnabled) routeLookupVersion += 1;
+      routeLookupsEnabled = enabled;
+    },
     retain(aircraft) {
       const live = new Set(aircraft.map((item) => normalizeAircraftMetadataKey(item.icao)));
       for (const icao of lastAircraft.keys()) if (!live.has(icao)) lastAircraft.delete(icao);
