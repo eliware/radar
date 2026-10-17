@@ -77,3 +77,48 @@ test("fades aircraft markers and labels as their receive age increases", () => {
   expect(alphaValues).toContain(0.5);
   expect(alpha).toBe(1);
 });
+
+test("draws emergency aircraft red while fading the marker and four-line tag", () => {
+  const context = Object.fromEntries(
+    ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fillText"].map((name) => [
+      name,
+      jest.fn(),
+    ]),
+  );
+  context.measureText = (text) => ({ width: text.length * 8 });
+  const alphaValues = [];
+  let alpha = 1;
+  Object.defineProperty(context, "globalAlpha", {
+    get: () => alpha,
+    set: (value) => {
+      alpha = value;
+      alphaValues.push(value);
+    },
+  });
+  const now = Date.now();
+  const dateNow = jest.spyOn(Date, "now").mockReturnValue(now);
+  try {
+    drawAircraftDisplay(
+      context,
+      [
+        {
+          x: 20,
+          y: 20,
+          receivedAt: now - 60_000,
+          squawk: "7500",
+          lines: ["HIJACKER", "123", "200 B738", "HIJACK"],
+        },
+      ],
+      12,
+      100,
+      100,
+    );
+  } finally {
+    dateNow.mockRestore();
+  }
+  expect(context.fillStyle).toBe("#ff0000");
+  expect(context.strokeStyle).toBe("#ff0000");
+  expect(context.fillText).toHaveBeenCalledWith("HIJACK", expect.any(Number), expect.any(Number));
+  expect(alphaValues).toContain(0.5);
+  expect(alpha).toBe(1);
+});

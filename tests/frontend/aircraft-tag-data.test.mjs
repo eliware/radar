@@ -33,3 +33,18 @@ test("formats the name, flight level, and speed without units", () => {
     formatAircraftTag({ altitudeFeet: Number.NaN, verticalRateFeetPerMinute: Number.NaN }),
   ).toEqual(["-", "-", "-"]);
 });
+
+test("adds emergency status as a fourth radar tag line", () => {
+  expect(formatAircraftTag({ callsign: "TEST", squawk: "7500" })).toEqual([
+    "TEST",
+    "-",
+    "-",
+    "HIJACK",
+  ]);
+  expect(formatAircraftTag({ callsign: "TEST", emergency: 1 })).toEqual([
+    "TEST",
+    "-",
+    "-",
+    "EMERG",
+  ]);
+});

@@ -42,7 +42,8 @@ export function renderFlightStrips(container, aircraft, width, now = Date.now())
         MIN_FLIGHT_STRIP_OPACITY,
         getAircraftAgeBrightness(item.lastSeen, now),
       );
-      return `<div class="flight-strip-aircraft" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
+      const emergencyClass = item.emergency ? " emergency" : "";
+      return `<div class="flight-strip-aircraft${emergencyClass}" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
     })
     .join("");
   container.innerHTML = `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;

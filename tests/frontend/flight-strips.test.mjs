@@ -48,6 +48,14 @@ test("limits strip fading to 25 percent until the aircraft expires", () => {
   expect(container.innerHTML).toContain('data-icao="AGING" style="opacity:0.25"');
 });
 
+test("marks emergency strips red while retaining the age opacity", () => {
+  const container = {};
+  renderFlightStrips(container, [{ ...aircraft("EMERGENCY", 1), squawk: "7700" }], 3000, 91000);
+  expect(container.innerHTML).toContain(
+    'class="flight-strip-aircraft emergency" data-icao="EMERGENCY" style="opacity:0.25"',
+  );
+});
+
 test("keeps the list scroll position when a refresh replaces its contents", () => {
   const oldList = { scrollTop: 120 };
   const newList = { scrollTop: 0 };

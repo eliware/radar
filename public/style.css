@@ -276,6 +276,9 @@ p {
 .flight-strip-row span:last-child {
   border-right: 0;
 }
+.flight-strip-aircraft.emergency {
+  color: #ff0000;
+}
 .flight-strip-list {
   min-height: 0;
   flex: 1;

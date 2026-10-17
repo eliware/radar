@@ -1,5 +1,6 @@
 import { formatAircraftSpeed, formatAircraftTag } from "./aircraft-tag-data.mjs";
 import { buildFlightStripLayout } from "./flight-strip-layout.mjs";
+import { getAircraftEmergencyLabel } from "../shared/aircraft-emergency.mjs";
 
 const fieldLabels = [
   "CALLSIGN",
@@ -47,6 +48,7 @@ export function buildFlightStripData(aircraft, width) {
     aircraft: sorted.map((item, index) => ({
       icao: item.icao ?? "",
       lastSeen: item.lastSeen,
+      emergency: Boolean(getAircraftEmergencyLabel(item)),
       ...layout.rows[index],
     })),
     weights: layout.alignedGroups.map((group) => group.map(() => 1)),

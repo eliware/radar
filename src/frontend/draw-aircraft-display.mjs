@@ -1,6 +1,9 @@
 import { layoutAircraftTags } from "./layout-aircraft-tags.mjs";
 import { getAircraftAgeBrightness } from "./aircraft-age-brightness.mjs";
 import { getRadarPalette } from "./radar-palette.mjs";
+import { getAircraftEmergencyLabel } from "../shared/aircraft-emergency.mjs";
+
+const EMERGENCY_COLOR = "#ff0000";
 
 export function drawAircraftDisplay(context, aircraft, fontSize, width, height, connected = true) {
   const palette = getRadarPalette(connected);
@@ -9,13 +12,17 @@ export function drawAircraftDisplay(context, aircraft, fontSize, width, height, 
   context.strokeStyle = palette.bright;
   const previousAlpha = context.globalAlpha ?? 1;
   for (const item of aircraft) {
+    const color = getAircraftEmergencyLabel(item) ? EMERGENCY_COLOR : palette.bright;
+    context.fillStyle = color;
+    context.strokeStyle = color;
     context.globalAlpha = previousAlpha * getAircraftAgeBrightness(item.receivedAt);
     drawTrack(context, item);
   }
   context.font = `${fontSize}px monospace`;
-  context.fillStyle = palette.bright;
-  context.strokeStyle = palette.bright;
   for (const tag of layoutAircraftTags(context, aircraft, fontSize, width, height)) {
+    const color = getAircraftEmergencyLabel(tag.item) ? EMERGENCY_COLOR : palette.bright;
+    context.fillStyle = color;
+    context.strokeStyle = color;
     context.globalAlpha = previousAlpha * getAircraftAgeBrightness(tag.item.receivedAt);
     drawTag(context, tag, fontSize);
   }
