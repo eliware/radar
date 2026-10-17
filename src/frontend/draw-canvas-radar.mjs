@@ -29,6 +29,7 @@ export function drawCanvasRadar(
   proceduresVisible = true,
   waterPaths = [],
   waterVisible = true,
+  homeElevationFeet = 0,
 ) {
   const palette = getRadarPalette(connected);
   const width = canvas.clientWidth || 1;
@@ -71,7 +72,13 @@ export function drawCanvasRadar(
     })),
   );
   ctx.restore();
-  const display = projectAircraftDisplayItems(aircraft, trails, location, 0, project);
+  const display = projectAircraftDisplayItems(
+    aircraft,
+    trails,
+    location,
+    homeElevationFeet,
+    project,
+  );
   drawAircraftDisplay(ctx, display, 9, width, height, connected);
   ctx.fillStyle = palette.bright;
   ctx.beginPath();

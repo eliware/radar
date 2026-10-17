@@ -1,58 +1,10 @@
-import { buildFlightStripData } from "./flight-strip-data.mjs";
-import { getAircraftAgeBrightness } from "./aircraft-age-brightness.mjs";
-
-const MIN_FLIGHT_STRIP_OPACITY = 0.25;
-
-function escapeHtml(value) {
-  return String(value).replace(
-    /[&<>"']/g,
-    (character) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      })[character],
-  );
-}
-
-function rowMarkup(values, weights, labels) {
-  const columns = weights.map((weight) => `minmax(0, ${weight}fr)`).join(" ");
-  const cells = values
-    .map((value, index) => {
-      if (!value && !labels[index]) return '<span aria-hidden="true"></span>';
-      const title = ` title="${escapeHtml(`${labels[index]}: ${value}`)}"`;
-      return `<span${title}>${escapeHtml(value)}</span>`;
-    })
-    .join("");
-  return `<div class="flight-strip-row" style="grid-template-columns:${columns}">${cells}</div>`;
-}
-
-export function renderFlightStrips(container, aircraft, width, now = Date.now()) {
-  if (!container) return;
-  const scrollTop = container.querySelector?.(".flight-strip-list")?.scrollTop ?? 0;
-  const data = buildFlightStripData(aircraft, width);
-  const rows = data.aircraft
-    .map((item) => {
-      const body = item.groups
-        .map((row, index) => rowMarkup(row, data.weights[index], item.labels[index]))
-        .join("");
-      const opacity = Math.max(
-        MIN_FLIGHT_STRIP_OPACITY,
-        getAircraftAgeBrightness(item.lastSeen, now),
-      );
-      const emergencyClass = item.emergency ? " emergency" : "";
-      return `<div class="flight-strip-aircraft${emergencyClass}" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
-    })
-    .join("");
-  container.innerHTML = `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;
-  const nextList = container.querySelector?.(".flight-strip-list");
-  if (nextList) nextList.scrollTop = scrollTop;
-}
+import { isAircraftProjectedNearHome } from "./aircraft-near-home-pass.mjs";
+import { renderFlightStrips } from "./render-flight-strips.mjs";
 
 export function createFlightStripView(container, windowRef, clock = Date.now) {
   const aircraft = new Map();
+  let location = null;
+  let elevationFeet = 0;
   const render = () => {
     const now = clock();
     for (const [icao, item] of aircraft) {
@@ -60,15 +12,23 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
     }
     renderFlightStrips(
       container,
-      [...aircraft.values()],
+      [...aircraft.values()].map((item) => ({
+        ...item,
+        nearHomePass: isAircraftProjectedNearHome(item, location, elevationFeet),
+      })),
       availableWidth(container, windowRef),
       now,
     );
   };
   windowRef?.addEventListener?.("resize", render);
-  const timer = windowRef?.setInterval?.(render, 1000);
+  const timer = windowRef?.setInterval?.(render, 500);
   render();
   return {
+    setHome(homeLocation, homeElevationFeet) {
+      location = homeLocation;
+      elevationFeet = homeElevationFeet;
+      render();
+    },
     update(items) {
       for (const item of Array.isArray(items) ? items : [items]) {
         if (item?.icao) aircraft.set(item.icao, item);

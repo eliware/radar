@@ -5,6 +5,7 @@ export function createCanvasRadarDraw({
   canvas,
   targets,
   location,
+  elevationFeet = 0,
   state,
   windowRef,
   trails,
@@ -37,5 +38,6 @@ export function createCanvasRadarDraw({
       state.proceduresVisible,
       water.paths,
       water.isVisible(),
+      elevationFeet,
     );
 }

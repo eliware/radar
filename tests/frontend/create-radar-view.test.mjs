@@ -60,6 +60,9 @@ test("uses Canvas when WebGL context creation fails", async () => {
   expect(createCanvasRadarView).toHaveBeenCalledWith({
     container: args.container,
     location: null,
+    elevationFeet: 300,
+    defaultRangeNm: undefined,
+    defaultRotationDegrees: undefined,
     windowRef: args.windowRef,
   });
   expect(args.onMode).toHaveBeenCalledWith("2D");

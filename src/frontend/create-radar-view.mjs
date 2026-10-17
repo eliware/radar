@@ -26,6 +26,7 @@ export async function createRadarView({
     const view = createCanvasRadarView({
       container,
       location,
+      elevationFeet,
       defaultRangeNm,
       defaultRotationDegrees,
       windowRef,

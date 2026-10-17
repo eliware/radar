@@ -28,6 +28,7 @@ export async function startDashboard({
   const resources = { windowRef, flightStrips, detachFlightStripsToggle };
   try {
     const config = await readJson(fetchData, "/api/config");
+    flightStrips.setHome(config.location, config.elevationFeet);
     resources.metarTimer = startMetarRefresh({
       fetchData,
       panel: document.querySelector("[data-metar-reports]"),

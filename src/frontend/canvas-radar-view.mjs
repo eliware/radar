@@ -10,6 +10,7 @@ import { createCanvasRadarWater } from "./create-canvas-radar-water.mjs";
 export function createCanvasRadarView({
   container,
   location,
+  elevationFeet = 0,
   defaultRangeNm = DEFAULT_RADAR_RANGE,
   defaultRotationDegrees = 0,
   windowRef = window,
@@ -53,6 +54,7 @@ export function createCanvasRadarView({
     canvas,
     targets,
     location,
+    elevationFeet,
     state,
     windowRef,
     trails,

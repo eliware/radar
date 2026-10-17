@@ -5,14 +5,22 @@ import { getAircraftEmergencyLabel } from "../shared/aircraft-emergency.mjs";
 
 const EMERGENCY_COLOR = "#ff0000";
 
-export function drawAircraftDisplay(context, aircraft, fontSize, width, height, connected = true) {
+export function drawAircraftDisplay(
+  context,
+  aircraft,
+  fontSize,
+  width,
+  height,
+  connected = true,
+  now = Date.now(),
+) {
   const palette = getRadarPalette(connected);
   drawTrails(context, aircraft, fontSize, palette.trail);
   context.fillStyle = palette.bright;
   context.strokeStyle = palette.bright;
   const previousAlpha = context.globalAlpha ?? 1;
   for (const item of aircraft) {
-    const color = getAircraftEmergencyLabel(item) ? EMERGENCY_COLOR : palette.bright;
+    const color = displayColor(item, palette.bright, now);
     context.fillStyle = color;
     context.strokeStyle = color;
     context.globalAlpha = previousAlpha * getAircraftAgeBrightness(item.receivedAt);
@@ -20,13 +28,19 @@ export function drawAircraftDisplay(context, aircraft, fontSize, width, height, 
   }
   context.font = `${fontSize}px monospace`;
   for (const tag of layoutAircraftTags(context, aircraft, fontSize, width, height)) {
-    const color = getAircraftEmergencyLabel(tag.item) ? EMERGENCY_COLOR : palette.bright;
+    const color = displayColor(tag.item, palette.bright, now);
     context.fillStyle = color;
     context.strokeStyle = color;
     context.globalAlpha = previousAlpha * getAircraftAgeBrightness(tag.item.receivedAt);
     drawTag(context, tag, fontSize);
   }
   context.globalAlpha = previousAlpha;
+}
+
+function displayColor(item, normalColor, now) {
+  if (getAircraftEmergencyLabel(item)) return EMERGENCY_COLOR;
+  if (!item.nearHomePass) return normalColor;
+  return Math.floor(now / 500) % 2 === 0 ? "#00ff41" : "#ffffff";
 }
 
 function drawTrails(context, aircraft, fontSize, trailColor) {

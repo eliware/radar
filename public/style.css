@@ -279,6 +279,12 @@ p {
 .flight-strip-aircraft.emergency {
   color: #ff0000;
 }
+.flight-strip-aircraft.near-home-pass.flash-green {
+  color: #00ff41;
+}
+.flight-strip-aircraft.near-home-pass.flash-white {
+  color: #fff;
+}
 .flight-strip-list {
   min-height: 0;
   flex: 1;

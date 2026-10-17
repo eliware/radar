@@ -122,3 +122,18 @@ test("draws emergency aircraft red while fading the marker and four-line tag", (
   expect(alphaValues).toContain(0.5);
   expect(alpha).toBe(1);
 });
+
+test("flashes near-home targets green and white on alternating half-second phases", () => {
+  const context = Object.fromEntries(
+    ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fillText"].map((name) => [
+      name,
+      jest.fn(),
+    ]),
+  );
+  context.measureText = (text) => ({ width: text.length * 8 });
+  const target = { x: 20, y: 20, nearHomePass: true, lines: ["PASS", "", ""] };
+  drawAircraftDisplay(context, [target], 12, 100, 100, true, 1000);
+  expect(context.strokeStyle).toBe("#00ff41");
+  drawAircraftDisplay(context, [target], 12, 100, 100, true, 1500);
+  expect(context.strokeStyle).toBe("#ffffff");
+});

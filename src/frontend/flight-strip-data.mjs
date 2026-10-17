@@ -49,6 +49,7 @@ export function buildFlightStripData(aircraft, width) {
       icao: item.icao ?? "",
       lastSeen: item.lastSeen,
       emergency: Boolean(getAircraftEmergencyLabel(item)),
+      nearHomePass: Boolean(item.nearHomePass),
       ...layout.rows[index],
     })),
     weights: layout.alignedGroups.map((group) => group.map(() => 1)),
