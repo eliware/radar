@@ -39,7 +39,7 @@ test("draws a dashed ten-mile approach line with a descending glide path", () =>
     },
     20,
   );
-  expect(ctx.strokeStyle).toBe("#50402e");
+  expect(ctx.strokeStyle).toBe("#c080ff");
   expect(ctx.setLineDash).toHaveBeenNthCalledWith(1, [4, 4]);
   expect(ctx.moveTo).toHaveBeenCalledWith(points[1].longitude, points[1].elevationFeet);
   expect(ctx.lineTo).toHaveBeenCalledWith(points[0].longitude, points[0].elevationFeet);

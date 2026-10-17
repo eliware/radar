@@ -67,3 +67,14 @@ test("skips hidden, distant, and invalid points and segments", () => {
   expect(ctx.stroke).not.toHaveBeenCalled();
   expect(ctx.fillText).not.toHaveBeenCalled();
 });
+
+test("keeps STAR routes in their existing color", () => {
+  const ctx = context();
+  drawProcedures(
+    ctx,
+    new Map([["star", { type: "STAR", points: [point("A", 1, 2), point("B", 2, 2)] }]]),
+    (item) => ({ x: item.x, y: item.y }),
+    10,
+  );
+  expect(ctx.strokeStyle).toBe("#50402e");
+});
