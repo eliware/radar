@@ -15,6 +15,8 @@ The optional ADS-B Exchange feeder container reads readsb's Beast output on priv
 
 The FlightAware PiAware feeder also reads Beast data from private port `30005` and runs without access to the SDR. Its assigned `PIAWARE_FEEDER_ID` is in `.env` so the site identity remains stable. Claim the site through FlightAware and set its receiver location and antenna altitude in the FlightAware stats page. Flightradar24 is configured as an optional Compose profile because it needs a sharing key. Run `docker compose --profile fr24 run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Enter the account email and antenna location, choose Beast TCP with host `readsb` and port `30005`, and disable MLAT. Save the issued key as `FR24_KEY` in `.env`, then start it with `docker compose --profile fr24 up -d fr24`. Its feeder has MLAT disabled as recommended when sharing to multiple networks.
 
+The ADSB.lol Ultrafeeder container runs in network-only mode and relays the existing readsb Beast feed from port `30005` to ADSB.lol. It does not access the SDR or alter Radar's SBS feed. Set a persistent `ADSBLOL_UUID` in `.env`; ADSB.lol does not require an assigned key. The service also sends MLAT data with station privacy enabled, so the station is hidden on the public MLAT map. Start it with `docker compose up -d adsblol` and check `docker compose logs -f adsblol` for feed connection status.
+
 ## Configure and start
 
 Clone the repository with Git LFS enabled, then enter the checkout:
@@ -26,7 +28,7 @@ cd radar
 git lfs pull
 ```
 
-Copy `.env.example` to `.env` and set `ADSB_LAT`, `ADSB_LON`, `ADSB_ALT`, and any view defaults. Set `ADSBX_UUID` to a generated persistent UUID and `ADSBX_SITENAME` to identify the site. The Compose file supplies `ADSB_HOST=readsb` and `ADSB_PORT=30003`; no host port is published for the feed. By default, Radar is available at `http://<server-ip>:3000` on the LAN.
+Copy `.env.example` to `.env` and set `ADSB_LAT`, `ADSB_LON`, `ADSB_ALT`, and any view defaults. Set `ADSBX_UUID` and `ADSBLOL_UUID` to separate generated persistent UUIDs; set `ADSBX_SITENAME` to identify the ADS-B Exchange site. The Compose file supplies `ADSB_HOST=readsb` and `ADSB_PORT=30003`; no host port is published for the feed. By default, Radar is available at `http://<server-ip>:3000` on the LAN.
 
 ## Develop and validate
 
