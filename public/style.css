@@ -160,7 +160,7 @@ p {
   overflow: hidden;
   transform: translateX(-50%);
   color: #ddd;
-  background: #000d;
+  background: transparent;
   font:
     13px/1.35 Consolas,
     "Courier New",
