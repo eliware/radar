@@ -18,7 +18,10 @@ test("draws camera position and MSL altitude using the radar monospace font", ()
   expect(context.textAlign).toBe("left");
   expect(context.fillText).toHaveBeenNthCalledWith(1, "LAT   43.0167°", 18, 30);
   expect(context.fillText).toHaveBeenNthCalledWith(2, "LON  -69.9772°", 18, 46);
-  expect(context.fillText).toHaveBeenNthCalledWith(3, "ALT 12,500' MSL", 18, 62);
+  expect(context.fillText).toHaveBeenNthCalledWith(3, "ALT    12,500' MSL", 18, 62);
+  const [latitude, longitude, altitude] = context.fillText.mock.calls.map(([text]) => text);
+  expect(altitude.indexOf("'")).toBe(latitude.indexOf("°"));
+  expect(altitude.indexOf("'")).toBe(longitude.indexOf("°"));
   expect(context.save).toHaveBeenCalled();
   expect(context.restore).toHaveBeenCalled();
 });
