@@ -19,7 +19,7 @@ test("returns configured stations and current reports", async () => {
           visibility: "10",
           flightCategory: "VFR",
           conditions: "—",
-          clouds: "FEW 045",
+          clouds: "FEW045",
           temperature: "64°F",
           dewPoint: "45°F",
           altimeter: "29.92",

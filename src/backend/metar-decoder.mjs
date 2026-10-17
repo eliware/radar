@@ -79,7 +79,7 @@ function cloudText(data) {
 
 function cloudLayerText({ quantity, height, type }) {
   const altitude = height == null ? "—" : String(Math.round(height / 100)).padStart(3, "0");
-  return `${quantity} ${altitude}${type ?? ""}`;
+  return `${quantity}${altitude}${type ?? ""}`;
 }
 
 function fahrenheitText(celsius) {

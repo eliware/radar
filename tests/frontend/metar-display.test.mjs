@@ -13,7 +13,7 @@ const decoded = {
   flightCategory: "VFR",
   visibility: "4",
   conditions: "RA",
-  clouds: "BKN 1200",
+  clouds: "BKN012",
   temperature: "70°F",
   dewPoint: "65°F",
   altimeter: "30.01",
