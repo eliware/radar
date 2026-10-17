@@ -56,7 +56,7 @@ export function drawCanvasRadar(
   ctx.save();
   ctx.translate(centerX, centerY);
   ctx.rotate(rotation);
-  drawCanvasRings(ctx, 0, 0, radius, range, palette);
+  drawCanvasRings(ctx, 0, 0, radius, range, palette, rotation);
   ctx.restore();
   drawRadarReferences(
     ctx,

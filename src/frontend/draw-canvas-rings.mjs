@@ -1,6 +1,6 @@
 import { getRadarLabelGapAngle, getRadarRingRanges, getRadarRingSpacing } from "./radar-range.mjs";
 
-export function drawCanvasRings(context, x, y, radius, range, palette) {
+export function drawCanvasRings(context, x, y, radius, range, palette, rotation = 0) {
   const majorStep = getRadarRingSpacing(range);
   context.textAlign = "left";
   context.font = "11px sans-serif";
@@ -15,7 +15,7 @@ export function drawCanvasRings(context, x, y, radius, range, palette) {
     const gap = label ? getRadarLabelGapAngle(ringRadius, textWidth) : 0;
     context.arc(x, y, ringRadius, -Math.PI / 2 + gap / 2, (3 * Math.PI) / 2 - gap / 2);
     context.stroke();
-    if (label) drawRingLabel(context, x, y, ringRadius, nm, palette.bright);
+    if (label) drawRingLabel(context, x, y, ringRadius, nm, palette.bright, rotation);
   }
   context.strokeStyle = palette.bright;
   context.lineWidth = 1;
@@ -27,10 +27,14 @@ export function drawCanvasRings(context, x, y, radius, range, palette) {
   context.stroke();
 }
 
-function drawRingLabel(context, x, y, ringRadius, nm, color) {
+function drawRingLabel(context, x, y, ringRadius, nm, color, rotation) {
+  context.save();
+  context.translate(x, y - ringRadius);
+  context.rotate(-rotation);
   context.fillStyle = color;
   context.textAlign = "center";
   context.textBaseline = "middle";
-  context.fillText(`${nm}`, x, y - ringRadius);
+  context.fillText(`${nm}`, 0, 0);
+  context.restore();
   context.textAlign = "left";
 }
