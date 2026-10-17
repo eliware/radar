@@ -116,6 +116,6 @@ test("releases scene resources", () => {
   expect(mocks.airspace.dispose).toHaveBeenCalledTimes(1);
   expect(mocks.overlay.destroy).toHaveBeenCalledTimes(1);
   expect(mocks.radarCamera.dispose).toHaveBeenCalledTimes(1);
-  expect(mocks.controls.dispose).toHaveBeenCalledTimes(1);
+  expect(mocks.controlsDispose).toHaveBeenCalledTimes(1);
   expect(container.replaceChildren).toHaveBeenCalledTimes(1);
 });

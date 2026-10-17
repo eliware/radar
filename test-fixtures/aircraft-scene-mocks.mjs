@@ -3,12 +3,23 @@ import { registerThreeSceneMocks } from "./three-scene-mocks.mjs";
 export function registerAircraftSceneMocks(jest) {
   registerThreeSceneMocks(jest);
   const scene = { rotation: {} };
-  const camera = {};
+  const camera = {
+    up: {
+      x: 0,
+      y: 0,
+      z: -1,
+      set(x, y, z) {
+        Object.assign(this, { x, y, z });
+      },
+    },
+    lookAt: jest.fn(),
+  };
   const renderer = { domElement: {}, dispose: jest.fn() };
+  const controlsDispose = jest.fn();
   const controls = {
     target: { set: jest.fn() },
     update: jest.fn(),
-    dispose: jest.fn(),
+    dispose: controlsDispose,
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
   };
@@ -120,6 +131,7 @@ export function registerAircraftSceneMocks(jest) {
     camera,
     renderer,
     controls,
+    controlsDispose,
     homeConnected,
     updateRings,
     airspace,

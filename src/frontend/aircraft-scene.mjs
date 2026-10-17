@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { createRadarControls } from "./create-radar-controls.mjs";
 import { createRadarStage } from "./create-radar-stage.mjs";
 import { createRadarCamera } from "./radar-camera.mjs";
 import { DEFAULT_RADAR_RANGE } from "./radar-range.mjs";
@@ -29,8 +29,7 @@ export function createAircraftScene({
   const updateRings = createRadarSceneOverlays(THREE, scene);
   const airspace = createAirspaceVolumes(THREE, scene, location, elevationFeet);
   const setRadarConnected = createRadarHome(THREE, scene, updateRings);
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.update();
+  const controls = createRadarControls(camera, renderer.domElement);
   const water = createSceneWater(THREE, scene, location, elevationFeet, controls, windowRef);
   const connection = createRadarConnectionState(setRadarConnected);
   const targets = createRadarTargets();
