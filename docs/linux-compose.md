@@ -13,6 +13,8 @@ The Compose service binds `/dev/bus/usb` into readsb and grants access to USB ch
 
 The optional ADS-B Exchange feeder container reads readsb's Beast output on private port `30005`. It does not access the SDR and does not change Radar's SBS connection on port `30003`. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` in `.env` to the antenna latitude, longitude, and altitude in feet above sea level. Both Radar and the feeder use these settings. Set `ADSBX_SITENAME` for the feeder label and generate one persistent `ADSBX_UUID` with `uuidgen`. The UUID is a feeder identifier you generate, not an account credential assigned by ADS-B Exchange. Compose pulls the third-party feeder image from GHCR; the Radar and readsb images are still built locally.
 
+The FlightAware PiAware feeder also reads Beast data from private port `30005` and runs without access to the SDR. Its assigned `PIAWARE_FEEDER_ID` is in `.env` so the site identity remains stable. Claim the site through FlightAware and set its receiver location and antenna altitude in the FlightAware stats page. Flightradar24 is configured as an optional Compose profile because it needs a sharing key. Run `docker compose --profile fr24 run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Enter the account email and antenna location, choose Beast TCP with host `readsb` and port `30005`, and disable MLAT. Save the issued key as `FR24_KEY` in `.env`, then start it with `docker compose --profile fr24 up -d fr24`. Its feeder has MLAT disabled as recommended when sharing to multiple networks.
+
 ## Configure and start
 
 Clone the repository with Git LFS enabled, then enter the checkout:
