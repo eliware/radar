@@ -207,6 +207,9 @@ p {
 .metar-reports td.metar-sky {
   text-align: center;
 }
+.metar-reports td.metar-age-old {
+  color: #ffeb3b;
+}
 .flight-category {
   font-weight: 700;
 }

@@ -1,6 +1,6 @@
-import { formatMetarAge } from "./format-metar-age.mjs";
+import { formatMetarAge, getMetarAgeMinutes } from "./format-metar-age.mjs";
 
-export function updateMetarDisplay(element, ticker, data) {
+export function updateMetarDisplay(element, ticker, data, now = new Date()) {
   if (!element || !ticker) return;
   const reports = Array.isArray(data?.reports) ? data.reports : [];
   if (!reports.length) {
@@ -9,7 +9,7 @@ export function updateMetarDisplay(element, ticker, data) {
     return;
   }
   element.innerHTML = `<table><thead><tr>${headers()}</tr></thead><tbody>${reports
-    .map(reportRow)
+    .map((report) => reportRow(report, now))
     .join("")}</tbody></table>`;
   ticker.innerHTML = `<span>${reports.map(tickerLine).join("　•　")}</span>`;
 }
@@ -30,14 +30,14 @@ function headers() {
   ].join("");
 }
 
-function reportRow({ id, metar, decoded }) {
+function reportRow({ id, metar, decoded }, now) {
   if (!decoded)
     return `<tr><td></td><th>${escapeText(id)}</th><td>—</td><td colspan="9">${escapeText(metar)}</td></tr>`;
   const values = [
     decoded.automated ? "A" : "",
     id,
     decoded.flightCategory,
-    formatMetarAge(decoded.observed),
+    formatMetarAge(decoded.observed, now),
     decoded.windDirection,
     decoded.windSpeed,
     decoded.visibility,
@@ -50,6 +50,10 @@ function reportRow({ id, metar, decoded }) {
   return `<tr>${values
     .map((value, index) => {
       if (index === 2) return `<td>${categoryLabel(value)}</td>`;
+      if (index === 3) {
+        const oldClass = getMetarAgeMinutes(decoded.observed, now) > 60 ? " metar-age-old" : "";
+        return `<td class="metar-age${oldClass}">${escapeText(value)}</td>`;
+      }
       if (index === 6) return `<td class="metar-visibility">${escapeText(value)}</td>`;
       if (index === 8) return `<td class="metar-sky">${escapeText(value)}</td>`;
       return `<td${index === 7 ? ' class="metar-weather"' : ""}>${escapeText(value)}</td>`;
