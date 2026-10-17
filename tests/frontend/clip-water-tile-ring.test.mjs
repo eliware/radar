@@ -58,3 +58,20 @@ test("drops rings with fewer than three points and edge-only rings", () => {
     ),
   ).toEqual([]);
 });
+
+test.each([
+  [
+    { x: 4160, y: 1000 },
+    { x: 4160, y: 4000 },
+    { x: 4200, y: 4000 },
+    { x: 4200, y: 1000 },
+  ],
+  [
+    { x: 1000, y: 4160 },
+    { x: 4000, y: 4160 },
+    { x: 4000, y: 4200 },
+    { x: 1000, y: 4200 },
+  ],
+])("drops water edges on the vector tile buffer: %j", (ring) => {
+  expect(clipWaterTileRing(ring, { z: 7, x: 38, y: 46 }, 4096)).toEqual([]);
+});

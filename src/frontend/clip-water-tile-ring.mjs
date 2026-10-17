@@ -19,8 +19,8 @@ export function clipWaterTileRing(ring, tile, extent) {
 
 function isTileEdge(start, end, extent) {
   return (
-    (start.x === end.x && (start.x === 0 || start.x === extent)) ||
-    (start.y === end.y && (start.y === 0 || start.y === extent))
+    (start.x === end.x && (start.x <= 0 || start.x >= extent)) ||
+    (start.y === end.y && (start.y <= 0 || start.y >= extent))
   );
 }
 
