@@ -11,13 +11,14 @@ export function updateMetarDisplay(element, ticker, data) {
   element.innerHTML = `<table><thead><tr>${headers()}</tr></thead><tbody>${reports
     .map(reportRow)
     .join("")}</tbody></table>`;
-  ticker.textContent = reports.map(({ id, metar }) => `${id} ${metar}`).join("　•　");
+  ticker.innerHTML = `<span>${reports.map(tickerLine).join("　•　")}</span>`;
 }
 
 function headers() {
   return [
     "<th></th>",
     "<th>APT</th>",
+    "<th>FLT</th>",
     '<th class="metar-age-header">AGE</th>',
     '<th class="metar-wind-header" colspan="2">WIND</th>',
     "<th>VIS</th>",
@@ -31,10 +32,11 @@ function headers() {
 
 function reportRow({ id, metar, decoded }) {
   if (!decoded)
-    return `<tr><td></td><th>${escapeText(id)}</th><td colspan="9">${escapeText(metar)}</td></tr>`;
+    return `<tr><td></td><th>${escapeText(id)}</th><td>—</td><td colspan="9">${escapeText(metar)}</td></tr>`;
   const values = [
     decoded.automated ? "A" : "",
     id,
+    decoded.flightCategory,
     formatMetarAge(decoded.observed),
     decoded.windDirection,
     decoded.windSpeed,
@@ -46,11 +48,20 @@ function reportRow({ id, metar, decoded }) {
     decoded.altimeter,
   ];
   return `<tr>${values
-    .map(
-      (value, index) =>
-        `<td${index === 6 ? ' class="metar-weather"' : ""}>${escapeText(value)}</td>`,
-    )
+    .map((value, index) => {
+      if (index === 2) return `<td>${categoryLabel(value)}</td>`;
+      return `<td${index === 7 ? ' class="metar-weather"' : ""}>${escapeText(value)}</td>`;
+    })
     .join("")}</tr>`;
+}
+
+function tickerLine({ id, metar, decoded }) {
+  return `${escapeText(id)} ${categoryLabel(decoded?.flightCategory)} ${escapeText(metar)}`.trim();
+}
+
+function categoryLabel(category) {
+  if (!["VFR", "MVFR", "IFR", "LIFR"].includes(category)) return "—";
+  return `<span class="flight-category flight-category-${category.toLowerCase()}">${category}</span>`;
 }
 
 function escapeText(value) {

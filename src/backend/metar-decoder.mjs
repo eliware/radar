@@ -1,4 +1,5 @@
 import { parseMetar } from "metar-taf-parser";
+import { metarFlightCategory } from "./metar-flight-category.mjs";
 
 export function decodeMetarReport(report, parse = parseMetar) {
   try {
@@ -9,7 +10,9 @@ export function decodeMetarReport(report, parse = parseMetar) {
     const decoded = decodedFields(data);
     return {
       ...report,
-      decoded: Object.values(decoded).every((value) => value === "—" || value === false)
+      decoded: Object.values(decoded).every(
+        (value) => value === "—" || value === false || value == null,
+      )
         ? null
         : decoded,
     };
@@ -25,6 +28,7 @@ function decodedFields(data) {
     windDirection: windDirectionText(data.wind),
     windSpeed: windSpeedText(data.wind),
     visibility: visibilityText(data),
+    flightCategory: metarFlightCategory(data),
     conditions: conditionText(data.weatherConditions),
     clouds: cloudText(data),
     temperature: fahrenheitText(data.temperature),

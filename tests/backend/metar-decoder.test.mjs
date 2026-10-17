@@ -16,6 +16,7 @@ test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
       windDirection: "290°",
       windSpeed: "12G18",
       visibility: "10",
+      flightCategory: "VFR",
       conditions: "-RA",
       clouds: "FEW 4500 BKN 8000",
       temperature: "64°F",
@@ -36,6 +37,7 @@ test("decodes variable wind, vertical visibility, and negative temperatures", ()
     windDirection: "VRB",
     windSpeed: "3",
     visibility: "VV 200 ft",
+    flightCategory: "LIFR",
     conditions: "FG",
     clouds: "Vertical visibility",
     temperature: "28°F",
@@ -52,6 +54,7 @@ test("keeps report time when weather fields are missing", () => {
     windDirection: "—",
     windSpeed: "—",
     visibility: "—",
+    flightCategory: null,
     conditions: "—",
     clouds: "—",
     temperature: "—",
@@ -90,6 +93,7 @@ test("formats optional cloud and temperature values", () => {
     windDirection: "VRB",
     windSpeed: "3",
     visibility: "10",
+    flightCategory: "VFR",
     conditions: "—",
     clouds: "BKN —",
     temperature: "64°F",
@@ -125,5 +129,6 @@ test("shows CAVOK when the report has no visibility or cloud groups", () => {
   }));
   const result = decodeMetarReport({ id: "KPWM", metar: "raw" }, parse);
   expect(result.decoded.visibility).toBe("—");
+  expect(result.decoded.flightCategory).toBe("VFR");
   expect(result.decoded.clouds).toBe("CAVOK");
 });

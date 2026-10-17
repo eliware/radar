@@ -10,6 +10,7 @@ const decoded = {
   observed: "13 16:41Z",
   windDirection: "180°",
   windSpeed: "6",
+  flightCategory: "VFR",
   visibility: "4",
   conditions: "RA",
   clouds: "BKN 1200",
@@ -27,17 +28,20 @@ test("renders decoded METAR rows and builds a mobile ticker", () => {
     ],
   });
   expect(panel.innerHTML).toContain('<th class="metar-age-header">AGE</th>');
+  expect(panel.innerHTML).toContain("<th>APT</th><th>FLT</th>");
   expect(panel.innerHTML).toContain('<th class="metar-wind-header" colspan="2">WIND</th>');
   expect(panel.innerHTML).toContain('<th class="metar-wx-header">WX</th>');
   expect(panel.innerHTML).toContain('<th class="metar-sky-header">SKY</th>');
   expect(panel.innerHTML).toContain("<th>TMP</th><th>DEW</th>");
   expect(panel.innerHTML).toContain("<td>A</td><td>KLEW</td>");
   expect(panel.innerHTML).toMatch(
-    /<td>KLEW<\/td><td>\d+(?:h\d*m?|m)<\/td><td>180°<\/td><td>6<\/td>/,
+    /<td>KLEW<\/td><td><span class="flight-category flight-category-vfr">VFR<\/span><\/td><td>\d+(?:h\d*m?|m)<\/td><td>180°<\/td><td>6<\/td>/,
   );
   expect(panel.innerHTML).toContain('<td class="metar-weather">RA</td>');
   expect(panel.innerHTML.match(/<tr>/g)).toHaveLength(3);
-  expect(ticker.textContent).toBe("KLEW 02004KT　•　KBXM 04006KT");
+  expect(ticker.innerHTML).toContain(
+    '<span>KLEW <span class="flight-category flight-category-vfr">VFR</span> 02004KT　•　KBXM <span class="flight-category flight-category-vfr">VFR</span> 04006KT</span>',
+  );
 });
 
 test("shows raw METAR text when the parser cannot decode a report", () => {
@@ -45,7 +49,25 @@ test("shows raw METAR text when the parser cannot decode a report", () => {
   updateMetarDisplay(panel, nodes()[1], {
     reports: [{ id: "KPWM", metar: "bad <data>", decoded: null }],
   });
-  expect(panel.innerHTML).toContain('<td></td><th>KPWM</th><td colspan="9">bad &lt;data&gt;</td>');
+  expect(panel.innerHTML).toContain(
+    '<td></td><th>KPWM</th><td>—</td><td colspan="9">bad &lt;data&gt;</td>',
+  );
+});
+
+test("renders the remaining category colors and omits unknown ticker labels", () => {
+  const [panel, ticker] = nodes();
+  updateMetarDisplay(panel, ticker, {
+    reports: ["MVFR", "IFR", "LIFR"].map((flightCategory) => ({
+      id: "KXXX",
+      metar: "raw",
+      decoded: { flightCategory },
+    })),
+  });
+  for (const category of ["mvfr", "ifr", "lifr"])
+    expect(panel.innerHTML).toContain(`flight-category-${category}`);
+  expect(ticker.innerHTML).toContain("flight-category-mvfr");
+  expect(ticker.innerHTML).toContain("flight-category-ifr");
+  expect(ticker.innerHTML).toContain("flight-category-lifr");
 });
 
 test("shows an empty report message and ignores missing display nodes", () => {

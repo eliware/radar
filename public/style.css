@@ -215,6 +215,21 @@ p {
 .metar-reports td.metar-weather {
   text-align: right;
 }
+.flight-category {
+  font-weight: 700;
+}
+.flight-category-vfr {
+  color: #00e676;
+}
+.flight-category-mvfr {
+  color: #ffeb3b;
+}
+.flight-category-ifr {
+  color: #ff9800;
+}
+.flight-category-lifr {
+  color: #ff5252;
+}
 .metar-reports tbody tr + tr {
   border-top: 1px solid #444;
 }
@@ -325,7 +340,7 @@ p {
     overflow: hidden;
     padding: 3px 0;
   }
-  .metar-ticker span {
+  .metar-ticker > span {
     display: inline-block;
     min-width: max-content;
     animation: metar-scroll 45s linear infinite;

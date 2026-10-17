@@ -17,6 +17,7 @@ test("returns configured stations and current reports", async () => {
           windDirection: "290°",
           windSpeed: "12",
           visibility: "10",
+          flightCategory: "VFR",
           conditions: "—",
           clouds: "FEW 4500",
           temperature: "64°F",
