@@ -42,10 +42,10 @@ test("shows the empty state and accepts a missing container", () => {
   expect(() => renderFlightStrips(null, [], 300)).not.toThrow();
 });
 
-test("fades each strip as its update gets older", () => {
+test("limits strip fading to 25 percent until the aircraft expires", () => {
   const container = {};
-  renderFlightStrips(container, [aircraft("AGING", 1)], 3000, 61000);
-  expect(container.innerHTML).toContain('data-icao="AGING" style="opacity:0.5"');
+  renderFlightStrips(container, [aircraft("AGING", 1)], 3000, 91000);
+  expect(container.innerHTML).toContain('data-icao="AGING" style="opacity:0.25"');
 });
 
 test("keeps the list scroll position when a refresh replaces its contents", () => {

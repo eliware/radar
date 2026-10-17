@@ -1,6 +1,8 @@
 import { buildFlightStripData } from "./flight-strip-data.mjs";
 import { getAircraftAgeBrightness } from "./aircraft-age-brightness.mjs";
 
+const MIN_FLIGHT_STRIP_OPACITY = 0.25;
+
 function escapeHtml(value) {
   return String(value).replace(
     /[&<>"']/g,
@@ -36,7 +38,10 @@ export function renderFlightStrips(container, aircraft, width, now = Date.now())
       const body = item.groups
         .map((row, index) => rowMarkup(row, data.weights[index], item.labels[index]))
         .join("");
-      const opacity = getAircraftAgeBrightness(item.lastSeen, now);
+      const opacity = Math.max(
+        MIN_FLIGHT_STRIP_OPACITY,
+        getAircraftAgeBrightness(item.lastSeen, now),
+      );
       return `<div class="flight-strip-aircraft" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
     })
     .join("");
