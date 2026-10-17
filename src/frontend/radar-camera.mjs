@@ -26,19 +26,21 @@ export function createRadarCamera({
     range = cameraDistanceToRange(distance);
     onRangeChange(range);
   };
-  controls.addEventListener("start", onStart);
-  controls.addEventListener("change", onChange);
-  const setRange = (value) => {
-    range = clampRadarRange(value);
-    camera.position.set(0, rangeToCameraDistance(range), 0);
-    controls.target.set(0, 0, 0);
-    controls.update();
-    onRangeChange(range);
-  };
   const setRotation = (radians) => {
     const current = controls.getAzimuthalAngle?.() ?? 0;
     controls.rotateLeft(-(radians - current));
     controls.update();
+  };
+  controls.addEventListener("start", onStart);
+  controls.addEventListener("change", onChange);
+  const setRange = (value) => {
+    const rotation = controls.getAzimuthalAngle?.() ?? 0;
+    range = clampRadarRange(value);
+    camera.position.set(0, rangeToCameraDistance(range), 0);
+    controls.target.set(0, 0, 0);
+    controls.update();
+    setRotation(rotation);
+    onRangeChange(range);
   };
   const zoomBy = (factor) => {
     onManualZoom();
