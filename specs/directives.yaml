@@ -91,7 +91,7 @@ directives:
       - Make each perpendicular leg match the altitude of its centerline endpoint.
       - Make VOR symbols and identifiers blue.
       - Show ILS course guides by default in both radar views. Use I to toggle them.
-      - Make dotted muted-orange ILS course guides 10 nautical miles long from each glide-slope site.
+      - Make muted-orange dotted ILS guides 10 nautical miles long from each glide-slope site.
       - Make NASR ILS marker beacons small hollow muted-orange circles at their coordinates.
       - Do not show text labels on ILS guides.
       - Extend ILS guides from the runway along the reciprocal corrected true landing course.

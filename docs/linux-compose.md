@@ -11,7 +11,7 @@ This guide runs Radar and readsb together on a Linux host with an RTL-SDR receiv
 
 The Compose configuration binds `/dev/bus/usb` into readsb and grants access to USB character devices (major 189). This lets the container see device nodes when the receiver is re-enumerated. The container is not privileged. Keep host USB permissions and Docker access for trusted administrators only.
 
-The optional ADSBX container reads readsb Beast data on private TCP port `30005`. It has no SDR access. Radar keeps its SBS connection on port `30003`. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` in `.env` for the antenna location and altitude in feet above sea level.
+The optional ADSBX container reads readsb Beast data at private TCP endpoint `30005`. It has no SDR access. Radar keeps its SBS connection at endpoint `30003`. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` in `.env` for the antenna location and altitude in feet above sea level.
 
 Radar and both feeders read these values. Set `ADSBX_SITENAME` to label the receiver. Create a stable `ADSBX_UUID` with `uuidgen`. This UUID identifies the receiver. It is not an account key.
 
@@ -19,11 +19,11 @@ Compose downloads the ADSBX image from GHCR. Radar and readsb build locally.
 
 The FlightAware PiAware container also reads Beast data at private TCP endpoint `30005` without SDR access. Its assigned `PIAWARE_FEEDER_ID` is in `.env`, keeping the site identity stable. Claim the receiver through FlightAware. Set its location and antenna altitude on the FlightAware stats page.
 
-Flightradar24 uses an optional Compose profile. Start the profile after getting a sharing key. Run `docker compose --profile fr24 run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Enter the account email and antenna location. Select Beast TCP, host `readsb`, and port `30005`. Disable MLAT.
+Flightradar24 uses an optional Compose profile. Start the profile after getting a sharing key. Run `docker compose --profile fr24 run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Supply the account email and antenna location. Select Beast TCP, host `readsb`, and endpoint `30005`. Disable MLAT.
 
-Save the issued key as `FR24_KEY` in `.env`. Start the service with `docker compose --profile fr24 up -d fr24`. Keep MLAT disabled when feeding multiple networks, as Flightradar24 recommends.
+Save the issued key as `FR24_KEY` in `.env`. Start the container with `docker compose --profile fr24 up -d fr24`. Keep MLAT disabled when feeding multiple networks, as Flightradar24 recommends.
 
-The ADSB.lol Ultrafeeder container runs in network-only mode. It forwards readsb Beast data from port `30005` to ADSB.lol. It does not access the SDR or change Radar's SBS connection.
+The ADSB.lol Ultrafeeder container runs in network-only mode. It forwards readsb Beast data from endpoint `30005` to ADSB.lol. It does not access the SDR or change Radar's SBS connection.
 
 Set a stable `ADSBLOL_UUID` in `.env`. ADSB.lol needs no assigned key. The container also sends MLAT data with receiver privacy enabled. This hides the receiver from the public MLAT map. Start it with `docker compose up -d adsblol`. Check `docker compose logs -f adsblol` for connection status.
 

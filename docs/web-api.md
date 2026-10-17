@@ -34,7 +34,7 @@ Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each updat
 
 Radar adds aircraft type data from the ADSB.lol v2 API by ICAO address. It adds departure and arrival data from ADSB.lol route JSON by callsign.
 
-It stores lookup results in memory only. Lookup failures do not stop aircraft updates. Route data can be wrong or missing, especially when callsigns are reused. Unavailable fields stay blank.
+It stores lookup results in memory only. Lookup failures do not stop aircraft updates. Route data can be inaccurate or missing, especially when callsigns are reused. Unavailable fields stay blank.
 
 These lookups enrich local readsb data. They do not add remote ADSB.lol aircraft.
 
@@ -48,7 +48,7 @@ The app renders rings every nautical mile under 10 miles. It renders rings every
 
 The radar shows green symbols while connected. It shows dark gray symbols when the receiver connection drops. Aircraft symbols are hollow diamonds.
 
-Labels show callsign, altitude, vertical trend, speed, and known type. If callsign is missing or a placeholder, the label uses the ICAO address. Aircraft marks and labels fade with age. Targets disappear after two minutes without an update.
+Labels show callsign, altitude, vertical trend, speed, and known type. If callsign is missing or a placeholder, the label uses the ICAO address. Aircraft marks and labels fade with age. Targets are removed after two minutes without an update.
 
 A predicted path lasts 60 seconds. History marks cover the last 60 seconds.
 
@@ -88,11 +88,11 @@ NASR has no local terminal-control boundary shapes. The radar can show FAA ARTCC
 
 ## Flight strips and weather
 
-Flight-strip panels sit beside the radar in landscape and below it in portrait. Press F to hide or show them. The radar fills the page while strips are hidden. Aircraft sort by distance, closest first.
+Flight-strip panels sit beside the radar in landscape and under it in portrait. Use F to hide or show them. The radar fills the page while flight cards are hidden. Aircraft sort by distance, closest first.
 
-Each strip shows callsign, altitude and trend, type, heading and speed, squawk, bearing and rounded range, departure, and destination. Field headers and units are omitted.
+Each flight card shows callsign, altitude and trend, type, heading and speed, squawk, bearing and rounded range, departure, and destination. Field headers and units are omitted.
 
-Narrow layouts wrap fields into aligned rows. Cards use white text on black, with a double border and single row dividers. The list scrolls without visible scrollbars. Cards fade with age and disappear after aircraft timeout. Refreshes preserve the scroll position.
+Narrow layouts arrange fields into aligned rows. Cards use white text on black, with a double border and single row dividers. The list scrolls while scrollbars stay hidden. Cards fade with age and are removed after aircraft timeout. Refreshes preserve the scroll offset.
 
 The 3D view shows a decoded VATSIM METAR table at the top center of the radar. Its fields are automation status, airport, flight category, age, wind direction, wind speed, visibility, weather, sky, temperature, dew point, and altimeter pressure. Flight category appears between airport and age, using green for VFR, yellow for MVFR, orange for IFR, and red for LIFR. The 2D view and narrow layouts show a one-line raw report ticker with the same category label and colors.
 
