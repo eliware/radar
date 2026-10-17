@@ -121,3 +121,25 @@ test("hides airport, airspace, VOR and runway layers with airport and VOR switch
     false,
   );
 });
+
+test("can omit flat airspace rings while retaining airport references", () => {
+  calls.length = 0;
+  drawAirspaceRings.mockClear();
+  drawAirportMarkers.mockClear();
+  drawRadarReferences(
+    {},
+    { airports: new Map() },
+    () => null,
+    20,
+    true,
+    undefined,
+    null,
+    undefined,
+    undefined,
+    undefined,
+    false,
+  );
+
+  expect(drawAirspaceRings).not.toHaveBeenCalled();
+  expect(drawAirportMarkers).toHaveBeenCalledTimes(1);
+});

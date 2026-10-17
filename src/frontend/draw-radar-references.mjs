@@ -18,13 +18,15 @@ export function drawRadarReferences(
   airwayVisibility = { Q: true, J: true, V: true },
   runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
+  airspaceRingsVisible = true,
 ) {
   const airports = references.airports ?? new Map();
   const procedures =
     typeof procedureVisibility === "boolean"
       ? { sidVisible: procedureVisibility, starVisible: procedureVisibility }
       : procedureVisibility;
-  if (referenceVisibility.airportsVisible) drawAirspaceRings(context, airports, project, range);
+  if (referenceVisibility.airportsVisible && airspaceRingsVisible)
+    drawAirspaceRings(context, airports, project, range);
   drawAirportRunways(
     context,
     airports,
