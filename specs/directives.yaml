@@ -175,7 +175,7 @@ directives:
       - Keep the radar legend background transparent. Align each symbol with its label in a table.
       - Use two legend columns on wide views and one column on narrow views.
       - Put the second legend column beside the first column.
-      - Show aircraft, vectors, history, home, airports, VORs, runways, and runway guides in the legend.
+      - Include aircraft, vectors, history, home, airports, VORs, runways, and runway guides.
       - Show I for ILS, S for SID and STAR, and W for water in the legend.
       - Use 18-pixel aircraft labels in 3D and 9-pixel labels in Canvas.
       - Make 3D aircraft labels two times the dimension of Canvas labels.
@@ -186,13 +186,13 @@ directives:
       - Label major range rings only. Keep labels and ring intervals the same in both radar views.
       - Make range rings through 300 nautical miles.
       - Allow full camera heading, tilt, pan, zoom, and a return to the default view.
-      - Describe stream altitude as barometric altitude. Do not claim it always equals true MSL altitude.
+      - Describe stream altitude as barometric. Do not claim it always equals true MSL altitude.
       - Keep the dashboard focused on the 3D view, flight cards, and aircraft details.
       - Keep the radar view square and align it to the top left of the page.
       - Set radar view dimensions to the shorter viewport dimension.
       - Reserve whitespace to the right of the radar view in landscape layout for flight cards.
       - Reserve whitespace under the radar view in portrait layout for flight cards.
-      - Show aircraft flight cards beside the radar in landscape layout and under it in portrait layout.
+      - Show flight cards beside the radar in landscape and at its foot in portrait.
       - Sort web flight cards by distance from home, with the closest aircraft first.
       - Show callsign, altitude and vertical rate, type code, heading and speed, and squawk.
       - Add blank, bearing, range, departure, and destination fields.

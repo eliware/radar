@@ -92,7 +92,7 @@ Flight-strip panels sit beside the radar in landscape and under it in portrait. 
 
 Each flight card shows callsign, altitude and trend, type, heading and speed, squawk, bearing and rounded range, departure, and destination. Field headers and units are omitted.
 
-Narrow layouts place fields in aligned rows. Cards use white text on black, with a double border and single row dividers. The list scrolls while scrollbars stay hidden. Cards fade with age and are removed after aircraft timeout. Refreshes preserve the scroll offset.
+Narrow layouts group fields into aligned rows. Cards use white text on black, with a double border and single row dividers. The list scrolls while scrollbars stay hidden. Cards fade with age and are removed after aircraft timeout. Refreshes preserve the scroll offset.
 
 The 3D view shows a decoded VATSIM METAR table at the top center of the radar. Its fields are automation status, airport, flight category, age, wind direction, wind speed, visibility, weather, sky, temperature, dew point, and altimeter pressure. Flight category appears between airport and age, using green for VFR, yellow for MVFR, orange for IFR, and red for LIFR. The 2D view and narrow layouts show a one-line raw report ticker with the same category label and colors.
 

@@ -10,7 +10,7 @@ Apply these rules across this repository.
 
 ## Layout
 
-Keep source in `src/`, launchers in `bin/`, and tests in `tests/`. Keep docs in `docs/` and specifications in `specs/`. Put each `.mjs` source file in `src/` and mirror it with one test file under `tests/`.
+Keep source in `src/`. Put `webpack.config.mjs` at the repository root for the browser build. Keep launchers in `bin/` and tests in `tests/`. Keep docs in `docs/` and specifications in `specs/`. Put each `.mjs` source file in `src/` and mirror it with one test file under `tests/`.
 
 ## Development
 
@@ -38,7 +38,7 @@ Validate settings before opening connections. Make shutdown repeatable.
 Run focused tests first during development.
 Run one test file with `npm test -- tests/path/to/example.test.mjs`.
 Run multiple test files with `npm test -- tests/path/to/first.test.mjs tests/path/to/second.test.mjs`.
-Avoid repeated full-suite runs during development.
+Prevent repeated full-suite runs during development.
 Run the full `npm test` suite for final validation before a commit, milestone, or release.
 
 ## CLI
