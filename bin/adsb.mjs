@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { adsbCliDependencies, startAdsbCli } from "../src/cli/adsb-cli.mjs";
+import { adsbCliDependencies, startAdsbCli } from "../src/cli/adsb/cli.mjs";
 import { startTableRefresh } from "../src/cli/table-refresh.mjs";
 import { createTerminalFrameOutput } from "../src/cli/terminal-frame-output.mjs";
 import { config } from "dotenv";

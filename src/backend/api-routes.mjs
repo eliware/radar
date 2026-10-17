@@ -1,10 +1,10 @@
-import { registerAirportRoutes } from "./airport-routes.mjs";
+import { registerAirportRoutes } from "./airport/routes.mjs";
 import { registerNavaidRoutes } from "./navaid-routes.mjs";
 import { registerAirspaceBoundaryRoutes } from "./airspace-boundary-routes.mjs";
-import { registerIlsApproachRoutes } from "./ils-approach-routes.mjs";
-import { registerProcedureRoutes } from "./procedure-routes.mjs";
-import { registerAirwayRoutes } from "./airway-routes.mjs";
-import { registerMetarRoutes } from "./metar-routes.mjs";
+import { registerIlsApproachRoutes } from "./ils/approach/routes.mjs";
+import { registerProcedureRoutes } from "./procedure/routes.mjs";
+import { registerAirwayRoutes } from "./airway/routes.mjs";
+import { registerMetarRoutes } from "./metar/routes.mjs";
 
 export function registerApiRoutes(
   app,

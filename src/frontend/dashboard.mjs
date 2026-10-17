@@ -1,13 +1,13 @@
-import { attachDashboardCompassControls } from "./attach-dashboard-compass-controls.mjs";
+import { attachDashboardCompassControls } from "./attach/dashboard/compass-controls.mjs";
 import { connectWebSocketFeed } from "./websocket-feed.mjs";
-import { createRadarReferenceLoader } from "./radar-reference-loader.mjs";
-import { createFlightStripView } from "./flight-strips.mjs";
-import { startMetarRefresh } from "./start-metar-refresh.mjs";
+import { createRadarReferenceLoader } from "./radar/reference/loader.mjs";
+import { createFlightStripView } from "./flight/strips.mjs";
+import { startMetarRefresh } from "./start/metar-refresh.mjs";
 import { handleDashboardFeedUpdate } from "./handle-dashboard-feed-update.mjs";
 import { dashboardWebSocketUrl } from "./dashboard-websocket-url.mjs";
-import { attachDashboardPagehide } from "./attach-dashboard-pagehide.mjs";
-import { destroyDashboardResources } from "./destroy-dashboard-resources.mjs";
-import { attachDashboardDisplayToggles } from "./attach-dashboard-display-toggles.mjs";
+import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
+import { destroyDashboardResources } from "./destroy/dashboard-resources.mjs";
+import { attachDashboardDisplayToggles } from "./attach/dashboard/display-toggles.mjs";
 
 export async function startDashboard({
   document,

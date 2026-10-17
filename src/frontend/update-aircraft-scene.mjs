@@ -1,5 +1,5 @@
-import { projectAircraftPosition } from "./aircraft-space-position.mjs";
-import { selectDefaultRadarRange } from "./radar-range.mjs";
+import { projectAircraftPosition } from "./aircraft/space-position.mjs";
+import { selectDefaultRadarRange } from "./radar/range.mjs";
 
 export function createAircraftSceneUpdater({
   location,

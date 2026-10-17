@@ -1,5 +1,5 @@
-import { buildFlightStripData } from "./flight-strip-data.mjs";
-import { getAircraftAgeBrightness } from "./aircraft-age-brightness.mjs";
+import { buildFlightStripData } from "./flight/strip/data.mjs";
+import { getAircraftAgeBrightness } from "./aircraft/age-brightness.mjs";
 
 const MIN_FLIGHT_STRIP_OPACITY = 0.25;
 

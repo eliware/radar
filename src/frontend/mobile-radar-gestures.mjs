@@ -1,4 +1,4 @@
-import { attachMobileRadarGestures } from "./attach-mobile-radar-gestures.mjs";
+import { attachMobileRadarGestures } from "./attach/mobile/radar-gestures.mjs";
 
 export function hasCoarsePointer(windowRef) {
   return Boolean(windowRef.matchMedia?.("(pointer: coarse)")?.matches);

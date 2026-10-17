@@ -1,10 +1,10 @@
 import { mkdir, stat } from "node:fs/promises";
 import puppeteer from "puppeteer";
-import { captureResponsiveScreenshots } from "../src/frontend/responsive-screenshots.mjs";
+import { captureResponsiveScreenshots } from "../src/frontend/responsive/screenshots.mjs";
 import {
   selectScreenshotModes,
   selectScreenshotViewports,
-} from "../src/frontend/responsive-screenshot-options.mjs";
+} from "../src/frontend/responsive/screenshot-options.mjs";
 
 const args = process.argv.slice(2);
 const viewportSelection = args.includes("--primary")

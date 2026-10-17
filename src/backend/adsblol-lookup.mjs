@@ -1,4 +1,4 @@
-import { hasUsefulCallsign } from "../shared/aircraft-callsign.mjs";
+import { hasUsefulCallsign } from "../shared/aircraft/callsign.mjs";
 import { createLookupCache } from "./lookup-cache.mjs";
 
 const apiRoot = "https://api.adsb.lol";

@@ -1,5 +1,5 @@
 import { renderHome } from "./client.mjs";
-import { createRadarView } from "./create-radar-view.mjs";
+import { createRadarView } from "./create/radar/view.mjs";
 import { startDashboard } from "./dashboard.mjs";
 
 renderHome(document);

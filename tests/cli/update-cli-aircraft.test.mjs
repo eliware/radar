@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { createCliAircraftUpdater } from "../../src/cli/update-cli-aircraft.mjs";
-import { createAircraftList } from "../../src/shared/aircraft-list.mjs";
+import { createAircraftList } from "../../src/shared/aircraft/list.mjs";
 
 test.each(["OK", "AD", "RM"])(
   "keeps the prior valid callsign when the CLI receives %s",

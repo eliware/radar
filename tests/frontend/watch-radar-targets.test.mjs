@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarTargets } from "../../src/frontend/radar-targets.mjs";
+import { createRadarTargets } from "../../src/frontend/radar/targets.mjs";
 import { watchRadarTargets } from "../../src/frontend/watch-radar-targets.mjs";
 
 test("expires stale targets once per second and stops its timer", () => {

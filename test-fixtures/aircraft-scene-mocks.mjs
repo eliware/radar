@@ -99,32 +99,32 @@ export function registerAircraftSceneMocks(jest) {
     createAircraftSceneUpdater,
   };
   const modules = {
-    createRadarStage: "create-radar-stage",
-    createRadarSceneOverlays: "radar-scene-overlays",
-    createAirspaceVolumes: "create-airspace-volumes",
-    createRadarHome: "create-radar-home",
-    createRadarCamera: "radar-camera",
-    createRadarTargets: "radar-targets",
-    createAircraftTrails: "aircraft-trails",
-    createAircraftDisplayOverlay: "aircraft-display-overlay",
-    createAircraftRadarLoop: "create-aircraft-radar-loop",
-    createRadarReferenceStore: "radar-reference-store",
+    createRadarStage: "create/radar/stage",
+    createRadarSceneOverlays: "radar/scene-overlays",
+    createAirspaceVolumes: "create/airspace-volumes",
+    createRadarHome: "create/radar/home",
+    createRadarCamera: "radar/camera",
+    createRadarTargets: "radar/targets",
+    createAircraftTrails: "aircraft/trails",
+    createAircraftDisplayOverlay: "aircraft/display-overlay",
+    createAircraftRadarLoop: "create/aircraft/radar/loop",
+    createRadarReferenceStore: "radar/reference/store",
     createAircraftSceneUpdater: "update-aircraft-scene",
   };
   for (const [name, factory] of Object.entries(factories)) {
     const path = modules[name];
-    jest.unstable_mockModule(`../../src/frontend/${path}.mjs`, () => ({
+    jest.unstable_mockModule(`../../../src/frontend/${path}.mjs`, () => ({
       [name]: factory,
     }));
   }
-  jest.unstable_mockModule("../../src/frontend/aircraft-space-position.mjs", () => ({
+  jest.unstable_mockModule("../../../src/frontend/aircraft/space-position.mjs", () => ({
     projectAircraftPosition,
   }));
-  jest.unstable_mockModule("../../src/frontend/radar-range.mjs", () => ({
+  jest.unstable_mockModule("../../../src/frontend/radar/range.mjs", () => ({
     DEFAULT_RADAR_RANGE: 20,
     selectDefaultRadarRange,
   }));
-  jest.unstable_mockModule("../../src/frontend/create-orbit-radar-state.mjs", () => ({
+  jest.unstable_mockModule("../../../src/frontend/create/orbit-radar-state.mjs", () => ({
     createOrbitRadarState: jest.fn(() => orbitState),
   }));
   jest.unstable_mockModule("three/addons/controls/OrbitControls.js", () => ({
