@@ -39,7 +39,7 @@ function dependencies() {
       registerHandlers: jest.fn(),
       registerSignals: jest.fn((value) => Object.assign(signals, value)),
       createAircraftFeed: jest.fn(() => feed),
-      createAdsbdbLookup: jest.fn(() => lookup),
+      createAdsbLolLookup: jest.fn(() => lookup),
       createAircraftEnrichmentFeed: jest.fn(() => enrichedFeed),
       parseMetarStations: jest.fn(() => ["KLEW", "KPWM", "KBXM"]),
       createMetarLookup: jest.fn((stations) => ({ stations, get: jest.fn() })),

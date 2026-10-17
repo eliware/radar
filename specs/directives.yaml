@@ -198,9 +198,9 @@ directives:
       - Combine flight strip heading and speed as three-digit heading, degree sign, and speed.
       - Combine flight strip bearing and range as three-digit bearing, degree sign, and rounded whole nautical miles.
       - Put origin and destination airport codes in the last two flight strip fields when known.
-      - Use ADSBdb aircraft lookup by ICAO hex for aircraft type codes.
-      - Use ADSBdb callsign lookup for origin and destination airport codes only.
-      - Cache ADSBdb lookups in server memory by ICAO hex and callsign.
+      - Use ADSB.lol v2 hex lookup by ICAO address for aircraft type codes.
+      - Use ADSB.lol route JSON by callsign for origin and destination airport codes.
+      - Cache ADSB.lol lookups in server memory by ICAO address and callsign.
       - Do not show field header rows in flight strips.
       - Wrap flight strip fields into two rows, then three rows as width decreases.
       - Use equal column widths in each wrapped flight strip row.

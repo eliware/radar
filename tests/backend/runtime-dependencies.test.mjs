@@ -16,8 +16,8 @@ jest.unstable_mockModule("../../src/backend/airport-database.mjs", () => ({
 jest.unstable_mockModule("../../src/shared/adsb-location.mjs", () => ({
   parseAdsbLocation: jest.fn(),
 }));
-jest.unstable_mockModule("../../src/backend/adsbdb-lookup.mjs", () => ({
-  createAdsbdbLookup: jest.fn(),
+jest.unstable_mockModule("../../src/backend/adsblol-lookup.mjs", () => ({
+  createAdsbLolLookup: jest.fn(),
 }));
 jest.unstable_mockModule("../../src/backend/aircraft-enrichment-feed.mjs", () => ({
   createAircraftEnrichmentFeed: jest.fn(),
@@ -39,7 +39,7 @@ test("provides server and feed runtime dependencies", () => {
     "createRadarServer",
     "createAirportDatabase",
     "parseAdsbLocation",
-    "createAdsbdbLookup",
+    "createAdsbLolLookup",
     "createAircraftEnrichmentFeed",
     "createMetarLookup",
     "parseMetarStations",

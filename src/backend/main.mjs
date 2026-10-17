@@ -22,7 +22,7 @@ export async function startWebApplication(dependencies) {
   });
   const enrichedFeed = dependencies.createAircraftEnrichmentFeed(
     feed,
-    dependencies.createAdsbdbLookup(),
+    dependencies.createAdsbLolLookup(),
   );
   const app = await dependencies.createRadarServer({
     feed: enrichedFeed,

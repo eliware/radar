@@ -4,7 +4,7 @@ import { createAircraftFeed } from "./aircraft-feed.mjs";
 import { createRadarServer } from "./server.mjs";
 import { createAirportDatabase } from "./airport-database.mjs";
 import { parseAdsbLocation } from "../shared/adsb-location.mjs";
-import { createAdsbdbLookup } from "./adsbdb-lookup.mjs";
+import { createAdsbLolLookup } from "./adsblol-lookup.mjs";
 import { createAircraftEnrichmentFeed } from "./aircraft-enrichment-feed.mjs";
 import { createMetarLookup, parseMetarStations } from "./metar-lookup.mjs";
 
@@ -17,7 +17,7 @@ export const runtimeDependencies = {
   createRadarServer,
   createAirportDatabase,
   parseAdsbLocation,
-  createAdsbdbLookup,
+  createAdsbLolLookup,
   createAircraftEnrichmentFeed,
   createMetarLookup,
   parseMetarStations,

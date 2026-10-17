@@ -30,7 +30,7 @@ The server returns an error if the NASR database or home location is not availab
 
 Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each update uses the CLI debug fields and adds lookup fields when available.
 
-Radar looks up aircraft types by ICAO address. It looks up origin and destination by callsign. It stores lookup results in memory only. A lookup failure does not stop aircraft updates. Route data can be wrong or missing.
+Radar enriches locally received aircraft with type data from the ADSB.lol v2 API by ICAO address and origin/destination data from ADSB.lol route JSON by callsign. It stores lookup results in memory only. A lookup failure does not stop aircraft updates. Route data can be wrong or missing, especially when callsigns are reused, and unavailable values are left blank. These lookups enrich the local readsb feed; Radar does not add aircraft from the ADSB.lol network through this mechanism.
 
 The browser reconnects after a WebSocket failure. It waits one second before the first retry. It doubles the delay up to 30 seconds. It requests a fresh aircraft list after it reconnects. The server retries the receiver feed after two seconds.
 
