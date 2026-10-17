@@ -93,8 +93,10 @@ test("returns not found when a requested chunk does not exist", async () => {
 test("configures Radar as a standalone portrait Home Screen app without offline caching", async () => {
   const root = new URL("../../", import.meta.url);
   const manifest = JSON.parse(await readText(new URL("public/manifest.webmanifest", root), "utf8"));
+  const packageJson = JSON.parse(await readText(new URL("package.json", root), "utf8"));
   const page = await readText(new URL("public/index.html", root), "utf8");
   expect(manifest.name).toBe("Eliware Radar");
+  expect(manifest.description).toBe(packageJson.description);
   expect(manifest.display).toBe("standalone");
   expect(manifest.orientation).toBe("portrait");
   expect(manifest.id).toBe("/");

@@ -3,7 +3,7 @@
   "short_name": "Radar",
   "id": "/",
   "start_url": "/",
-  "description": "Private real-time ADS-B radar for my home receiver.",
+  "description": "Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
