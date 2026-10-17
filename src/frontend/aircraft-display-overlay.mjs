@@ -5,6 +5,7 @@ import { drawRadarReferences } from "./draw-radar-references.mjs";
 import { createRadarScopePath } from "./create-radar-scope-path.mjs";
 import { projectAircraftDisplayItems } from "./project-aircraft-display-items.mjs";
 import { projectRadarReference } from "./project-radar-reference.mjs";
+import { drawCameraReadout } from "./draw-camera-readout.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
@@ -64,6 +65,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       proceduresVisible,
       waterVisible,
     );
+    drawCameraReadout(context, camera, location, elevationFeet);
 
     function project(position) {
       const point = new THREE.Vector3(position.x, position.y, position.z).project(camera);
