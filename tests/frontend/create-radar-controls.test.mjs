@@ -35,6 +35,7 @@ test("creates altitude-axis controls and restores camera orientation on dispose"
   expect(result).toBe(controls);
   expect(constructedUp).toEqual({ x: 0, y: 1, z: 0 });
   expect(constructedElement).toBe(element);
+  expect(controls.maxPolarAngle).toBe(Math.PI / 2 - 0.01);
   expect(controls.update).toHaveBeenCalledTimes(1);
   result.dispose();
   expect(originalDispose).toHaveBeenCalledTimes(1);
