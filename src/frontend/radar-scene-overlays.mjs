@@ -1,4 +1,4 @@
-import { getRadarLabelGapAngle, getRadarRingRanges, getRadarRingSpacing } from "./radar-range.mjs";
+import * as radarRange from "./radar-range.mjs";
 import { createRadarLabel } from "./radar-label.mjs";
 import { getRadarRingColor } from "./radar-palette.mjs";
 
@@ -12,8 +12,8 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
   for (let range = 15; range <= 300; range += 5) addRing(range);
   axes.push(addAxis("x"), addAxis("z"));
   function updateRange(range) {
-    const visible = new Set(getRadarRingRanges(range));
-    const majorStep = getRadarRingSpacing(range);
+    const visible = new Set(radarRange.getRadarRingRanges(range));
+    const majorStep = radarRange.getRadarRingSpacing(range);
     for (const [distance, ring] of rings) {
       ring.visible = visible.has(distance);
       const major = distance % majorStep === 0;
@@ -24,24 +24,23 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
       const labelVisible = major || (range < 10 && distance === Math.floor(range));
       const labelWidth = 6.4 * (range / 20) * (labels.get(distance)?.userData.textWidthRatio ?? 0);
       const gap = labelVisible
-        ? getRadarLabelGapAngle(distance, labelWidth, 0.12 * (range / 20))
+        ? radarRange.getRadarLabelGapAngle(distance, labelWidth, 0.12 * (range / 20))
         : 0;
       const arc = 2 * Math.PI - gap;
       ring.rotation.x = Math.PI / 2;
       if (ring.userData.tube !== tube || ring.userData.arc !== arc) {
         ring.geometry.dispose?.();
         ring.geometry = new THREE.TorusGeometry(distance, tube, 6, 192, arc);
-        if (labelVisible) ring.geometry.rotateZ(-Math.PI / 2 + gap / 2);
+        if (labelVisible) ring.geometry.rotateZ(radarRange.RADAR_RING_LABEL_ANGLE + gap / 2);
         ring.userData.tube = tube;
         ring.userData.arc = arc;
       }
     }
     for (const [distance, label] of labels) {
-      label.visible =
-        visible.has(distance) &&
-        (distance % majorStep === 0 || (range < 10 && distance === Math.floor(range)));
+      const labeled = distance % majorStep === 0 || (range < 10 && distance === Math.floor(range));
+      label.visible = visible.has(distance) && labeled;
       const labelWidth = 6.4 * (range / 20);
-      label.position.set(0, 0.08, -distance);
+      label.position.set(-distance / Math.sqrt(2), 0.08, -distance / Math.sqrt(2));
       label.scale.set(labelWidth, range / 20, 1);
     }
     for (const axis of axes) axis.scale.set(1, range / 300, 1);
@@ -66,7 +65,7 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
   return updateRange;
 
   function addRing(range) {
-    const major = range % getRadarRingSpacing(20) === 0;
+    const major = range % radarRange.getRadarRingSpacing(20) === 0;
     const baseTube = major ? 0.055 : 0.025;
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(range, baseTube, 6, 192),

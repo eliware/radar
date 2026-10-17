@@ -38,7 +38,7 @@ The browser reconnects after a WebSocket failure. It waits one second before the
 
 The radar is a black square, aligned to the top left. The default view is centered on home. The default rotation and range use `RADAR_DEFAULT_ROTATION` and `RADAR_DEFAULT_RANGE_NM`. The range starts at the configured default or five nautical miles beyond the furthest aircraft, whichever is greater. The range limits are 1 and 300 nautical miles.
 
-The app draws rings every one nautical mile below 10 miles. It draws rings every five miles below 60 miles, every 10 miles below 150 miles, and every 25 miles at greater ranges. It draws bold labeled rings at 2, 10, 20, or 50-mile intervals. Darker minor rings sit halfway between. Ring labels do not show units.
+The app draws rings every one nautical mile below 10 miles. It draws rings every five miles below 60 miles, every 10 miles below 150 miles, and every 25 miles at greater ranges. It draws bold labeled rings at 2, 10, 20, or 50-mile intervals. Darker minor rings sit halfway between. Ring labels do not show units and sit along a northwest radial, leaving a gap in the rings there without drawing a radial line.
 
 The radar shows green symbols while connected. It shows dark gray symbols when the feed disconnects. Aircraft symbols are hollow diamonds. Labels show callsign, altitude, vertical trend, speed, and type code when known. The label uses the ICAO address when the callsign is missing or is a placeholder. It fades aircraft marks and labels by age. It removes an aircraft after two minutes without an update. It shows a predicted path for 60 seconds and history marks for the last 60 seconds.
 

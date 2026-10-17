@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { createRadarSceneOverlays } from "../../src/frontend/radar-scene-overlays.mjs";
+import { RADAR_RING_LABEL_ANGLE } from "../../src/frontend/radar-range.mjs";
 
 test("shows matching rings and center axes for the selected range", () => {
   const scene = {
@@ -79,14 +80,18 @@ test("shows matching rings and center axes for the selected range", () => {
     2,
   );
   update(20);
-  expect(labels[9].position.set).toHaveBeenCalledWith(0, 0.08, -10);
-  expect(labels[11].position.set).toHaveBeenCalledWith(0, 0.08, -20);
+  expect(labels[9].position.set).toHaveBeenCalledWith(-10 / Math.sqrt(2), 0.08, -10 / Math.sqrt(2));
+  expect(labels[11].position.set).toHaveBeenCalledWith(
+    -20 / Math.sqrt(2),
+    0.08,
+    -20 / Math.sqrt(2),
+  );
   const labeledRing = rings.find((ring) => ring.geometry.values[0] === 10);
   expect(labeledRing.rotation.x).toBe(Math.PI / 2);
   expect(labeledRing.rotation.z).toBe(0);
   expect(labeledRing.geometry.values[4]).toBeLessThan(2 * Math.PI);
   expect(labeledRing.geometry.startAngle).toBeCloseTo(
-    -Math.PI / 2 + (2 * Math.PI - labeledRing.geometry.values[4]) / 2,
+    RADAR_RING_LABEL_ANGLE + (2 * Math.PI - labeledRing.geometry.values[4]) / 2,
   );
   expect(rings.filter((ring) => ring.visible).map((ring) => ring.geometry.values[0])).toEqual([
     5, 10, 15, 20,

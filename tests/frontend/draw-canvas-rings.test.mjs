@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { drawCanvasRings } from "../../src/frontend/draw-canvas-rings.mjs";
+import { getRadarLabelGapAngle, RADAR_RING_LABEL_ANGLE } from "../../src/frontend/radar-range.mjs";
 
 test("draws range rings and the north-east axes", () => {
   const context = {
@@ -17,6 +18,13 @@ test("draws range rings and the north-east axes", () => {
   drawCanvasRings(context, 0, 0, 100, 20, { major: "major", minor: "minor", bright: "bright" });
   expect(context.arc).toHaveBeenCalledTimes(4);
   expect(context.fillText).toHaveBeenCalledWith("20", expect.any(Number), expect.any(Number));
+  expect(context.translate).toHaveBeenCalledWith(
+    100 * Math.cos(RADAR_RING_LABEL_ANGLE),
+    100 * Math.sin(RADAR_RING_LABEL_ANGLE),
+  );
+  expect(context.arc.mock.calls[1][3]).toBeCloseTo(
+    RADAR_RING_LABEL_ANGLE + getRadarLabelGapAngle(50, 14) / 2,
+  );
 });
 
 test("counter-rotates range labels so they stay upright", () => {

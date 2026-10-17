@@ -1,4 +1,9 @@
-import { getRadarLabelGapAngle, getRadarRingRanges, getRadarRingSpacing } from "./radar-range.mjs";
+import {
+  getRadarLabelGapAngle,
+  getRadarRingRanges,
+  getRadarRingSpacing,
+  RADAR_RING_LABEL_ANGLE,
+} from "./radar-range.mjs";
 
 export function drawCanvasRings(context, x, y, radius, range, palette, rotation = 0) {
   const majorStep = getRadarRingSpacing(range);
@@ -13,7 +18,13 @@ export function drawCanvasRings(context, x, y, radius, range, palette, rotation 
     const label = major || (range < 10 && nm === Math.floor(range));
     const textWidth = context.measureText?.(`${nm}`).width ?? `${nm}`.length * 7;
     const gap = label ? getRadarLabelGapAngle(ringRadius, textWidth) : 0;
-    context.arc(x, y, ringRadius, -Math.PI / 2 + gap / 2, (3 * Math.PI) / 2 - gap / 2);
+    context.arc(
+      x,
+      y,
+      ringRadius,
+      RADAR_RING_LABEL_ANGLE + gap / 2,
+      RADAR_RING_LABEL_ANGLE + 2 * Math.PI - gap / 2,
+    );
     context.stroke();
     if (label) drawRingLabel(context, x, y, ringRadius, nm, palette.bright, rotation);
   }
@@ -29,7 +40,10 @@ export function drawCanvasRings(context, x, y, radius, range, palette, rotation 
 
 function drawRingLabel(context, x, y, ringRadius, nm, color, rotation) {
   context.save();
-  context.translate(x, y - ringRadius);
+  context.translate(
+    x + Math.cos(RADAR_RING_LABEL_ANGLE) * ringRadius,
+    y + Math.sin(RADAR_RING_LABEL_ANGLE) * ringRadius,
+  );
   context.rotate(-rotation);
   context.fillStyle = color;
   context.textAlign = "center";
