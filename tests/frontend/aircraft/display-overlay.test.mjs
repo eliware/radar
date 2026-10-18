@@ -31,6 +31,10 @@ test("draws projected aircraft and history over the scene, then removes its canv
     constructor(x, y, z) {
       Object.assign(this, { x, y, z });
     }
+    set(x, y, z) {
+      Object.assign(this, { x, y, z });
+      return this;
+    }
     project() {
       return this;
     }

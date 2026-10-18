@@ -2,6 +2,8 @@ import { selectDefaultRadarRange } from "../../../radar/range.mjs";
 import { watchRadarTargets } from "../../../watch-radar-targets.mjs";
 import { createRadarRenderLoop } from "../../../radar/render-loop.mjs";
 
+const OVERLAY_REFRESH_MS = 100;
+
 export function createAircraftRadarLoop({
   targets,
   trails,
@@ -30,6 +32,7 @@ export function createAircraftRadarLoop({
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   isWaterVisible = () => true,
 }) {
+  let lastOverlayFrame = null;
   const stopWatch = watchRadarTargets({
     targets,
     windowRef,
@@ -45,7 +48,10 @@ export function createAircraftRadarLoop({
     camera,
     container,
     windowRef,
-    onFrame: () =>
+    onFrame: (time) => {
+      const now = Number.isFinite(time) ? time : (windowRef.performance?.now?.() ?? Date.now());
+      if (lastOverlayFrame !== null && now - lastOverlayFrame < OVERLAY_REFRESH_MS) return;
+      lastOverlayFrame = now;
       overlay.draw(
         targets.items(),
         trails,
@@ -71,7 +77,8 @@ export function createAircraftRadarLoop({
             referenceVisibility.airportsVisible && runwayVisibility.isExtensionsVisible(),
         },
         referenceVisibility,
-      ),
+      );
+    },
   });
   return () => {
     stopRender();

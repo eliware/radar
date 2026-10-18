@@ -7,9 +7,9 @@ export function createRadarRenderLoop({ renderer, scene, camera, container, wind
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
   };
-  const animate = () => {
+  const animate = (time) => {
     renderer.render(scene, camera);
-    onFrame?.();
+    onFrame?.(time);
     frame = windowRef.requestAnimationFrame(animate);
   };
   let frame = windowRef.requestAnimationFrame(animate);

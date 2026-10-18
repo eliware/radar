@@ -6,11 +6,13 @@ import { projectAircraftDisplayItems } from "../project/aircraft-display-items.m
 import { projectRadarReference } from "../project/radar-reference.mjs";
 import { drawCameraReadout } from "../draw/camera-readout.mjs";
 import { attachRadarLegendClick } from "../attach/radar-legend-click.mjs";
+import { resizeOverlayCanvas } from "./resize-overlay-canvas.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
+  const projectedPosition = new THREE.Vector3();
   Object.assign(canvas.style, {
     position: "absolute",
     inset: "0",
@@ -44,9 +46,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
     const ratio = Math.min(windowRef.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(width * ratio);
-    canvas.height = Math.round(height * ratio);
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    resizeOverlayCanvas(canvas, context, width, height, ratio);
     context.clearRect(0, 0, width, height);
     drawRadarReferences(
       context,
@@ -79,8 +79,11 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     drawCameraReadout(context, camera, location, elevationFeet);
 
     function project(position) {
-      const point = new THREE.Vector3(position.x, position.y, position.z).project(camera);
-      return { x: ((point.x + 1) * width) / 2, y: ((1 - point.y) * height) / 2 };
+      projectedPosition.set(position.x, position.y, position.z).project(camera);
+      return {
+        x: ((projectedPosition.x + 1) * width) / 2,
+        y: ((1 - projectedPosition.y) * height) / 2,
+      };
     }
   }
 

@@ -2,14 +2,15 @@ import { expect, jest, test } from "@jest/globals";
 import { createAircraftRadarLoop } from "../../../../../src/frontend/create/aircraft/radar/loop.mjs";
 
 test("starts frame and expiry loops, then stops them", () => {
-  const callbacks = new Map();
+  const callbacks = [];
   const expiryCallbacks = [];
   let expired = [{ icao: "ABC123" }];
   const renderer = { render: jest.fn(), setSize: jest.fn() };
+  const overlay = { draw: jest.fn() };
   const windowRef = {
     requestAnimationFrame: jest.fn((callback) => {
-      callbacks.set(callback, callback);
-      return callbacks.size;
+      callbacks.push(callback);
+      return callbacks.length;
     }),
     cancelAnimationFrame: jest.fn(),
     addEventListener: jest.fn(),
@@ -30,12 +31,15 @@ test("starts frame and expiry loops, then stops them", () => {
     scene: {},
     camera: { updateProjectionMatrix: jest.fn() },
     container: { clientWidth: 100, clientHeight: 100 },
-    overlay: { draw: jest.fn() },
+    overlay,
     location: null,
     elevationFeet: 300,
     isConnected: () => false,
   });
-  [...callbacks.values()][0]();
+  callbacks[0](0);
+  callbacks[1](50);
+  callbacks[2](100);
+  expect(overlay.draw).toHaveBeenCalledTimes(2);
   expiryCallbacks[0]();
   expired = [];
   expiryCallbacks[0]();
@@ -47,8 +51,9 @@ test("starts frame and expiry loops, then stops them", () => {
 test("does not change range when expired aircraft cannot change auto zoom", () => {
   const setRange = jest.fn();
   const trails = { remove: jest.fn() };
+  let frame;
   const windowRef = {
-    requestAnimationFrame: jest.fn(() => 1),
+    requestAnimationFrame: jest.fn((callback) => ((frame = callback), 1)),
     cancelAnimationFrame: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
@@ -74,6 +79,7 @@ test("does not change range when expired aircraft cannot change auto zoom", () =
     isConnected: () => false,
   });
 
+  frame();
   expect(trails.remove).toHaveBeenCalledWith(["ABC123"]);
   expect(setRange).not.toHaveBeenCalled();
 });
