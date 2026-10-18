@@ -5,7 +5,7 @@ function setup({ secure = true, sensor = {}, view = { setRotation: jest.fn() } }
   const listeners = new Map();
   const buttonListeners = new Map();
   const button = {
-    textContent: "FOLLOW PHONE",
+    textContent: "FOLLOW",
     addEventListener: jest.fn((name, callback) => buttonListeners.set(name, callback)),
     removeEventListener: jest.fn(),
     setAttribute: jest.fn(),
@@ -39,7 +39,7 @@ test("tracks iOS compass heading and stops on the next tap", async () => {
     "deviceorientation",
     expect.any(Function),
   );
-  expect(state.button.textContent).toBe("FOLLOW PHONE");
+  expect(state.button.textContent).toBe("FOLLOW");
   detach();
 });
 

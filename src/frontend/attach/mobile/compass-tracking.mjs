@@ -22,7 +22,7 @@ export function attachMobileCompassTracking(documentRef, windowRef, view) {
   const stop = () => {
     active = false;
     windowRef.removeEventListener("deviceorientation", onHeading);
-    setStatus("FOLLOW PHONE");
+    setStatus("FOLLOW");
   };
   const start = async () => {
     if (windowRef.isSecureContext === false) return setStatus("HTTPS REQUIRED");

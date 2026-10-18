@@ -313,13 +313,20 @@ p {
   }
 }
 @media (hover: none) and (pointer: coarse) {
+  .radar-compass {
+    right: auto;
+    bottom: calc(42px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+  }
   .compass-follow {
     position: absolute;
     z-index: 3;
-    right: 14px;
-    bottom: 108px;
+    right: auto;
+    bottom: max(8px, env(safe-area-inset-bottom, 0px));
+    left: 50%;
     display: block;
-    padding: 7px 9px;
+    padding: 5px 10px;
     border: 1px solid #007b20;
     border-radius: 4px;
     color: #00ff41;
@@ -327,6 +334,7 @@ p {
     font:
       10px Consolas,
       monospace;
+    transform: translateX(-50%);
   }
 }
 @media (max-width: 900px) {
