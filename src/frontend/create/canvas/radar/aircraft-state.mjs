@@ -19,5 +19,14 @@ export function createCanvasRadarAircraftState(location, state, draw) {
         state.range = selectDefaultRadarRange(targets.distances(), state.defaultRangeNm);
       draw();
     },
+    updateRemote(items) {
+      const remote = items.filter((item) => item.remoteOnly);
+      trails.remove(targets.removeRemoteOnlyExcept(remote.map((item) => item.icao)));
+      for (const item of remote) {
+        const position = projectAircraftPosition(item, location, 0);
+        if (position) targets.update(item, Math.hypot(position.x, position.z));
+      }
+      draw();
+    },
   };
 }

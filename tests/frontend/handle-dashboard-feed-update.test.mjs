@@ -17,3 +17,13 @@ test("ignores invalid JSON feed messages", () => {
   expect(scene.update).not.toHaveBeenCalled();
   expect(strips.update).not.toHaveBeenCalled();
 });
+
+test("sends remote snapshots to the remote aircraft updaters", () => {
+  const scene = { update: jest.fn(), updateRemote: jest.fn() };
+  const strips = { update: jest.fn(), updateRemote: jest.fn() };
+  const aircraft = [{ icao: "ABC123", remoteOnly: true }];
+  handleDashboardFeedUpdate(scene, strips, JSON.stringify({ event: "remote-snapshot", aircraft }));
+  expect(scene.updateRemote).toHaveBeenCalledWith(aircraft);
+  expect(strips.updateRemote).toHaveBeenCalledWith(aircraft);
+  expect(scene.update).not.toHaveBeenCalled();
+});

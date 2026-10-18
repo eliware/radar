@@ -50,6 +50,12 @@ export function registerApiRoutes(
   app.get("/ws", { websocket: true }, (socket) => {
     const unsubscribe = feed.subscribe((aircraft) => {
       if (socket.readyState === 1) socket.send(JSON.stringify(aircraft));
+    }, socket);
+    socket.on("message", (message) => {
+      try {
+        const request = JSON.parse(message.toString());
+        if (request.type === "viewport") feed.setClientRadius?.(socket, request.radiusNm);
+      } catch {}
     });
     socket.on("close", unsubscribe);
     socket.on("error", unsubscribe);

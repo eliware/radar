@@ -8,7 +8,7 @@ import { dashboardWebSocketUrl } from "./dashboard-websocket-url.mjs";
 import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
 import { destroyDashboardResources } from "./destroy/dashboard-resources.mjs";
 import { attachDashboardDisplayToggles } from "./attach/dashboard/display-toggles.mjs";
-
+import { createViewportReporter } from "./report-viewport.mjs";
 export async function startDashboard({
   document,
   fetchData,
@@ -70,12 +70,14 @@ export async function startDashboard({
     const aircraft = await readJson(fetchData, "/api/aircraft");
     flightStrips.update(aircraft);
     aircraft.forEach((item) => scene.update(item));
+    const sendViewport = createViewportReporter(scene);
     const feed = connectWebSocketFeed({
       WebSocketClass,
       url: dashboardWebSocketUrl(document.location),
       onState: (connected) => scene.setConnected?.(connected),
       onMessage: (data) => handleDashboardFeedUpdate(scene, flightStrips, data),
-      onOpen: async () => {
+      onOpen: async (socket) => {
+        sendViewport(socket, true);
         try {
           const latest = await readJson(fetchData, "/api/aircraft");
           flightStrips.update(latest);
@@ -84,6 +86,7 @@ export async function startDashboard({
       },
     });
     resources.feed = feed;
+    resources.detachViewport = scene.onViewChange?.(() => sendViewport(feed.socket));
     const destroy = attachDashboardPagehide(windowRef, () => destroyDashboardResources(resources));
     return { scene, socket: feed.socket, feed, flightStrips, destroy };
   } catch {
@@ -93,6 +96,5 @@ export async function startDashboard({
 }
 async function readJson(fetchData, path) {
   const response = await fetchData(path);
-  if (!response.ok) throw new Error(`Request failed: ${path}`);
-  return response.json();
+  return response.ok ? response.json() : Promise.reject(new Error(`Request failed: ${path}`));
 }

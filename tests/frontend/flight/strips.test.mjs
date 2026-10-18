@@ -104,6 +104,20 @@ test("updates on resize and each second, then removes stale aircraft on destroy"
   expect(windowRef.clearInterval).toHaveBeenCalledWith(17);
 });
 
+test("refreshes remote strips and removes tracks missing from the remote snapshot", () => {
+  const container = {};
+  const view = createFlightStripView(container, {}, () => 1000);
+  view.updateRemote([
+    { ...aircraft("REMOTE", 1), remoteOnly: true },
+    { ...aircraft("LOCAL", 2), remoteOnly: false },
+  ]);
+  expect(container.innerHTML).toContain("2 AIRCRAFT");
+  view.updateRemote([]);
+  expect(container.innerHTML).toContain("1 AIRCRAFT");
+  expect(container.innerHTML).not.toContain('data-icao="REMOTE"');
+  view.destroy();
+});
+
 test("supports an unavailable container and window", () => {
   const view = createFlightStripView(null, undefined);
   view.update(aircraft("A", 1));

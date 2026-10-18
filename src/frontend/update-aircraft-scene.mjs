@@ -10,14 +10,20 @@ export function createAircraftSceneUpdater({
   isAutoZoom,
   defaultRangeNm,
 }) {
-  return (aircraft) => {
+  function update(aircraft, autoZoom = true) {
     const position = projectAircraftPosition(aircraft, location, elevationFeet);
     if (!position) return;
     const expired = targets.update(aircraft, Math.hypot(position.x, position.z));
     trails.remove(expired);
     trails.add(aircraft.icao, position);
-    if (!isAutoZoom()) return;
+    if (!autoZoom || !isAutoZoom()) return;
     const nextRange = selectDefaultRadarRange(targets.distances(), defaultRangeNm);
     if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
+  }
+  update.updateRemote = (items) => {
+    const remote = items.filter((item) => item.remoteOnly);
+    trails.remove(targets.removeRemoteOnlyExcept(remote.map((item) => item.icao)));
+    remote.forEach((item) => update(item, false));
   };
+  return update;
 }

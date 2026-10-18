@@ -122,6 +122,7 @@ export function registerAircraftSceneMocks(jest) {
   }));
   jest.unstable_mockModule("../../../src/frontend/radar/range.mjs", () => ({
     DEFAULT_RADAR_RANGE: 20,
+    MAX_RADAR_RANGE: 300,
     selectDefaultRadarRange,
   }));
   jest.unstable_mockModule("../../../src/frontend/create/orbit-radar-state.mjs", () => ({

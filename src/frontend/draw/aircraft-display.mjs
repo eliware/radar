@@ -4,6 +4,7 @@ import { getRadarPalette } from "../radar/palette.mjs";
 import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
 
 const EMERGENCY_COLOR = "#ff0000";
+const REMOTE_ONLY_COLOR = "#c6ff00";
 
 export function drawAircraftDisplay(
   context,
@@ -39,6 +40,7 @@ export function drawAircraftDisplay(
 
 function displayColor(item, normalColor, now) {
   if (getAircraftEmergencyLabel(item)) return EMERGENCY_COLOR;
+  if (item.remoteOnly) return REMOTE_ONLY_COLOR;
   if (!item.nearHomePass) return normalColor;
   return Math.floor(now / 500) % 2 === 0 ? "#00ff41" : "#ffffff";
 }

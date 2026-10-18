@@ -103,6 +103,22 @@ test("retains route data when a placeholder replaces a useful callsign", async (
   });
 });
 
+test("skips lookups when re-api metadata already has type and complete route fields", () => {
+  const state = createState();
+  state.coordinator.update(
+    {
+      icao: "ABC123",
+      callsign: "BAW183",
+      aircraftTypeCode: "B738",
+      origin: "EGLL",
+      destination: "KBOS",
+    },
+    state.publish,
+  );
+  expect(state.lookup.getAircraftType).not.toHaveBeenCalled();
+  expect(state.lookup.getCallsignRoute).not.toHaveBeenCalled();
+});
+
 test("pauses route lookups and ignores results started before they were disabled", async () => {
   const state = createState();
   let complete;

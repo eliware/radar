@@ -9,7 +9,7 @@ import { createRadarLayerVisibility } from "../create/radar/layer-visibility.mjs
 import { createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
 import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
 import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
-import { createRadarViewport } from "../radar/reference/viewport.mjs";
+import { getRadarCanvasViewport } from "./viewport.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -75,18 +75,13 @@ export function createCanvasRadarView({
       draw();
     },
     update: aircraftState.update,
+    updateRemote: aircraftState.updateRemote,
     ...references.updates(() => {}, draw),
     setIlsVisible: layers.ils.setVisible,
     ...viewState,
-    getViewportBounds() {
-      return createRadarViewport(
-        canvas.clientWidth,
-        canvas.clientHeight,
-        state.range,
-        state.offsetX,
-        state.offsetY,
-        state.rotation,
-      );
+    getViewportBounds: () => getRadarCanvasViewport(canvas, state),
+    visibleRadiusNm() {
+      return this.getViewportBounds().visibleRadiusNm;
     },
     destroy() {
       detachEvents();

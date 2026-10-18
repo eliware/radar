@@ -25,3 +25,12 @@ test("keeps a target that updates within its live period", () => {
 test("starts with no tracked targets", () => {
   expect(createRadarTargets().distances()).toEqual([]);
 });
+
+test("uses the source observation time and removes missing remote-only tracks", () => {
+  const targets = createRadarTargets({ clock: () => 10_000, staleAfterMs: 120_000 });
+  targets.update({ icao: "REMOTE", remoteOnly: true, lastSeen: 8000 }, 10);
+  targets.update({ icao: "LOCAL", remoteOnly: false }, 2);
+  expect(targets.items().get("REMOTE").receivedAt).toBe(8000);
+  expect(targets.removeRemoteOnlyExcept([])).toEqual(["REMOTE"]);
+  expect([...targets.items().keys()]).toEqual(["LOCAL"]);
+});

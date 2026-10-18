@@ -137,3 +137,31 @@ test("flashes near-home targets green and white on alternating half-second phase
   drawAircraftDisplay(context, [target], 12, 100, 100, true, 1500);
   expect(context.strokeStyle).toBe("#ffffff");
 });
+
+test("draws remote-only targets in yellow-green while preserving emergency red", () => {
+  const context = Object.fromEntries(
+    ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fillText"].map((name) => [
+      name,
+      jest.fn(),
+    ]),
+  );
+  context.measureText = (text) => ({ width: text.length * 8 });
+  const strokeColors = [];
+  context.stroke.mockImplementation(function () {
+    strokeColors.push(this.strokeStyle);
+  });
+  drawAircraftDisplay(
+    context,
+    [
+      { x: 20, y: 20, remoteOnly: true, lines: ["REMOTE", "", ""] },
+      { x: 80, y: 80, remoteOnly: true, squawk: "7700", lines: ["EMERG", "", ""] },
+    ],
+    12,
+    100,
+    100,
+  );
+  expect(context.strokeStyle).toBe("#ff0000");
+  expect(context.fillStyle).toBe("#ff0000");
+  expect(strokeColors).toContain("#c6ff00");
+  expect(strokeColors).toContain("#ff0000");
+});

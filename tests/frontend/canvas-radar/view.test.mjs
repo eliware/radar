@@ -86,6 +86,7 @@ test("wires view changes and reference updates", () => {
     minX: expect.any(Number),
     maxRangeNm: expect.any(Number),
   });
+  expect(view.visibleRadiusNm()).toBe(view.getViewportBounds().visibleRadiusNm);
   view.updateAirports([{ faaId: "PWM", icao: "KPWM", rangeNm: 4, latitude: 43.1, longitude: -70 }]);
   view.updateNavaids([{ identifier: "ENE", rangeNm: 5, latitude: 43.2, longitude: -70 }]);
   view.updateBoundaries([{ id: "ZBW", type: "ARTCC", points: [{ latitude: 43, longitude: -70 }] }]);

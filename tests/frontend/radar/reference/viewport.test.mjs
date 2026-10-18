@@ -11,6 +11,7 @@ test("viewport bounds include the rotated mobile screen and cap fetch range", ()
   expect(bounds.minX).toBeLessThan(-20);
   expect(bounds.maxX).toBeGreaterThan(20);
   expect(bounds.maxRangeNm).toBeLessThan(100);
+  expect(bounds.visibleRadiusNm).toBeLessThan(bounds.maxRangeNm);
   expect(createRadarViewport(400, 800, 300, 0, 0, 0).maxRangeNm).toBe(300);
 });
 

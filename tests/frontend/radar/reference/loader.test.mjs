@@ -48,8 +48,10 @@ test("loads a coarse range bucket and clips crossing geometry to the viewport", 
       ),
     ),
   );
-  createRadarReferenceLoader(fetchData, updates, location).load(bounds);
+  const loader = createRadarReferenceLoader(fetchData, updates, location);
+  loader.load(bounds);
   await flush();
+  loader.load(bounds);
 
   expect(fetchData).toHaveBeenCalledTimes(6);
   expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("minRangeNm=0&maxRangeNm=50"));

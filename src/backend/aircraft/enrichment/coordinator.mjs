@@ -19,6 +19,7 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     const icao = normalizeAircraftMetadataKey(aircraft.icao);
     const callsign = normalizeAircraftMetadataKey(aircraft.callsign);
     const latest = { ...lastAircraft.get(icao), ...aircraft };
+    const enriched = metadata.enrich(latest);
     const usefulCallsign = retainUsefulCallsign(
       lastAircraft.get(icao)?.callsign,
       aircraft.callsign,
@@ -27,11 +28,17 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     else latest.callsign = usefulCallsign;
     lastAircraft.set(icao, latest);
     publish(metadata.enrich(latest));
-    lookup
-      .getAircraftType(icao)
-      .then((result) => publishIfChanged(icao, metadata.updateType(icao, result), publish))
-      .catch(() => undefined);
-    if (!routeLookupsEnabled || !hasUsefulCallsign(callsign)) return;
+    if (!enriched.aircraftTypeCode)
+      lookup
+        .getAircraftType(icao)
+        .then((result) => publishIfChanged(icao, metadata.updateType(icao, result), publish))
+        .catch(() => undefined);
+    if (
+      !routeLookupsEnabled ||
+      !hasUsefulCallsign(callsign) ||
+      (enriched.origin && enriched.destination)
+    )
+      return;
     const version = routeLookupVersion;
     lookup
       .getCallsignRoute(callsign)

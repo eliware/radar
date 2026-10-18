@@ -32,11 +32,15 @@ The server returns an error if the NASR database or home location is not availab
 
 Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each update uses the CLI debug fields and adds lookup fields when available.
 
-Radar adds aircraft type data from the ADSB.lol v2 API by ICAO address. It adds departure and arrival data from ADSB.lol route JSON by callsign.
+While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every two seconds. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
 
-It stores lookup results in memory only. Lookup failures do not stop aircraft updates. Route data can be inaccurate or missing, especially when callsigns are reused. Unavailable fields stay blank.
+Remote aircraft are combined with local readsb reports by ICAO address. When both sources report a target, readsb fields replace remote fields. ADSB.lol re-api supplies type codes and callsigns. Radar requests route data only when a remote record lacks a departure or arrival airport code. Remote-only targets appear yellow-green and expire when reports stop.
 
-These lookups enrich local readsb data. They do not add remote ADSB.lol aircraft.
+ADSB.lol identifies re-api data as ODbL 1.0 in its [feeder re-api documentation](https://www.adsb.lol/docs/feeders-only/re-api/).
+
+Local aircraft types come from ADSB.lol v2 lookup by ICAO address. Departure and arrival fields use ADSB.lol route JSON by callsign. Results remain in memory. Lookup failures do not stop aircraft updates.
+
+Route data can be inaccurate or missing, especially when callsigns are reused. Unavailable fields stay blank.
 
 The browser reconnects after a WebSocket failure. It waits one second before the first retry. It doubles the interval to a maximum of 30 seconds. After reconnecting, it requests the current aircraft list. The server retries the receiver connection after two seconds.
 

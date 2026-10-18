@@ -27,7 +27,7 @@ export function connectWebSocketFeed({
       if (stopped || retryPending || current !== socket) return;
       retryDelay = 1000;
       onState(true);
-      await onOpen();
+      await onOpen(current);
     };
     current.onmessage = (event) => {
       if (!stopped && !retryPending && current === socket) onMessage(event.data);

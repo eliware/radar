@@ -15,9 +15,13 @@ test("starts the scene loop and creates the aircraft updater", () => {
   const options = { defaultRangeNm: 25 };
   const stop = jest.fn();
   const update = jest.fn();
+  update.updateRemote = jest.fn();
   startLoop.mockReturnValueOnce(stop);
   createUpdater.mockReturnValueOnce(update);
-  expect(createAircraftSceneWorkflow(options)).toEqual({ stop, update });
+  const workflow = createAircraftSceneWorkflow(options);
+  expect(workflow).toEqual({ stop, update, updateRemote: update.updateRemote });
   expect(startLoop).toHaveBeenCalledWith(options);
   expect(createUpdater).toHaveBeenCalledWith(options);
+  workflow.updateRemote([]);
+  expect(update.updateRemote).toHaveBeenCalledWith([]);
 });

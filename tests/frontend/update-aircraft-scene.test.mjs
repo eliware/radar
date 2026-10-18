@@ -4,6 +4,7 @@ import { createAircraftSceneUpdater } from "../../src/frontend/update-aircraft-s
 function makeUpdater({ autoZoom = true, position = { x: 3, y: 0, z: 4 } } = {}) {
   const targets = {
     update: jest.fn(() => ["OLD"]),
+    removeRemoteOnlyExcept: jest.fn(() => ["REMOTE-OLD"]),
     distances: jest.fn(() => [30]),
   };
   const trails = { add: jest.fn(), remove: jest.fn() };
@@ -48,4 +49,19 @@ test("keeps the current camera range when target range does not change", () => {
   state.targets.distances.mockReturnValue([15]);
   state.update({ icao: "SAME00", latitude: 43.1, longitude: -70 });
   expect(state.radarCamera.setRange).not.toHaveBeenCalled();
+});
+
+test("updates remote-only targets without auto-zoom and removes missing remote targets", () => {
+  const state = makeUpdater();
+  state.update.updateRemote([
+    { icao: "REMOTE", latitude: 43.1, longitude: -70, remoteOnly: true },
+    { icao: "LOCAL", latitude: 43.2, longitude: -70, remoteOnly: false },
+  ]);
+  expect(state.targets.removeRemoteOnlyExcept).toHaveBeenCalledWith(["REMOTE"]);
+  expect(state.targets.update).toHaveBeenCalledWith(
+    expect.objectContaining({ icao: "REMOTE", remoteOnly: true }),
+    expect.any(Number),
+  );
+  expect(state.radarCamera.setRange).not.toHaveBeenCalled();
+  expect(state.trails.remove).toHaveBeenCalledWith(["REMOTE-OLD"]);
 });

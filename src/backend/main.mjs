@@ -20,12 +20,17 @@ export async function startWebApplication(dependencies) {
     locationLongitude: process.env.ADSB_LON,
     onError: (error) => log.warn(`ADS-B stream error: ${error.message}`),
   });
-  const enrichedFeed = dependencies.createAircraftEnrichmentFeed(
-    feed,
-    dependencies.createAdsbLolLookup(),
-  );
+  const lookup = dependencies.createAdsbLolLookup();
+  const enrichedFeed = dependencies.createAircraftEnrichmentFeed(feed, lookup);
+  const remoteSource = dependencies.createAdsbLolRemoteSource({
+    location,
+    defaultRangeNm: radarViewSettings.defaultRangeNm,
+    lookup,
+    onError: (error) => log.warn(`ADSB.lol remote feed error: ${error.message}`),
+  });
+  const mergedFeed = dependencies.createMergedAircraftFeed(enrichedFeed, remoteSource);
   const app = await dependencies.createRadarServer({
-    feed: enrichedFeed,
+    feed: mergedFeed,
     location,
     elevationFeet,
     ...radarViewSettings,
@@ -35,6 +40,7 @@ export async function startWebApplication(dependencies) {
   let shutdownPromise;
   const shutdown = () => {
     if (shutdownPromise) return shutdownPromise;
+    mergedFeed.close();
     enrichedFeed.close();
     feed.close();
     shutdownPromise = app.close().then(() => log.info("Web application stopped"));
@@ -43,7 +49,7 @@ export async function startWebApplication(dependencies) {
   dependencies.registerSignals({ log, shutdownHook: shutdown });
   await app.listen({ host: "0.0.0.0", port });
   log.info(`Web application listening at TCP endpoint ${port}`);
-  return { app, feed: enrichedFeed, shutdown };
+  return { app, feed: mergedFeed, shutdown };
 }
 
 function validPort(value, name) {

@@ -11,6 +11,7 @@ test("registers health, data, procedure, airway, and update relay routes", async
   const feed = {
     list: jest.fn(() => [{ icao: "ABC123" }]),
     subscribe: jest.fn(() => subscriber),
+    setClientRadius: jest.fn(),
     isReady: jest.fn(() => true),
     setRouteLookupsEnabled: jest.fn(),
   };
@@ -41,6 +42,12 @@ test("registers health, data, procedure, airway, and update relay routes", async
   const socket = { readyState: 1, send: jest.fn(), on: jest.fn() };
   routes.get("/ws")[1](socket);
   const update = feed.subscribe.mock.calls[0][0];
+  expect(feed.subscribe).toHaveBeenCalledWith(expect.any(Function), socket);
+  const message = socket.on.mock.calls.find(([event]) => event === "message")[1];
+  message(Buffer.from('{"type":"viewport","radiusNm":65}'));
+  expect(feed.setClientRadius).toHaveBeenCalledWith(socket, 65);
+  message(Buffer.from('{"type":"other"}'));
+  message(Buffer.from("invalid json"));
   update({ icao: "ABC123" });
   expect(socket.send).toHaveBeenCalledWith('{"icao":"ABC123"}');
   socket.readyState = 3;

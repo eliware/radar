@@ -23,6 +23,8 @@ function dependencies() {
   const log = { info: jest.fn(), warn: jest.fn() };
   const feed = { close: jest.fn() };
   const enrichedFeed = { close: jest.fn() };
+  const remoteSource = { close: jest.fn() };
+  const mergedFeed = { close: jest.fn() };
   const lookup = {};
   const app = { listen: jest.fn(async () => undefined), close: jest.fn(async () => undefined) };
   const signals = {};
@@ -30,6 +32,8 @@ function dependencies() {
     log,
     feed,
     enrichedFeed,
+    remoteSource,
+    mergedFeed,
     lookup,
     app,
     signals,
@@ -41,6 +45,8 @@ function dependencies() {
       createAircraftFeed: jest.fn(() => feed),
       createAdsbLolLookup: jest.fn(() => lookup),
       createAircraftEnrichmentFeed: jest.fn(() => enrichedFeed),
+      createAdsbLolRemoteSource: jest.fn(() => remoteSource),
+      createMergedAircraftFeed: jest.fn(() => mergedFeed),
       parseMetarStations: jest.fn(() => ["KLEW", "KPWM", "KBXM"]),
       createMetarLookup: jest.fn((stations) => ({ stations, get: jest.fn() })),
       createAirportDatabase: jest.fn(() => null),
@@ -70,7 +76,7 @@ test("starts Fastify and closes the feed after a signal", async () => {
     }),
   );
   expect(deps.values.createRadarServer).toHaveBeenCalledWith({
-    feed: deps.values.createAircraftEnrichmentFeed.mock.results[0].value,
+    feed: deps.mergedFeed,
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 320,
     defaultRangeNm: 25,
@@ -80,16 +86,19 @@ test("starts Fastify and closes the feed after a signal", async () => {
   });
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 8080 });
   deps.values.createAircraftFeed.mock.calls[0][0].onError(new Error("offline"));
+  deps.values.createAdsbLolRemoteSource.mock.calls[0][0].onError(new Error("remote offline"));
   expect(deps.log.warn).toHaveBeenCalledWith("ADS-B stream error: offline");
+  expect(deps.log.warn).toHaveBeenCalledWith("ADSB.lol remote feed error: remote offline");
   await deps.signals.shutdownHook();
   await deps.signals.shutdownHook();
   expect(deps.feed.close).toHaveBeenCalledTimes(1);
+  expect(deps.mergedFeed.close).toHaveBeenCalledTimes(1);
   expect(
     deps.values.createAircraftEnrichmentFeed.mock.results[0].value.close,
   ).toHaveBeenCalledTimes(1);
   expect(deps.app.close).toHaveBeenCalledTimes(1);
   expect(runtime.app).toBe(deps.app);
-  expect(runtime.feed).toBe(deps.enrichedFeed);
+  expect(runtime.feed).toBe(deps.mergedFeed);
 });
 
 test("uses default web and feed settings", async () => {

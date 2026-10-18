@@ -18,8 +18,22 @@ export function createRadarTargets({
   return {
     update(item, distance) {
       const expired = prune();
-      targets.set(item.icao, { item, distance, lastSeen: clock() });
+      targets.set(item.icao, {
+        item,
+        distance,
+        lastSeen: Number.isFinite(item.lastSeen) ? Math.min(clock(), item.lastSeen) : clock(),
+      });
       return expired;
+    },
+    removeRemoteOnlyExcept(icaos) {
+      const keep = new Set(icaos);
+      const removed = [];
+      for (const [icao, target] of targets)
+        if (target.item.remoteOnly && !keep.has(icao)) {
+          targets.delete(icao);
+          removed.push(icao);
+        }
+      return removed;
     },
     prune,
     distances() {

@@ -41,6 +41,8 @@ test("provides server and feed runtime dependencies", () => {
     "parseAdsbLocation",
     "createAdsbLolLookup",
     "createAircraftEnrichmentFeed",
+    "createAdsbLolRemoteSource",
+    "createMergedAircraftFeed",
     "createMetarLookup",
     "parseMetarStations",
   ]);

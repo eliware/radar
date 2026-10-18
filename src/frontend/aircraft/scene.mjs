@@ -17,6 +17,7 @@ import { createAircraftRadarCamera } from "../create/aircraft/radar/camera.mjs";
 import { createRadarConnectionState } from "../create/radar/connection-state.mjs";
 import { createAircraftSceneWorkflow } from "../create/aircraft/scene-workflow.mjs";
 import { destroyAircraftSceneResources } from "../destroy/aircraft-scene-resources.mjs";
+import { createRadarViewportRadius } from "../radar/viewport-radius.mjs";
 export function createAircraftScene({
   container,
   location,
@@ -45,10 +46,7 @@ export function createAircraftScene({
       controls,
       element: renderer.domElement,
       windowRef,
-      onRangeChange: (range) => {
-        updateRings(range);
-        water.load(range);
-      },
+      onRangeChange: (range) => (updateRings(range), water.load(range)),
       defaultRangeNm,
     },
     targets,
@@ -78,8 +76,10 @@ export function createAircraftScene({
   return {
     ...connection,
     update: workflow.update,
+    updateRemote: workflow.updateRemote,
     ...references.updates((items) => airspace.update(items)),
     setIlsVisible: layers.ils.setVisible,
+    visibleRadiusNm: createRadarViewportRadius(THREE, camera, container, elevationFeet),
     ...createOrbitRadarState(controls, radarCamera),
     reset,
     destroy: () =>

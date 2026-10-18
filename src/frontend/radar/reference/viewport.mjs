@@ -22,15 +22,14 @@ export function createRadarViewport(width, height, range, panX, panY, rotation) 
     }),
     { minX: Infinity, maxX: -Infinity, minZ: Infinity, maxZ: -Infinity },
   );
+  const visibleRadiusNm = Math.max(...points.map(({ x, z }) => Math.hypot(x, z)));
   const nearestX = Math.max(bounds.minX, Math.min(0, bounds.maxX));
   const nearestZ = Math.max(bounds.minZ, Math.min(0, bounds.maxZ));
   return {
     ...bounds,
+    visibleRadiusNm,
     minRangeNm: Math.max(0, Math.hypot(nearestX, nearestZ) - REFERENCE_MARGIN_NM),
-    maxRangeNm: Math.min(
-      300,
-      Math.max(...points.map(({ x, z }) => Math.hypot(x, z))) + REFERENCE_MARGIN_NM,
-    ),
+    maxRangeNm: Math.min(300, visibleRadiusNm + REFERENCE_MARGIN_NM),
   };
 }
 
