@@ -76,7 +76,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
       runwayVisibility,
       referenceVisibility,
     );
-    drawCameraReadout(context, camera, location, elevationFeet);
+    drawCameraReadout(context, camera, location, elevationFeet, width);
 
     function project(position) {
       projectedPosition.set(position.x, position.y, position.z).project(camera);

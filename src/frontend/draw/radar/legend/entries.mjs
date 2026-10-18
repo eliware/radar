@@ -21,11 +21,12 @@ const ENTRIES = [
 export function radarLegendLayout(width, height) {
   const columns = width >= 640 ? 2 : 1;
   const rows = Math.ceil(ENTRIES.length / columns);
-  const firstY = height - 54 - (rows - 1) * 16;
+  const firstY = 24;
+  const rowHeight = columns === 1 && height < 400 ? 14 : 16;
   return ENTRIES.map((entry, index) => {
     const column = Math.floor(index / rows);
     const row = index % rows;
-    return { entry, x: 12 + column * 112, y: firstY + row * 16 };
+    return { entry, x: 12 + column * 112, y: firstY + row * rowHeight };
   });
 }
 

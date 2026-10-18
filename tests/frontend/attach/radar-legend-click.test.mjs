@@ -30,8 +30,8 @@ test("routes METAR and flight-strip legend clicks through document key handlers"
   const redraw = jest.fn();
   const detach = attachRadarLegendClick(element, documentRef, { KeyboardEvent }, redraw);
   const click = listeners.get("element:click");
-  click({ clientX: 120, clientY: 380 });
-  click({ clientX: 120, clientY: 396 });
+  click({ clientX: 120, clientY: 314 });
+  click({ clientX: 120, clientY: 330 });
 
   expect(keys).toEqual(["m", "f"]);
   expect(redraw).toHaveBeenCalledTimes(2);
@@ -54,9 +54,9 @@ test("does not dispatch keyboard actions when a non-toggle legend item is clicke
     dispatchEvent: jest.fn((event) => keyHandler(event)),
   };
   attachRadarLegendClick(element, documentRef, { KeyboardEvent: class {} });
-  clickListeners.get("click")({ clientX: 20, clientY: 90 });
+  clickListeners.get("click")({ clientX: 200, clientY: 90 });
   expect(documentRef.dispatchEvent).not.toHaveBeenCalled();
-  clickListeners.get("click")({ clientX: 20, clientY: 330 });
+  clickListeners.get("click")({ clientX: 20, clientY: 264 });
   keyHandler({ key: "x" });
   expect(documentRef.dispatchEvent).toHaveBeenCalledTimes(1);
 });
