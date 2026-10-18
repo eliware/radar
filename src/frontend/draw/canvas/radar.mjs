@@ -40,7 +40,7 @@ export function drawCanvasRadar(
   const centerX = width / 2 + panX;
   const centerY = height / 2 + panY;
   const project = createCanvasRadarProjector(centerX, centerY, radius, range, rotation);
-  if (waterVisible) drawWaterOutlines(ctx, waterPaths, project, location);
+  if (waterVisible) drawWaterOutlines(ctx, waterPaths, project, location, width, height);
   ctx.save();
   ctx.translate(centerX, centerY);
   ctx.rotate(rotation);
