@@ -1,4 +1,6 @@
 export function drawRadarScale(context, range, radius, height) {
+  context.fillStyle = "#ffffff";
+  context.strokeStyle = "#ffffff";
   const scaleNm = selectScaleDistance(range, radius, 120);
   const length = (scaleNm / range) * radius;
   const x = 14;

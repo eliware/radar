@@ -8,6 +8,7 @@ test("reports the view range and rotation, and notifies on camera changes", () =
     addEventListener: jest.fn((name, listener) => listeners.set(name, listener)),
     removeEventListener: jest.fn(),
     rotateLeft: jest.fn(),
+    rotateUp: jest.fn(),
     update: jest.fn(),
   };
   const radarCamera = { range: jest.fn(() => 20), zoomBy: jest.fn(), setRotation: jest.fn() };
@@ -16,9 +17,11 @@ test("reports the view range and rotation, and notifies on camera changes", () =
   expect(state.range()).toBe(20);
   state.zoomBy(1.2);
   state.rotateBy(Math.PI / 12);
+  state.tiltBy(Math.PI / 36);
   state.setRotation((140 * Math.PI) / 180);
   expect(radarCamera.zoomBy).toHaveBeenCalledWith(1.2);
   expect(controls.rotateLeft).toHaveBeenCalledWith(-Math.PI / 12);
+  expect(controls.rotateUp).toHaveBeenCalledWith(-Math.PI / 36);
   expect(controls.update).toHaveBeenCalled();
   expect(radarCamera.setRotation).toHaveBeenCalledWith((140 * Math.PI) / 180);
   const listener = jest.fn();

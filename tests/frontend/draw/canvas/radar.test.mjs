@@ -131,7 +131,7 @@ test("draws north-up rings, aircraft, and nearby references while disconnected",
 
   expect(canvas.width).toBe(600);
   expect(canvas.height).toBe(400);
-  expect(context.fillStyle).toBe("#444444");
+  expect(context.fillStyle).toBe("#ffffff");
   expect(context.rotate).toHaveBeenCalledWith(0);
   expect(context.fillText).toHaveBeenCalledWith("NORTH", expect.any(Number), expect.any(Number));
   expect(context.fillText).toHaveBeenCalledWith("KPWM", expect.any(Number), expect.any(Number));

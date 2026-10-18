@@ -46,6 +46,17 @@ test("ignores other keys, modifiers, and editable targets", () => {
   expect(view.rotateBy).not.toHaveBeenCalled();
 });
 
+test("uses Ctrl+Up and Ctrl+Down to adjust 3D perspective tilt", () => {
+  const state = setup();
+  const view = { tiltBy: jest.fn() };
+  const preventDefault = jest.fn();
+  attachRadarArrowControls(state.documentRef, view);
+  state.sendKey({ key: "ArrowUp", ctrlKey: true, preventDefault });
+  state.sendKey({ key: "ArrowDown", ctrlKey: true, preventDefault });
+  expect(view.tiltBy.mock.calls).toEqual([[Math.PI / 36], [-Math.PI / 36]]);
+  expect(preventDefault).toHaveBeenCalledTimes(2);
+});
+
 test("supports missing event methods", () => {
   expect(attachRadarArrowControls(null, {})()).toBeUndefined();
   const detach = attachRadarArrowControls({ addEventListener: jest.fn() }, {});
