@@ -20,12 +20,22 @@
   "bin": {
     "radar-adsb": "./bin/adsb.mjs"
   },
+  "files": [
+    "bin/",
+    "scripts/",
+    "src/",
+    "public/",
+    "docs/nasr-data.md",
+    "nasr/NASR.sqlite",
+    "dist/"
+  ],
   "scripts": {
     "test": "eliware-test",
     "lint": "eliware-test --lint",
     "audit": "eliware-test --audit",
     "format": "eliware-test --format",
     "format:check": "eliware-test --format-check",
+    "import:db": "node bin/import-nasr.db.mjs",
     "build": "webpack --config webpack.config.mjs",
     "prebuild": "webpack-cli --version",
     "screenshots": "node bin/screenshots.mjs",

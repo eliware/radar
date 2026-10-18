@@ -16,7 +16,7 @@ test("resolves the packaged NASR database by default", () => {
   const database = {};
   const Database = jest.fn(() => database);
   expect(openAirportDatabase(undefined, { Database, exists })).toBe(database);
-  expect(exists.mock.calls[0][0]).toMatch(/[\\/]nasr[\\/]NASR_2026_10_01\.sqlite$/);
+  expect(exists.mock.calls[0][0]).toMatch(/[\\/]nasr[\\/]NASR\.sqlite$/);
   expect(Database).toHaveBeenCalledWith(exists.mock.calls[0][0], { readOnly: true });
 });
 
