@@ -16,11 +16,13 @@ test("draws camera position and altitude using the radar monospace font", () => 
   );
   expect(context.font).toBe("12px monospace");
   expect(context.fillStyle).toBe("#00a832");
-  expect(context.textAlign).toBe("right");
-  expect(context.fillText).toHaveBeenNthCalledWith(1, "LAT   43.0167°", 382, 30);
-  expect(context.fillText).toHaveBeenNthCalledWith(2, "LON  -69.9772°", 382, 46);
-  expect(context.fillText).toHaveBeenNthCalledWith(3, "ALT    12,500'", 382, 62);
-  const [latitude, longitude, altitude] = context.fillText.mock.calls.map(([text]) => text);
+  expect(context.fillText).toHaveBeenNthCalledWith(1, "  43.0167°", 352, 30);
+  expect(context.fillText).toHaveBeenNthCalledWith(2, "LAT", 360, 30);
+  expect(context.fillText).toHaveBeenNthCalledWith(3, " -69.9772°", 352, 46);
+  expect(context.fillText).toHaveBeenNthCalledWith(4, "LON", 360, 46);
+  expect(context.fillText).toHaveBeenNthCalledWith(5, "   12,500'", 352, 62);
+  expect(context.fillText).toHaveBeenNthCalledWith(6, "ALT", 360, 62);
+  const [latitude, , longitude, , altitude] = context.fillText.mock.calls.map(([text]) => text);
   expect(altitude.indexOf("'")).toBe(latitude.indexOf("°"));
   expect(altitude.indexOf("'")).toBe(longitude.indexOf("°"));
   expect(context.save).toHaveBeenCalled();

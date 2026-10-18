@@ -24,13 +24,27 @@ export function drawCameraReadout(context, camera, location, elevationFeet, widt
   context.save();
   context.font = "12px monospace";
   context.fillStyle = "#00a832";
-  context.textAlign = "right";
   context.textBaseline = "alphabetic";
-  const x = width - 18;
-  context.fillText(`LAT ${formatCoordinate(latitude)}°`, x, 30);
-  context.fillText(`LON ${formatCoordinate(longitude)}°`, x, 46);
-  context.fillText(`ALT ${altitude.toLocaleString("en-US").padStart(9)}'`, x, 62);
+  const valueX = width - 48;
+  const labelX = width - 40;
+  drawReadoutRow(context, `${formatCoordinate(latitude)}°`, "LAT", valueX, labelX, 30);
+  drawReadoutRow(context, `${formatCoordinate(longitude)}°`, "LON", valueX, labelX, 46);
+  drawReadoutRow(
+    context,
+    `${altitude.toLocaleString("en-US").padStart(9)}'`,
+    "ALT",
+    valueX,
+    labelX,
+    62,
+  );
   context.restore();
+}
+
+function drawReadoutRow(context, value, label, valueX, labelX, y) {
+  context.textAlign = "right";
+  context.fillText(value, valueX, y);
+  context.textAlign = "left";
+  context.fillText(label, labelX, y);
 }
 
 function formatCoordinate(value) {
