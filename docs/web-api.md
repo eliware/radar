@@ -66,7 +66,7 @@ Use the Up and Down arrow keys to change range. Use the Left and Right arrow key
 
 Use W to show or hide muted lake and ocean outlines. The browser requests vector tiles from OpenFreeMap. It does not use a Radar server proxy or save tiles to disk. Map data attribution appears at lower left.
 
-The radar legend has a transparent background and aligns each symbol with its label. Wide views use two columns. Narrow views use one. The second column sits adjacent to the first.
+The radar legend has a transparent background and aligns each symbol with its label. Wide views use two columns. Narrow views use one. Tap or click a layer entry to apply its matching keyboard toggle. M controls METAR and F controls flight strips.
 
 - Key A toggles airports, their Class B/C/D airspace, runways, and runway guides.
 - Key N toggles VORs. Key R toggles runways. Key E toggles runway guides.

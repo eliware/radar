@@ -5,6 +5,7 @@ import { drawRadarReferences } from "../draw/radar/references.mjs";
 import { projectAircraftDisplayItems } from "../project/aircraft-display-items.mjs";
 import { projectRadarReference } from "../project/radar-reference.mjs";
 import { drawCameraReadout } from "../draw/camera-readout.mjs";
+import { attachRadarLegendClick } from "../attach/radar-legend-click.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const canvas = documentRef.createElement("canvas");
@@ -17,6 +18,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     pointerEvents: "none",
   });
   container.appendChild(canvas);
+  const detachLegendClick = attachRadarLegendClick(container, documentRef, windowRef);
 
   function draw(
     aircraft,
@@ -82,5 +84,12 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     }
   }
 
-  return { canvas, draw, destroy: () => canvas.remove() };
+  return {
+    canvas,
+    draw,
+    destroy: () => {
+      detachLegendClick();
+      canvas.remove();
+    },
+  };
 }

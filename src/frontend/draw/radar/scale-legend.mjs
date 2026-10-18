@@ -1,5 +1,5 @@
 import { drawRadarScale } from "./scale.mjs";
-import { drawRadarLegendTable } from "./legend-table.mjs";
+import { drawRadarLegendTable } from "./legend/table.mjs";
 
 export function drawRadarScaleLegend(
   context,
