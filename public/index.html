@@ -99,10 +99,6 @@
         <button class="compass-follow" data-compass-follow type="button" aria-pressed="false">
           FOLLOW
         </button>
-        <section class="metar-display" data-metar data-radar-mode="3D" aria-label="METAR reports">
-          <div class="metar-reports" data-metar-reports>Loading METAR reports.</div>
-          <div class="metar-ticker" aria-hidden="true"><span data-metar-ticker></span></div>
-        </section>
         <div class="scene" data-scene></div>
       </section>
       <section
@@ -111,6 +107,10 @@
         aria-label="Aircraft flight strips"
       ></section>
     </main>
+    <section class="metar-display" data-metar data-radar-mode="3D" aria-label="METAR reports">
+      <div class="metar-reports" data-metar-reports>Loading METAR reports.</div>
+      <div class="metar-ticker" aria-hidden="true"><span data-metar-ticker></span></div>
+    </section>
     <script type="module" src="/client.js"></script>
   </body>
 </html>

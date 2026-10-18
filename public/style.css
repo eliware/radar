@@ -107,7 +107,7 @@ p {
 .radar-compass [data-compass-heading] {
   fill: currentColor;
   font:
-    bold 10px Consolas,
+    bold 15px Consolas,
     monospace;
   text-anchor: middle;
   dominant-baseline: middle;
@@ -143,10 +143,10 @@ p {
   height: 100%;
 }
 .metar-display {
-  position: absolute;
-  z-index: 1;
+  position: fixed;
+  z-index: 2147483647;
   top: 8px;
-  left: 50%;
+  left: calc(var(--radar-size) / 2);
   width: max-content;
   max-width: calc(100% - 220px);
   max-height: 190px;
@@ -338,7 +338,7 @@ p {
   }
 }
 @media (hover: none) and (pointer: coarse) {
-  .scene-panel:has(.metar-display[data-radar-mode="2D"]) .radar-compass {
+  body:has(.metar-display[data-radar-mode="2D"]) .radar-compass {
     right: 14px;
     bottom: 12px;
     left: auto;
@@ -347,13 +347,15 @@ p {
 }
 @media (max-width: 900px) {
   .metar-display {
-    top: calc(env(safe-area-inset-top, 0px) + 8px);
+    top: auto;
+    bottom: -10px;
     left: 0;
     width: 100%;
     max-width: 100%;
     height: 26px;
     max-height: 26px;
     white-space: nowrap;
+    background: #000;
     transform: none;
   }
   .metar-reports {
@@ -364,7 +366,7 @@ p {
     overflow: hidden;
     padding: 3px 0;
   }
-  .metar-ticker > span {
+  .metar-ticker > span > span {
     display: inline-block;
     width: max-content;
     white-space: nowrap;
