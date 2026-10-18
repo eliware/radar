@@ -347,7 +347,7 @@ p {
 }
 @media (max-width: 900px) {
   .metar-display {
-    top: 8px;
+    top: calc(env(safe-area-inset-top, 0px) + 8px);
     width: calc(100% - 24px);
     height: 26px;
     max-height: 26px;
