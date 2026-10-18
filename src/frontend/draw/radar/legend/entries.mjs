@@ -15,7 +15,7 @@ const ENTRIES = [
   ["dash", "V VICTOR", "airwayV", "airwayVVisible", "v"],
   ["wave", "W WATER", "water", "waterVisible", "w"],
   ["line", "M METAR", "metar", "metarVisible", "m"],
-  ["line", "F FLT STRIPS", "strips", "flightStripsVisible", "f"],
+  ["line", "F STRIPS", "strips", "flightStripsVisible", "f"],
 ];
 
 export function radarLegendLayout(width, height) {

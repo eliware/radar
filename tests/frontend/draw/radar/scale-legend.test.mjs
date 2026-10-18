@@ -39,7 +39,7 @@ test("draws a transparent two-column legend with layer toggles", () => {
       "S STAR",
       "W WATER",
       "M METAR",
-      "F FLT STRIPS",
+      "F STRIPS",
     ]),
   );
   expect(context.fillRect).toBeUndefined();

@@ -44,7 +44,7 @@ test("draws every aligned legend symbol in two columns", () => {
   expect(context.fillText).toHaveBeenCalledWith("R RUNWAY", 26, 314);
   expect(context.fillText).toHaveBeenCalledWith("E ERCL", 26, 330);
   expect(context.fillText).toHaveBeenCalledWith("M METAR", 138, 314);
-  expect(context.fillText).toHaveBeenCalledWith("F FLT STRIPS", 138, 330);
+  expect(context.fillText).toHaveBeenCalledWith("F STRIPS", 138, 330);
   expect(context.stroke).toHaveBeenCalled();
   expect(context.arc).toHaveBeenCalled();
 });
@@ -93,7 +93,7 @@ test("restores METAR and flight-strip indicators from local storage", () => {
     });
     drawRadarLegendTable(context, 800, 400, true, {});
     expect(colors.get("M METAR")).toBe("#444444");
-    expect(colors.get("F FLT STRIPS")).toBe("#444444");
+    expect(colors.get("F STRIPS")).toBe("#444444");
   } finally {
     if (originalStorage) Object.defineProperty(globalThis, "localStorage", originalStorage);
     else delete globalThis.localStorage;
