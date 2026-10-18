@@ -81,7 +81,8 @@ test("keeps partial route data and ignores empty or failed lookups", async () =>
   state.lookup.getAircraftType.mockRejectedValueOnce(new Error("offline"));
   state.coordinator.update({ ...item, callsign: "BAW184" }, state.publish);
   state.coordinator.update({ ...item, callsign: "BAW185" }, state.publish);
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  await Promise.resolve();
+  await Promise.resolve();
   expect(state.changes).toHaveLength(4);
 });
 

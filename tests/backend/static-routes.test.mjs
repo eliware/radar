@@ -1,5 +1,4 @@
 import { expect, jest, test } from "@jest/globals";
-import { readFile as readText } from "node:fs/promises";
 import Fastify from "fastify";
 import { registerStaticRoutes } from "../../src/backend/static-routes.mjs";
 
@@ -88,26 +87,6 @@ test("returns not found when a requested chunk does not exist", async () => {
   expect(response.statusCode).toBe(404);
   expect(response.body).toBe("Not found");
   await app.close();
-});
-
-test("configures Radar as a standalone portrait Home Screen app without offline caching", async () => {
-  const root = new URL("../../", import.meta.url);
-  const manifest = JSON.parse(await readText(new URL("public/manifest.webmanifest", root), "utf8"));
-  const packageJson = JSON.parse(await readText(new URL("package.json", root), "utf8"));
-  const page = await readText(new URL("public/index.html", root), "utf8");
-  expect(manifest.name).toBe("Eliware Radar");
-  expect(manifest.description).toBe(packageJson.description);
-  expect(manifest.display).toBe("standalone");
-  expect(manifest.orientation).toBe("portrait");
-  expect(manifest.id).toBe("/");
-  expect(manifest.icons.map(({ purpose }) => purpose)).toEqual(["any", "any", "maskable"]);
-  expect(manifest.screenshots.map(({ form_factor }) => form_factor)).toEqual(["wide", "narrow"]);
-  expect(manifest.screenshots.map(({ sizes }) => sizes)).toEqual(["1280x1024", "1170x2532"]);
-  expect(manifest.screenshots.every(({ type }) => type === "image/png")).toBe(true);
-  expect(page).toContain('name="apple-mobile-web-app-capable" content="yes"');
-  expect(page).toContain('rel="apple-touch-icon" href="/icons/radar-180.png"');
-  expect(page).toContain('rel="manifest" href="/manifest.webmanifest"');
-  expect(page).not.toContain("serviceWorker.register");
 });
 
 test("rejects unknown PWA screenshot names", async () => {

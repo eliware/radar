@@ -18,7 +18,7 @@ test("loads the visible map area once and redraws when tile data arrives", async
     redraw,
   );
   water.update();
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  await settleMicrotasks();
   water.update();
   expect(fetchRef).toHaveBeenCalledTimes(1);
   expect(redraw).toHaveBeenCalled();
@@ -29,6 +29,10 @@ test("loads the visible map area once and redraws when tile data arrives", async
   water.update();
   water.destroy();
 });
+
+async function settleMicrotasks() {
+  for (let turn = 0; turn < 20; turn += 1) await Promise.resolve();
+}
 
 test("does not request tiles without a home location", () => {
   const fetchRef = jest.fn();

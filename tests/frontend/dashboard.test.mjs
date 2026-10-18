@@ -185,10 +185,10 @@ test("loads reference data to the maximum range independent of zoom", async () =
     createScene: () => scene,
     windowRef,
   });
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  await Promise.resolve();
   changeView(undefined);
   changeView(30);
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  await Promise.resolve();
   expect(scene.onViewChange).toHaveBeenCalledTimes(2);
   expect(requested.filter((path) => path.includes("maxRangeNm=300"))).toHaveLength(6);
   expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=300");

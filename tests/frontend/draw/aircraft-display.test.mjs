@@ -56,8 +56,8 @@ test("fades aircraft markers and labels as their receive age increases", () => {
       alphaValues.push(value);
     },
   });
-  const now = Date.now();
-  const dateNow = jest.spyOn(Date, "now").mockReturnValue(now);
+  const now = 1_000_000;
+  jest.useFakeTimers().setSystemTime(now);
   try {
     drawAircraftDisplay(
       context,
@@ -70,7 +70,7 @@ test("fades aircraft markers and labels as their receive age increases", () => {
       100,
     );
   } finally {
-    dateNow.mockRestore();
+    jest.useRealTimers();
   }
 
   expect(alphaValues).toContain(1);
@@ -95,8 +95,8 @@ test("draws emergency aircraft red while fading the marker and four-line tag", (
       alphaValues.push(value);
     },
   });
-  const now = Date.now();
-  const dateNow = jest.spyOn(Date, "now").mockReturnValue(now);
+  const now = 1_000_000;
+  jest.useFakeTimers().setSystemTime(now);
   try {
     drawAircraftDisplay(
       context,
@@ -114,7 +114,7 @@ test("draws emergency aircraft red while fading the marker and four-line tag", (
       100,
     );
   } finally {
-    dateNow.mockRestore();
+    jest.useRealTimers();
   }
   expect(context.fillStyle).toBe("#ff0000");
   expect(context.strokeStyle).toBe("#ff0000");

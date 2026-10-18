@@ -22,7 +22,7 @@ test("loads map outlines around the current camera target and cleans up", async 
   );
   expect(water.isVisible()).toBe(true);
   water.load(20);
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  for (let turn = 0; turn < 20; turn += 1) await Promise.resolve();
   expect(fetchRef).toHaveBeenCalledTimes(1);
   listeners.get("keydown")({ key: "w", preventDefault: jest.fn() });
   expect(water.isVisible()).toBe(false);

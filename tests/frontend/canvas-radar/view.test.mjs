@@ -112,31 +112,33 @@ test("starts with the configured range and rotation", () => {
 });
 
 test("ignores invalid aircraft and draws valid aircraft updates", () => {
-  let now = Date.now();
-  const dateNow = jest.spyOn(Date, "now").mockImplementation(() => now);
-  const state = setup();
-  const view = createCanvasRadarView({ ...state, location: { latitude: 43, longitude: -70 } });
-  const draws = state.context.fillRect.mock.calls.length;
-  expect(view.update({ icao: "BAD", latitude: undefined, longitude: 0 })).toBeUndefined();
-  expect(state.context.fillRect).toHaveBeenCalledTimes(draws);
-  view.update({
-    icao: "ABC123",
-    callsign: "TEST1",
-    latitude: 43.1,
-    longitude: -70,
-    trackDegrees: 90,
-    groundSpeedKnots: 100,
-  });
-  expect(state.context.fillText).toHaveBeenCalledWith(
-    "TEST1",
-    expect.any(Number),
-    expect.any(Number),
-  );
-  now += 120_001;
-  state.tick();
-  expect(state.context.rotate).toHaveBeenCalledWith(0);
-  view.destroy();
-  dateNow.mockRestore();
+  jest.useFakeTimers().setSystemTime(1_000_000);
+  try {
+    const state = setup();
+    const view = createCanvasRadarView({ ...state, location: { latitude: 43, longitude: -70 } });
+    const draws = state.context.fillRect.mock.calls.length;
+    expect(view.update({ icao: "BAD", latitude: undefined, longitude: 0 })).toBeUndefined();
+    expect(state.context.fillRect).toHaveBeenCalledTimes(draws);
+    view.update({
+      icao: "ABC123",
+      callsign: "TEST1",
+      latitude: 43.1,
+      longitude: -70,
+      trackDegrees: 90,
+      groundSpeedKnots: 100,
+    });
+    expect(state.context.fillText).toHaveBeenCalledWith(
+      "TEST1",
+      expect.any(Number),
+      expect.any(Number),
+    );
+    jest.setSystemTime(1_120_001);
+    state.tick();
+    expect(state.context.rotate).toHaveBeenCalledWith(0);
+    view.destroy();
+  } finally {
+    jest.useRealTimers();
+  }
 });
 
 test("keeps a user zoom when new aircraft arrive", () => {

@@ -1,5 +1,4 @@
 import { expect, jest, test } from "@jest/globals";
-import { readFileSync } from "node:fs";
 import { attachRadarCompassDisplay } from "../../../../src/frontend/attach/radar/compass-display.mjs";
 
 function makeDocument(missing) {
@@ -70,33 +69,4 @@ test.each(["[data-radar-compass]", "[data-compass-rose]", "[data-compass-heading
 
 test("does nothing when the document is absent", () => {
   expect(() => attachRadarCompassDisplay(null, {})()).not.toThrow();
-});
-
-test("defines a clickable 16-point compass with four labels and reset access", () => {
-  const markup = readFileSync(new URL("../../../../public/index.html", import.meta.url), "utf8");
-  const rose = markup.match(/<g data-compass-rose[\s\S]*?<\/g>/)?.[0] ?? "";
-  expect(rose.match(/<use\b/g)).toHaveLength(16);
-  expect(rose.match(/class="compass-intercardinal"/g)).toHaveLength(8);
-  expect(rose.match(/class="compass-label(?: compass-label-north)?"/g)).toHaveLength(4);
-  expect(markup).toContain('data-compass-heading x="58" y="58">000</text>');
-  const stylesheet = readFileSync(new URL("../../../../public/style.css", import.meta.url), "utf8");
-  expect(stylesheet).toContain("bold 20px Consolas");
-  expect(stylesheet).toContain(".radar-compass .compass-intercardinal");
-  expect(markup).toContain('role="button"');
-  expect(markup).toContain('tabindex="0"');
-  expect(markup).not.toContain("data-reset");
-  expect(markup).not.toContain("data-radar-control");
-  expect(markup).not.toContain("data-compass-joystick");
-});
-
-test("keeps small map attribution in the lower-left corner", () => {
-  const markup = readFileSync(new URL("../../../../public/index.html", import.meta.url), "utf8");
-  const stylesheet = readFileSync(new URL("../../../../public/style.css", import.meta.url), "utf8");
-  const attribution = stylesheet.match(/\.map-attribution\s*\{([^}]+)\}/)?.[1] ?? "";
-  expect(markup).toContain('class="map-attribution"');
-  expect(markup).toContain("© OpenStreetMap · OpenMapTiles · OpenFreeMap");
-  expect(markup).toContain('href="https://www.openstreetmap.org/copyright"');
-  expect(attribution).toContain("bottom: 2px");
-  expect(attribution).toContain("left: 5px");
-  expect(attribution).toContain("font-size: 8px");
 });

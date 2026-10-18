@@ -40,17 +40,14 @@ test("does not publish stale results after cancel", async () => {
 
 test("aborts obsolete tile requests and avoids caching their results", async () => {
   const calls = [];
-  const fetchRef = jest.fn((url, options = {}) => {
+  const fetchRef = jest.fn((url, { signal } = {}) => {
     if (url.endsWith("/planet"))
       return Promise.resolve(response({ tiles: ["https://tile/{z}/{x}/{y}"] }));
-    calls.push({ url, signal: options.signal });
-    if (calls.length <= 10) {
+    calls.push({ url, signal });
+    if (calls.length === 1) {
       return new Promise((resolve, reject) => {
-        options.signal?.addEventListener("abort", () => reject(new Error("aborted")), {
-          once: true,
-        });
-        if (options.signal?.aborted) reject(new Error("aborted"));
-        setTimeout(() => resolve(response(null, new ArrayBuffer(0))), 100);
+        signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true });
+        if (signal.aborted) reject(new Error("aborted"));
       });
     }
     return Promise.resolve(response(null, new ArrayBuffer(0)));
@@ -60,6 +57,7 @@ test("aborts obsolete tile requests and avoids caching their results", async () 
   while (!calls.length) await Promise.resolve();
   const oldTileCalls = calls.length;
   const newView = loader.load({ latitude: 10, longitude: 10 }, 1, jest.fn());
+  await Promise.resolve();
   await Promise.all([oldView, newView]);
   expect(calls.slice(0, oldTileCalls).every(({ signal }) => signal.aborted)).toBe(true);
   const oldUrls = new Set(calls.slice(0, oldTileCalls).map(({ url }) => url));
@@ -96,7 +94,7 @@ test("reuses pending tile requests and ignores failed tile responses", async () 
   const fetchRef = jest.fn(async (url) => {
     if (url.endsWith("/planet")) return response({ tiles: ["https://tile/{z}/{x}/{y}"] });
     tileCalls += 1;
-    await new Promise((resolve) => setTimeout(resolve, 2));
+    await Promise.resolve();
     return { ok: false };
   });
   const loader = createWaterOutlineLoader(fetchRef);

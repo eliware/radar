@@ -2,8 +2,7 @@ import { expect, jest, test } from "@jest/globals";
 import { createCanvasRadarAircraftState } from "../../../../../src/frontend/create/canvas/radar/aircraft-state.mjs";
 
 test("tracks valid aircraft, sets auto-zoom, and prunes stale targets", () => {
-  let now = Date.now();
-  const dateNow = jest.spyOn(Date, "now").mockImplementation(() => now);
+  jest.useFakeTimers().setSystemTime(1_000_000);
   try {
     const state = { autoZoom: true, range: 20 };
     const draw = jest.fn();
@@ -14,13 +13,13 @@ test("tracks valid aircraft, sets auto-zoom, and prunes stale targets", () => {
     expect(state.range).toBeGreaterThan(20);
     expect(tracker.targets.items().has("A")).toBe(true);
     expect(tracker.trails.get("A")).toHaveLength(1);
-    now += 120_001;
+    jest.setSystemTime(1_120_001);
     tracker.update({ icao: "B", latitude: 43, longitude: -69.5 });
     expect(tracker.targets.items().has("A")).toBe(false);
     expect(tracker.trails.get("A")).toEqual([]);
     expect(draw).toHaveBeenCalledTimes(2);
   } finally {
-    dateNow.mockRestore();
+    jest.useRealTimers();
   }
 });
 
