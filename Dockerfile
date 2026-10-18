@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY src ./src
+COPY webpack.config.mjs ./webpack.config.mjs
 RUN npm run build
 
 FROM node:26-bookworm-slim
