@@ -413,3 +413,8 @@ p {
   min-width: 0;
   min-height: 0;
 }
+@media (min-width: 901px) {
+  .dashboard.flight-strips-hidden ~ .metar-display[data-radar-mode="3D"] {
+    left: 50%;
+  }
+}
