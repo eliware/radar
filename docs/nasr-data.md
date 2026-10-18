@@ -2,7 +2,7 @@
 
 Radar reads the indexed FAA NASR SQLite database at `nasr/NASR.sqlite` in read-only mode. Git LFS tracks this file. Install Git LFS before cloning. If the checkout contains a 133-byte pointer rather than the database, run `git lfs install` and `git lfs pull` from the repository root. Set `NASR_DATABASE_PATH` to use a different database file.
 
-Import a NASR SQLite file with `npm run import:db -- <input-file>`. The importer checks SQLite integrity and the NASR tables and columns used by Radar. It copies the input to `nasr/NASR.sqlite`, adds indexes for location lookups, joins, and ordering, then checks every index definition. Keep the source NASR download as a separate backup.
+Import a NASR SQLite file with `npm run import:db -- <input-file>`. The importer checks SQLite integrity and the NASR tables and columns used by Radar. It copies the input to `nasr/NASR.sqlite`, adds indexes for location lookups, joins, and ordering, then checks every index definition and representative query plan. The source file remains unchanged, and repeated imports do not duplicate indexes. Keep the source NASR download as a separate backup.
 
 ## Airports and runways
 

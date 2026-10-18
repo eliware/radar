@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 import { NASR_INDEXES, REQUIRED_COLUMNS } from "./indexes.mjs";
+import { verifyNasrQueryPlans } from "./query-plans.mjs";
 
 const DEFAULT_OUTPUT = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -79,6 +80,7 @@ export function importNasrDatabase(
       database.exec("ANALYZE");
       validateNasrDatabase(database);
       verifyNasrIndexes(database);
+      verifyNasrQueryPlans(database);
     } finally {
       database.close();
     }
