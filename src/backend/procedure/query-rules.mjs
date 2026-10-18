@@ -1,6 +1,7 @@
 const JOIN_POINT = `LEFT JOIN FIX_BASE F ON F.FIX_ID = R.POINT
   AND F.ICAO_REGION_CODE = R.ICAO_REGION_CODE
-  LEFT JOIN NAV_BASE N ON N.NAV_ID = R.POINT`;
+  LEFT JOIN NAV_BASE N ON N.NAV_ID = R.POINT
+    AND N.NAV_TYPE = TRIM(R.POINT_TYPE)`;
 
 function routeSelect(type, routeTable, baseTable, codeColumn, nameColumn) {
   return `SELECT '${type}' AS type, B.${nameColumn} AS name, B.${codeColumn} AS code,

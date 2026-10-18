@@ -6,13 +6,19 @@ export function createAirportReferenceQueries(database) {
   const runwayStatement = database.prepare(RUNWAY_QUERY);
   const navaidStatement = database.prepare(NAVAID_QUERY);
   return {
-    findBetween: (location, minRangeNm, maxRangeNm) =>
-      rowsBetween(airportStatement, location, maxRangeNm).flatMap((row) => {
-        const airport = mapInRange(row, location, minRangeNm, maxRangeNm);
-        return airport
-          ? [{ ...airport, runways: groupRunwayEnds(runwayStatement.all(row.faaId)) }]
-          : [];
-      }),
+    findBetween: (location, minRangeNm, maxRangeNm) => {
+      const airports = rowsBetween(airportStatement, location, maxRangeNm)
+        .map((row) => mapInRange(row, location, minRangeNm, maxRangeNm))
+        .filter(Boolean);
+      if (!airports.length) return [];
+      const runways = groupRunwayEnds(
+        runwayStatement.all(JSON.stringify(airports.map(({ faaId }) => faaId))),
+      );
+      return airports.map((airport) => ({
+        ...airport,
+        runways: runways.get(airport.faaId) ?? [],
+      }));
+    },
     findNavaidsBetween: (location, minRangeNm, maxRangeNm) =>
       rowsBetween(navaidStatement, location, maxRangeNm).flatMap((row) => {
         const navaid = mapInRange(row, location, minRangeNm, maxRangeNm);
@@ -43,13 +49,20 @@ function mapInRange(row, location, minRangeNm, maxRangeNm) {
 }
 
 function groupRunwayEnds(ends) {
-  const groups = new Map();
+  const airports = new Map();
   for (const end of ends) {
     if (!Number.isFinite(end.latitude) || !Number.isFinite(end.longitude)) continue;
     if (!Number.isFinite(end.alignmentDegrees)) continue;
-    const group = groups.get(end.runwayId) ?? [];
+    const runways = airports.get(end.airportId) ?? new Map();
+    const group = runways.get(end.runwayId) ?? [];
     group.push(end);
-    groups.set(end.runwayId, group);
+    runways.set(end.runwayId, group);
+    airports.set(end.airportId, runways);
   }
-  return [...groups.values()].filter((group) => group.length === 2);
+  return new Map(
+    [...airports].map(([airportId, runways]) => [
+      airportId,
+      [...runways.values()].filter((group) => group.length === 2),
+    ]),
+  );
 }
