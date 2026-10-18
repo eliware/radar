@@ -37,6 +37,18 @@ export function createRadarReferenceStore() {
       for (const item of items) airways.set(item.id, item);
       onChange();
     },
+    updateAll(collections) {
+      const [airportItems, navaidItems, boundaryItems, ilsItems, procedureItems, airwayItems] =
+        collections;
+      replace(airports, airportItems, (item) => item.faaId);
+      replace(navaids, navaidItems, (item) => `${item.state}:${item.identifier}`);
+      replace(boundaries, boundaryItems, (item) => item.id);
+      replace(ilsApproaches, ilsItems, (item) => `${item.faaId}:${item.runwayEnd}`);
+      replace(procedures, procedureItems, (item) => item.id);
+      replace(airways, airwayItems, (item) => item.id);
+      onAirports(airportItems);
+      onChange();
+    },
   });
   return {
     airports,
@@ -48,4 +60,9 @@ export function createRadarReferenceStore() {
     ...updates(),
     updates,
   };
+}
+
+function replace(map, items, identity) {
+  map.clear();
+  for (const item of items) map.set(identity(item), item);
 }

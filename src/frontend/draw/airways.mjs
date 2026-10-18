@@ -15,7 +15,7 @@ export function drawAirways(context, airways, project, range, visibility) {
     drawSegments(context, airway.name, points, range);
     context.setLineDash([]);
     for (const point of points) {
-      if (point.rangeNm > range || !valid(point.screen)) continue;
+      if (point.viewportCut || point.rangeNm > range || !valid(point.screen)) continue;
       drawFix(context, point.screen);
       context.fillText(point.fix, point.screen.x + 7, point.screen.y - 5);
     }

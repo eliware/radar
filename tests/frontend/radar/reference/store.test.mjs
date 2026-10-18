@@ -16,3 +16,27 @@ test("stores airport, navaid, boundary, ILS, procedure, and airway records by st
   expect(store.procedures.has("SID:LBSTA8")).toBe(true);
   expect(store.airways.has("V12:0")).toBe(true);
 });
+
+test("replaces all reference layers with one redraw callback", () => {
+  const store = createRadarReferenceStore();
+  let redraws = 0;
+  const updates = store.updates(
+    () => {},
+    () => redraws++,
+  );
+  updates.updateAll([
+    [{ faaId: "PWM" }],
+    [{ state: "ME", identifier: "ENE" }],
+    [{ id: "ZBW" }],
+    [{ faaId: "PWM", runwayEnd: "11" }],
+    [{ id: "SID:LBSTA8" }],
+    [{ id: "V12:0" }],
+  ]);
+  expect(store.airports.has("PWM")).toBe(true);
+  expect(store.navaids.has("ME:ENE")).toBe(true);
+  expect(store.boundaries.has("ZBW")).toBe(true);
+  expect(store.ilsApproaches.has("PWM:11")).toBe(true);
+  expect(store.procedures.has("SID:LBSTA8")).toBe(true);
+  expect(store.airways.has("V12:0")).toBe(true);
+  expect(redraws).toBe(1);
+});

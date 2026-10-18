@@ -32,7 +32,7 @@ function drawProcedure(context, procedure, project, range) {
   drawRoute(context, points, range);
   context.setLineDash([]);
   for (const point of points) {
-    if (point.rangeNm > range || !valid(point.screen)) continue;
+    if (point.viewportCut || point.rangeNm > range || !valid(point.screen)) continue;
     drawPyramid(context, point.screen);
     if (point.label) context.fillText(point.fix, point.screen.x, point.screen.y - 6);
   }
