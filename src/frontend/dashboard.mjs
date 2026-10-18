@@ -58,13 +58,15 @@ export async function startDashboard({
       scene.updateProcedures &&
       scene.updateAirways &&
       scene.range
-        ? createRadarReferenceLoader(fetchData, scene)
+        ? createRadarReferenceLoader(fetchData, scene, config.location)
         : null;
     if (referenceLoader)
       detachReferences =
-        scene.onViewChange((range) => referenceLoader.load(range ?? scene.range())) ?? (() => {});
+        scene.onViewChange(() =>
+          referenceLoader.load(scene.getViewportBounds?.() ?? scene.range()),
+        ) ?? (() => {});
     resources.detachReferences = detachReferences;
-    if (referenceLoader) referenceLoader.load(scene.range());
+    if (referenceLoader) referenceLoader.load(scene.getViewportBounds?.() ?? scene.range());
     const aircraft = await readJson(fetchData, "/api/aircraft");
     flightStrips.update(aircraft);
     aircraft.forEach((item) => scene.update(item));
@@ -78,10 +80,7 @@ export async function startDashboard({
           const latest = await readJson(fetchData, "/api/aircraft");
           flightStrips.update(latest);
           latest.forEach((item) => scene.update(item));
-        } catch {
-          // Keep WebSocket open.
-          // Reconnection requests the current snapshot.
-        }
+        } catch {}
       },
     });
     resources.feed = feed;
@@ -92,7 +91,6 @@ export async function startDashboard({
     return null;
   }
 }
-
 async function readJson(fetchData, path) {
   const response = await fetchData(path);
   if (!response.ok) throw new Error(`Request failed: ${path}`);

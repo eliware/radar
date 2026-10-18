@@ -3,14 +3,14 @@ import { AIRWAY_QUERY } from "./query-rules.mjs";
 
 export function createAirwayQuery(database) {
   const statement = database.prepare(AIRWAY_QUERY);
-  let rows;
+  let paths;
   return (location, minRangeNm, maxRangeNm) => {
-    rows ??= statement.all();
-    return buildAirways(rows, location, minRangeNm, maxRangeNm);
+    paths ??= buildAirways(statement.all(), location);
+    return paths.filter((path) => pathInRange(path.points, minRangeNm, maxRangeNm));
   };
 }
 
-function buildAirways(rows, location, minRangeNm, maxRangeNm) {
+function buildAirways(rows, location) {
   const groups = new Map();
   const cosine = Math.cos((location.latitude * Math.PI) / 180);
   for (const row of rows) {
@@ -33,7 +33,7 @@ function buildAirways(rows, location, minRangeNm, maxRangeNm) {
     groups.set(key, group);
   }
   const paths = [...groups.values()].flatMap((group) => (flush(group), group.paths));
-  return paths.filter((path) => pathInRange(path.points, minRangeNm, maxRangeNm));
+  return paths;
 }
 
 function pointAtHome(row, location, cosine) {

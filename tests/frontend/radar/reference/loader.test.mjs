@@ -1,135 +1,101 @@
-import { expect, jest, test } from "@jest/globals";
+import { afterEach, expect, jest, test } from "@jest/globals";
 import { createRadarReferenceLoader } from "../../../../src/frontend/radar/reference/loader.mjs";
 
-function response(rows = []) {
-  return { ok: true, json: async () => rows };
+const response = (rows = []) => ({ ok: true, json: async () => rows });
+const bounds = { minX: -20, maxX: 20, minZ: -20, maxZ: 20, minRangeNm: 0, maxRangeNm: 40 };
+const location = { latitude: 43, longitude: -70 };
+
+function scene() {
+  return Object.fromEntries(
+    ["Airports", "Navaids", "Boundaries", "Ils", "Procedures", "Airways"].map((name) => [
+      `update${name}`,
+      jest.fn(),
+    ]),
+  );
 }
 
-test("loads reference data through the maximum radar range on first request", async () => {
-  const fetchData = jest.fn().mockResolvedValue(response());
-  const scene = {
-    updateAirports: jest.fn(),
-    updateNavaids: jest.fn(),
-    updateBoundaries: jest.fn(),
-    updateIls: jest.fn(),
-    updateProcedures: jest.fn(),
-    updateAirways: jest.fn(),
-  };
-  const loader = createRadarReferenceLoader(fetchData, scene);
-  await loader.load(20);
-  await loader.load(30);
-  expect(fetchData.mock.calls.map(([url]) => url)).toEqual([
-    "/api/airports?minRangeNm=0&maxRangeNm=300",
-    "/api/navaids?minRangeNm=0&maxRangeNm=300",
-    "/api/airspace-boundaries?minRangeNm=0&maxRangeNm=300",
-    "/api/ils?minRangeNm=0&maxRangeNm=300",
-    "/api/procedures?minRangeNm=0&maxRangeNm=300",
-    "/api/airways?minRangeNm=0&maxRangeNm=300",
-  ]);
-  expect(scene.updateBoundaries).toHaveBeenCalledTimes(1);
-  expect(loader.loadedThrough()).toBe(300);
-});
+async function flush() {
+  await jest.advanceTimersByTimeAsync(180);
+  await Promise.resolve();
+  await Promise.resolve();
+}
 
-test("ignores invalid ranges and caps requested data at the radar limit", async () => {
-  const fetchData = jest.fn().mockResolvedValue(response());
-  const scene = {
-    updateAirports: jest.fn(),
-    updateNavaids: jest.fn(),
-    updateBoundaries: jest.fn(),
-    updateIls: jest.fn(),
-    updateProcedures: jest.fn(),
-    updateAirways: jest.fn(),
-  };
-  const loader = createRadarReferenceLoader(fetchData, scene);
+afterEach(() => jest.useRealTimers());
 
-  await loader.load(Number.NaN);
-  await loader.load(Number.POSITIVE_INFINITY);
-  expect(fetchData).not.toHaveBeenCalled();
-  await loader.load(500);
-  await loader.load(400);
-
-  expect(loader.loadedThrough()).toBe(300);
-  expect(fetchData).toHaveBeenCalledTimes(6);
-  expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("maxRangeNm=300"));
-});
-
-test("retries loading the maximum range after a failed API response", async () => {
-  const fetchData = jest
-    .fn()
-    .mockResolvedValueOnce({ ok: false })
-    .mockResolvedValue(response(["loaded"]));
-  const scene = {
-    updateAirports: jest.fn(),
-    updateNavaids: jest.fn(),
-    updateBoundaries: jest.fn(),
-    updateIls: jest.fn(),
-    updateProcedures: jest.fn(),
-    updateAirways: jest.fn(),
-  };
-  const loader = createRadarReferenceLoader(fetchData, scene);
-
-  await loader.load(10);
-  expect(loader.loadedThrough()).toBe(0);
-  await loader.load(10);
-
-  expect(loader.loadedThrough()).toBe(300);
-  expect(scene.updateAirports).toHaveBeenCalledWith(["loaded"]);
-});
-
-test("coalesces zoom changes while the maximum range is loading", async () => {
-  const pending = [];
-  const fetchData = jest.fn(
-    () => new Promise((resolve) => pending.push(() => resolve(response()))),
+test("loads only the viewport range and keeps intersecting geometry", async () => {
+  jest.useFakeTimers();
+  const updates = scene();
+  const fetchData = jest.fn((url) =>
+    Promise.resolve(
+      response(
+        url.includes("/airways?")
+          ? [
+              {
+                id: "crossing",
+                points: [
+                  { x: -50, z: 0 },
+                  { x: 50, z: 0 },
+                ],
+              },
+              {
+                id: "outside",
+                points: [
+                  { x: 50, z: 50 },
+                  { x: 60, z: 60 },
+                ],
+              },
+            ]
+          : [],
+      ),
+    ),
   );
-  const scene = {
-    updateAirports: jest.fn(),
-    updateNavaids: jest.fn(),
-    updateBoundaries: jest.fn(),
-    updateIls: jest.fn(),
-    updateProcedures: jest.fn(),
-    updateAirways: jest.fn(),
-  };
-  const loader = createRadarReferenceLoader(fetchData, scene);
-  const first = loader.load(10);
-  const second = loader.load(20);
-  expect(first).toBe(second);
-
-  while (pending.length) pending.shift()();
-  await first;
+  const loader = createRadarReferenceLoader(fetchData, updates, location);
+  loader.load(bounds);
+  await flush();
 
   expect(fetchData).toHaveBeenCalledTimes(6);
-  expect(loader.loadedThrough()).toBe(300);
+  expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("minRangeNm=0&maxRangeNm=40"));
+  expect(updates.updateAirways).toHaveBeenCalledWith([
+    { id: "crossing", points: expect.any(Array) },
+  ]);
 });
 
-test("retries the fixed maximum range after an in-flight request fails", async () => {
-  let failFirst;
-  let shouldFail = true;
-  const requests = [];
-  const fetchData = jest.fn((url) => {
-    requests.push(url);
-    if (shouldFail && url.includes("/api/airports?") && url.endsWith("maxRangeNm=300")) {
-      shouldFail = false;
-      return new Promise((resolve) => (failFirst = () => resolve({ ok: false })));
-    }
-    return Promise.resolve(response());
-  });
-  const scene = {
-    updateAirports: jest.fn(),
-    updateNavaids: jest.fn(),
-    updateBoundaries: jest.fn(),
-    updateIls: jest.fn(),
-    updateProcedures: jest.fn(),
-    updateAirways: jest.fn(),
-  };
-  const loader = createRadarReferenceLoader(fetchData, scene);
-  const pending = loader.load(10);
-  loader.load(20);
-  failFirst();
-  await pending;
-  expect(loader.loadedThrough()).toBe(0);
-  await loader.load(20);
-  expect(
-    requests.filter((url) => url === "/api/airports?minRangeNm=0&maxRangeNm=300"),
-  ).toHaveLength(2);
-  expect(loader.loadedThrough()).toBe(300);
+test("coalesces frequent pan updates and ignores identical viewport requests", async () => {
+  jest.useFakeTimers();
+  const fetchData = jest.fn().mockResolvedValue(response());
+  const loader = createRadarReferenceLoader(fetchData, scene(), location);
+  loader.load(bounds);
+  loader.load({ ...bounds, maxX: 25, maxRangeNm: 45 });
+  loader.load({ ...bounds, maxX: 25, maxRangeNm: 45 });
+  await flush();
+
+  expect(fetchData).toHaveBeenCalledTimes(12);
+  expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("maxRangeNm=45"));
+});
+
+test("retains the 300 nautical mile maximum and supports non-2D scenes", async () => {
+  jest.useFakeTimers();
+  const fetchData = jest.fn().mockResolvedValue(response());
+  const loader = createRadarReferenceLoader(fetchData, scene(), location);
+  loader.load(500);
+  await flush();
+  expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("minRangeNm=0&maxRangeNm=300"));
+});
+
+test("leaves the current references intact when an API layer fails", async () => {
+  const updates = scene();
+  const fetchData = jest.fn().mockResolvedValue({ ok: false });
+  const loader = createRadarReferenceLoader(fetchData, updates, location);
+  await loader.load(bounds);
+  expect(fetchData).toHaveBeenCalledTimes(6);
+  Object.values(updates).forEach((update) => expect(update).not.toHaveBeenCalled());
+});
+
+test("clears old geometry when the viewport moves beyond the 300 nautical mile limit", () => {
+  const updates = scene();
+  const fetchData = jest.fn();
+  const loader = createRadarReferenceLoader(fetchData, updates, location);
+  loader.load({ ...bounds, minRangeNm: 320, maxRangeNm: 300 });
+  expect(fetchData).not.toHaveBeenCalled();
+  Object.values(updates).forEach((update) => expect(update).toHaveBeenCalledWith([]));
 });

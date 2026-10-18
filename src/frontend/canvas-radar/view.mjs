@@ -9,6 +9,7 @@ import { createRadarLayerVisibility } from "../create/radar/layer-visibility.mjs
 import { createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
 import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
 import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
+import { createRadarViewport } from "../radar/reference/viewport.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -77,6 +78,16 @@ export function createCanvasRadarView({
     ...references.updates(() => {}, draw),
     setIlsVisible: layers.ils.setVisible,
     ...viewState,
+    getViewportBounds() {
+      return createRadarViewport(
+        canvas.clientWidth,
+        canvas.clientHeight,
+        state.range,
+        state.offsetX,
+        state.offsetY,
+        state.rotation,
+      );
+    },
     destroy() {
       detachEvents();
       layers.destroy();
