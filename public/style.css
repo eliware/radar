@@ -107,7 +107,7 @@ p {
 .radar-compass [data-compass-heading] {
   fill: currentColor;
   font:
-    bold 20px Consolas,
+    bold 10px Consolas,
     monospace;
   text-anchor: middle;
   dominant-baseline: middle;
@@ -335,6 +335,14 @@ p {
       10px Consolas,
       monospace;
     transform: translateX(-50%);
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .scene-panel:has(.metar-display[data-radar-mode="2D"]) .radar-compass {
+    right: 14px;
+    bottom: 12px;
+    left: auto;
+    transform: none;
   }
 }
 @media (max-width: 900px) {
