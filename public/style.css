@@ -82,11 +82,11 @@ p {
   stroke-width: 2.2;
 }
 .radar-compass .compass-diagonal {
-  stroke-width: 1.9;
+  stroke-width: 2.1;
 }
 .radar-compass .compass-intercardinal {
   stroke-width: 1.8;
-  stroke-opacity: 0.9;
+  stroke-opacity: 1;
 }
 .compass-label {
   fill: currentColor;
@@ -97,7 +97,11 @@ p {
   dominant-baseline: middle;
 }
 .compass-label-north {
-  font-size: 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.compass-label-cardinal {
+  font-size: 12px;
   font-weight: 700;
 }
 .radar-compass [data-compass-heading] {
