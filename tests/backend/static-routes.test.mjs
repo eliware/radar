@@ -14,8 +14,10 @@ test("serves the page and browser bundle", async () => {
   const script = await app.inject({ url: "/client.js" });
   expect(page.statusCode).toBe(200);
   expect(page.headers["content-type"]).toContain("text/html");
+  expect(page.headers["cache-control"]).toBe("no-cache");
   expect(style.statusCode).toBe(200);
   expect(style.headers["content-type"]).toContain("text/css");
+  expect(style.headers["cache-control"]).toBe("no-cache");
   expect(manifest.statusCode).toBe(200);
   expect(manifest.headers["content-type"]).toContain("application/manifest+json");
   expect(icon.statusCode).toBe(200);

@@ -1,4 +1,4 @@
-import { expect, test } from "@jest/globals";
+import { expect, jest, test } from "@jest/globals";
 import { updateMetarDisplay } from "../../src/frontend/metar-display.mjs";
 
 function nodes() {
@@ -48,6 +48,24 @@ test("renders decoded METAR rows and builds a mobile ticker", () => {
   expect(ticker.innerHTML).toContain(
     '<span>KLEW <span class="flight-category flight-category-vfr">VFR</span> 02004KT　•　KBXM <span class="flight-category flight-category-vfr">VFR</span> 04006KT</span>',
   );
+});
+
+test("forces layout before starting the ticker animation", () => {
+  const [panel, ticker] = nodes();
+  const reflow = jest.fn();
+  const line = {
+    style: { animation: "metar-scroll 45s linear infinite" },
+    get offsetWidth() {
+      reflow();
+      return 100;
+    },
+  };
+  ticker.firstElementChild = line;
+  updateMetarDisplay(panel, ticker, {
+    reports: [{ id: "KLEW", metar: "raw", decoded }],
+  });
+  expect(line.style.animation).toBe("");
+  expect(reflow).toHaveBeenCalledTimes(1);
 });
 
 test("highlights METAR age only after it exceeds one hour", () => {

@@ -12,6 +12,14 @@ export function updateMetarDisplay(element, ticker, data, now = new Date()) {
     .map((report) => reportRow(report, now))
     .join("")}</tbody></table>`;
   ticker.innerHTML = `<span>${reports.map(tickerLine).join("　•　")}</span>`;
+  restartTickerAnimation(ticker.firstElementChild);
+}
+
+function restartTickerAnimation(line) {
+  if (!line) return;
+  line.style.animation = "none";
+  void line.offsetWidth;
+  line.style.animation = "";
 }
 
 function headers() {

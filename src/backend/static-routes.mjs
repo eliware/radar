@@ -10,12 +10,14 @@ const pwaScreenshots = new Set(["radar-desktop.png", "radar-mobile.png"]);
 const charsetSeparator = String.fromCharCode(59);
 
 export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFile }) {
-  app.get("/", async (_request, reply) =>
-    sendAsset(reply, `${publicRoot}/index.html`, "text/html", read),
-  );
-  app.get("/style.css", async (_request, reply) =>
-    sendAsset(reply, `${publicRoot}/style.css`, "text/css", read),
-  );
+  app.get("/", async (_request, reply) => {
+    reply.header("Cache-Control", "no-cache");
+    return sendAsset(reply, `${publicRoot}/index.html`, "text/html", read);
+  });
+  app.get("/style.css", async (_request, reply) => {
+    reply.header("Cache-Control", "no-cache");
+    return sendAsset(reply, `${publicRoot}/style.css`, "text/css", read);
+  });
   app.get("/manifest.webmanifest", async (_request, reply) =>
     sendAsset(reply, `${publicRoot}/manifest.webmanifest`, "application/manifest+json", read),
   );
