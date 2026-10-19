@@ -15,6 +15,7 @@ test("projects aircraft labels, one-minute vectors, and history points", () => {
         trackDegrees: 0,
         groundSpeedKnots: 120,
         receivedAt: 123,
+        remoteOnly: true,
       },
     ],
     ["BAD", { icao: "BAD", latitude: Number.NaN, longitude: -70 }],
@@ -30,7 +31,11 @@ test("projects aircraft labels, one-minute vectors, and history points", () => {
   );
 
   expect(result).toHaveLength(1);
-  expect(result[0]).toMatchObject({ receivedAt: 123, lines: ["RADAR1", "100C", "120"] });
+  expect(result[0]).toMatchObject({
+    receivedAt: 123,
+    remoteOnly: true,
+    lines: ["RADAR1", "100C", "120"],
+  });
   expect(result[0].futureX).toBe(0);
   expect(result[0].futureY).toBeCloseTo(result[0].y - 4, 0);
   expect(result[0].history).toEqual([{ x: 2, y: 6 }]);

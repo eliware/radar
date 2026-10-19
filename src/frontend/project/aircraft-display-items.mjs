@@ -14,6 +14,7 @@ export function projectAircraftDisplayItems(aircraft, trails, location, elevatio
     display.push({
       ...marker,
       receivedAt: item.receivedAt,
+      remoteOnly: item.remoteOnly === true,
       nearHomePass: isAircraftProjectedNearHome(item, location, elevationFeet),
       emergency: Boolean(getAircraftEmergencyLabel(item)),
       futureX: future ? project(future).x : null,
