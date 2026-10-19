@@ -1,13 +1,21 @@
 import { expect, jest, test } from "@jest/globals";
 import { handleDashboardFeedUpdate } from "../../src/frontend/handle-dashboard-feed-update.mjs";
 
-test("updates the scene and strips from one aircraft message", () => {
-  const scene = { update: jest.fn() };
-  const strips = { update: jest.fn() };
-  const aircraft = { icao: "ABC123" };
-  handleDashboardFeedUpdate(scene, strips, JSON.stringify(aircraft));
-  expect(scene.update).toHaveBeenCalledWith(aircraft);
-  expect(strips.update).toHaveBeenCalledWith(aircraft);
+test("replaces scene and strip aircraft from a snapshot", () => {
+  const scene = { updateSnapshot: jest.fn() };
+  const strips = { updateSnapshot: jest.fn() };
+  const aircraft = [{ icao: "ABC123" }];
+  handleDashboardFeedUpdate(
+    scene,
+    strips,
+    JSON.stringify({
+      event: "aircraft-snapshot",
+      aircraft,
+      localFurthestDistanceNm: 12,
+    }),
+  );
+  expect(scene.updateSnapshot).toHaveBeenCalledWith(aircraft, 12);
+  expect(strips.updateSnapshot).toHaveBeenCalledWith(aircraft);
 });
 
 test("ignores invalid JSON feed messages", () => {
@@ -18,12 +26,9 @@ test("ignores invalid JSON feed messages", () => {
   expect(strips.update).not.toHaveBeenCalled();
 });
 
-test("sends remote snapshots to the remote aircraft updaters", () => {
-  const scene = { update: jest.fn(), updateRemote: jest.fn() };
-  const strips = { update: jest.fn(), updateRemote: jest.fn() };
-  const aircraft = [{ icao: "ABC123", remoteOnly: true }];
-  handleDashboardFeedUpdate(scene, strips, JSON.stringify({ event: "remote-snapshot", aircraft }));
-  expect(scene.updateRemote).toHaveBeenCalledWith(aircraft);
-  expect(strips.updateRemote).toHaveBeenCalledWith(aircraft);
-  expect(scene.update).not.toHaveBeenCalled();
+test("ignores obsolete non-snapshot feed messages", () => {
+  const scene = { updateSnapshot: jest.fn() };
+  const strips = { updateSnapshot: jest.fn() };
+  handleDashboardFeedUpdate(scene, strips, JSON.stringify({ icao: "ABC123" }));
+  expect(scene.updateSnapshot).not.toHaveBeenCalled();
 });

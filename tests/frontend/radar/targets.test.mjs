@@ -26,6 +26,14 @@ test("starts with no tracked targets", () => {
   expect(createRadarTargets().distances()).toEqual([]);
 });
 
+test("retains only identifiers included in the current viewport snapshot", () => {
+  const targets = createRadarTargets();
+  targets.update({ icao: "KEEP" }, 2);
+  targets.update({ icao: "DROP" }, 3);
+  expect(targets.retain(["KEEP"])).toEqual(["DROP"]);
+  expect([...targets.items().keys()]).toEqual(["KEEP"]);
+});
+
 test("uses the source observation time and removes missing remote-only tracks", () => {
   const targets = createRadarTargets({ clock: () => 10_000, staleAfterMs: 120_000 });
   targets.update({ icao: "REMOTE", remoteOnly: true, lastSeen: 8000 }, 10);

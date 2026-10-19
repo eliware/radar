@@ -5,6 +5,7 @@ function makeUpdater({ autoZoom = true, position = { x: 3, y: 0, z: 4 } } = {}) 
   const targets = {
     update: jest.fn(() => ["OLD"]),
     removeRemoteOnlyExcept: jest.fn(() => ["REMOTE-OLD"]),
+    retain: jest.fn(() => ["OUTSIDE"]),
     localDistances: jest.fn(() => [30]),
   };
   const trails = { add: jest.fn(), remove: jest.fn() };
@@ -16,6 +17,7 @@ function makeUpdater({ autoZoom = true, position = { x: 3, y: 0, z: 4 } } = {}) 
     trails,
     radarCamera,
     isAutoZoom: () => autoZoom,
+    defaultRangeNm: 20,
   });
   return { update, targets, trails, radarCamera, position };
 }
@@ -64,4 +66,23 @@ test("updates remote-only targets without auto-zoom and removes missing remote t
   );
   expect(state.radarCamera.setRange).not.toHaveBeenCalled();
   expect(state.trails.remove).toHaveBeenCalledWith(["REMOTE-OLD"]);
+});
+
+test("replaces snapshot targets and sets auto-zoom from local furthest distance", () => {
+  const state = makeUpdater();
+  state.update.updateSnapshot([{ icao: "IN", latitude: 43.1, longitude: -70 }], 25);
+  expect(state.targets.retain).toHaveBeenCalledWith(["IN"]);
+  expect(state.trails.remove).toHaveBeenCalledWith(["OUTSIDE"]);
+  expect(state.radarCamera.setRange).toHaveBeenCalledWith(30);
+});
+
+test("skips invalid snapshot contents and avoids redundant range updates", () => {
+  const state = makeUpdater();
+  state.radarCamera.range.mockReturnValue(30);
+  state.update.updateSnapshot(null, 25);
+  expect(state.targets.retain).toHaveBeenCalledWith([]);
+  expect(state.radarCamera.setRange).not.toHaveBeenCalled();
+  const manual = makeUpdater({ autoZoom: false });
+  manual.update.updateSnapshot([], Number.NaN);
+  expect(manual.radarCamera.setRange).not.toHaveBeenCalled();
 });

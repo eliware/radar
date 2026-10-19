@@ -23,7 +23,7 @@ function setup(overrides = {}) {
   };
 }
 
-test("polls every two seconds for the largest connected-client radius", async () => {
+test("polls every five seconds for the largest connected-client radius", async () => {
   const state = setup({
     request: jest.fn(async () => ({
       ok: true,
@@ -38,7 +38,7 @@ test("polls every two seconds for the largest connected-client radius", async ()
   state.source.connectClient("desktop");
   state.source.setClientRadius("phone", 42.1);
   state.source.setClientRadius("desktop", 530);
-  expect(state.setIntervalFn).toHaveBeenCalledWith(expect.any(Function), 2000);
+  expect(state.setIntervalFn).toHaveBeenCalledWith(expect.any(Function), 5000);
   expect(state.request).not.toHaveBeenCalled();
   await state.timers.get(7).callback();
   expect(state.request.mock.calls[0][0]).toContain("circle=43.8,-70.4,300");

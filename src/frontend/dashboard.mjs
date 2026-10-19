@@ -67,23 +67,13 @@ export async function startDashboard({
         ) ?? (() => {});
     resources.detachReferences = detachReferences;
     if (referenceLoader) referenceLoader.load(scene.getViewportBounds?.() ?? scene.range());
-    const aircraft = await readJson(fetchData, "/api/aircraft");
-    flightStrips.update(aircraft);
-    aircraft.forEach((item) => scene.update(item));
     const sendViewport = createViewportReporter(scene);
     const feed = connectWebSocketFeed({
       WebSocketClass,
       url: dashboardWebSocketUrl(document.location),
       onState: (connected) => scene.setConnected?.(connected),
       onMessage: (data) => handleDashboardFeedUpdate(scene, flightStrips, data),
-      onOpen: async (socket) => {
-        sendViewport(socket, true);
-        try {
-          const latest = await readJson(fetchData, "/api/aircraft");
-          flightStrips.update(latest);
-          latest.forEach((item) => scene.update(item));
-        } catch {}
-      },
+      onOpen: (socket) => sendViewport(socket, true),
     });
     resources.feed = feed;
     resources.detachViewport = scene.onViewChange?.(() => sendViewport(feed.socket));

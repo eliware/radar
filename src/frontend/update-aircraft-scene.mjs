@@ -25,5 +25,14 @@ export function createAircraftSceneUpdater({
     trails.remove(targets.removeRemoteOnlyExcept(remote.map((item) => item.icao)));
     remote.forEach((item) => update(item, false));
   };
+  update.updateSnapshot = (items, localFurthestDistanceNm) => {
+    const aircraft = Array.isArray(items) ? items : [];
+    trails.remove(targets.retain(aircraft.map((item) => item.icao)));
+    aircraft.forEach((item) => update(item, false));
+    if (isAutoZoom() && Number.isFinite(localFurthestDistanceNm)) {
+      const nextRange = selectDefaultRadarRange([localFurthestDistanceNm], defaultRangeNm);
+      if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
+    }
+  };
   return update;
 }

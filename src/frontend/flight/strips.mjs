@@ -42,6 +42,12 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
       for (const item of items) aircraft.set(item.icao, item);
       render();
     },
+    updateSnapshot(items) {
+      aircraft.clear();
+      for (const item of Array.isArray(items) ? items : [])
+        if (item?.icao) aircraft.set(item.icao, item);
+      render();
+    },
     destroy() {
       windowRef?.removeEventListener?.("resize", render);
       if (timer !== undefined) windowRef?.clearInterval?.(timer);

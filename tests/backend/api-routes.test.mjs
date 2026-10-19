@@ -48,10 +48,12 @@ test("registers health, data, procedure, airway, and update relay routes", async
   expect(feed.setClientRadius).toHaveBeenCalledWith(socket, 65);
   message(Buffer.from('{"type":"other"}'));
   message(Buffer.from("invalid json"));
-  update({ icao: "ABC123" });
-  expect(socket.send).toHaveBeenCalledWith('{"icao":"ABC123"}');
+  update({ event: "aircraft-snapshot", aircraft: [{ icao: "ABC123" }] });
+  expect(socket.send).toHaveBeenCalledWith(
+    '{"event":"aircraft-snapshot","aircraft":[{"icao":"ABC123"}]}',
+  );
   socket.readyState = 3;
-  update({ icao: "ABC123" });
+  update({ event: "aircraft-snapshot", aircraft: [{ icao: "ABC123" }] });
   expect(socket.send).toHaveBeenCalledTimes(1);
   expect(socket.on).toHaveBeenCalledWith("close", subscriber);
   expect(socket.on).toHaveBeenCalledWith("error", subscriber);

@@ -50,3 +50,23 @@ test("tracks remote-only aircraft and removes stale remote targets", () => {
   expect(tracker.targets.items().has("REMOTE")).toBe(false);
   expect(draw).toHaveBeenCalledTimes(3);
 });
+
+test("replaces targets from viewport snapshots and auto-zooms from local range only", () => {
+  const state = { autoZoom: true, range: 20, defaultRangeNm: 20 };
+  const draw = jest.fn();
+  const tracker = createCanvasRadarAircraftState({ latitude: 43, longitude: -70 }, state, draw);
+  tracker.update({ icao: "OLD", latitude: 43, longitude: -69 });
+  tracker.updateSnapshot(
+    [{ icao: "REMOTE", latitude: 43.1, longitude: -69, remoteOnly: true }],
+    25,
+  );
+  expect(tracker.targets.items().has("OLD")).toBe(false);
+  expect(tracker.targets.items().get("REMOTE").remoteOnly).toBe(true);
+  expect(state.range).toBeGreaterThan(20);
+  expect(draw).toHaveBeenCalledTimes(2);
+  state.autoZoom = false;
+  tracker.updateSnapshot([], 1);
+  expect(draw).toHaveBeenCalledTimes(3);
+  tracker.updateSnapshot(null, Number.NaN);
+  expect(draw).toHaveBeenCalledTimes(4);
+});

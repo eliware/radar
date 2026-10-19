@@ -1,7 +1,7 @@
 import { normalizeRemoteAircraft } from "../remote-aircraft.mjs";
 import { requestAdsbLolCircle } from "./request.mjs";
 import { storeRemoteAircraft } from "../store-remote-aircraft.mjs";
-const POLL_INTERVAL_MS = 2000;
+const POLL_INTERVAL_MS = 5000;
 const MAX_RADIUS_NM = 300;
 export function createAdsbLolRemoteSource({
   location,

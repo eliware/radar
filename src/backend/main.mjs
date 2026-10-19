@@ -28,7 +28,9 @@ export async function startWebApplication(dependencies) {
     lookup,
     onError: (error) => log.warn(`ADSB.lol remote feed error: ${error.message}`),
   });
-  const mergedFeed = dependencies.createMergedAircraftFeed(enrichedFeed, remoteSource);
+  const mergedFeed = dependencies.createMergedAircraftFeed(enrichedFeed, remoteSource, {
+    defaultRangeNm: radarViewSettings.defaultRangeNm,
+  });
   const app = await dependencies.createRadarServer({
     feed: mergedFeed,
     location,

@@ -48,8 +48,8 @@ export function registerApiRoutes(
     return { enabled };
   });
   app.get("/ws", { websocket: true }, (socket) => {
-    const unsubscribe = feed.subscribe((aircraft) => {
-      if (socket.readyState === 1) socket.send(JSON.stringify(aircraft));
+    const unsubscribe = feed.subscribe((snapshot) => {
+      if (socket.readyState === 1) socket.send(JSON.stringify(snapshot));
     }, socket);
     socket.on("message", (message) => {
       try {

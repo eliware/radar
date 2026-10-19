@@ -32,7 +32,7 @@ The server returns an error if the NASR database or home location is not availab
 
 Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each update uses the CLI debug fields and adds lookup fields when available.
 
-While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every two seconds. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
+While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every five seconds. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
 
 Remote aircraft are combined with local readsb reports by ICAO address. When both sources report a target, readsb fields replace remote fields. ADSB.lol re-api supplies type codes and callsigns. Radar requests route data only when a remote record lacks a departure or arrival airport code. Remote-only targets appear yellow-green and expire when reports stop.
 

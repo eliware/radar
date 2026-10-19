@@ -44,12 +44,9 @@ function jsonResponse(value, ok = true) {
 }
 test("starts the secure live view and handles feed messages", async () => {
   const document = makeDocument();
-  const aircraft = { icao: "ABC123" };
   const responses = [
     jsonResponse({ location: { latitude: 43, longitude: -70 }, elevationFeet: 300 }),
     jsonResponse({ reports: [{ id: "KPWM", metar: "METAR" }] }),
-    jsonResponse([aircraft]),
-    jsonResponse([{ icao: "RESTORE1" }]),
   ];
   const fetchData = jest.fn((path, options) =>
     path === "/api/route-lookups"
@@ -89,7 +86,7 @@ test("starts the secure live view and handles feed messages", async () => {
     createScene,
   });
   expect(result).toEqual(expect.objectContaining({ scene, socket }));
-  expect(scene.update).toHaveBeenCalledWith(aircraft);
+  expect(fetchData).not.toHaveBeenCalledWith("/api/aircraft");
   document.sendKey({ key: "f", preventDefault: jest.fn() });
   document.sendKey({ key: "m", preventDefault: jest.fn() });
   expect(document.strips.hidden).toBe(true);
@@ -100,8 +97,7 @@ test("starts the secure live view and handles feed messages", async () => {
   await socket.onopen();
   scene.onViewChange.mock.calls.at(-1)[0]();
   expect(socket.send).toHaveBeenCalledWith('{"type":"viewport","radiusNm":56}');
-  expect(scene.update).toHaveBeenLastCalledWith({ icao: "RESTORE1" });
-  socket.onmessage({ data: '{"icao":"DEF456"}' });
+  socket.onmessage({ data: JSON.stringify({ event: "aircraft-snapshot", aircraft: [] }) });
   socket.onclose();
   expect(scene.setConnected).toHaveBeenLastCalledWith(false);
   result.destroy();

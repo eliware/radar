@@ -35,6 +35,16 @@ export function createRadarTargets({
         }
       return removed;
     },
+    retain(icaos) {
+      const keep = new Set(icaos);
+      const removed = [];
+      for (const icao of targets.keys())
+        if (!keep.has(icao)) {
+          targets.delete(icao);
+          removed.push(icao);
+        }
+      return removed;
+    },
     prune,
     distances() {
       return [...targets.values()].map(({ distance }) => distance);

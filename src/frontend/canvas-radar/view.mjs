@@ -80,6 +80,7 @@ export function createCanvasRadarView({
       draw();
     },
     update: aircraftState.update,
+    updateSnapshot: aircraftState.updateSnapshot,
     updateRemote: aircraftState.updateRemote,
     ...references.updates(() => {}, draw),
     setIlsVisible: layers.ils.setVisible,

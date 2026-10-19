@@ -9,7 +9,7 @@ export function createCanvasRadarAircraftState(location, state, draw) {
   return {
     targets,
     trails,
-    update(item) {
+    update(item, shouldDraw = true) {
       const position = projectAircraftPosition(item, location, 0);
       if (!position) return;
       const expired = targets.update(item, Math.hypot(position.x, position.z));
@@ -17,6 +17,14 @@ export function createCanvasRadarAircraftState(location, state, draw) {
       trails.add(item.icao, position);
       if (state.autoZoom)
         state.range = selectDefaultRadarRange(targets.localDistances(), state.defaultRangeNm);
+      if (shouldDraw) draw();
+    },
+    updateSnapshot(items, localFurthestDistanceNm) {
+      const aircraft = Array.isArray(items) ? items : [];
+      trails.remove(targets.retain(aircraft.map((item) => item.icao)));
+      for (const item of aircraft) this.update(item, false);
+      if (state.autoZoom && Number.isFinite(localFurthestDistanceNm))
+        state.range = selectDefaultRadarRange([localFurthestDistanceNm], state.defaultRangeNm);
       draw();
     },
     updateRemote(items) {

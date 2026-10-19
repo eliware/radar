@@ -5,11 +5,9 @@ export function handleDashboardFeedUpdate(scene, flightStrips, data) {
   } catch {
     return;
   }
-  if (aircraft?.event === "remote-snapshot") {
-    scene.updateRemote?.(aircraft.aircraft);
-    flightStrips.updateRemote?.(aircraft.aircraft);
+  if (aircraft?.event === "aircraft-snapshot") {
+    scene.updateSnapshot?.(aircraft.aircraft, aircraft.localFurthestDistanceNm);
+    flightStrips.updateSnapshot?.(aircraft.aircraft);
     return;
   }
-  scene.update(aircraft);
-  flightStrips.update(aircraft);
 }

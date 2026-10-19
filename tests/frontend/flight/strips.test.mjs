@@ -118,6 +118,17 @@ test("refreshes remote strips and removes tracks missing from the remote snapsho
   view.destroy();
 });
 
+test("replaces strips from the complete filtered aircraft snapshot", () => {
+  const container = {};
+  const view = createFlightStripView(container, {}, () => 1000);
+  view.update(aircraft("OLD", 2));
+  view.updateSnapshot([aircraft("NEW", 1), {}]);
+  expect(container.innerHTML).toContain('data-icao="NEW"');
+  expect(container.innerHTML).not.toContain('data-icao="OLD"');
+  view.updateSnapshot(null);
+  expect(container.innerHTML).toContain("Waiting for aircraft...");
+});
+
 test("supports an unavailable container and window", () => {
   const view = createFlightStripView(null, undefined);
   view.update(aircraft("A", 1));

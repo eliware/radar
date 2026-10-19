@@ -7,5 +7,6 @@ export function createAircraftSceneWorkflow(options) {
     stop: startAircraftSceneLoop(options),
     update,
     updateRemote: update.updateRemote,
+    updateSnapshot: update.updateSnapshot,
   };
 }
