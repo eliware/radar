@@ -4,7 +4,7 @@ import { getRadarPalette } from "../radar/palette.mjs";
 import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
 
 const EMERGENCY_COLOR = "#ff0000";
-const REMOTE_ONLY_COLOR = "#80ff21";
+const REMOTE_ONLY_COLOR = "#ffff00";
 
 export function drawAircraftDisplay(
   context,
