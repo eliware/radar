@@ -138,7 +138,7 @@ test("flashes near-home targets green and white on alternating half-second phase
   expect(context.strokeStyle).toBe("#ffffff");
 });
 
-test("draws remote-only targets in yellow-green while preserving emergency red", () => {
+test("draws remote-only targets in amber while preserving emergency red", () => {
   const context = Object.fromEntries(
     ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fillText"].map((name) => [
       name,
@@ -162,6 +162,6 @@ test("draws remote-only targets in yellow-green while preserving emergency red",
   );
   expect(context.strokeStyle).toBe("#ff0000");
   expect(context.fillStyle).toBe("#ff0000");
-  expect(strokeColors).toContain("#80ff21");
+  expect(strokeColors).toContain("#ffbf00");
   expect(strokeColors).toContain("#ff0000");
 });
