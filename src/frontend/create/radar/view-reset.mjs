@@ -9,7 +9,7 @@ export function createRadarViewReset(
 ) {
   return () => {
     setAutoZoom(true);
-    radarCamera.setRange(selectDefaultRadarRange(targets.distances(), defaultRangeNm));
+    radarCamera.setRange(selectDefaultRadarRange(targets.localDistances(), defaultRangeNm));
     radarCamera.setRotation(defaultRotationRadians);
   };
 }

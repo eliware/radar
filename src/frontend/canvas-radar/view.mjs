@@ -67,7 +67,12 @@ export function createCanvasRadarView({
   const layers = createRadarLayerVisibility(documentRef, draw);
   const detachEvents = attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef);
   draw();
-  const viewState = createCanvasRadarState(state, draw, () => targets.distances(), viewChanges);
+  const viewState = createCanvasRadarState(
+    state,
+    draw,
+    () => targets.localDistances(),
+    viewChanges,
+  );
   return {
     mode: "2D",
     setConnected(connected) {

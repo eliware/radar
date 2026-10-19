@@ -3,7 +3,7 @@ import { configureRadarViewDefaults } from "../../../src/frontend/configure-rada
 
 test("sets configured defaults and returns a reset action", () => {
   const radarCamera = { setRange: jest.fn(), setRotation: jest.fn() };
-  const targets = { distances: () => [] };
+  const targets = { localDistances: () => [] };
   const setAutoZoom = jest.fn();
   const reset = configureRadarViewDefaults(radarCamera, targets, setAutoZoom, 25, 140);
   expect(radarCamera.setRange).toHaveBeenCalledWith(25);

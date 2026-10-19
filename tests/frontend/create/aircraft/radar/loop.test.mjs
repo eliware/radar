@@ -22,7 +22,7 @@ test("starts frame and expiry loops, then stops them", () => {
     clearInterval: jest.fn(),
   };
   const stop = createAircraftRadarLoop({
-    targets: { items: () => new Map(), distances: () => [], prune: () => expired },
+    targets: { items: () => new Map(), localDistances: () => [], prune: () => expired },
     trails: { remove: jest.fn() },
     windowRef,
     radarCamera: { setRange: jest.fn(), range: () => 20 },
@@ -64,7 +64,7 @@ test("does not change range when expired aircraft cannot change auto zoom", () =
     clearInterval: jest.fn(),
   };
   createAircraftRadarLoop({
-    targets: { items: () => new Map(), distances: () => [], prune: () => ["ABC123"] },
+    targets: { items: () => new Map(), localDistances: () => [], prune: () => ["ABC123"] },
     trails,
     windowRef,
     radarCamera: { setRange, range: () => 20 },

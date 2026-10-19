@@ -5,7 +5,7 @@ function makeUpdater({ autoZoom = true, position = { x: 3, y: 0, z: 4 } } = {}) 
   const targets = {
     update: jest.fn(() => ["OLD"]),
     removeRemoteOnlyExcept: jest.fn(() => ["REMOTE-OLD"]),
-    distances: jest.fn(() => [30]),
+    localDistances: jest.fn(() => [30]),
   };
   const trails = { add: jest.fn(), remove: jest.fn() };
   const radarCamera = { range: jest.fn(() => 20), setRange: jest.fn() };
@@ -40,13 +40,13 @@ test("skips invalid aircraft and keeps manual zoom unchanged", () => {
   const manual = makeUpdater({ autoZoom: false });
   manual.update({ icao: "DEF456", latitude: 43.1, longitude: -70 });
   expect(manual.trails.add).toHaveBeenCalledWith("DEF456", expect.any(Object));
-  expect(manual.targets.distances).not.toHaveBeenCalled();
+  expect(manual.targets.localDistances).not.toHaveBeenCalled();
   expect(manual.radarCamera.setRange).not.toHaveBeenCalled();
 });
 
 test("keeps the current camera range when target range does not change", () => {
   const state = makeUpdater();
-  state.targets.distances.mockReturnValue([15]);
+  state.targets.localDistances.mockReturnValue([15]);
   state.update({ icao: "SAME00", latitude: 43.1, longitude: -70 });
   expect(state.radarCamera.setRange).not.toHaveBeenCalled();
 });

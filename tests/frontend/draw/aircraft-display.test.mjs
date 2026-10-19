@@ -162,6 +162,6 @@ test("draws remote-only targets in yellow-green while preserving emergency red",
   );
   expect(context.strokeStyle).toBe("#ff0000");
   expect(context.fillStyle).toBe("#ff0000");
-  expect(strokeColors).toContain("#c6ff00");
+  expect(strokeColors).toContain("#80ff21");
   expect(strokeColors).toContain("#ff0000");
 });

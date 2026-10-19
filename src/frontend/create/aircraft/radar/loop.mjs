@@ -39,7 +39,7 @@ export function createAircraftRadarLoop({
     onExpire: (expired) => {
       trails.remove(expired);
       if (isAutoZoom())
-        radarCamera.setRange(selectDefaultRadarRange(targets.distances(), defaultRangeNm));
+        radarCamera.setRange(selectDefaultRadarRange(targets.localDistances(), defaultRangeNm));
     },
   });
   const stopRender = createRadarRenderLoop({

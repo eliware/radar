@@ -39,6 +39,11 @@ export function createRadarTargets({
     distances() {
       return [...targets.values()].map(({ distance }) => distance);
     },
+    localDistances() {
+      return [...targets.values()]
+        .filter(({ item }) => !item.remoteOnly)
+        .map(({ distance }) => distance);
+    },
     items() {
       return new Map(
         [...targets].map(([icao, { item, lastSeen }]) => [icao, { ...item, receivedAt: lastSeen }]),

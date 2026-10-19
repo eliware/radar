@@ -27,7 +27,7 @@ test("wires pan, zoom, expiry, refresh, and cleanup to the Canvas view", () => {
       .mockReturnValueOnce([])
       .mockReturnValueOnce(["OLD"])
       .mockReturnValue(["STALE"]),
-    distances: jest.fn(() => [50]),
+    localDistances: jest.fn(() => [50]),
   };
   const trails = { remove: jest.fn() };
   const draw = jest.fn();

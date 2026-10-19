@@ -16,7 +16,7 @@ export function createCanvasRadarAircraftState(location, state, draw) {
       trails.remove(expired);
       trails.add(item.icao, position);
       if (state.autoZoom)
-        state.range = selectDefaultRadarRange(targets.distances(), state.defaultRangeNm);
+        state.range = selectDefaultRadarRange(targets.localDistances(), state.defaultRangeNm);
       draw();
     },
     updateRemote(items) {

@@ -31,6 +31,8 @@ test("uses the source observation time and removes missing remote-only tracks", 
   targets.update({ icao: "REMOTE", remoteOnly: true, lastSeen: 8000 }, 10);
   targets.update({ icao: "LOCAL", remoteOnly: false }, 2);
   expect(targets.items().get("REMOTE").receivedAt).toBe(8000);
+  expect(targets.distances()).toEqual([10, 2]);
+  expect(targets.localDistances()).toEqual([2]);
   expect(targets.removeRemoteOnlyExcept([])).toEqual(["REMOTE"]);
   expect([...targets.items().keys()]).toEqual(["LOCAL"]);
 });

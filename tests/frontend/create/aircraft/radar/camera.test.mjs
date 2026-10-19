@@ -11,7 +11,7 @@ test("configures camera defaults and tracks auto zoom state", () => {
     Object.assign(options, settings);
     return camera;
   });
-  const targets = { distances: jest.fn(() => [10]) };
+  const targets = { localDistances: jest.fn(() => [10]) };
   const state = createAircraftRadarCamera({
     createCamera,
     cameraOptions: { camera: "camera" },
@@ -28,5 +28,5 @@ test("configures camera defaults and tracks auto zoom state", () => {
   state.reset();
   expect(state.isAutoZoom()).toBe(true);
   expect(camera.setRange).toHaveBeenLastCalledWith(25);
-  expect(targets.distances).toHaveBeenCalled();
+  expect(targets.localDistances).toHaveBeenCalled();
 });

@@ -34,19 +34,19 @@ test("keeps the current range when auto-zoom is disabled", () => {
 
 test("tracks remote-only aircraft and removes stale remote targets", () => {
   const draw = jest.fn();
-  const tracker = createCanvasRadarAircraftState(
-    { latitude: 43, longitude: -70 },
-    { autoZoom: true, range: 20 },
-    draw,
-  );
+  const state = { autoZoom: true, range: 20 };
+  const tracker = createCanvasRadarAircraftState({ latitude: 43, longitude: -70 }, state, draw);
   tracker.updateRemote([
-    { icao: "REMOTE", latitude: 43.1, longitude: -70, remoteOnly: true },
+    { icao: "REMOTE", latitude: 43.1, longitude: -68.5, remoteOnly: true },
     { icao: "LOCAL", latitude: 43.2, longitude: -70, remoteOnly: false },
     { icao: "BAD", latitude: Number.NaN, longitude: -70, remoteOnly: true },
   ]);
   expect(tracker.targets.items().has("REMOTE")).toBe(true);
+  expect(state.range).toBe(20);
   expect(tracker.targets.items().has("LOCAL")).toBe(false);
+  tracker.update({ icao: "LOCAL", latitude: 43.5, longitude: -70 });
+  expect(state.range).toBeLessThan(50);
   tracker.updateRemote([]);
   expect(tracker.targets.items().has("REMOTE")).toBe(false);
-  expect(draw).toHaveBeenCalledTimes(2);
+  expect(draw).toHaveBeenCalledTimes(3);
 });

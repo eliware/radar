@@ -17,7 +17,7 @@ export function createAircraftSceneUpdater({
     trails.remove(expired);
     trails.add(aircraft.icao, position);
     if (!autoZoom || !isAutoZoom()) return;
-    const nextRange = selectDefaultRadarRange(targets.distances(), defaultRangeNm);
+    const nextRange = selectDefaultRadarRange(targets.localDistances(), defaultRangeNm);
     if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
   }
   update.updateRemote = (items) => {

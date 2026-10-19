@@ -90,7 +90,7 @@ test("restores auto-zoom when the view resets", () => {
   const loop = mocks.factories.createAircraftRadarLoop.mock.calls.at(-1)[0];
   mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
   expect(loop.isAutoZoom()).toBe(false);
-  mocks.targets.distances.mockReturnValue([40]);
+  mocks.targets.localDistances.mockReturnValue([40]);
   view.reset();
   expect(mocks.radarCamera.setRange).toHaveBeenLastCalledWith(45);
   expect(mocks.radarCamera.setRotation).toHaveBeenLastCalledWith(0);

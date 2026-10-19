@@ -36,7 +36,7 @@ export function registerAircraftSceneMocks(jest) {
   const airspace = { update: jest.fn(), dispose: jest.fn() };
   const targets = {
     update: jest.fn(() => []),
-    distances: jest.fn(() => []),
+    localDistances: jest.fn(() => []),
     items: jest.fn(() => []),
   };
   const trails = { add: jest.fn(), remove: jest.fn() };
