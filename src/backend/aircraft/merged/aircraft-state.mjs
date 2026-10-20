@@ -40,8 +40,10 @@ export function createMergedAircraftState() {
 function merge({ local, remote }) {
   if (!local) return { ...remote, remoteOnly: true };
   const combined = { ...remote, ...local, remoteOnly: false };
-  for (const [key, value] of Object.entries(remote ?? {}))
+  for (const [key, value] of Object.entries(remote ?? {})) {
+    if (key === "remoteOnly") continue;
     if (local[key] === null || local[key] === undefined || local[key] === "") combined[key] = value;
+  }
   return combined;
 }
 

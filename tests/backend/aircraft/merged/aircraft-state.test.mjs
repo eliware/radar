@@ -4,7 +4,13 @@ import { createMergedAircraftState } from "../../../../src/backend/aircraft/merg
 test("merges local precedence, remote fallbacks, sorting, and local range", () => {
   const state = createMergedAircraftState();
   state.replaceRemote([
-    { icao: "abc123", distanceNauticalMiles: 5, altitudeFeet: 9000, callsign: "REMOTE" },
+    {
+      icao: "abc123",
+      distanceNauticalMiles: 5,
+      altitudeFeet: 9000,
+      callsign: "REMOTE",
+      remoteOnly: true,
+    },
     { icao: "DEF456", distanceNauticalMiles: 2 },
   ]);
   state.setLocal({ icao: "ABC123", distanceNauticalMiles: 7, altitudeFeet: 12000, callsign: "" });
