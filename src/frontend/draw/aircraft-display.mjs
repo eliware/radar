@@ -27,7 +27,7 @@ export function drawAircraftDisplay(
     context.globalAlpha = previousAlpha * getAircraftAgeBrightness(item.receivedAt);
     drawTrack(context, item);
   }
-  context.font = `${fontSize}px monospace`;
+  context.font = `${fontSize}px Consolas, "Courier New", monospace`;
   for (const tag of layoutAircraftTags(context, aircraft, fontSize, width, height)) {
     const color = displayColor(tag.item, palette.bright, now);
     context.fillStyle = color;
@@ -47,7 +47,7 @@ function displayColor(item, normalColor, now) {
 
 function drawTrails(context, aircraft, fontSize, trailColor) {
   context.fillStyle = trailColor;
-  context.font = `${fontSize / 2}px monospace`;
+  context.font = `${fontSize / 2}px Consolas, "Courier New", monospace`;
   for (const item of aircraft) {
     for (const point of (item.history ?? []).slice(0, -1)) {
       context.fillText(String.fromCharCode(92), point.x, point.y);

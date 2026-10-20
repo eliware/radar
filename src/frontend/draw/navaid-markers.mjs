@@ -5,7 +5,7 @@ export function drawNavaidMarkers(context, navaids, project, range) {
   context.strokeStyle = NAVAID_COLOR;
   context.fillStyle = NAVAID_COLOR;
   context.lineWidth = 1;
-  context.font = "12px monospace";
+  context.font = '12px Consolas, "Courier New", monospace';
   context.textAlign = "left";
   for (const navaid of navaids.values()) {
     if (navaid.rangeNm > range) continue;

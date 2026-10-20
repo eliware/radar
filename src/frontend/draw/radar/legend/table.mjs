@@ -20,7 +20,7 @@ const COLORS = {
 
 export function drawRadarLegendTable(context, width, height, connected, visibility) {
   const palette = getRadarPalette(connected);
-  context.font = "12px monospace";
+  context.font = '12px Consolas, "Courier New", monospace';
   context.textAlign = "left";
   radarLegendLayout(width, height).forEach(({ entry, x, y }) => {
     const [icon, label, color, toggle] = entry;

@@ -12,7 +12,7 @@ export function drawProcedures(
   if (visibility === false) return;
   context.save();
   context.lineWidth = 1;
-  context.font = "10px monospace";
+  context.font = '10px Consolas, "Courier New", monospace';
   context.textAlign = "center";
   context.setLineDash([3, 3]);
   for (const procedure of procedures.values()) {

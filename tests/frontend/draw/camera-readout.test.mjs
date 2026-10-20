@@ -14,7 +14,7 @@ test("draws camera position and altitude using the radar monospace font", () => 
     300,
     400,
   );
-  expect(context.font).toBe("12px monospace");
+  expect(context.font).toBe('12px Consolas, "Courier New", monospace');
   expect(context.fillStyle).toBe("#00a832");
   expect(context.fillText).toHaveBeenNthCalledWith(1, "  43.0167°", 352, 30);
   expect(context.fillText).toHaveBeenNthCalledWith(2, "LAT", 360, 30);

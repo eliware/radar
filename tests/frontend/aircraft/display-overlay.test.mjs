@@ -109,7 +109,7 @@ test("draws projected aircraft and history over the scene, then removes its canv
   expect(context.setTransform).toHaveBeenCalledWith(2, 0, 0, 2, 0, 0);
   expect(context.fillText).toHaveBeenCalled();
   expect(context.setLineDash).toHaveBeenCalledWith([4, 4]);
-  expect(measuredFonts).toContain("18px monospace");
+  expect(measuredFonts).toContain('18px Consolas, "Courier New", monospace');
   container.clientWidth = 0;
   container.clientHeight = 0;
   windowRef.devicePixelRatio = 0;

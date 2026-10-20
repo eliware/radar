@@ -19,6 +19,7 @@ test("draws range rings and the north-east axes", () => {
     restore: jest.fn(),
   };
   drawCanvasRings(context, 0, 0, 100, 20, { major: "major", minor: "minor", bright: "bright" });
+  expect(context.font).toBe('11px Consolas, "Courier New", monospace');
   expect(context.arc).toHaveBeenCalledTimes(4);
   expect(context.fillText).toHaveBeenCalledWith("20", expect.any(Number), expect.any(Number));
   expect(context.translate).toHaveBeenCalledWith(

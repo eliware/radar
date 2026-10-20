@@ -22,7 +22,7 @@ export function drawCameraReadout(context, camera, location, elevationFeet, widt
       (Math.PI * EARTH_RADIUS_NM * Math.cos((location.latitude * Math.PI) / 180));
   const altitude = Math.round((elevationFeet + position.y * FEET_PER_NM) / 100) * 100;
   context.save();
-  context.font = "12px monospace";
+  context.font = '12px Consolas, "Courier New", monospace';
   context.fillStyle = "#00a832";
   context.textBaseline = "alphabetic";
   const valueX = width - 48;

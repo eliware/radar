@@ -8,7 +8,7 @@ import {
 export function drawCanvasRings(context, x, y, radius, range, palette, rotation = 0) {
   const majorStep = getRadarRingSpacing(range);
   context.textAlign = "left";
-  context.font = "11px sans-serif";
+  context.font = '11px Consolas, "Courier New", monospace';
   for (const nm of getRadarRingRanges(range)) {
     const major = nm % majorStep === 0;
     context.strokeStyle = major ? palette.major : palette.minor;

@@ -33,7 +33,7 @@ test("creates a canvas sprite label and releases its resources", () => {
   const THREE = makeThree();
   const label = createRadarLabel(THREE, "N123AB", documentRef);
   const scene = { remove: jest.fn() };
-  expect(context.font).toBe("48px sans-serif");
+  expect(context.font).toBe('48px Consolas, "Courier New", monospace');
   expect(label.scale.set).toHaveBeenCalledWith(6.4, 1, 1);
   expect(context.fillText).toHaveBeenCalledWith("N123AB", 4, 40);
   removeRadarLabel(scene, label);

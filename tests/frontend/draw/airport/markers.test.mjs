@@ -22,7 +22,7 @@ test("draws a gray identifier for airports inside the current range", () => {
   drawAirportMarkers(context, airports, () => ({ x: 20, y: 30 }), 20);
   expect(context.fillStyle).toBe("#b8b8b8");
   expect(context.textAlign).toBe("center");
-  expect(context.font).toBe("12px monospace");
+  expect(context.font).toBe('12px Consolas, "Courier New", monospace');
   expect(context.fillText).toHaveBeenCalledWith("KPWM", 20, 20);
   expect(context.fillText).toHaveBeenCalledWith("BGR", 20, 20);
   expect(context.fillText).toHaveBeenCalledTimes(2);
@@ -46,7 +46,7 @@ test("uses smaller airport labels on narrow 2D canvases", () => {
     20,
   );
 
-  expect(context.font).toBe("9px monospace");
+  expect(context.font).toBe('9px Consolas, "Courier New", monospace');
   expect(context.fillText).toHaveBeenCalledWith("KPWM", 20, 20);
 });
 

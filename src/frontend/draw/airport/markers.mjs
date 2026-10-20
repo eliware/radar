@@ -5,7 +5,7 @@ export function drawAirportMarkers(context, airports, project, range) {
   context.fillStyle = AIRPORT_COLOR;
   context.strokeStyle = AIRPORT_COLOR;
   const fontSize = context.canvas?.clientWidth <= 600 ? 9 : 12;
-  context.font = `${fontSize}px monospace`;
+  context.font = `${fontSize}px Consolas, "Courier New", monospace`;
   context.textAlign = "center";
   for (const airport of airports.values()) {
     if (airport.rangeNm > range) continue;

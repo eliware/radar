@@ -9,7 +9,7 @@ export function createRadarLabel(
   canvas.width = 512;
   canvas.height = 80;
   const context = canvas.getContext("2d");
-  context.font = "48px sans-serif";
+  context.font = '48px Consolas, "Courier New", monospace';
   const textWidthRatio = Math.min(
     1,
     (context.measureText?.(text).width ?? text.length * 28) / canvas.width,

@@ -1,6 +1,7 @@
 :root {
   color-scheme: dark;
-  font-family: "Segoe UI", sans-serif;
+  --radar-font: Consolas, "Courier New", monospace;
+  font-family: var(--radar-font);
   background: #000;
   color: #00ff41;
   font-synthesis: none;
@@ -10,6 +11,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: inherit;
 }
 html,
 body {
@@ -90,9 +92,7 @@ p {
 }
 .compass-label {
   fill: currentColor;
-  font:
-    8px "Segoe UI",
-    sans-serif;
+  font: 8px var(--radar-font);
   text-anchor: middle;
   dominant-baseline: middle;
 }
@@ -106,9 +106,7 @@ p {
 }
 .radar-compass [data-compass-heading] {
   fill: currentColor;
-  font:
-    bold 15px Consolas,
-    monospace;
+  font: bold 15px var(--radar-font);
   text-anchor: middle;
   dominant-baseline: middle;
   paint-order: stroke;
@@ -154,10 +152,7 @@ p {
   transform: translateX(-50%);
   color: #ddd;
   background: transparent;
-  font:
-    13px/1.35 Consolas,
-    "Courier New",
-    monospace;
+  font: 13px/1.35 var(--radar-font);
   pointer-events: none;
 }
 .metar-reports {
@@ -239,7 +234,7 @@ p {
   padding: 10px;
   color: #fff;
   background: #000;
-  font-family: Consolas, "Courier New", monospace;
+  font-family: var(--radar-font);
   font-size: 0.86rem;
 }
 .flight-strip-frame {
@@ -331,9 +326,7 @@ p {
     border-radius: 4px;
     color: #00ff41;
     background: #000;
-    font:
-      10px Consolas,
-      monospace;
+    font: 10px var(--radar-font);
     transform: translateX(-50%);
   }
 }
