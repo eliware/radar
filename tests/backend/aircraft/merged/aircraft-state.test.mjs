@@ -52,3 +52,48 @@ test("supports local-only entries without distance or remote fields", () => {
   ]);
   expect(state.localFurthestDistanceNm()).toBe(3);
 });
+
+test("hands off to a newer remote position only after local data goes stale", () => {
+  let now = 20_000;
+  const state = createMergedAircraftState({ clock: () => now, localFreshnessMs: 8_000 });
+  state.replaceLocal([
+    { icao: "ABC123", latitude: 43, longitude: -70, callsign: "LOCAL", lastSeen: 17_000 },
+  ]);
+  state.replaceRemote([
+    {
+      icao: "ABC123",
+      latitude: 43.1,
+      longitude: -70.1,
+      aircraftTypeCode: "B712",
+      callsign: "REMOTE",
+      lastSeen: 19_000,
+      remoteOnly: true,
+    },
+  ]);
+
+  expect(state.list()[0]).toEqual(
+    expect.objectContaining({ latitude: 43, longitude: -70, callsign: "LOCAL", remoteOnly: false }),
+  );
+
+  now = 26_000;
+  state.replaceRemote([
+    {
+      icao: "ABC123",
+      latitude: 43.2,
+      longitude: -70.2,
+      aircraftTypeCode: "B712",
+      callsign: "REMOTE",
+      lastSeen: 25_000,
+      remoteOnly: true,
+    },
+  ]);
+  expect(state.list()[0]).toEqual(
+    expect.objectContaining({
+      latitude: 43.2,
+      longitude: -70.2,
+      callsign: "REMOTE",
+      aircraftTypeCode: "B712",
+      remoteOnly: true,
+    }),
+  );
+});
