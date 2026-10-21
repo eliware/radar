@@ -7,6 +7,7 @@ const ENTRIES = [
   ["cross", "N VOR", "vor", "navaidsVisible", "n"],
   ["line", "R RUNWAY", "runway", "runwaysVisible", "r"],
   ["dash", "E ERCL", "extension", "extensionsVisible", "e"],
+  ["dash", "B BASE", "extension", "baseLegsVisible", "b"],
   ["dash", "I ILS", "ils", "ilsVisible", "i"],
   ["dash", "D SID", "sid", "sidVisible", "d"],
   ["dash", "S STAR", "star", "starVisible", "s"],

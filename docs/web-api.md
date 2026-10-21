@@ -73,7 +73,9 @@ Use W to show or hide muted lake and ocean outlines. The browser requests vector
 The radar legend has a transparent background and aligns each symbol with its label. Wide views use two columns. Narrow views use one. Tap or click a layer entry to apply its matching keyboard toggle. M controls METAR and F controls flight strips.
 
 - Key A toggles airports, their Class B/C/D airspace, runways, and runway guides.
-- Key N toggles VORs. Key R toggles runways. Key E toggles runway guides.
+- Key N toggles VORs. Key R toggles runways. Key E toggles extended runway centerlines.
+- Key B toggles base legs. The clickable legend orders `B BASE` after `E ERCL`.
+- In two-column legends, `I ILS` starts the second column. Clickable legend entries match their keys.
 - Key I toggles ILS courses and marker beacons. Key D toggles SIDs. Key S toggles STARs.
 - Key Q toggles RNAV airways. Key J toggles Jet airways. Key V toggles Victor airways. Key W toggles water.
 - Key M toggles METARs. Hidden METARs stop refreshing. Key F toggles flight strips.

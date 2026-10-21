@@ -29,9 +29,10 @@ test("creates visible layers and destroys all keyboard listeners", () => {
   expect(layers.airways.isVisible("V")).toBe(true);
   expect(layers.runways.isRunwaysVisible()).toBe(true);
   expect(layers.runways.isExtensionsVisible()).toBe(true);
+  expect(layers.runways.isBaseLegsVisible()).toBe(true);
   expect(layers.references.isAirportsVisible()).toBe(true);
   expect(layers.references.isNavaidsVisible()).toBe(true);
-  ["i", "d", "s", "q", "j", "v", "r", "e", "a", "n"].forEach((key) =>
+  ["i", "d", "s", "q", "j", "v", "r", "e", "b", "a", "n"].forEach((key) =>
     listeners.forEach((listener) => listener({ key, preventDefault: jest.fn() })),
   );
   expect(layers.ils.isVisible()).toBe(true);
@@ -39,6 +40,7 @@ test("creates visible layers and destroys all keyboard listeners", () => {
   expect(layers.procedures.isStarVisible()).toBe(false);
   expect(layers.airways.isVisible("J")).toBe(true);
   expect(layers.runways.isRunwaysVisible()).toBe(false);
+  expect(stored.get("radar.visibility.baseLegs")).toBe("false");
   expect(layers.references.isAirportsVisible()).toBe(false);
   expect(layers.references.isNavaidsVisible()).toBe(false);
   expect(stored.get("radar.visibility.ils")).toBe("true");

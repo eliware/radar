@@ -45,6 +45,7 @@ export function createCanvasRadarDraw({
       {
         runwaysVisible: state.airportsVisible && state.runwaysVisible,
         extensionsVisible: state.airportsVisible && state.extensionsVisible,
+        baseLegsVisible: state.airportsVisible && state.baseLegsVisible,
       },
       { airportsVisible: state.airportsVisible, navaidsVisible: state.navaidsVisible },
     );

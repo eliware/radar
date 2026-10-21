@@ -25,7 +25,7 @@ test("renders reference layers with shared visibility and without a scope clip",
     ilsVisible: true,
     procedureVisibility: { sidVisible: true, starVisible: true },
     airwayVisibility: { Q: true },
-    runwayVisibility: { runwaysVisible: false, extensionsVisible: true },
+    runwayVisibility: { runwaysVisible: false, extensionsVisible: true, baseLegsVisible: false },
     referenceVisibility: { airportsVisible: false, navaidsVisible: true },
   };
   drawCanvasRadarReferences(options);

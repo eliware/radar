@@ -85,8 +85,11 @@ directives:
       - Center airport labels above their marker dots.
       - Make runways solid gray lines.
       - Make runway geometry follow each runway end's NASR elevation.
-      - Make dark gray dotted runway extensions 10 nautical miles long.
-      - Lift each extended centerline to 3,000 feet above its runway end elevation.
+      - Make dark gray dotted ERCLs 10 nautical miles long.
+      - Lift each ERCL to 3,000 feet above its runway end elevation.
+      - Make perpendicular base legs at ERCL endpoints and toggle them separately with B.
+      - Toggle ERCLs with E and keep both ERCLs and base legs enabled by default.
+      - Order B BASE after E ERCL and start the second legend column with I ILS.
       - Make dark gray dotted perpendicular base-leg marks 10 nautical miles from extension ends.
       - Make each perpendicular leg match the altitude of its centerline endpoint.
       - Make VOR symbols and identifiers blue.

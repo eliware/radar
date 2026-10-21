@@ -10,7 +10,7 @@ Radar loads airport data by distance from `ADSB_LAT` and `ADSB_LON`. It requests
 
 Radar lists public-use airports with a four-character ICAO code that starts with `K`. Each airport needs an asphalt or concrete runway longer than 1,000 feet. Radar plots only runways that satisfy these rules.
 
-Airport markers use the airport location and elevation. Runway ends use their NASR coordinates and elevations. Radar plots a dotted runway centerline extension to 10 nautical miles from each end. The line reaches 3,000 feet above the runway end. Dotted perpendicular runway legs use that altitude too.
+Airport markers use the airport location and elevation. Runway ends use their NASR coordinates and elevations. Radar plots a dotted extended runway centerline to 10 nautical miles from each end. Key E toggles these centerlines. Key B toggles the dotted perpendicular base legs at each extended centerline endpoint. Both layers start enabled and can be toggled independently.
 
 ## Navigation aids and airspace
 

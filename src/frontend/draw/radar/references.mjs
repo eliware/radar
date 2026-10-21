@@ -15,7 +15,7 @@ export function drawRadarReferences(
   ilsVisible = true,
   procedureVisibility = { sidVisible: true, starVisible: true },
   airwayVisibility = { Q: true, J: true, V: true },
-  runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
+  runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   airspaceRingsVisible = true,
 ) {
@@ -34,6 +34,7 @@ export function drawRadarReferences(
     maxRange,
     referenceVisibility.airportsVisible && runwayVisibility.runwaysVisible,
     referenceVisibility.airportsVisible && runwayVisibility.extensionsVisible,
+    referenceVisibility.airportsVisible && runwayVisibility.baseLegsVisible,
   );
   if (referenceVisibility.airportsVisible) drawAirportMarkers(context, airports, project, maxRange);
   if (referenceVisibility.navaidsVisible)

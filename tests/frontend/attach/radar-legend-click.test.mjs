@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { attachRadarLegendClick } from "../../../src/frontend/attach/radar-legend-click.mjs";
 
-test("routes METAR and flight-strip legend clicks through document key handlers", () => {
+test("routes METAR, flight, base, and ILS clicks through document key handlers", () => {
   const listeners = new Map();
   const element = {
     clientWidth: 320,
@@ -30,10 +30,12 @@ test("routes METAR and flight-strip legend clicks through document key handlers"
   const redraw = jest.fn();
   const detach = attachRadarLegendClick(element, documentRef, { KeyboardEvent }, redraw);
   const click = listeners.get("element:click");
-  click({ clientX: 120, clientY: 314 });
   click({ clientX: 120, clientY: 330 });
+  click({ clientX: 120, clientY: 346 });
+  click({ clientX: 120, clientY: 202 });
+  click({ clientX: 120, clientY: 218 });
 
-  expect(keys).toEqual(["m", "f"]);
+  expect(keys).toEqual(["m", "f", "b", "i"]);
   expect(redraw).toHaveBeenCalledTimes(2);
   detach();
   expect(element.removeEventListener).toHaveBeenCalledWith("click", click);

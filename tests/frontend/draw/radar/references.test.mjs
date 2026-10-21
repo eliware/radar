@@ -58,7 +58,15 @@ test("routes each reference layer in draw order with visibility", () => {
     "airways",
   ]);
   expect(drawAirspaceRings).toHaveBeenCalledWith(context, airports, project, 300);
-  expect(drawAirportRunways).toHaveBeenCalledWith(context, airports, project, 300, true, true);
+  expect(drawAirportRunways).toHaveBeenCalledWith(
+    context,
+    airports,
+    project,
+    300,
+    true,
+    true,
+    true,
+  );
   expect(drawAirportMarkers).toHaveBeenCalledWith(context, airports, project, 300);
   expect(drawNavaidMarkers).toHaveBeenCalledWith(context, navaids, project, 300);
   expect(drawArtccBoundaries).toHaveBeenCalledWith(context, boundaries, project);
@@ -98,7 +106,7 @@ test("hides airport, airspace, VOR and runway layers with airport and VOR switch
     true,
     { sidVisible: true, starVisible: true },
     { Q: true, J: true, V: true },
-    { runwaysVisible: true, extensionsVisible: true },
+    { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
     { airportsVisible: false, navaidsVisible: false },
   );
   expect(drawAirspaceRings).not.toHaveBeenCalled();
@@ -109,6 +117,7 @@ test("hides airport, airspace, VOR and runway layers with airport and VOR switch
     expect.anything(),
     expect.anything(),
     300,
+    false,
     false,
     false,
   );

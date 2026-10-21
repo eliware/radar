@@ -34,6 +34,7 @@ test("draws a transparent two-column legend with layer toggles", () => {
       "N VOR",
       "R RUNWAY",
       "E ERCL",
+      "B BASE",
       "I ILS",
       "D SID",
       "S STAR",
@@ -45,6 +46,7 @@ test("draws a transparent two-column legend with layer toggles", () => {
   expect(context.fillRect).toBeUndefined();
   expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 26, 24);
   expect(context.fillText).toHaveBeenCalledWith("R RUNWAY", 26, 120);
+  expect(context.fillText).toHaveBeenCalledWith("I ILS", 138, 24);
   expect(context.closePath).toHaveBeenCalled();
   expect(context.fill).toHaveBeenCalled();
 });
@@ -56,7 +58,7 @@ test("uses one column and dims hidden layers on narrow views", () => {
     colors.set(label, this.strokeStyle);
   });
   drawRadarScaleLegend(context, 320, 320, 1, 140.8, true, false, false, false);
-  expect(context.fillText).toHaveBeenCalledWith("I ILS", 26, 136);
-  expect(context.fillText).toHaveBeenCalledWith("W WATER", 26, 220);
+  expect(context.fillText).toHaveBeenCalledWith("I ILS", 26, 150);
+  expect(context.fillText).toHaveBeenCalledWith("W WATER", 26, 234);
   expect(colors.get("I ILS")).toBe("#444444");
 });

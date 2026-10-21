@@ -31,7 +31,7 @@ export function drawCanvasRadar(
   homeElevationFeet = 0,
   airways = new Map(),
   airwayVisibility = { Q: true, J: true, V: true },
-  runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
+  runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
 ) {
   const palette = getRadarPalette(connected);

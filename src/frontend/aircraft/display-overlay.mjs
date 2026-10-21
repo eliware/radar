@@ -41,7 +41,7 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     waterVisible = true,
     airways = new Map(),
     airwayVisibility = { Q: true, J: true, V: true },
-    runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
+    runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
     referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   ) {
     const width = container.clientWidth || 1;

@@ -10,6 +10,7 @@ export function drawAirportRunways(
   range,
   runwaysVisible = true,
   extensionsVisible = true,
+  baseLegsVisible = true,
 ) {
   context.strokeStyle = "#777777";
   context.lineWidth = 1.5;
@@ -17,11 +18,27 @@ export function drawAirportRunways(
   for (const airport of airports.values()) {
     if (airport.rangeNm > range) continue;
     for (const runway of airport.runways ?? [])
-      drawRunway(context, runway, airport, project, runwaysVisible, extensionsVisible);
+      drawRunway(
+        context,
+        runway,
+        airport,
+        project,
+        runwaysVisible,
+        extensionsVisible,
+        baseLegsVisible,
+      );
   }
 }
 
-function drawRunway(context, runway, airport, project, runwaysVisible, extensionsVisible) {
+function drawRunway(
+  context,
+  runway,
+  airport,
+  project,
+  runwaysVisible,
+  extensionsVisible,
+  baseLegsVisible,
+) {
   const ends = runway.map((end) => ({
     ...end,
     elevationFeet: Number.isFinite(end.elevationFeet) ? end.elevationFeet : airport.elevationFeet,
@@ -29,30 +46,31 @@ function drawRunway(context, runway, airport, project, runwaysVisible, extension
   const points = ends.map(project);
   if (points.some((point) => !validPoint(point))) return;
   if (runwaysVisible) drawLine(context, points[0], points[1]);
-  if (extensionsVisible) for (const end of ends) drawRunwayExtension(context, end, project);
+  if (extensionsVisible || baseLegsVisible)
+    for (const end of ends)
+      drawRunwayExtension(context, end, project, extensionsVisible, baseLegsVisible);
 }
 
-function drawRunwayExtension(context, end, project) {
+function drawRunwayExtension(context, end, project, extensionsVisible, baseLegsVisible) {
   const outward = (end.alignmentDegrees + 180) % 360;
   const farEnd = runwayDestination(end, outward, EXTENSION_NM);
   const baseElevation = Number.isFinite(end.elevationFeet) ? end.elevationFeet : 0;
   const farAltitude = baseElevation + EXTENSION_ALTITUDE_FEET;
-  const outerPoint = project({ ...farEnd, elevationFeet: farAltitude });
-  const left = project({
-    ...runwayDestination(farEnd, outward - 90, 5),
-    elevationFeet: farAltitude,
-  });
-  const right = project({
-    ...runwayDestination(farEnd, outward + 90, 5),
-    elevationFeet: farAltitude,
-  });
-  const origin = project({ ...end, elevationFeet: baseElevation });
-  if (![origin, outerPoint, left, right].every(validPoint)) return;
+  const outerPoint = extensionsVisible ? project({ ...farEnd, elevationFeet: farAltitude }) : null;
+  const origin = extensionsVisible ? project({ ...end, elevationFeet: baseElevation }) : null;
+  const left = baseLegsVisible
+    ? project({ ...runwayDestination(farEnd, outward - 90, 5), elevationFeet: farAltitude })
+    : null;
+  const right = baseLegsVisible
+    ? project({ ...runwayDestination(farEnd, outward + 90, 5), elevationFeet: farAltitude })
+    : null;
+  if (extensionsVisible && (!validPoint(origin) || !validPoint(outerPoint))) return;
+  if (baseLegsVisible && (!validPoint(left) || !validPoint(right))) return;
   context.strokeStyle = "#333333";
   context.lineCap = "round";
   context.setLineDash([1, 5]);
-  drawLine(context, origin, outerPoint);
-  drawLine(context, left, right);
+  if (extensionsVisible) drawLine(context, origin, outerPoint);
+  if (baseLegsVisible) drawLine(context, left, right);
   context.setLineDash([]);
 }
 

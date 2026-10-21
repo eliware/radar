@@ -17,6 +17,7 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
       "airway-V",
       "runways",
       "extensions",
+      "baseLegs",
       "airports",
       "navaids",
     ].map((key) => [key, readToggleState(key)]),
@@ -39,6 +40,7 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
     if (restoring) return;
     writeToggleState("runways", value.runwaysVisible);
     writeToggleState("extensions", value.extensionsVisible);
+    writeToggleState("baseLegs", value.baseLegsVisible);
     onChange?.(value);
   });
   const references = createReferenceVisibility(documentRef, (value) => {
@@ -53,6 +55,7 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
   ["Q", "J", "V"].forEach((type) => airways.setVisible(type, saved[`airway-${type}`]));
   runways.setRunwaysVisible(saved.runways);
   runways.setExtensionsVisible(saved.extensions);
+  runways.setBaseLegsVisible(saved.baseLegs);
   references.setAirportsVisible(saved.airports);
   references.setNavaidsVisible(saved.navaids);
   restoring = false;

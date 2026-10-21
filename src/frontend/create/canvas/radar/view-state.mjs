@@ -14,6 +14,7 @@ export function createCanvasRadarViewState(defaultRangeNm, defaultRotationRadian
     airwayVisibility: { Q: true, J: true, V: true },
     runwaysVisible: true,
     extensionsVisible: true,
+    baseLegsVisible: true,
     airportsVisible: true,
     navaidsVisible: true,
   };

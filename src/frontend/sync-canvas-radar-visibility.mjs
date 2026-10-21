@@ -7,6 +7,7 @@ export function syncCanvasRadarVisibility(state, layers) {
   );
   state.runwaysVisible = layers.runways.isRunwaysVisible();
   state.extensionsVisible = layers.runways.isExtensionsVisible();
+  state.baseLegsVisible = layers.runways.isBaseLegsVisible();
   state.airportsVisible = layers.references.isAirportsVisible();
   state.navaidsVisible = layers.references.isNavaidsVisible();
 }

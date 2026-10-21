@@ -24,7 +24,11 @@ test("starts the scene loop with layer visibility and shared references", () => 
       ils: { isVisible: isIlsVisible },
       procedures: { isSidVisible, isStarVisible },
       airways: { isVisible: isAirwayVisible },
-      runways: { isRunwaysVisible: jest.fn(() => true), isExtensionsVisible: jest.fn(() => true) },
+      runways: {
+        isRunwaysVisible: jest.fn(() => true),
+        isExtensionsVisible: jest.fn(() => true),
+        isBaseLegsVisible: jest.fn(() => true),
+      },
       references: { isAirportsVisible: jest.fn(() => true), isNavaidsVisible: jest.fn(() => true) },
     },
     water: { isVisible: jest.fn(() => true) },

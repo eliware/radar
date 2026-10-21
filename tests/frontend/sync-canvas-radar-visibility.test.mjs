@@ -7,7 +7,11 @@ test("copies each active layer visibility into canvas state", () => {
     ils: { isVisible: () => false },
     procedures: { isSidVisible: () => false, isStarVisible: () => true },
     airways: { isVisible: (type) => type !== "J" },
-    runways: { isRunwaysVisible: () => false, isExtensionsVisible: () => true },
+    runways: {
+      isRunwaysVisible: () => false,
+      isExtensionsVisible: () => true,
+      isBaseLegsVisible: () => false,
+    },
     references: { isAirportsVisible: () => false, isNavaidsVisible: () => true },
   };
   syncCanvasRadarVisibility(state, layers);
@@ -18,6 +22,7 @@ test("copies each active layer visibility into canvas state", () => {
     airwayVisibility: { Q: true, J: false, V: true },
     runwaysVisible: false,
     extensionsVisible: true,
+    baseLegsVisible: false,
     airportsVisible: false,
     navaidsVisible: true,
   });
@@ -31,7 +36,11 @@ test("does not mutate its layer controllers", () => {
       ils: { isVisible: method },
       procedures: { isSidVisible: method, isStarVisible: method },
       airways: { isVisible: method },
-      runways: { isRunwaysVisible: method, isExtensionsVisible: method },
+      runways: {
+        isRunwaysVisible: method,
+        isExtensionsVisible: method,
+        isBaseLegsVisible: method,
+      },
       references: { isAirportsVisible: method, isNavaidsVisible: method },
     },
   );

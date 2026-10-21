@@ -31,20 +31,22 @@ test("draws every aligned legend symbol in two columns", () => {
     airwayVVisible: true,
     runwaysVisible: true,
     extensionsVisible: true,
+    baseLegsVisible: true,
     airportVisible: true,
     navaidsVisible: true,
     waterVisible: true,
   });
-  expect(context.fillText).toHaveBeenCalledTimes(17);
+  expect(context.fillText).toHaveBeenCalledTimes(18);
   expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 26, 24);
   expect(context.fillText).toHaveBeenCalledWith("A AIRPORT", 26, 88);
   expect(context.fillText).toHaveBeenCalledWith("N VOR", 26, 104);
-  expect(context.fillText).toHaveBeenCalledWith("I ILS", 26, 152);
-  expect(context.fillText).toHaveBeenCalledWith("V VICTOR", 138, 88);
+  expect(context.fillText).toHaveBeenCalledWith("I ILS", 138, 24);
+  expect(context.fillText).toHaveBeenCalledWith("B BASE", 26, 152);
+  expect(context.fillText).toHaveBeenCalledWith("V VICTOR", 138, 104);
   expect(context.fillText).toHaveBeenCalledWith("R RUNWAY", 26, 120);
   expect(context.fillText).toHaveBeenCalledWith("E ERCL", 26, 136);
-  expect(context.fillText).toHaveBeenCalledWith("M METAR", 138, 120);
-  expect(context.fillText).toHaveBeenCalledWith("F STRIPS", 138, 136);
+  expect(context.fillText).toHaveBeenCalledWith("M METAR", 138, 136);
+  expect(context.fillText).toHaveBeenCalledWith("F STRIPS", 138, 152);
   expect(context.stroke).toHaveBeenCalled();
   expect(context.arc).toHaveBeenCalled();
 });
@@ -62,9 +64,10 @@ test("draws a single column and dims disabled or disconnected entries", () => {
     navaidsVisible: false,
     runwaysVisible: false,
     extensionsVisible: false,
+    baseLegsVisible: false,
     waterVisible: false,
   });
-  expect(context.fillText).toHaveBeenCalledWith("W WATER", 26, 248);
+  expect(context.fillText).toHaveBeenCalledWith("W WATER", 26, 264);
   expect(context.strokeStyle).toBe("#444444");
 });
 

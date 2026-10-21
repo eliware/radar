@@ -28,7 +28,11 @@ export function createAircraftRadarLoop({
   procedureVisibility = { sidVisible: true, starVisible: true },
   airways = new Map(),
   airwayVisibility = { isVisible: () => true },
-  runwayVisibility = { isRunwaysVisible: () => true, isExtensionsVisible: () => true },
+  runwayVisibility = {
+    isRunwaysVisible: () => true,
+    isExtensionsVisible: () => true,
+    isBaseLegsVisible: () => true,
+  },
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   isWaterVisible = () => true,
 }) {
@@ -75,6 +79,8 @@ export function createAircraftRadarLoop({
             referenceVisibility.airportsVisible && runwayVisibility.isRunwaysVisible(),
           extensionsVisible:
             referenceVisibility.airportsVisible && runwayVisibility.isExtensionsVisible(),
+          baseLegsVisible:
+            referenceVisibility.airportsVisible && runwayVisibility.isBaseLegsVisible(),
         },
         referenceVisibility,
       );

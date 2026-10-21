@@ -12,7 +12,7 @@ export function drawRadarScaleLegend(
   procedureVisibility = { sidVisible: true, starVisible: true },
   waterVisible = true,
   airwayVisibility = { Q: true, J: true, V: true },
-  runwayVisibility = { runwaysVisible: true, extensionsVisible: true },
+  runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
 ) {
   const procedures =

@@ -17,6 +17,7 @@ test("sets the configured view defaults and enables reference layers", () => {
     airwayVisibility: { Q: true, J: true, V: true },
     runwaysVisible: true,
     extensionsVisible: true,
+    baseLegsVisible: true,
     airportsVisible: true,
     navaidsVisible: true,
   });

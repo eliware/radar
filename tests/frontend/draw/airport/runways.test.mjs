@@ -146,7 +146,29 @@ test("skips an extension when its projected points are invalid", () => {
   expect(context.stroke).toHaveBeenCalledTimes(1);
 });
 
-test("can toggle runway geometry and extended centerlines independently", () => {
+test("skips base legs when a projected leg endpoint is invalid", () => {
+  const context = {
+    beginPath: jest.fn(),
+    lineTo: jest.fn(),
+    moveTo: jest.fn(),
+    setLineDash: jest.fn(),
+    stroke: jest.fn(),
+  };
+  let calls = 0;
+  const runway = [
+    { latitude: 43, longitude: -70, elevationFeet: 50, alignmentDegrees: 10 },
+    { latitude: 43.01, longitude: -70, elevationFeet: 50, alignmentDegrees: 190 },
+  ];
+  drawAirportRunways(
+    context,
+    new Map([["PWM", { rangeNm: 1, runways: [runway] }]]),
+    () => (++calls === 5 ? null : { x: 1, y: 2 }),
+    20,
+  );
+  expect(context.stroke).toHaveBeenCalledTimes(3);
+});
+
+test("can toggle runways, ERCL, and base legs independently", () => {
   const runway = [
     { latitude: 43, longitude: -70, elevationFeet: 50, alignmentDegrees: 10 },
     { latitude: 43.01, longitude: -70, elevationFeet: 50, alignmentDegrees: 190 },
@@ -165,5 +187,11 @@ test("can toggle runway geometry and extended centerlines independently", () => 
   expect(noRunways.stroke).toHaveBeenCalledTimes(4);
   const noExtensions = makeContext();
   drawAirportRunways(noExtensions, airports, project, 20, true, false);
-  expect(noExtensions.stroke).toHaveBeenCalledTimes(1);
+  expect(noExtensions.stroke).toHaveBeenCalledTimes(3);
+  const noBaseLegs = makeContext();
+  drawAirportRunways(noBaseLegs, airports, project, 20, true, true, false);
+  expect(noBaseLegs.stroke).toHaveBeenCalledTimes(3);
+  const neitherGuide = makeContext();
+  drawAirportRunways(neitherGuide, airports, project, 20, true, false, false);
+  expect(neitherGuide.stroke).toHaveBeenCalledTimes(1);
 });
