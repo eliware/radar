@@ -1,6 +1,6 @@
 # Release Notes
 
-## 13.0.0 — 2026-10-17
+## 14.0.0 — 2026-10-21
 
 ### Added
 
@@ -21,3 +21,7 @@
 - Add aligned radar labels, ring labels, and line gaps.
 - Add filters for short or unpaved runways.
 - Add a Git LFS copy of NASR data for local deployment.
+
+### Changed
+
+- Pad numeric METAR wind directions to three digits with leading zeros.

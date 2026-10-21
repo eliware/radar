@@ -26,6 +26,15 @@ test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
   });
 });
 
+test.each([
+  ["00504KT", "005°"],
+  ["04504KT", "045°"],
+  ["36004KT", "360°"],
+])("pads numeric wind direction in %s", (wind, expected) => {
+  const result = decodeMetarReport({ id: "KPWM", metar: `METAR KPWM 131651Z ${wind}` });
+  expect(result.decoded.windDirection).toBe(expected);
+});
+
 test("decodes variable wind, vertical visibility, and negative temperatures", () => {
   const result = decodeMetarReport({
     id: "KLEW",
