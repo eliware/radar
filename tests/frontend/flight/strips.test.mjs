@@ -87,6 +87,7 @@ test("updates on resize and each second, then removes stale aircraft on destroy"
     clearInterval: jest.fn(),
   };
   const view = createFlightStripView(container, windowRef, () => now);
+  view.setHome({ latitude: 43, longitude: -70 }, 310);
   view.update([aircraft("FRESH", 5), { icao: "NO-TIME", distanceNauticalMiles: 2 }]);
   view.update({ callsign: "NO-ICAO" });
   expect(container.innerHTML).toContain("2 AIRCRAFT");

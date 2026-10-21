@@ -10,14 +10,41 @@ test("renders near-home strip colors in the synchronized green and white phases"
   expect(container.innerHTML).toContain("near-home-pass flash-white");
 });
 
-test("keeps emergency strip color precedence and the age-based opacity", () => {
+test.each([
+  ["local", false, 'class="flight-strip-aircraft emergency"'],
+  ["remote", true, 'class="flight-strip-aircraft remote-only emergency"'],
+])("keeps %s emergency red and faded", (_source, remoteOnly, classes) => {
   const container = {};
   renderFlightStrips(
     container,
-    [{ icao: "EMERG", squawk: "7700", nearHomePass: true, lastSeen: 1000 }],
+    [{ icao: "EMERG", squawk: "7700", remoteOnly, nearHomePass: true, lastSeen: 1000 }],
     3000,
     91000,
   );
-  expect(container.innerHTML).toContain('class="flight-strip-aircraft emergency"');
+  expect(container.innerHTML).toContain(classes);
   expect(container.innerHTML).toContain('style="opacity:0.25"');
+});
+
+test("marks remote strips amber without applying local pass flashing", () => {
+  const container = {};
+  renderFlightStrips(
+    container,
+    [{ icao: "REMOTE", remoteOnly: true, nearHomePass: true, lastSeen: 1000 }],
+    3000,
+    1000,
+  );
+  expect(container.innerHTML).toContain('class="flight-strip-aircraft remote-only"');
+  expect(container.innerHTML).not.toContain("near-home-pass");
+});
+
+test("keeps local strips green and applies the local pass flash", () => {
+  const container = {};
+  renderFlightStrips(
+    container,
+    [{ icao: "LOCAL", remoteOnly: false, nearHomePass: true, lastSeen: 1000 }],
+    3000,
+    1000,
+  );
+  expect(container.innerHTML).toContain("near-home-pass flash-green");
+  expect(container.innerHTML).not.toContain("remote-only");
 });

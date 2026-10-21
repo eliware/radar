@@ -275,6 +275,12 @@ p {
 .flight-strip-row span:last-child {
   border-right: 0;
 }
+.flight-strip-aircraft {
+  color: #00ff41;
+}
+.flight-strip-aircraft.remote-only {
+  color: #ffbf00;
+}
 .flight-strip-aircraft.emergency {
   color: #ff0000;
 }

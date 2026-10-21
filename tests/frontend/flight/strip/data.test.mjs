@@ -65,3 +65,15 @@ test("keeps the combined fields readable when one value is missing", () => {
   expect(row[0].groups[0][3]).toBe("359°-");
   expect(row[1].groups[0][3]).toBe("-457");
 });
+
+test("preserves the remote-only source flag for strip rendering", () => {
+  const rows = buildFlightStripData(
+    [
+      { ...fullAircraft, icao: "LOCAL" },
+      { ...fullAircraft, icao: "REMOTE", remoteOnly: true },
+    ],
+    3000,
+  ).aircraft;
+  expect(rows.find((item) => item.icao === "LOCAL").remoteOnly).toBe(false);
+  expect(rows.find((item) => item.icao === "REMOTE").remoteOnly).toBe(true);
+});

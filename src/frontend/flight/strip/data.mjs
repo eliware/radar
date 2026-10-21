@@ -48,6 +48,7 @@ export function buildFlightStripData(aircraft, width) {
     aircraft: sorted.map((item, index) => ({
       icao: item.icao ?? "",
       lastSeen: item.lastSeen,
+      remoteOnly: item.remoteOnly === true,
       emergency: Boolean(getAircraftEmergencyLabel(item)),
       nearHomePass: Boolean(item.nearHomePass),
       ...layout.rows[index],

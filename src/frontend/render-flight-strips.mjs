@@ -43,9 +43,11 @@ export function renderFlightStrips(container, aircraft, width, now = Date.now())
         getAircraftAgeBrightness(item.lastSeen, now),
       );
       const classes = [
+        item.remoteOnly && "remote-only",
         item.emergency && "emergency",
-        item.nearHomePass && !item.emergency && "near-home-pass",
+        item.nearHomePass && !item.remoteOnly && !item.emergency && "near-home-pass",
         item.nearHomePass &&
+          !item.remoteOnly &&
           !item.emergency &&
           (Math.floor(now / 500) % 2 ? "flash-white" : "flash-green"),
       ].filter(Boolean);
