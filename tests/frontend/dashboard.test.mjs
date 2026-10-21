@@ -96,7 +96,7 @@ test("starts the secure live view and handles feed messages", async () => {
   );
   await socket.onopen();
   scene.onViewChange.mock.calls.at(-1)[0]();
-  expect(socket.send).toHaveBeenCalledWith('{"type":"viewport","radiusNm":56}');
+  expect(socket.send).toHaveBeenCalledWith('{"type":"viewport","radiusNm":56,"localOnly":false}');
   socket.onmessage({ data: JSON.stringify({ event: "aircraft-snapshot", aircraft: [] }) });
   socket.onclose();
   expect(scene.setConnected).toHaveBeenLastCalledWith(false);

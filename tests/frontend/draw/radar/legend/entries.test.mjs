@@ -17,7 +17,23 @@ test("lays out clickable actions in the same one or two columns as the legend", 
   expect(findRadarLegendToggle(320, 400, 20, 296)).toBe("f");
   expect(findRadarLegendToggle(320, 400, 200, 90)).toBeUndefined();
   const shortcuts = desktop.filter(({ entry }) => entry[4]).map(({ entry }) => entry[4]);
-  expect(shortcuts).toEqual(["a", "n", "r", "e", "b", "i", "d", "s", "q", "j", "v", "w", "m", "f"]);
+  expect(shortcuts).toEqual([
+    "l",
+    "a",
+    "n",
+    "r",
+    "e",
+    "b",
+    "i",
+    "d",
+    "s",
+    "q",
+    "j",
+    "v",
+    "w",
+    "m",
+    "f",
+  ]);
   desktop
     .filter(({ entry }) => entry[4])
     .forEach(({ entry, x, y }) => {

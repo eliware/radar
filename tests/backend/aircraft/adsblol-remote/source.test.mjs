@@ -168,6 +168,30 @@ test("does not poll without clients or publish a result after disconnect", async
   expect(state.timers.size).toBe(0);
 });
 
+test("pauses remote polling only when every connected client is local-only", async () => {
+  const state = setup();
+  const subscriber = jest.fn();
+  state.source.subscribe(subscriber);
+  state.source.connectClient("desktop");
+  state.source.connectClient("phone");
+  state.source.setClientLocalOnly("desktop", true);
+  expect(state.timers.size).toBe(1);
+  state.source.setClientLocalOnly("phone", true);
+  expect(state.timers.size).toBe(0);
+  expect(state.source.list()).toEqual([]);
+  expect(subscriber).toHaveBeenLastCalledWith([]);
+  state.source.setClientLocalOnly("phone", false);
+  expect(state.timers.size).toBe(1);
+  state.source.setClientLocalOnly("unknown", true);
+  state.source.setClientLocalOnly("phone", "true");
+  expect(state.timers.size).toBe(1);
+  state.source.setClientLocalOnly("phone", true);
+  state.source.disconnectClient("phone");
+  expect(state.timers.size).toBe(0);
+  state.source.disconnectClient("desktop");
+  expect(state.source.list()).toEqual([]);
+});
+
 test("suppresses a late failure after disconnect and cancels scheduled polling", async () => {
   let rejectResponse;
   const request = jest.fn(() => new Promise((_resolve, reject) => (rejectResponse = reject)));

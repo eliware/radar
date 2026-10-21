@@ -1,0 +1,23 @@
+import { readToggleState, writeToggleState } from "../toggle-state-storage.mjs";
+
+export function createAircraftVisibility(documentRef, onChange = () => {}) {
+  let remoteVisible = readToggleState("remote-aircraft");
+  const onKeyDown = (event) => {
+    if (event.key?.toLowerCase() !== "l" || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (["input", "textarea", "select"].includes(event.target?.tagName?.toLowerCase())) return;
+    if (event.target?.isContentEditable) return;
+    event.preventDefault();
+    setLocalOnly(remoteVisible);
+  };
+  documentRef?.addEventListener?.("keydown", onKeyDown);
+  function setLocalOnly(value) {
+    remoteVisible = !value;
+    writeToggleState("remote-aircraft", remoteVisible);
+    onChange({ localOnly: !remoteVisible });
+  }
+  return {
+    isLocalOnly: () => !remoteVisible,
+    setLocalOnly,
+    destroy: () => documentRef?.removeEventListener?.("keydown", onKeyDown),
+  };
+}

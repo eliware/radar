@@ -54,7 +54,10 @@ export function registerApiRoutes(
     socket.on("message", (message) => {
       try {
         const request = JSON.parse(message.toString());
-        if (request.type === "viewport") feed.setClientRadius?.(socket, request.radiusNm);
+        if (request.type === "viewport") {
+          feed.setClientRadius?.(socket, request.radiusNm);
+          feed.setClientLocalOnly?.(socket, request.localOnly);
+        }
       } catch {}
     });
     socket.on("close", unsubscribe);

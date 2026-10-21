@@ -32,7 +32,8 @@ test("creates visible layers and destroys all keyboard listeners", () => {
   expect(layers.runways.isBaseLegsVisible()).toBe(true);
   expect(layers.references.isAirportsVisible()).toBe(true);
   expect(layers.references.isNavaidsVisible()).toBe(true);
-  ["i", "d", "s", "q", "j", "v", "r", "e", "b", "a", "n"].forEach((key) =>
+  expect(layers.aircraft.isLocalOnly()).toBe(false);
+  ["i", "d", "s", "q", "j", "v", "r", "e", "b", "a", "n", "l"].forEach((key) =>
     listeners.forEach((listener) => listener({ key, preventDefault: jest.fn() })),
   );
   expect(layers.ils.isVisible()).toBe(true);
@@ -43,9 +44,10 @@ test("creates visible layers and destroys all keyboard listeners", () => {
   expect(stored.get("radar.visibility.baseLegs")).toBe("false");
   expect(layers.references.isAirportsVisible()).toBe(false);
   expect(layers.references.isNavaidsVisible()).toBe(false);
+  expect(layers.aircraft.isLocalOnly()).toBe(true);
   expect(stored.get("radar.visibility.ils")).toBe("true");
   layers.destroy();
-  expect(removed).toHaveLength(5);
+  expect(removed).toHaveLength(6);
   if (originalStorage) Object.defineProperty(globalThis, "localStorage", originalStorage);
   else delete globalThis.localStorage;
 });

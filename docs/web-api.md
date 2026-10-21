@@ -36,6 +36,8 @@ While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api ev
 
 Remote aircraft are combined with local readsb reports by ICAO address. When both sources report a target, readsb fields replace remote fields. ADSB.lol re-api supplies type codes and callsigns. Radar requests route data only when a remote record lacks a departure or arrival airport code. Remote-only targets appear yellow-green and expire when reports stop.
 
+Key L shows local readsb aircraft only. Clicking AIRCRAFT applies the same toggle without changing its appearance. Browser storage remembers this mode. ADSB.lol polling pauses when all connected browsers select local-only mode and resumes when any browser requests remote aircraft.
+
 ADSB.lol identifies re-api data as ODbL 1.0 in its [feeder re-api documentation](https://www.adsb.lol/docs/feeders-only/re-api/).
 
 Local aircraft types come from ADSB.lol v2 lookup by ICAO address. Departure and arrival fields use ADSB.lol route JSON by callsign. Results remain in memory. Lookup failures do not stop aircraft updates.
@@ -79,6 +81,7 @@ The radar legend has a transparent background and aligns each symbol with its la
 - Key I toggles ILS courses and marker beacons. Key D toggles SIDs. Key S toggles STARs.
 - Key Q toggles RNAV airways. Key J toggles Jet airways. Key V toggles Victor airways. Key W toggles water.
 - Key M toggles METARs. Hidden METARs stop refreshing. Key F toggles flight strips.
+- Key L shows only local readsb aircraft. Click AIRCRAFT to apply the same toggle.
 
 When flight strips are hidden, the radar fills the viewport and route lookups for ORIG/DEST pause. Browser local storage saves visibility choices and restores them on refresh.
 

@@ -12,6 +12,7 @@ test("registers health, data, procedure, airway, and update relay routes", async
     list: jest.fn(() => [{ icao: "ABC123" }]),
     subscribe: jest.fn(() => subscriber),
     setClientRadius: jest.fn(),
+    setClientLocalOnly: jest.fn(),
     isReady: jest.fn(() => true),
     setRouteLookupsEnabled: jest.fn(),
   };
@@ -44,8 +45,9 @@ test("registers health, data, procedure, airway, and update relay routes", async
   const update = feed.subscribe.mock.calls[0][0];
   expect(feed.subscribe).toHaveBeenCalledWith(expect.any(Function), socket);
   const message = socket.on.mock.calls.find(([event]) => event === "message")[1];
-  message(Buffer.from('{"type":"viewport","radiusNm":65}'));
+  message(Buffer.from('{"type":"viewport","radiusNm":65,"localOnly":true}'));
   expect(feed.setClientRadius).toHaveBeenCalledWith(socket, 65);
+  expect(feed.setClientLocalOnly).toHaveBeenCalledWith(socket, true);
   message(Buffer.from('{"type":"other"}'));
   message(Buffer.from("invalid json"));
   update({ event: "aircraft-snapshot", aircraft: [{ icao: "ABC123" }] });

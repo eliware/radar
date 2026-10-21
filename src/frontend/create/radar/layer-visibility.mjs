@@ -3,6 +3,7 @@ import { createProcedureVisibility } from "../procedure-visibility.mjs";
 import { createAirwayVisibility } from "../airway-visibility.mjs";
 import { createRunwayVisibility } from "../runway-visibility.mjs";
 import { createReferenceVisibility } from "../reference-visibility.mjs";
+import { createAircraftVisibility } from "../aircraft-visibility.mjs";
 import { readToggleState, writeToggleState } from "../../toggle-state-storage.mjs";
 
 export function createRadarLayerVisibility(documentRef, onChange, onReferenceChange) {
@@ -22,6 +23,7 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
       "navaids",
     ].map((key) => [key, readToggleState(key)]),
   );
+  const aircraft = createAircraftVisibility(documentRef);
   const ils = createIlsVisibility(documentRef, (value) => {
     if (!restoring) changed("ils", value, onChange);
   });
@@ -66,12 +68,14 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
     airways,
     runways,
     references,
+    aircraft,
     destroy() {
       ils.destroy();
       procedures.destroy();
       airways.destroy();
       runways.destroy();
       references.destroy();
+      aircraft.destroy();
     },
   };
 }

@@ -7,6 +7,7 @@ export function destroyDashboardResources(resources) {
   resources.detachArrowControls?.();
   resources.detachReferences?.();
   resources.detachViewport?.();
+  resources.detachViewportReporter?.();
   resources.metarRefresh?.destroy();
   resources.feed?.close();
   resources.flightStrips?.destroy();

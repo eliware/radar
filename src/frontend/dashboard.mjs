@@ -65,7 +65,8 @@ export async function startDashboard({
         scene.onViewChange(() => referenceLoader.load(scene.getViewportBounds())) ?? (() => {});
     resources.detachReferences = detachReferences;
     if (referenceLoader) referenceLoader.load(scene.getViewportBounds());
-    const sendViewport = createViewportReporter(scene);
+    const sendViewport = createViewportReporter(scene, document);
+    resources.detachViewportReporter = sendViewport.destroy;
     const feed = connectWebSocketFeed({
       WebSocketClass,
       url: dashboardWebSocketUrl(document.location),

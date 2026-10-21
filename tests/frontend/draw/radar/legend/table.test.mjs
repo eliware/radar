@@ -71,6 +71,16 @@ test("draws a single column and dims disabled or disconnected entries", () => {
   expect(context.strokeStyle).toBe("#444444");
 });
 
+test("keeps the AIRCRAFT legend appearance unchanged", () => {
+  const context = createContext();
+  const colors = new Map();
+  context.fillText.mockImplementation(function (label) {
+    colors.set(label, this.fillStyle);
+  });
+  drawRadarLegendTable(context, 800, 400, true, { aircraftVisible: false });
+  expect(colors.get("AIRCRAFT")).toBe("#00ff41");
+});
+
 test("uses a safe column width when text measurement is unavailable", () => {
   const context = createContext();
   delete context.measureText;

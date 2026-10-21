@@ -20,7 +20,7 @@ export function createAdsbLolRemoteSource({
   let routeLookupsEnabled = true;
   const poller = createAdsbLolPoller({
     poll,
-    hasClients: () => clients.size > 0,
+    hasClients: () => [...clients.values()].some((client) => !client.localOnly),
     setTimeoutFn,
     clearTimeoutFn,
     onError,
@@ -42,7 +42,14 @@ export function createAdsbLolRemoteSource({
     if (!Number.isFinite(location?.latitude) || !Number.isFinite(location?.longitude)) {
       return;
     }
-    const radius = Math.min(MAX_RADIUS_NM, Math.max(...clients.values()));
+    const radius = Math.min(
+      MAX_RADIUS_NM,
+      Math.max(
+        ...[...clients.values()]
+          .filter((client) => !client.localOnly)
+          .map((client) => client.radiusNm),
+      ),
+    );
     const records = await requestAdsbLolCircle(request, location, radius);
     if (!isCurrent()) return;
     records.forEach((item) => update(item));
@@ -60,16 +67,35 @@ export function createAdsbLolRemoteSource({
       return () => subscribers.delete(subscriber);
     },
     connectClient(key) {
-      clients.set(key, Math.min(MAX_RADIUS_NM, Math.max(1, defaultRangeNm)));
+      clients.set(key, {
+        radiusNm: Math.min(MAX_RADIUS_NM, Math.max(1, defaultRangeNm)),
+        localOnly: false,
+      });
       start();
     },
     setClientRadius(key, value) {
-      if (clients.has(key) && Number.isFinite(value))
-        clients.set(key, Math.min(MAX_RADIUS_NM, Math.max(1, Math.ceil(value))));
+      const client = clients.get(key);
+      if (client && Number.isFinite(value))
+        client.radiusNm = Math.min(MAX_RADIUS_NM, Math.max(1, Math.ceil(value)));
+    },
+    setClientLocalOnly(key, value) {
+      const client = clients.get(key);
+      if (!client || typeof value !== "boolean") return;
+      client.localOnly = value;
+      if ([...clients.values()].some((item) => !item.localOnly)) start();
+      else {
+        poller.stop();
+        aircraft.clear();
+        publish();
+      }
     },
     disconnectClient(key) {
       clients.delete(key);
       if (!clients.size) {
+        poller.stop();
+        aircraft.clear();
+        publish();
+      } else if (![...clients.values()].some((item) => !item.localOnly)) {
         poller.stop();
         aircraft.clear();
         publish();

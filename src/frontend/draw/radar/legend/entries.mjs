@@ -1,5 +1,5 @@
 const ENTRIES = [
-  ["diamond", "AIRCRAFT", "bright"],
+  ["diamond", "AIRCRAFT", "bright", "aircraftVisible", "l"],
   ["line", "60s VECTOR", "bright"],
   ["slash", "HISTORY", "trail"],
   ["circle", "HOME", "bright"],

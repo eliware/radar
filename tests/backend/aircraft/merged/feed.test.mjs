@@ -22,6 +22,7 @@ function setup() {
     subscribe: jest.fn((listener) => ((onRemote = listener), jest.fn())),
     connectClient: jest.fn(),
     setClientRadius: jest.fn(),
+    setClientLocalOnly: jest.fn(),
     disconnectClient: jest.fn(),
     setRouteLookupsEnabled: jest.fn(),
     close: jest.fn(),
@@ -84,6 +85,28 @@ test("sends one filtered snapshot per second without event-driven broadcasts", (
   stopNear();
   stopNear();
   expect(state.remoteSource.disconnectClient).toHaveBeenCalledTimes(1);
+});
+
+test("filters remote-only aircraft per client and forwards local-only policy", () => {
+  const state = setup();
+  const localOnly = jest.fn();
+  const remoteEnabled = jest.fn();
+  state.feed.subscribe(localOnly, "local");
+  state.feed.subscribe(remoteEnabled, "remote");
+  state.feed.setClientLocalOnly("missing", true);
+  state.feed.setClientLocalOnly("local", "true");
+  state.feed.setClientRadius("remote", 20);
+  state.feed.setClientLocalOnly("local", true);
+  expect(state.remoteSource.setClientLocalOnly).toHaveBeenCalledWith("local", true);
+  expect(localOnly).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      event: "aircraft-snapshot",
+      aircraft: [expect.objectContaining({ icao: "ABC123", remoteOnly: false })],
+    }),
+  );
+  state.tick();
+  expect(localOnly.mock.calls.at(-1)[0].aircraft).toHaveLength(1);
+  expect(remoteEnabled.mock.calls.at(-1)[0].aircraft).toHaveLength(2);
 });
 
 test("stops snapshot timer with last client and stops safely on close", () => {

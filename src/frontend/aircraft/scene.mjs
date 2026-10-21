@@ -78,6 +78,7 @@ export function createAircraftScene({
     update: workflow.update,
     updateRemote: workflow.updateRemote,
     updateSnapshot: workflow.updateSnapshot,
+    isLocalOnly: layers.aircraft.isLocalOnly,
     ...references.updates((items) => airspace.update(items)),
     setIlsVisible: layers.ils.setVisible,
     ...createRadarViewport(THREE, camera, controls, container, elevationFeet),

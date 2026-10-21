@@ -28,7 +28,8 @@ export function createMergedAircraftFeed(
       const visible = aircraft.filter(
         (item) =>
           Number.isFinite(item.distanceNauticalMiles) &&
-          item.distanceNauticalMiles <= client.radiusNm,
+          item.distanceNauticalMiles <= client.radiusNm &&
+          (!client.localOnly || !item.remoteOnly),
       );
       client.send({ event: "aircraft-snapshot", aircraft: visible, localFurthestDistanceNm });
     }
@@ -50,9 +51,16 @@ export function createMergedAircraftFeed(
       client.radiusNm = clampRadius(value);
       remoteSource.setClientRadius(key, client.radiusNm);
     },
+    setClientLocalOnly(key, value) {
+      const client = clients.get(key);
+      if (!client || typeof value !== "boolean") return;
+      client.localOnly = value;
+      remoteSource.setClientLocalOnly?.(key, value);
+      publishSnapshots();
+    },
     subscribe(send, key = Symbol("feed-client")) {
       if (closed) return () => false;
-      clients.set(key, { send, radiusNm: clampRadius(defaultRangeNm) });
+      clients.set(key, { send, radiusNm: clampRadius(defaultRangeNm), localOnly: false });
       remoteSource.connectClient(key);
       if (snapshotTimer === undefined)
         snapshotTimer = setIntervalFn(publishSnapshots, SNAPSHOT_INTERVAL_MS);

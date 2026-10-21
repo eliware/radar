@@ -124,6 +124,10 @@ directives:
       - Hide cached airspace meshes outside the current 3D reference view.
       - Debounce 3D reference view updates while the camera moves.
       - Keep ADSB.lol polling radius tied to zoom and viewport dimensions, not camera tilt.
+      - Toggle between all aircraft and local readsb aircraft with L.
+      - Keep AIRCRAFT legend appearance unchanged and make it clickable for the L action.
+      - Pause ADSB.lol polling while every connected client selects local-only mode.
+      - Store local-only mode in browser storage.
       - Offer an optional runtime vector-tile layer for muted gray lake and ocean outlines.
       - Load vector tiles that cover the current radar view.
       - Keep tile data in browser memory.
