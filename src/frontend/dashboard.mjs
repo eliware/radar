@@ -57,16 +57,14 @@ export async function startDashboard({
       scene.updateIls &&
       scene.updateProcedures &&
       scene.updateAirways &&
-      scene.range
+      scene.getViewportBounds
         ? createRadarReferenceLoader(fetchData, scene, config.location)
         : null;
     if (referenceLoader)
       detachReferences =
-        scene.onViewChange(() =>
-          referenceLoader.load(scene.getViewportBounds?.() ?? scene.range()),
-        ) ?? (() => {});
+        scene.onViewChange(() => referenceLoader.load(scene.getViewportBounds())) ?? (() => {});
     resources.detachReferences = detachReferences;
-    if (referenceLoader) referenceLoader.load(scene.getViewportBounds?.() ?? scene.range());
+    if (referenceLoader) referenceLoader.load(scene.getViewportBounds());
     const sendViewport = createViewportReporter(scene);
     const feed = connectWebSocketFeed({
       WebSocketClass,

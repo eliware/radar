@@ -13,6 +13,8 @@ beforeEach(() => jest.clearAllMocks());
 
 test("wires scene services, reports connection changes, and publishes references", () => {
   const view = createView();
+  expect(view.getViewportBounds).toEqual(expect.any(Function));
+  expect(view.visibleRadiusNm).toEqual(expect.any(Function));
   const loop = mocks.factories.createAircraftRadarLoop.mock.calls[0][0];
   const cameraOptions = mocks.factories.createRadarCamera.mock.calls[0][0];
   expect(mocks.factories.createRadarStage).toHaveBeenCalledWith(

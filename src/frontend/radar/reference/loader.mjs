@@ -3,6 +3,7 @@ import { createRadarReferenceCache } from "./cache.mjs";
 
 const PATHS = ["airports", "navaids", "airspace-boundaries", "ils", "procedures", "airways"];
 const RANGE_STEP_NM = 25;
+const APPLY_DELAY_MS = 80;
 
 export function createRadarReferenceLoader(fetchData, scene, location) {
   const cache = createRadarReferenceCache();
@@ -11,6 +12,7 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
   let latestBounds = null;
   let lastKey = "";
   let timer;
+  let applyTimer;
   let loading;
 
   function loadNext() {
@@ -21,7 +23,7 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
       .then((collections) => {
         cache.add(collections);
         loadedThrough = end;
-        cache.apply(scene, latestBounds, location);
+        applyLatest();
       })
       .catch(() => {})
       .finally(() => {
@@ -31,21 +33,38 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
       });
   }
 
+  function applyLatest() {
+    clearTimeout(applyTimer);
+    applyTimer = setTimeout(() => {
+      applyTimer = undefined;
+      cache.apply(scene, latestBounds, location);
+    }, APPLY_DELAY_MS);
+  }
+
   return {
     load(view) {
       const bounds = view && typeof view === "object" ? view : null;
-      const minimum = bounds?.minRangeNm ?? 0;
-      const maximum = Math.min(MAX_RADAR_RANGE, bounds?.maxRangeNm ?? MAX_RADAR_RANGE);
-      const key = bounds
-        ? [bounds.minX, bounds.maxX, bounds.minZ, bounds.maxZ]
-            .map((value) => Math.round(value * 2) / 2)
-            .join(":")
-        : "all";
+      if (!bounds) {
+        lastKey = "";
+        latestBounds = null;
+        clearTimeout(applyTimer);
+        applyTimer = undefined;
+        return cache.clear(scene);
+      }
+      const minimum = bounds.minRangeNm ?? 0;
+      const maximum = Math.min(MAX_RADAR_RANGE, bounds.maxRangeNm ?? 0);
+      const key = [bounds.minX, bounds.maxX, bounds.minZ, bounds.maxZ, minimum, maximum]
+        .map((value) => Math.round(value * 2) / 2)
+        .join(":");
       if (key === lastKey) return;
       lastKey = key;
       latestBounds = bounds;
-      if (maximum <= minimum) return cache.clear(scene);
-      if (loadedThrough) cache.apply(scene, bounds, location);
+      if (maximum <= minimum) {
+        clearTimeout(applyTimer);
+        applyTimer = undefined;
+        return cache.clear(scene);
+      }
+      if (loadedThrough) applyLatest();
       const target = Math.min(MAX_RADAR_RANGE, Math.ceil(maximum / RANGE_STEP_NM) * RANGE_STEP_NM);
       if (target <= loadedThrough) return;
       requestedThrough = Math.max(requestedThrough, target);

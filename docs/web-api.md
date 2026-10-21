@@ -58,7 +58,7 @@ A predicted path lasts 60 seconds. History marks cover the last 60 seconds.
 
 ADS-B altitude is barometric altitude. It may not match true altitude above mean sea level.
 
-The 3D view uses Three.js. If WebGL cannot start, the app uses a 2D Canvas view. Both views show the same aircraft, range, rings, reference data, and water outlines. The Canvas view does not show vertical height.
+The 3D view uses Three.js. When WebGL cannot start, Radar uses 2D Canvas. Both views show the same aircraft, range rings, reference data, and water outlines. The Canvas view has no vertical height. The 3D camera uses its frustum for reference data and skips overlay points outside its depth planes. Polling uses zoom and viewport dimensions, so tilt does not expand the ADSB.lol radius.
 
 On desktop, move the pointer while holding the left button to turn the view. Hold the right button to pan. Use the scroll wheel to zoom. On mobile, keep home centered. Pinch to zoom and twist two fingers to turn. Panning is disabled on mobile.
 
@@ -82,7 +82,7 @@ When flight strips are hidden, the radar fills the viewport and route lookups fo
 
 ## Airport and procedure layers
 
-The browser requests reference data for the current range. It requests only new distance bands as the range grows. It keeps results in browser memory.
+The browser requests reference data inside the current view and keeps results in browser memory. Both views request only new distance bands as they expand. The 3D view uses frustum intersections with ground and terminal airspace heights to set query limits. Reference requests stop at 300 nautical miles. Cached airspace meshes outside the current view are hidden. Overlay points behind the camera are skipped.
 
 Airport markers use pale gray. Labels sit above the markers. VOR symbols and labels use blue. Runway guides use dark gray dotted lines.
 

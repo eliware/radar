@@ -1,6 +1,6 @@
 {
   "name": "@eliware/radar",
-  "version": "14.0.0",
+  "version": "15.0.0",
   "type": "module",
   "description": "Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
   "keywords": [
@@ -61,7 +61,7 @@
     "webpack-cli": "^7.2.3"
   },
   "devDependencies": {
-    "@eliware/test": "^14.0.0"
+    "@eliware/test": "^15.0.0"
   },
   "jest": {
     "testEnvironment": "node",

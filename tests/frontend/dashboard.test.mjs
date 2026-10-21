@@ -128,7 +128,7 @@ test("destroys the scene when dashboard setup fails after scene creation", async
   await startDashboard({ document: makeDocument(), fetchData, createScene: () => scene });
   expect(scene.destroy).toHaveBeenCalledTimes(1);
 });
-test("loads reference data to the maximum range independent of zoom", async () => {
+test("loads references to the current 3D viewport bounds instead of all ranges", async () => {
   const document = makeDocument();
   const requested = [];
   const fetchData = jest.fn(async (path) => {
@@ -151,6 +151,14 @@ test("loads reference data to the maximum range independent of zoom", async () =
     updateProcedures: jest.fn(),
     updateAirways: jest.fn(),
     range: () => 20,
+    getViewportBounds: () => ({
+      minX: -25,
+      maxX: 25,
+      minZ: -20,
+      maxZ: 20,
+      minRangeNm: 0,
+      maxRangeNm: 30,
+    }),
     onViewChange: jest.fn((listener) => {
       viewListeners.push(listener);
       return viewListeners.length === 1 ? jest.fn() : undefined;
@@ -169,24 +177,20 @@ test("loads reference data to the maximum range independent of zoom", async () =
   viewListeners[1](30);
   await Promise.resolve();
   expect(scene.onViewChange).toHaveBeenCalledTimes(3);
-  expect(requested.filter((path) => path.includes("maxRangeNm=300"))).toHaveLength(6);
-  expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=300");
-  expect(requested.some((path) => path.includes("minRangeNm=20&maxRangeNm=30"))).toBe(false);
+  expect(requested.filter((path) => path.includes("maxRangeNm=50"))).toHaveLength(6);
+  expect(requested).toContain("/api/airports?minRangeNm=0&maxRangeNm=50");
+  expect(requested.some((path) => path.includes("maxRangeNm=300"))).toBe(false);
   result.destroy();
   expect(windowRef.clearInterval).toHaveBeenCalledWith("metar");
 });
-
 test("supports a scene without a viewport change subscription", async () => {
-  const fetchData = jest.fn(async (path) =>
-    jsonResponse(path === "/api/config" ? {} : path === "/api/metar" ? { reports: [] } : []),
-  );
+  const fetchData = jest.fn().mockResolvedValue(jsonResponse({}));
   const scene = { update: jest.fn(), destroy: jest.fn() };
   const windowRef = { addEventListener: jest.fn(), removeEventListener: jest.fn() };
-  class MockSocket {}
   const result = await startDashboard({
     document: makeDocument(),
     fetchData,
-    WebSocketClass: MockSocket,
+    WebSocketClass: class {},
     createScene: () => scene,
     windowRef,
   });

@@ -8,9 +8,12 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
   const shapes = new Map();
   let material;
   let visible = true;
+  let visibleIds = new Set();
   function update(airports) {
+    visibleIds = new Set();
     for (const airport of airports) {
       const id = airport.faaId;
+      visibleIds.add(id);
       if (shapes.has(id)) continue;
       const bands = airportAirspaceBands(airport);
       if (!bands.length) continue;
@@ -37,10 +40,11 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
       scene.add(lines);
       shapes.set(id, lines);
     }
+    for (const [id, shape] of shapes) shape.visible = visible && visibleIds.has(id);
   }
   function setVisible(value) {
     visible = Boolean(typeof value === "object" ? value.airportsVisible : value);
-    for (const shape of shapes.values()) shape.visible = visible;
+    for (const [id, shape] of shapes) shape.visible = visible && visibleIds.has(id);
   }
   function dispose() {
     for (const shape of shapes.values()) {

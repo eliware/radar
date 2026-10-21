@@ -38,6 +38,9 @@ test("adds a bounded airspace shell once and disposes it", () => {
   expect(shape.visible).toBe(false);
   volumes.setVisible(true);
   expect(shape.visible).toBe(true);
+  volumes.update([elevatedAirport]);
+  expect(shape.visible).toBe(false);
+  expect(scene.add.mock.calls[1][0].visible).toBe(true);
   volumes.dispose();
   expect(scene.remove).toHaveBeenCalledTimes(2);
 });

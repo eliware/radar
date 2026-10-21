@@ -50,7 +50,7 @@ test("loads a coarse range bucket and clips crossing geometry to the viewport", 
   );
   const loader = createRadarReferenceLoader(fetchData, updates, location);
   loader.load(bounds);
-  await flush();
+  await flush(80);
   loader.load(bounds);
 
   expect(fetchData).toHaveBeenCalledTimes(6);
@@ -72,7 +72,7 @@ test("reuses cached geometry while panning within the loaded range", async () =>
   const fetchData = jest.fn().mockResolvedValue(response());
   const loader = createRadarReferenceLoader(fetchData, updates, location);
   loader.load(bounds);
-  await flush();
+  await flush(80);
   loader.load({ ...bounds, maxX: 25, maxRangeNm: 45 });
   await flush(500);
   expect(fetchData).toHaveBeenCalledTimes(6);
@@ -84,7 +84,7 @@ test("fetches only the newly exposed range when zooming out", async () => {
   const fetchData = jest.fn().mockResolvedValue(response());
   const loader = createRadarReferenceLoader(fetchData, scene(), location);
   loader.load(bounds);
-  await flush();
+  await flush(80);
   loader.load({ ...bounds, maxX: 30, maxRangeNm: 61 });
   await flush(180);
   expect(fetchData).toHaveBeenCalledTimes(12);
@@ -108,12 +108,25 @@ test("queues a larger range while the initial query batch is still running", asy
   await flush();
 });
 
-test("retains the 300 nautical mile maximum for non-2D scenes", async () => {
-  jest.useFakeTimers();
-  const fetchData = jest.fn().mockResolvedValue(response());
-  createRadarReferenceLoader(fetchData, scene(), location).load(500);
-  await flush();
-  expect(fetchData).toHaveBeenCalledWith(expect.stringContaining("minRangeNm=0&maxRangeNm=300"));
+test("does not fall back to loading all references when viewport bounds are unavailable", () => {
+  const updates = scene();
+  const fetchData = jest.fn();
+  createRadarReferenceLoader(fetchData, updates, location).load(500);
+  expect(fetchData).not.toHaveBeenCalled();
+  Object.values(updates).forEach((update) => expect(update).toHaveBeenCalledWith([]));
+});
+
+test("clears references when viewport bounds omit the visible range", () => {
+  const updates = scene();
+  const fetchData = jest.fn();
+  createRadarReferenceLoader(fetchData, updates, location).load({
+    minX: -1,
+    maxX: 1,
+    minZ: -1,
+    maxZ: 1,
+  });
+  expect(fetchData).not.toHaveBeenCalled();
+  Object.values(updates).forEach((update) => expect(update).toHaveBeenCalledWith([]));
 });
 
 test("leaves current references intact when a range request fails", async () => {

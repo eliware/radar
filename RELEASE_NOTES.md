@@ -1,5 +1,12 @@
 # Release Notes
 
+## 15.0.0 — 2026-10-21
+
+### Changed
+
+- Set 3D reference loading from camera frustum limits and skip overlays outside camera depth.
+- Keep remote aircraft polling tied to zoom while the 3D camera tilts.
+
 ## 14.0.0 — 2026-10-21
 
 ### Added

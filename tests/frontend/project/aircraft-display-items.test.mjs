@@ -45,3 +45,18 @@ test("returns an empty display when the home location is invalid", () => {
   const aircraft = new Map([["A1", { icao: "A1", latitude: 43, longitude: -70 }]]);
   expect(projectAircraftDisplayItems(aircraft, new Map(), null, 0, (point) => point)).toEqual([]);
 });
+
+test("drops aircraft, history, and vectors outside the camera depth", () => {
+  const aircraft = new Map([
+    ["A1", { icao: "A1", latitude: 43.1, longitude: -70, altitudeFeet: 10000 }],
+  ]);
+  const trails = new Map([["A1", [{ x: 1, y: 2, z: 3 }]]]);
+  const result = projectAircraftDisplayItems(
+    aircraft,
+    trails,
+    { latitude: 43, longitude: -70 },
+    0,
+    () => null,
+  );
+  expect(result).toEqual([]);
+});

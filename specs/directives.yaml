@@ -115,6 +115,12 @@ directives:
       - Do not require authentication for local HTTP or WebSocket access.
       - Host the local page, CSS, and built JavaScript on the web server.
       - Keep Three.js as the primary 3D radar renderer.
+      - Build 3D reference limits from frustum intersections with ground and airspace levels.
+      - Load reference data only to the 3D frustum limits, capped at 300 nautical miles.
+      - Reject projected overlay points behind the camera or outside its near and far planes.
+      - Hide cached airspace meshes outside the current 3D reference view.
+      - Debounce 3D reference view updates while the camera moves.
+      - Keep ADSB.lol polling radius tied to zoom and viewport dimensions, not camera tilt.
       - Offer an optional runtime vector-tile layer for muted gray lake and ocean outlines.
       - Load vector tiles that cover the current radar view.
       - Keep tile data in browser memory.
@@ -234,9 +240,7 @@ directives:
       - Mark missing flight card values with a dash.
       - Make FAA ARTCC boundary paths gray when NASR data has them.
       - Do not label ARTCC paths as Portland or A90 terminal boundaries.
-      - Load airport, navaid, airspace, and boundary data only through the current zoom range.
-      - Load ILS data only through the current zoom range.
-      - Load SID and STAR data only through the current zoom range.
+      - Use the camera frustum to limit 3D reference drawing and data requests.
       - Keep radio controls out of the dashboard until requested.
       - Document the RTL1090 background and foreground procedures in `docs/`.
       - Provide browser assets, documented routes, and mirrored tests.
