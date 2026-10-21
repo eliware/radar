@@ -275,6 +275,10 @@ p {
 .flight-strip-row span:last-child {
   border-right: 0;
 }
+.flight-strip-list.rows-2 .flight-strip-row span,
+.flight-strip-list.rows-3 .flight-strip-row span {
+  padding-block: 1px;
+}
 .flight-strip-aircraft {
   color: #00ff41;
 }

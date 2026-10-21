@@ -55,7 +55,7 @@ export function renderFlightStrips(container, aircraft, width, now = Date.now())
       return `<div class="flight-strip-aircraft${classNames}" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
     })
     .join("");
-  container.innerHTML = `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;
+  container.innerHTML = `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list rows-${data.rowCount}">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;
   const nextList = container.querySelector?.(".flight-strip-list");
   if (nextList) nextList.scrollTop = scrollTop;
 }

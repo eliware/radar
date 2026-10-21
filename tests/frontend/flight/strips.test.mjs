@@ -27,6 +27,16 @@ test("renders aligned aircraft data rows at narrow widths", () => {
   );
   expect(tracks).toHaveLength(3);
   expect(new Set(tracks).size).toBe(1);
+  expect(container.innerHTML).toContain('class="flight-strip-list rows-3"');
+});
+
+test("marks one-row and two-row layouts for compact padding", () => {
+  const oneRow = {};
+  const twoRows = {};
+  renderFlightStrips(oneRow, [aircraft("ONE", 1)], 3000);
+  renderFlightStrips(twoRows, [aircraft("TWO", 1)], 300);
+  expect(oneRow.innerHTML).toContain('class="flight-strip-list rows-1"');
+  expect(twoRows.innerHTML).toContain('class="flight-strip-list rows-2"');
 });
 
 test("keeps the blank type slot aligned in two-row strips", () => {

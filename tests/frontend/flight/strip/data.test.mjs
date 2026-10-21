@@ -17,7 +17,7 @@ const fullAircraft = {
   lastSeen: 1000,
 };
 
-test("sorts aircraft and formats the nine aligned fields", () => {
+test("sorts aircraft and formats visible fields without a one-row spacer", () => {
   const far = { ...fullAircraft, icao: "FAR123", distanceNauticalMiles: 40 };
   const result = buildFlightStripData([far, fullAircraft], 3000);
   expect(result.count).toBe(2);
@@ -28,7 +28,6 @@ test("sorts aircraft and formats the nine aligned fields", () => {
     "B738",
     "009°200",
     "1200",
-    "",
     "007°4",
     "KPWM",
     "KBOS",
@@ -46,7 +45,6 @@ test("shows optional type, range, origin, and destination values", () => {
     "TYPE",
     "HEADING / SPEED",
     "SQUAWK",
-    "",
     "BEARING / RANGE",
     "ORIGIN",
     "DESTINATION",

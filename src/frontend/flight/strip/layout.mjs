@@ -21,11 +21,14 @@ export function buildFlightStripLayout(values, width, labels) {
       : Math.max(...twoRows.map((group) => requiredWidth(group, values, 5))) <= width
         ? twoRows
         : threeRows;
-  const columnCount = Math.max(...groups.map((group) => group.length));
-  const alignedGroups = groups.map((group) =>
+  const visibleGroups =
+    groups.length === 3 ? groups : groups.map((group) => group.filter((i) => i !== 5));
+  const columnCount = Math.max(...visibleGroups.map((group) => group.length));
+  const alignedGroups = visibleGroups.map((group) =>
     Array.from({ length: columnCount }, (_, index) => group[index] ?? null),
   );
   return {
+    rowCount: groups.length,
     alignedGroups,
     rows: values.map((row) => ({
       groups: alignedGroups.map((group) =>

@@ -45,6 +45,7 @@ export function buildFlightStripData(aircraft, width) {
   const values = sorted.map(valuesOf);
   const layout = buildFlightStripLayout(values, width, fieldLabels);
   return {
+    rowCount: layout.rowCount,
     aircraft: sorted.map((item, index) => ({
       icao: item.icao ?? "",
       lastSeen: item.lastSeen,
