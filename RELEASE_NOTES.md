@@ -1,11 +1,19 @@
 # Release Notes
 
-## 15.0.0 — 2026-10-21
+## 15.0.0 — 2026-10-22
+
+### Added
+
+- Add a local-only aircraft mode that pauses remote polling while all connected clients use it.
+- Add a separate B toggle for runway base legs and color flight strips by aircraft source.
 
 ### Changed
 
-- Set 3D reference loading from camera frustum limits and skip overlays outside camera depth.
-- Keep remote aircraft polling tied to zoom while the 3D camera tilts.
+- Use camera frustum intersections to limit 3D reference data and omit overlays behind the camera.
+- Keep remote polling range tied to zoom when the 3D view tilts.
+- Set wrapped flight-card rows to one-pixel vertical padding and offset the mobile 2D legend from the iOS status area.
+- Align lookup user-agent version strings with Radar 15.0.0.
+- Update shared Eliware dependencies to v15.
 
 ## 14.0.0 — 2026-10-21
 

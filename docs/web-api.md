@@ -34,7 +34,7 @@ Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each updat
 
 While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every six seconds after success. Failed requests use exponential backoff, with delays capped at five minutes. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
 
-Remote aircraft are combined with local readsb reports by ICAO address. When both sources report a target, readsb fields replace remote fields. ADSB.lol re-api supplies type codes and callsigns. Radar requests route data only when a remote record lacks a departure or arrival airport code. Remote-only targets appear yellow-green and expire when reports stop.
+Remote aircraft are combined with local readsb reports by ICAO address. When both sources report a target, readsb fields replace remote fields. ADSB.lol re-api supplies type codes and callsigns. Radar requests route data only when a remote record lacks a departure or arrival airport code. Local targets are green, remote-only targets are amber, and both sources use bright red for emergency aircraft. Targets fade with age and remote-only targets expire when reports stop.
 
 Key L shows local readsb aircraft only. Clicking AIRCRAFT applies the same toggle without changing its appearance. Browser storage remembers this mode. ADSB.lol polling pauses when all connected browsers select local-only mode and resumes when any browser requests remote aircraft.
 
@@ -48,7 +48,9 @@ The browser reconnects after a WebSocket failure. It waits one second before the
 
 ## Radar view
 
-The radar is a black square, aligned to the top left. The default view is centered on home. The default heading and range use `RADAR_DEFAULT_ROTATION` and `RADAR_DEFAULT_RANGE_NM`. The range starts at the configured default or five nautical miles more than the furthest aircraft. The larger value is used. The range limits are 1 and 300 nautical miles.
+The radar is a black square, aligned to the top left. The default view is centered on home. The default heading and range use `RADAR_DEFAULT_ROTATION` and `RADAR_DEFAULT_RANGE_NM`. The range starts at the configured default or five nautical miles more than the furthest locally detected aircraft. The larger value is used.
+
+Remote aircraft do not change auto-zoom. The range limits are 1 and 300 nautical miles.
 
 The app renders rings every nautical mile under 10 miles. It renders rings every five miles under 60 miles, every 10 miles under 150 miles, and every 25 miles at greater ranges. Bold labels mark rings at 2, 10, 20, or 50-mile intervals. Dark minor rings sit halfway between. Ring labels omit units and sit along a northwest radial, leaving an opening in the rings without a radial line.
 
@@ -101,7 +103,7 @@ Flight-strip panels sit beside the radar in landscape and under it in portrait. 
 
 Each flight card shows callsign, altitude and trend, type, heading and speed, squawk, bearing and rounded range, departure, and destination. Field headers and units are omitted.
 
-Narrow layouts group fields into aligned rows. Cards use white text on black, with a double border and single row dividers. The list scrolls while scrollbars stay hidden. Cards fade with age and are removed after aircraft timeout. Refreshes preserve the scroll offset.
+Narrow layouts group fields into aligned rows. Local aircraft cards are green, remote-only cards are amber, and emergency cards are bright red. Cards use a black background, double outer border, and single row dividers. The list scrolls while scrollbars stay hidden. Cards fade with age and are removed after aircraft timeout. Refreshes preserve the scroll offset.
 
 The 3D view shows a decoded VATSIM METAR table at the top center of the radar. Its fields are automation status, airport, flight category, age, wind direction, wind speed, visibility, weather, sky, temperature, dew point, and altimeter pressure. Flight category appears between airport and age, using green for VFR, yellow for MVFR, orange for IFR, and red for LIFR. The 2D view and narrow layouts show a one-line raw report ticker with the same category label and colors.
 
