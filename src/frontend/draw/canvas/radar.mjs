@@ -33,6 +33,7 @@ export function drawCanvasRadar(
   airwayVisibility = { Q: true, J: true, V: true },
   runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
+  legendTopInset = 0,
 ) {
   const palette = getRadarPalette(connected);
   const { width, height } = prepareCanvasRadar(ctx, canvas, windowRef);
@@ -91,5 +92,6 @@ export function drawCanvasRadar(
     airwayVisibility,
     runwayVisibility,
     referenceVisibility,
+    legendTopInset,
   );
 }

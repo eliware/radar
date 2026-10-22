@@ -18,11 +18,11 @@ const COLORS = {
   strips: "#ffffff",
 };
 
-export function drawRadarLegendTable(context, width, height, connected, visibility) {
+export function drawRadarLegendTable(context, width, height, connected, visibility, topInset = 0) {
   const palette = getRadarPalette(connected);
   context.font = '12px Consolas, "Courier New", monospace';
   context.textAlign = "left";
-  radarLegendLayout(width, height).forEach(({ entry, x, y }) => {
+  radarLegendLayout(width, height, topInset).forEach(({ entry, x, y }) => {
     const [icon, label, color, toggle] = entry;
     const enabled = !toggle || getVisibility(toggle, visibility);
     const ink = connected && enabled ? (palette[color] ?? COLORS[color]) : "#444444";

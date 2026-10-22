@@ -19,10 +19,14 @@ const ENTRIES = [
   ["line", "F STRIPS", "strips", "flightStripsVisible", "f"],
 ];
 
-export function radarLegendLayout(width, height) {
+export function radarLegendTopInset(windowRef) {
+  return windowRef.matchMedia?.("(hover: none) and (pointer: coarse)").matches ? 48 : 0;
+}
+
+export function radarLegendLayout(width, height, topInset = 0) {
   const columns = width >= 640 ? 2 : 1;
   const rows = Math.ceil(ENTRIES.length / columns);
-  const firstY = 24;
+  const firstY = 24 + topInset;
   const rowHeight = columns === 1 && height < 400 ? 14 : 16;
   return ENTRIES.map((entry, index) => {
     const column = Math.floor(index / rows);
@@ -31,8 +35,8 @@ export function radarLegendLayout(width, height) {
   });
 }
 
-export function findRadarLegendToggle(width, height, x, y) {
-  return radarLegendLayout(width, height).find(
+export function findRadarLegendToggle(width, height, x, y, topInset = 0) {
+  return radarLegendLayout(width, height, topInset).find(
     ({ entry, x: left, y: top }) =>
       entry[4] && x >= left - 8 && x <= left + 108 && y >= top - 8 && y <= top + 8,
   )?.entry[4];

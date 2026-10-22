@@ -1,6 +1,6 @@
 import { findRadarLegendToggle } from "../draw/radar/legend/entries.mjs";
 
-export function attachRadarLegendClick(element, documentRef, windowRef, redraw) {
+export function attachRadarLegendClick(element, documentRef, windowRef, redraw, topInset = 0) {
   if (
     !element?.addEventListener ||
     !documentRef?.dispatchEvent ||
@@ -15,7 +15,7 @@ export function attachRadarLegendClick(element, documentRef, windowRef, redraw) 
     if (!rect.width || !rect.height) return;
     const x = ((event.clientX - rect.left) * width) / rect.width;
     const y = ((event.clientY - rect.top) * height) / rect.height;
-    const key = findRadarLegendToggle(width, height, x, y);
+    const key = findRadarLegendToggle(width, height, x, y, topInset);
     if (!key) return;
     documentRef.dispatchEvent(
       new windowRef.KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }),

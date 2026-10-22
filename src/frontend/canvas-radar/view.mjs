@@ -10,6 +10,7 @@ import { createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
 import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
 import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
 import { getRadarCanvasViewport } from "./viewport.mjs";
+import { radarLegendTopInset } from "../draw/radar/legend/entries.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -24,6 +25,7 @@ export function createCanvasRadarView({
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
   const defaultRotationRadians = (-defaultRotationDegrees * Math.PI) / 180 || 0;
   const references = createRadarReferenceStore();
+  const legendTopInset = radarLegendTopInset(windowRef);
   const state = createCanvasRadarViewState(defaultRangeNm, defaultRotationRadians);
   const viewChanges = createViewChangeListeners();
   canvas.setAttribute("aria-label", "Top-down 2D radar view");
@@ -57,6 +59,7 @@ export function createCanvasRadarView({
     procedures: references.procedures,
     airways: references.airways,
     water: waterLayer.data,
+    legendTopInset,
   });
   draw = () => {
     syncCanvasRadarVisibility(state, layers);
@@ -65,7 +68,15 @@ export function createCanvasRadarView({
     viewChanges.emit(state.range);
   };
   const layers = createRadarLayerVisibility(documentRef, draw);
-  const detachEvents = attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef);
+  const detachEvents = attachCanvasRadarEvents(
+    canvas,
+    state,
+    draw,
+    targets,
+    trails,
+    windowRef,
+    legendTopInset,
+  );
   draw();
   const viewState = createCanvasRadarState(
     state,

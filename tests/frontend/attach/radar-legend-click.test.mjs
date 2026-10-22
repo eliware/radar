@@ -43,6 +43,26 @@ test("routes AIRCRAFT, METAR, flight, base, and ILS clicks through document key 
   expect(documentListeners.size).toBe(0);
 });
 
+test("uses the same top inset for mobile 2D legend taps", () => {
+  let click;
+  const element = {
+    clientWidth: 390,
+    clientHeight: 844,
+    addEventListener: (_type, listener) => (click = listener),
+    removeEventListener() {},
+    getBoundingClientRect: () => ({ left: 0, top: 0, width: 390, height: 844 }),
+  };
+  const documentRef = { addEventListener() {}, removeEventListener() {}, dispatchEvent: jest.fn() };
+  class KeyboardEvent {
+    constructor(_type, options) {
+      this.key = options.key;
+    }
+  }
+  attachRadarLegendClick(element, documentRef, { KeyboardEvent }, undefined, 48);
+  click({ clientX: 20, clientY: 72 });
+  expect(documentRef.dispatchEvent.mock.calls[0][0].key).toBe("l");
+});
+
 test("does not dispatch keyboard actions when a non-toggle legend item is clicked", () => {
   const clickListeners = new Map();
   const element = {

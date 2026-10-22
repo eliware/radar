@@ -6,7 +6,15 @@ import { createCanvasRadarGestures } from "../../create/canvas/radar/gestures.mj
 import { clampRadarRange, selectDefaultRadarRange } from "../../radar/range.mjs";
 import { attachRadarLegendClick } from "../radar-legend-click.mjs";
 
-export function attachCanvasRadarEvents(canvas, state, draw, targets, trails, windowRef) {
+export function attachCanvasRadarEvents(
+  canvas,
+  state,
+  draw,
+  targets,
+  trails,
+  windowRef,
+  legendTopInset = 0,
+) {
   const gestures = attachMobileRadarGestures(canvas, createCanvasRadarGestures(state, draw));
   const pan = attachCanvasPan(canvas, (x, y) => {
     state.autoZoom = false;
@@ -34,6 +42,7 @@ export function attachCanvasRadarEvents(canvas, state, draw, targets, trails, wi
     windowRef.document ?? globalThis.document,
     windowRef,
     draw,
+    legendTopInset,
   );
   return () => [refresh, watch, gestures, pan, legend].forEach((detach) => detach());
 }

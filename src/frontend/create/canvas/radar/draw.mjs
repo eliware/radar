@@ -16,6 +16,7 @@ export function createCanvasRadarDraw({
   procedures,
   airways,
   water = { paths: [], isVisible: () => false },
+  legendTopInset = 0,
 }) {
   return () =>
     drawCanvasRadar(
@@ -48,5 +49,6 @@ export function createCanvasRadarDraw({
         baseLegsVisible: state.airportsVisible && state.baseLegsVisible,
       },
       { airportsVisible: state.airportsVisible, navaidsVisible: state.navaidsVisible },
+      legendTopInset,
     );
 }
