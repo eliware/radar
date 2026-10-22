@@ -7,6 +7,8 @@ services:
       [
         "--device-type",
         "rtlsdr",
+        "--device",
+        "${READSB_DEVICE:?Set READSB_DEVICE in .env}",
         "--net",
         "--net-sbs-port",
         "30003",
