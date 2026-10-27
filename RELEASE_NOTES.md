@@ -1,6 +1,6 @@
 # Release Notes
 
-## 15.0.0 — 2026-10-22
+## 15.0.1 — 2026-10-27
 
 ### Added
 
@@ -9,11 +9,14 @@
 
 ### Changed
 
+- Pin readsb to the configured RTL-SDR device.
+- Update lookup user-agent version strings to Radar 15.0.1.
+- Update shared Eliware packages, dotenv, Puppeteer, and webpack.
+- Expand end-user setup, configuration, CLI, API, and deployment documentation.
+- The root README and repository guidance contain only convention-required information.
 - Use camera frustum intersections to limit 3D reference data and omit overlays behind the camera.
 - Keep remote polling range tied to zoom when the 3D view tilts.
 - Set wrapped flight-card rows to one-pixel vertical padding and offset the mobile 2D legend from the iOS status area.
-- Align lookup user-agent version strings with Radar 15.0.0.
-- Update shared Eliware dependencies to v15.
 
 ## 14.0.0 — 2026-10-21
 

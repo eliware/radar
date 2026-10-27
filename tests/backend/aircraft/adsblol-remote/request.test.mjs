@@ -9,7 +9,7 @@ test("requests an ADSB.lol circle with Radar contact details", async () => {
   );
   expect(request).toHaveBeenCalledWith("https://re-api.adsb.lol/?circle=43.8,-70.4,25", {
     headers: {
-      "user-agent": "EliwareRadar/15.0.0 (+https://radar.purinton.us; contact: radar@eliware.org)",
+      "user-agent": "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)",
     },
   });
 });

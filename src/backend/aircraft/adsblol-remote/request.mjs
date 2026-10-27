@@ -1,5 +1,5 @@
 const API_ROOT = "https://re-api.adsb.lol/";
-const USER_AGENT = "EliwareRadar/15.0.0 (+https://radar.purinton.us; contact: radar@eliware.org)";
+const USER_AGENT = "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)";
 
 export async function requestAdsbLolCircle(request, location, radiusNm) {
   const circle = `${location.latitude},${location.longitude},${radiusNm}`;

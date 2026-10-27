@@ -8,7 +8,7 @@ const response = (body, status = 200) => ({
 });
 const requestOptions = {
   headers: {
-    "user-agent": "EliwareRadar/15.0.0 (+https://radar.purinton.us; contact: radar@eliware.org)",
+    "user-agent": "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)",
   },
 };
 

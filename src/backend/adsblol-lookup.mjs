@@ -3,7 +3,7 @@ import { createLookupCache } from "./lookup-cache.mjs";
 
 const apiRoot = "https://api.adsb.lol";
 const routeRoot = "https://vrs-standing-data.adsb.lol/routes";
-const userAgent = "EliwareRadar/15.0.0 (+https://radar.purinton.us; contact: radar@eliware.org)";
+const userAgent = "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)";
 
 export function createAdsbLolLookup({
   request = globalThis.fetch,

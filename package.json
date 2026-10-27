@@ -1,6 +1,6 @@
 {
   "name": "@eliware/radar",
-  "version": "15.0.0",
+  "version": "15.0.1",
   "type": "module",
   "description": "Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
   "keywords": [
