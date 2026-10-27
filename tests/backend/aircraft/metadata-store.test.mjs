@@ -1,17 +1,12 @@
 import { expect, test } from "@jest/globals";
-import {
-  createAircraftMetadataStore,
-  normalizeAircraftMetadataKey,
-} from "../../../src/backend/aircraft/metadata-store.mjs";
+import { createAircraftMetadataStore } from "../../../src/backend/aircraft/metadata-store.mjs";
 
 test("normalizes keys and enriches aircraft with type and route data", () => {
   const store = createAircraftMetadataStore();
-  expect(normalizeAircraftMetadataKey("  abC123 ")).toBe("ABC123");
-  expect(normalizeAircraftMetadataKey(null)).toBe("");
   expect(store.updateType("ABC123", { aircraftTypeCode: "B738" })).toBe(true);
   expect(store.updateRoute("BAW15K", { origin: "EGLL", destination: "KBOS" })).toBe(true);
   expect(
-    store.enrich({ icao: "abc123", callsign: "baw15k", aircraftTypeCode: "OLD" }),
+    store.enrich({ icao: "ABC123", callsign: "BAW15K", aircraftTypeCode: "OLD" }),
   ).toMatchObject({ aircraftTypeCode: "B738", origin: "EGLL", destination: "KBOS" });
 });
 

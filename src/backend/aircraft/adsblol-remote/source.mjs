@@ -1,7 +1,6 @@
-import { normalizeRemoteAircraft } from "../remote-aircraft.mjs";
 import { requestAdsbLolCircle } from "./request.mjs";
 import { createAdsbLolPoller } from "./poller.mjs";
-import { storeRemoteAircraft } from "../store-remote-aircraft.mjs";
+import { createAdsbLolAircraftStore } from "./aircraft-store.mjs";
 const POLL_INTERVAL_MS = 6000;
 const MAX_RADIUS_NM = 300;
 export function createAdsbLolRemoteSource({
@@ -15,9 +14,13 @@ export function createAdsbLolRemoteSource({
   onError = () => {},
 }) {
   const clients = new Map();
-  const aircraft = new Map();
   const subscribers = new Set();
-  let routeLookupsEnabled = true;
+  const aircraft = createAdsbLolAircraftStore({
+    location,
+    lookup,
+    clock,
+    onRouteUpdate: publish,
+  });
   const poller = createAdsbLolPoller({
     poll,
     hasClients: () => [...clients.values()].some((client) => !client.localOnly),
@@ -26,16 +29,11 @@ export function createAdsbLolRemoteSource({
     onError,
     intervalMs: POLL_INTERVAL_MS,
   });
-  function list() {
-    const now = clock();
-    for (const [icao, item] of aircraft) if (now - item.lastSeen > 120_000) aircraft.delete(icao);
-    return [...aircraft.values()];
-  }
   function start() {
     poller.start();
   }
   function publish() {
-    const current = list();
+    const current = aircraft.list();
     subscribers.forEach((subscriber) => subscriber(current));
   }
   async function poll(isCurrent) {
@@ -52,16 +50,11 @@ export function createAdsbLolRemoteSource({
     );
     const records = await requestAdsbLolCircle(request, location, radius);
     if (!isCurrent()) return;
-    records.forEach((item) => update(item));
+    records.forEach((item) => aircraft.update(item));
     publish();
   }
-  function update(item) {
-    const mapped = normalizeRemoteAircraft(item, location, clock());
-    if (!mapped) return;
-    storeRemoteAircraft(aircraft, mapped, lookup, routeLookupsEnabled, publish);
-  }
   return {
-    list,
+    list: aircraft.list,
     subscribe(subscriber) {
       subscribers.add(subscriber);
       return () => subscribers.delete(subscriber);
@@ -102,7 +95,7 @@ export function createAdsbLolRemoteSource({
       }
     },
     setRouteLookupsEnabled(value) {
-      routeLookupsEnabled = Boolean(value);
+      aircraft.setRouteLookupsEnabled(value);
     },
     close() {
       poller.close();

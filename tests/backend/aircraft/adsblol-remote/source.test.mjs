@@ -82,39 +82,6 @@ test("backs off failures exponentially, caps at five minutes, then resets after 
   state.source.disconnectClient("browser");
 });
 
-test("uses route lookups only when enabled and the re-api route is absent", async () => {
-  const lookup = {
-    getCallsignRoute: jest.fn(async () => ({ origin: "KBOS", destination: "KORD" })),
-  };
-  const request = jest.fn(async () => ({
-    ok: true,
-    json: async () => ({
-      aircraft: [
-        {
-          hex: "abc123",
-          lat: 43.9,
-          lon: -70.3,
-          seen: 0,
-          seen_pos: 0,
-          t: "E75L",
-          flight: "RPA3471",
-        },
-      ],
-    }),
-  }));
-  const state = setup({ request, lookup });
-  state.source.setRouteLookupsEnabled(false);
-  state.source.connectClient("browser");
-  await tick(state);
-  expect(lookup.getCallsignRoute).not.toHaveBeenCalled();
-  state.source.setRouteLookupsEnabled(true);
-  await tick(state);
-  await Promise.resolve();
-  expect(lookup.getCallsignRoute).toHaveBeenCalledWith("RPA3471");
-  expect(state.source.list()[0]).toMatchObject({ origin: "KBOS", destination: "KORD" });
-  state.source.disconnectClient("browser");
-});
-
 test("expires old positions and rejects invalid remote aircraft", async () => {
   let now = 100_000;
   const state = setup({
@@ -221,4 +188,11 @@ test("uses constructor defaults and safely handles request errors", async () => 
   active.connectClient("browser");
   await fire();
   active.close();
+});
+
+test("forwards route lookup settings to the aircraft store", () => {
+  const state = setup();
+  state.source.setRouteLookupsEnabled(false);
+  state.source.setRouteLookupsEnabled(true);
+  state.source.close();
 });

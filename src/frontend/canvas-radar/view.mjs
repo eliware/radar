@@ -62,12 +62,15 @@ export function createCanvasRadarView({
     legendTopInset,
   });
   draw = () => {
-    syncCanvasRadarVisibility(state, layers);
     drawRadar();
     waterLayer.update();
     viewChanges.emit(state.range);
   };
-  const layers = createRadarLayerVisibility(documentRef, draw);
+  const layers = createRadarLayerVisibility(documentRef, () => {
+    syncCanvasRadarVisibility(state, layers);
+    draw();
+  });
+  syncCanvasRadarVisibility(state, layers);
   const detachEvents = attachCanvasRadarEvents(
     canvas,
     state,

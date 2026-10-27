@@ -184,3 +184,12 @@ test("redraws the radar when the W key changes water visibility", () => {
     expect.any(Function),
   );
 });
+
+test("syncs layer visibility when a layer shortcut changes its state", () => {
+  const state = setup();
+  const view = createCanvasRadarView({ ...state, location: null });
+  const drawCount = state.context.fillRect.mock.calls.length;
+  state.sendKey({ key: "i", preventDefault: jest.fn() });
+  expect(state.context.fillRect.mock.calls.length).toBeGreaterThan(drawCount);
+  view.destroy();
+});

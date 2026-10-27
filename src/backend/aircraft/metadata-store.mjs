@@ -13,11 +13,11 @@ export function createAircraftMetadataStore(limit = MAX_ENTRIES) {
   }
 
   return {
-    enrich(aircraft) {
+    enrich(aircraft, icao = aircraft.icao, callsign = aircraft.callsign) {
       return {
         ...aircraft,
-        ...typesByIcao.get(normalizeAircraftMetadataKey(aircraft.icao)),
-        ...routesByCallsign.get(normalizeAircraftMetadataKey(aircraft.callsign)),
+        ...typesByIcao.get(icao),
+        ...routesByCallsign.get(callsign),
       };
     },
     updateType(icao, result) {
@@ -29,10 +29,6 @@ export function createAircraftMetadataStore(limit = MAX_ENTRIES) {
         : false;
     },
   };
-}
-
-export function normalizeAircraftMetadataKey(value) {
-  return typeof value === "string" ? value.trim().toUpperCase() : "";
 }
 
 function sameLookupData(before, after) {

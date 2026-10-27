@@ -1,5 +1,9 @@
 import { hasUsefulCallsign, retainUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
-import { createAircraftMetadataStore, normalizeAircraftMetadataKey } from "../metadata-store.mjs";
+import { createAircraftMetadataStore } from "../metadata-store.mjs";
+
+export function normalizeAircraftMetadataKey(value) {
+  return typeof value === "string" ? value.trim().toUpperCase() : "";
+}
 
 export function createAircraftEnrichmentCoordinator(lookup) {
   const metadata = createAircraftMetadataStore();
@@ -8,10 +12,18 @@ export function createAircraftEnrichmentCoordinator(lookup) {
   let routeLookupsEnabled = true;
   let routeLookupVersion = 0;
 
+  function enrich(aircraft) {
+    return metadata.enrich(
+      aircraft,
+      normalizeAircraftMetadataKey(aircraft.icao),
+      normalizeAircraftMetadataKey(aircraft.callsign),
+    );
+  }
+
   function publishIfChanged(icao, changed, publish) {
     const aircraft = lastAircraft.get(icao);
     if (closed || !changed || !aircraft) return;
-    publish(metadata.enrich(aircraft));
+    publish(enrich(aircraft));
   }
 
   function update(aircraft, publish) {
@@ -19,7 +31,7 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     const icao = normalizeAircraftMetadataKey(aircraft.icao);
     const callsign = normalizeAircraftMetadataKey(aircraft.callsign);
     const latest = { ...lastAircraft.get(icao), ...aircraft };
-    const enriched = metadata.enrich(latest);
+    const enriched = enrich(latest);
     const usefulCallsign = retainUsefulCallsign(
       lastAircraft.get(icao)?.callsign,
       aircraft.callsign,
@@ -27,7 +39,7 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     if (usefulCallsign === null || usefulCallsign === undefined) delete latest.callsign;
     else latest.callsign = usefulCallsign;
     lastAircraft.set(icao, latest);
-    publish(metadata.enrich(latest));
+    publish(enrich(latest));
     if (!enriched.aircraftTypeCode)
       lookup
         .getAircraftType(icao)
@@ -51,7 +63,7 @@ export function createAircraftEnrichmentCoordinator(lookup) {
 
   return {
     update,
-    enrich: (aircraft) => metadata.enrich(aircraft),
+    enrich,
     setRouteLookupsEnabled(value) {
       const enabled = Boolean(value);
       if (enabled !== routeLookupsEnabled) routeLookupVersion += 1;

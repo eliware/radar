@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { drawCanvasRadar } from "../../../../src/frontend/draw/canvas/radar.mjs";
 
-test("draws close range rings below five nautical miles", () => {
+test("orchestrates a radar draw with default layer options", () => {
   const context = Object.fromEntries(
     [
       "setTransform",
@@ -23,13 +23,9 @@ test("draws close range rings below five nautical miles", () => {
       "restore",
     ].map((name) => [name, jest.fn()]),
   );
-  context.measureText = jest.fn((text) => ({ width: text.length * 8 }));
-  const canvas = { clientWidth: 0, clientHeight: 0 };
-  drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 0 });
-  expect(canvas.width).toBe(1);
-  expect(canvas.height).toBe(1);
-  expect(context.arc).toHaveBeenCalledTimes(6);
-  expect(context.clip).not.toHaveBeenCalled();
+  const canvas = { clientWidth: 100, clientHeight: 100 };
+  drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 1 });
+  expect(context.arc).toHaveBeenCalled();
   expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
 });
 

@@ -2,11 +2,8 @@ import { projectAircraftDisplayItems } from "../../project/aircraft-display-item
 import { drawAircraftDisplay } from "../aircraft-display.mjs";
 import { drawRadarScaleLegend } from "../radar/scale-legend.mjs";
 import { drawCanvasRadarReferences } from "./radar-references.mjs";
-import { getRadarPalette } from "../../radar/palette.mjs";
-import { drawCanvasRings } from "./rings.mjs";
 import { drawWaterOutlines } from "../water-outlines.mjs";
-import { prepareCanvasRadar } from "../../prepare-canvas-radar.mjs";
-import { createCanvasRadarProjector } from "../../create/canvas/radar/projector.mjs";
+import { createCanvasRadarScope } from "./scope.mjs";
 export function drawCanvasRadar(
   ctx,
   canvas,
@@ -35,18 +32,19 @@ export function drawCanvasRadar(
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   legendTopInset = 0,
 ) {
-  const palette = getRadarPalette(connected);
-  const { width, height } = prepareCanvasRadar(ctx, canvas, windowRef);
-  const radius = Math.max(1, Math.min(width, height) * 0.44);
-  const centerX = width / 2 + panX;
-  const centerY = height / 2 + panY;
-  const project = createCanvasRadarProjector(centerX, centerY, radius, range, rotation);
+  const scope = createCanvasRadarScope(
+    ctx,
+    canvas,
+    range,
+    panX,
+    panY,
+    windowRef,
+    rotation,
+    connected,
+  );
+  const { width, height, radius, centerX, centerY, project, palette } = scope;
   if (waterVisible) drawWaterOutlines(ctx, waterPaths, project, location, width, height);
-  ctx.save();
-  ctx.translate(centerX, centerY);
-  ctx.rotate(rotation);
-  drawCanvasRings(ctx, 0, 0, radius, range, palette, rotation);
-  ctx.restore();
+  scope.drawRings();
   drawCanvasRadarReferences({
     ctx,
     location,
