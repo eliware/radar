@@ -3,6 +3,7 @@ import { drawAircraftDisplay } from "../aircraft/display.mjs";
 import { drawRadarScaleLegend } from "../radar/scale-legend.mjs";
 import { drawCanvasRadarReferences, drawCanvasRadarWater } from "./radar-references.mjs";
 import { createCanvasRadarScope } from "./scope.mjs";
+import { drawHomeMarker } from "./home-marker.mjs";
 export function drawCanvasRadar(
   ctx,
   canvas,
@@ -72,10 +73,7 @@ export function drawCanvasRadar(
     project,
   );
   drawAircraftDisplay(ctx, display, 9, width, height, connected);
-  ctx.fillStyle = palette.bright;
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
-  ctx.fill();
+  drawHomeMarker(ctx, centerX, centerY, palette.bright);
   drawRadarScaleLegend(
     ctx,
     width,

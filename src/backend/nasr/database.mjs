@@ -1,8 +1,8 @@
-import { copyFileSync, existsSync, mkdirSync, renameSync, rmSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { NASR_INDEXES } from "./indexes.mjs";
 import { DEFAULT_OUTPUT } from "./output-path.mjs";
+import { createNasrImportFiles } from "./import-files.mjs";
 import { verifyNasrQueryPlans } from "./query-plans.mjs";
 import { validateNasrDatabase, verifyNasrIndexes } from "./validation.mjs";
 
@@ -11,18 +11,13 @@ export { validateNasrDatabase, verifyNasrIndexes } from "./validation.mjs";
 export function importNasrDatabase(
   inputPath,
   outputPath = DEFAULT_OUTPUT,
-  {
-    Database = DatabaseSync,
-    exists = existsSync,
-    copy = copyFileSync,
-    mkdir = mkdirSync,
-    rename = renameSync,
-    remove = rmSync,
-  } = {},
+  { Database = DatabaseSync, exists, copy, mkdir, rename, remove } = {},
 ) {
+  const files = createNasrImportFiles({ exists, copy, mkdir, rename, remove });
   const input = resolve(inputPath || "");
   const output = resolve(outputPath);
-  if (!inputPath || !exists(input)) throw new Error(`Input NASR database not found: ${input}`);
+  if (!inputPath || !files.exists(input))
+    throw new Error(`Input NASR database not found: ${input}`);
   if (input === output) throw new Error("Input and output NASR database paths must be different.");
   const source = new Database(input, { readOnly: true });
   try {
@@ -30,10 +25,10 @@ export function importNasrDatabase(
   } finally {
     source.close();
   }
-  mkdir(dirname(output), { recursive: true });
-  const temporary = `${output}.tmp-${process.pid}`;
+  files.prepareOutput(output);
+  const temporary = files.temporaryPath(output);
   try {
-    copy(input, temporary);
+    files.copyInput(input, temporary);
     const database = new Database(temporary);
     try {
       database.exec("BEGIN");
@@ -46,10 +41,10 @@ export function importNasrDatabase(
     } finally {
       database.close();
     }
-    rename(temporary, output);
+    files.install(temporary, output);
     return { output, indexes: NASR_INDEXES.length };
   } catch (error) {
-    remove(temporary, { force: true });
+    files.cleanup(temporary);
     throw error;
   }
 }

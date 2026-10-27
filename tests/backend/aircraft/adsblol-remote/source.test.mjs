@@ -34,7 +34,7 @@ async function tick(state) {
   await timer.callback();
 }
 
-test("polls every six seconds for the largest connected-client radius", async () => {
+test("polls by active client radius and pauses only when every client is local-only", async () => {
   const state = setup({
     request: jest.fn(async () => ({
       ok: true,
@@ -58,10 +58,19 @@ test("polls every six seconds for the largest connected-client radius", async ()
   expect(state.source.list()).toMatchObject([{ icao: "ABC123", aircraftTypeCode: "E75L" }]);
   expect([...state.timers.values()][0].delay).toBe(6000);
   expect(subscriber).toHaveBeenCalledTimes(1);
-  state.source.disconnectClient("phone");
+  state.source.setClientLocalOnly("phone", true);
   expect(state.timers.size).toBe(1);
+  state.source.setClientLocalOnly("desktop", true);
+  expect(state.timers.size).toBe(0);
+  expect(state.source.list()).toEqual([]);
+  expect(subscriber).toHaveBeenLastCalledWith([]);
+  state.source.setClientLocalOnly("unknown", true);
+  state.source.setClientLocalOnly("phone", "true");
+  state.source.setClientLocalOnly("phone", false);
+  expect(state.timers.size).toBe(1);
+  state.source.disconnectClient("phone");
   state.source.disconnectClient("desktop");
-  expect(state.clearTimeoutFn).toHaveBeenCalledTimes(1);
+  expect(state.clearTimeoutFn).toHaveBeenCalledTimes(2);
   expect(state.source.list()).toEqual([]);
   state.source.disconnectClient("another");
 });
@@ -135,30 +144,6 @@ test("does not poll without clients or publish a result after disconnect", async
   await pending;
   expect(state.request).toHaveBeenCalledTimes(1);
   expect(state.timers.size).toBe(0);
-});
-
-test("pauses remote polling only when every connected client is local-only", async () => {
-  const state = setup();
-  const subscriber = jest.fn();
-  state.source.subscribe(subscriber);
-  state.source.connectClient("desktop");
-  state.source.connectClient("phone");
-  state.source.setClientLocalOnly("desktop", true);
-  expect(state.timers.size).toBe(1);
-  state.source.setClientLocalOnly("phone", true);
-  expect(state.timers.size).toBe(0);
-  expect(state.source.list()).toEqual([]);
-  expect(subscriber).toHaveBeenLastCalledWith([]);
-  state.source.setClientLocalOnly("phone", false);
-  expect(state.timers.size).toBe(1);
-  state.source.setClientLocalOnly("unknown", true);
-  state.source.setClientLocalOnly("phone", "true");
-  expect(state.timers.size).toBe(1);
-  state.source.setClientLocalOnly("phone", true);
-  state.source.disconnectClient("phone");
-  expect(state.timers.size).toBe(0);
-  state.source.disconnectClient("desktop");
-  expect(state.source.list()).toEqual([]);
 });
 
 test("suppresses a late failure after disconnect and cancels scheduled polling", async () => {

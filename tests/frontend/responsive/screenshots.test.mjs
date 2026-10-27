@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { captureResponsiveScreenshots } from "../../../src/frontend/responsive/screenshots.mjs";
-import { selectScreenshotViewports } from "../../../src/frontend/responsive/screenshot-options.mjs";
+import { selectScreenshotViewports } from "../../../src/frontend/responsive/screenshot/options.mjs";
 
 function makeCaptureTools({ size = 1000, pageError = false } = {}) {
   const page = {

@@ -2,7 +2,7 @@ import { expect, test } from "@jest/globals";
 import {
   selectScreenshotModes,
   selectScreenshotViewports,
-} from "../../../src/frontend/responsive/screenshot-options.mjs";
+} from "../../../../src/frontend/responsive/screenshot/options.mjs";
 
 test("selects documented desktop and phone viewports", () => {
   expect(selectScreenshotViewports()).toHaveLength(6);
