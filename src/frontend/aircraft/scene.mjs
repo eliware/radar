@@ -11,7 +11,7 @@ import { createOrbitRadarState } from "../create/orbit-radar-state.mjs";
 import { createRadarHome } from "../create/radar/home.mjs";
 import { createAirspaceVolumes } from "../create/airspace-volumes.mjs";
 import { createRadarReferenceStore } from "../radar/reference/store.mjs";
-import { createRadarLayerVisibility } from "../create/radar/layer-visibility.mjs";
+import { createRadarLayerVisibility } from "../create/radar/layer/visibility.mjs";
 import { createSceneWater } from "../create/scene-water.mjs";
 import { createAircraftRadarCamera } from "../create/aircraft/radar/camera.mjs";
 import { createRadarConnectionState } from "../create/radar/connection-state.mjs";

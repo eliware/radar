@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarLayerVisibility } from "../../../../src/frontend/create/radar/layer-visibility.mjs";
+import { createRadarLayerVisibility } from "../../../../../src/frontend/create/radar/layer/visibility.mjs";
 
 test("creates visible layers and destroys all keyboard listeners", () => {
   const originalStorage = Object.getOwnPropertyDescriptor(globalThis, "localStorage");

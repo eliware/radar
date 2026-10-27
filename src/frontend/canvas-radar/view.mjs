@@ -5,7 +5,7 @@ import { createCanvasRadarState } from "../create/canvas/radar/state.mjs";
 import { createViewChangeListeners } from "../create/view-change-listeners.mjs";
 import { createRadarReferenceStore } from "../radar/reference/store.mjs";
 import { attachCanvasRadarEvents } from "../attach/canvas/radar-events.mjs";
-import { createRadarLayerVisibility } from "../create/radar/layer-visibility.mjs";
+import { createRadarLayerVisibility } from "../create/radar/layer/visibility.mjs";
 import { createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
 import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
 import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";

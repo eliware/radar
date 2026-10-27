@@ -1,54 +1,42 @@
-import { createIlsVisibility } from "../ils-visibility.mjs";
-import { createProcedureVisibility } from "../procedure-visibility.mjs";
-import { createAirwayVisibility } from "../airway-visibility.mjs";
-import { createRunwayVisibility } from "../runway-visibility.mjs";
-import { createReferenceVisibility } from "../reference-visibility.mjs";
-import { createAircraftVisibility } from "../aircraft-visibility.mjs";
-import { readToggleState, writeToggleState } from "../../toggle-state-storage.mjs";
+import { createIlsVisibility } from "../../ils-visibility.mjs";
+import { createProcedureVisibility } from "../../procedure-visibility.mjs";
+import { createAirwayVisibility } from "../../airway-visibility.mjs";
+import { createRunwayVisibility } from "../../runway-visibility.mjs";
+import { createReferenceVisibility } from "../../reference-visibility.mjs";
+import { createAircraftVisibility } from "../../aircraft-visibility.mjs";
+import { persistLayerVisibility, readSavedLayerVisibility } from "./visibility-persistence.mjs";
 
 export function createRadarLayerVisibility(documentRef, onChange, onReferenceChange) {
   let restoring = true;
-  const saved = Object.fromEntries(
-    [
-      "ils",
-      "sid",
-      "star",
-      "airway-Q",
-      "airway-J",
-      "airway-V",
-      "runways",
-      "extensions",
-      "baseLegs",
-      "airports",
-      "navaids",
-    ].map((key) => [key, readToggleState(key)]),
-  );
+  const saved = readSavedLayerVisibility();
   const aircraft = createAircraftVisibility(documentRef);
   const ils = createIlsVisibility(documentRef, (value) => {
     if (!restoring) changed("ils", value, onChange);
   });
   const procedures = createProcedureVisibility(documentRef, (value) => {
     if (restoring) return;
-    writeToggleState("sid", value.sidVisible);
-    writeToggleState("star", value.starVisible);
+    persistLayerVisibility("sid", value.sidVisible);
+    persistLayerVisibility("star", value.starVisible);
     onChange?.(value);
   });
   const airways = createAirwayVisibility(documentRef, (value) => {
     if (restoring) return;
-    Object.entries(value).forEach(([type, visible]) => writeToggleState(`airway-${type}`, visible));
+    Object.entries(value).forEach(([type, visible]) =>
+      persistLayerVisibility(`airway-${type}`, visible),
+    );
     onChange?.(value);
   });
   const runways = createRunwayVisibility(documentRef, (value) => {
     if (restoring) return;
-    writeToggleState("runways", value.runwaysVisible);
-    writeToggleState("extensions", value.extensionsVisible);
-    writeToggleState("baseLegs", value.baseLegsVisible);
+    persistLayerVisibility("runways", value.runwaysVisible);
+    persistLayerVisibility("extensions", value.extensionsVisible);
+    persistLayerVisibility("baseLegs", value.baseLegsVisible);
     onChange?.(value);
   });
   const references = createReferenceVisibility(documentRef, (value) => {
     if (restoring) return;
-    writeToggleState("airports", value.airportsVisible);
-    writeToggleState("navaids", value.navaidsVisible);
+    persistLayerVisibility("airports", value.airportsVisible);
+    persistLayerVisibility("navaids", value.navaidsVisible);
     (onReferenceChange ?? onChange)?.(value);
   });
   ils.setVisible(saved.ils);
@@ -81,6 +69,6 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
 }
 
 function changed(key, value, onChange) {
-  writeToggleState(key, value);
+  persistLayerVisibility(key, value);
   onChange?.(value);
 }

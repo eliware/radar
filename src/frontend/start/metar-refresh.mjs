@@ -1,4 +1,4 @@
-import { updateMetarDisplay } from "../metar-display.mjs";
+import { updateMetarDisplay } from "../metar/display.mjs";
 
 export function startMetarRefresh({ fetchData, panel, ticker, timerHost, enabled = true }) {
   const refresh = async () => {
