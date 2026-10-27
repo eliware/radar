@@ -1,7 +1,8 @@
-import { layoutAircraftTags } from "../layout-aircraft-tags.mjs";
-import { getAircraftAgeBrightness } from "../aircraft/age-brightness.mjs";
-import { getRadarPalette } from "../radar/palette.mjs";
-import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
+import { layoutAircraftTags } from "../../layout-aircraft-tags.mjs";
+import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
+import { getRadarPalette } from "../../radar/palette.mjs";
+import { getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
+import { drawAircraftTrails } from "./trails.mjs";
 
 const EMERGENCY_COLOR = "#ff0000";
 const REMOTE_ONLY_COLOR = "#ffbf00";
@@ -16,7 +17,7 @@ export function drawAircraftDisplay(
   now = Date.now(),
 ) {
   const palette = getRadarPalette(connected);
-  drawTrails(context, aircraft, fontSize, palette.trail);
+  drawAircraftTrails(context, aircraft, fontSize, palette.trail);
   context.fillStyle = palette.bright;
   context.strokeStyle = palette.bright;
   const previousAlpha = context.globalAlpha ?? 1;
@@ -43,16 +44,6 @@ function displayColor(item, normalColor, now) {
   if (item.remoteOnly) return REMOTE_ONLY_COLOR;
   if (!item.nearHomePass) return normalColor;
   return Math.floor(now / 500) % 2 === 0 ? "#00ff41" : "#ffffff";
-}
-
-function drawTrails(context, aircraft, fontSize, trailColor) {
-  context.fillStyle = trailColor;
-  context.font = `${fontSize / 2}px Consolas, "Courier New", monospace`;
-  for (const item of aircraft) {
-    for (const point of (item.history ?? []).slice(0, -1)) {
-      context.fillText(String.fromCharCode(92), point.x, point.y);
-    }
-  }
 }
 
 function drawTrack(context, item) {

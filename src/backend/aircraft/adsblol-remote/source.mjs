@@ -1,6 +1,7 @@
 import { requestAdsbLolCircle } from "./request.mjs";
 import { createAdsbLolPoller } from "./poller.mjs";
 import { createAdsbLolAircraftStore } from "./aircraft-store.mjs";
+import { createAdsbLolClients } from "./clients.mjs";
 const POLL_INTERVAL_MS = 6000;
 const MAX_RADIUS_NM = 300;
 export function createAdsbLolRemoteSource({
@@ -13,7 +14,7 @@ export function createAdsbLolRemoteSource({
   clearTimeoutFn = clearTimeout,
   onError = () => {},
 }) {
-  const clients = new Map();
+  const clients = createAdsbLolClients(defaultRangeNm, MAX_RADIUS_NM);
   const subscribers = new Set();
   const aircraft = createAdsbLolAircraftStore({
     location,
@@ -23,7 +24,7 @@ export function createAdsbLolRemoteSource({
   });
   const poller = createAdsbLolPoller({
     poll,
-    hasClients: () => [...clients.values()].some((client) => !client.localOnly),
+    hasClients: () => clients.hasRemoteClients,
     setTimeoutFn,
     clearTimeoutFn,
     onError,
@@ -40,11 +41,7 @@ export function createAdsbLolRemoteSource({
     if (!Number.isFinite(location?.latitude) || !Number.isFinite(location?.longitude)) {
       return;
     }
-    let radius = 0;
-    for (const client of clients.values())
-      if (!client.localOnly) radius = Math.max(radius, client.radiusNm);
-    radius = Math.min(MAX_RADIUS_NM, radius);
-    const records = await requestAdsbLolCircle(request, location, radius);
+    const records = await requestAdsbLolCircle(request, location, clients.radiusNm);
     if (!isCurrent()) return;
     records.forEach((item) => aircraft.update(item));
     publish();
@@ -56,22 +53,15 @@ export function createAdsbLolRemoteSource({
       return () => subscribers.delete(subscriber);
     },
     connectClient(key) {
-      clients.set(key, {
-        radiusNm: Math.min(MAX_RADIUS_NM, Math.max(1, defaultRangeNm)),
-        localOnly: false,
-      });
+      clients.connect(key);
       start();
     },
     setClientRadius(key, value) {
-      const client = clients.get(key);
-      if (client && Number.isFinite(value))
-        client.radiusNm = Math.min(MAX_RADIUS_NM, Math.max(1, Math.ceil(value)));
+      clients.setRadius(key, value);
     },
     setClientLocalOnly(key, value) {
-      const client = clients.get(key);
-      if (!client || typeof value !== "boolean") return;
-      client.localOnly = value;
-      if ([...clients.values()].some((item) => !item.localOnly)) start();
+      if (!clients.setLocalOnly(key, value)) return;
+      if (clients.hasRemoteClients) start();
       else {
         poller.stop();
         aircraft.clear();
@@ -79,12 +69,12 @@ export function createAdsbLolRemoteSource({
       }
     },
     disconnectClient(key) {
-      clients.delete(key);
+      clients.disconnect(key);
       if (!clients.size) {
         poller.stop();
         aircraft.clear();
         publish();
-      } else if (![...clients.values()].some((item) => !item.localOnly)) {
+      } else if (!clients.hasRemoteClients) {
         poller.stop();
         aircraft.clear();
         publish();

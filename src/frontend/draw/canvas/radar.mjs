@@ -1,5 +1,5 @@
 import { projectAircraftDisplayItems } from "../../project/aircraft-display-items.mjs";
-import { drawAircraftDisplay } from "../aircraft-display.mjs";
+import { drawAircraftDisplay } from "../aircraft/display.mjs";
 import { drawRadarScaleLegend } from "../radar/scale-legend.mjs";
 import { drawCanvasRadarReferences, drawCanvasRadarWater } from "./radar-references.mjs";
 import { createCanvasRadarScope } from "./scope.mjs";

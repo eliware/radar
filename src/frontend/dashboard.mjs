@@ -7,6 +7,7 @@ import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
 import { destroyDashboardResources } from "./destroy/dashboard-resources.mjs";
 import { attachDashboardDisplayToggles } from "./attach/dashboard/display-toggles.mjs";
 import { createViewportReporter } from "./report-viewport.mjs";
+import { readJson } from "./read-json.mjs";
 export async function startDashboard({
   document,
   fetchData,
@@ -65,8 +66,4 @@ export async function startDashboard({
     destroyDashboardResources(resources);
     return null;
   }
-}
-async function readJson(fetchData, path) {
-  const response = await fetchData(path);
-  return response.ok ? response.json() : Promise.reject(new Error(`Request failed: ${path}`));
 }
