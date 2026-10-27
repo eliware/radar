@@ -6,8 +6,6 @@ import { createNasrImportFiles } from "./import-files.mjs";
 import { verifyNasrQueryPlans } from "./query-plans.mjs";
 import { validateNasrDatabase, verifyNasrIndexes } from "./validation.mjs";
 
-export { validateNasrDatabase, verifyNasrIndexes } from "./validation.mjs";
-
 export function importNasrDatabase(
   inputPath,
   outputPath = DEFAULT_OUTPUT,

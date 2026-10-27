@@ -19,6 +19,7 @@ test("assembles airport and navaid reference lookups with close support", () => 
     () => repository.findNavaidsBetween(location, 0, 20),
     () => repository.findIlsApproaches(location, 0, 20),
     () => repository.findProceduresBetween(location, 0, 20),
+    () => repository.findAirwaysBetween(location, 0, 20),
     () => repository.findBoundariesBetween(location, 0, 20),
   ])
     expect(query).toThrow("Airport database is closed.");
