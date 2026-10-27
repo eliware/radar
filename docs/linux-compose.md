@@ -25,7 +25,9 @@ Save the issued key as `FR24_KEY` in `.env`. Start the container with `docker co
 
 The ADSB.lol Ultrafeeder container runs in network-only mode. It forwards readsb Beast data from endpoint `30005` to ADSB.lol. It does not access the SDR or change Radar's SBS connection.
 
-Set a stable `ADSBLOL_UUID` in `.env`. ADSB.lol needs no assigned key. The container also sends MLAT data with receiver privacy enabled. This hides the receiver from the public MLAT map. Start it with `docker compose up -d adsblol`. Check `docker compose logs -f adsblol` for connection status.
+Set a stable `ADSBLOL_UUID` in `.env` for the feeder. Radar accepts an optional `ADSBLOL_API_KEY` for re-api aircraft requests. Keep that key private.
+
+The feeder sends MLAT data with receiver privacy enabled. This hides the receiver from the public MLAT map. Start it with `docker compose up -d adsblol`. Check `docker compose logs -f adsblol` for connection status.
 
 ## Configure and start
 

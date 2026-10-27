@@ -15,6 +15,7 @@ Copy `.env.example` to `.env` and edit the settings you want to change. Most set
 | `ADSB_LAT`               | unset                         | Home or receiver latitude in decimal degrees, from -90 to 90. Set it with `ADSB_LON`. It centers the radar and supports CLI range and bearing. |
 | `ADSB_LON`               | unset                         | Home or receiver longitude in decimal degrees, from -180 to 180. Set it with `ADSB_LAT`.                                                       |
 | `ADSB_ALT`               | `300`                         | Home elevation in feet above mean sea level. Use any finite number. It sets 3D reference placement and feeder location.                        |
+| `ADSBLOL_API_KEY`        | unset                         | Optional ADSB.lol re-api key. Radar sends it in the `x-api-key` header for remote aircraft requests. Keep it private.                          |
 | `RADAR_DEFAULT_RANGE_NM` | `20`                          | Initial radar range in nautical miles. Use a number from 1 through 300.                                                                        |
 | `RADAR_DEFAULT_ROTATION` | `0`                           | Initial radar heading in degrees clockwise from north. Use an integer from 0 through 359.                                                      |
 | `NASR_DATABASE_PATH`     | Repository `nasr/NASR.sqlite` | Optional path to an FAA NASR SQLite database. A custom path must exist. See [FAA NASR data](nasr-data.md).                                     |
@@ -26,7 +27,7 @@ The CLI uses `ADSB_HOST`, `ADSB_PORT`, `ADSB_LAT`, and `ADSB_LON`. `--host` and 
 
 ## Optional feeder settings for Docker Compose
 
-Docker Compose uses these values for feeder containers. The web app and CLI do not use them. See [Linux Compose deployment](linux-compose.md):
+Docker Compose uses these values for feeder containers. The web app and CLI do not use them. The web app uses `ADSBLOL_API_KEY` for remote aircraft requests. See [Linux Compose deployment](linux-compose.md).
 
 | Variable            | Meaning                                                                           |
 | ------------------- | --------------------------------------------------------------------------------- |
