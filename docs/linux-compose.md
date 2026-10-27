@@ -1,6 +1,6 @@
 # Linux Compose deployment
 
-This guide runs Radar and readsb together on a Linux host with an RTL-SDR receiver. Docker Compose builds both images locally. The private Compose network carries readsb SBS data. Radar listens on host TCP endpoint `3000`.
+This guide runs Radar and readsb together on Linux with an RTL-SDR receiver. Docker Compose builds both images locally. The default stack also starts ADSBX, FlightAware, and ADSB.lol feeders. Flightradar24 is available through an optional profile. The private Compose network carries readsb SBS and Beast data. Radar listens on host TCP port `3000`.
 
 ## Requirements
 
@@ -38,7 +38,11 @@ cd radar
 git lfs pull
 ```
 
-Copy `.env.example` to `.env`. Set `ADSB_LAT`, `ADSB_LON`, `ADSB_ALT`, and view defaults. Give `ADSBX_UUID` and `ADSBLOL_UUID` separate stable UUID values. Set `ADSBX_SITENAME` to label your ADSBX receiver.
+Copy `.env.example` to `.env`. Set `READSB_DEVICE` to the receiver's serial number or device index. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` to its location and elevation. The default stack requires `ADSBX_UUID`, `PIAWARE_FEEDER_ID`, and `ADSBLOL_UUID`. Configure stable IDs for those feeders before starting Compose.
+
+Use `uuidgen` to create UUID values, then keep them stable. Set `ADSBX_SITENAME` to label your receiver. See [Runtime configuration](configuration.md) for all variables.
+
+The default Compose stack starts five containers: `readsb`, `radar`, `adsbx`, `piaware`, and `adsblol`. Each feeder requires its matching values in `.env`. To run only Radar and readsb, edit the Compose selection for your setup. Flightradar24 is excluded from the default stack and starts only with its `fr24` profile.
 
 Compose sets `ADSB_HOST=readsb` and `ADSB_PORT=30003`. It does not publish the host input endpoint. Open Radar at `http://<server-ip>:3000` on the LAN.
 
@@ -128,4 +132,4 @@ npm run puppeteer
 npm run screenshots
 ```
 
-Images are written to `artifacts/screenshots/`. Use `RADAR_SCREENSHOT_URL`, `RADAR_SCREENSHOT_VIEWPORTS`, `RADAR_SCREENSHOT_MODES`, or `RADAR_SCREENSHOT_DIR` to select a server, viewport, mode, or output directory. The configured viewport names are listed in `src/frontend/responsive-screenshot-options.mjs`.
+Images are written to `artifacts/screenshots/`. Use `RADAR_SCREENSHOT_URL`, `RADAR_SCREENSHOT_VIEWPORTS`, `RADAR_SCREENSHOT_MODES`, or `RADAR_SCREENSHOT_DIR` to select a server, viewport, mode, or output directory. The configured viewport names are defined in `src/frontend/responsive/screenshot-options.mjs`.

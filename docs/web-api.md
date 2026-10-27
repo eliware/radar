@@ -4,29 +4,35 @@ Radar provides a web dashboard, HTTP API, and WebSocket connection. The server r
 
 ## Start the app
 
-Run `npm run build` to build browser files. Run `node bin/radar.mjs` to start the server. The default TCP endpoint is `3000`. The server listens on `0.0.0.0` for local network access.
+From the repository root, run `npm ci` once, then `npm run build` to build browser files. Run `node bin/radar.mjs` to start the server. The default HTTP port is `3000`. The server listens on `0.0.0.0` for local network access. Use `Ctrl+C` to stop it cleanly.
 
 Open `http://localhost:3000` on the server computer. Find its Wi-Fi address with `ipconfig` on Windows. Open `http://<computer-ip>:3000` on a device on the same network.
 
-Set `PORT`, `ADSB_HOST`, and `ADSB_PORT` in `.env` or the process environment. Their defaults are `3000`, `127.0.0.1`, and `30003`.
+Set runtime options in `.env` or the process environment. See [Configuration](configuration.md) for defaults, accepted values, and validation rules. The web API has no authentication, so limit access to a trusted network.
 
 Set `ADSB_LAT` and `ADSB_LON` as decimal coordinates. Set `ADSB_ALT` in feet above mean sea level. Default elevation is 300 feet. Set `RADAR_DEFAULT_RANGE_NM` from 1 through 300 to change the default range. Set `RADAR_DEFAULT_ROTATION` from 0 through 359 to change the default heading. Defaults are 20 nautical miles and north-up.
 
-## HTTP endpoints
+## HTTP routes
 
-`GET /health` reports that the Radar server can answer requests. `GET /ready` returns HTTP 200 when Radar has an active SBS TCP connection and HTTP 503 while disconnected. Readiness does not require aircraft reception. `GET /api/config` returns home location and elevation. `GET /api/aircraft` returns recent aircraft.
+| Method and path                | Response                                                                                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /health`                  | `200` and `{ "status": "ok" }` when the server can answer requests.                                                                          |
+| `GET /ready`                   | `200` and `{ "status": "ready" }` when Radar has an active SBS TCP connection. `503` while disconnected. Aircraft reception is not required. |
+| `GET /api/config`              | Home location, elevation, default range, and heading.                                                                                        |
+| `GET /api/aircraft`            | Current aircraft list.                                                                                                                       |
+| `GET /api/metar`               | Decoded reports for configured airports. `502` if VATSIM data is unavailable.                                                                |
+| `GET /api/airports`            | Airports and runway ends.                                                                                                                    |
+| `GET /api/navaids`             | VOR, VOR/DME, and VORTAC records.                                                                                                            |
+| `GET /api/airspace-boundaries` | FAA ARTCC boundary paths.                                                                                                                    |
+| `GET /api/ils`                 | ILS approaches and matching marker beacons.                                                                                                  |
+| `GET /api/procedures`          | SID and STAR paths.                                                                                                                          |
+| `GET /api/airways`             | RNAV, Jet, and Victor airway paths.                                                                                                          |
+| `POST /api/route-lookups`      | Enables or disables route lookups. JSON body: `{ "enabled": true }` or `{ "enabled": false }`.                                               |
+| `GET /ws`                      | WebSocket aircraft updates and viewport controls.                                                                                            |
 
-`GET /api/metar` returns decoded reports for `METAR_STATIONS`. Radar reads reports from the VATSIM METAR API. It caches reports for five minutes. The default airport list is `KLEW,KPWM,KBXM`.
+Each of the six reference-data routes accepts `minRangeNm` and `maxRangeNm` query parameters. `minRangeNm` defaults to `0`, and `maxRangeNm` is required. Set a nonnegative minimum less than the maximum, which is 300 nautical miles at most. Routes return `503` if NASR data or home location values are unavailable. An invalid range returns `400`. See [Configuration](configuration.md) for METAR settings and [Flight strips and weather](#flight-strips-and-weather) for cache behavior.
 
-The range routes accept `minRangeNm` and `maxRangeNm` query values. The maximum range is 300 nautical miles. Each route needs a configured home location.
-
-- `/api/airports` returns qualifying airports and runway ends.
-- `/api/navaids` returns VOR, VOR/DME, and VORTAC records.
-- `/api/airspace-boundaries` returns nearby FAA ARTCC paths.
-- `/api/ils` returns ILS records and matching marker beacons.
-- `/api/procedures` returns SID and STAR paths.
-
-The server returns an error if the NASR database or home location is not available. The API does not require authentication.
+The API does not require authentication. Do not expose it to an untrusted network.
 
 ## WebSocket
 
@@ -122,3 +128,7 @@ Connect a WebSocket client to `ws://127.0.0.1:3000/ws` to read live updates.
 Run `npm run puppeteer` to install Chrome. Start the web app. Run `npm run screenshots` to save viewport images under `artifacts/screenshots/`.
 
 Run `npm run screenshots:primary` to capture only the 1280 by 1024 primary monitor view. Run `npm run lighthouse` while the web app runs to save an accessibility report under `artifacts/`.
+
+## Browser assets
+
+The server serves `/` and `/style.css` from `public/`, the manifest from `/manifest.webmanifest`, approved app icons under `/icons/`, and install-prompt screenshots under `/screenshots/`. Run `npm run build` to create `dist/client.js` and split chunks under `dist/chunks/`. The server exposes them as `/client.js` and `/chunks/<filename>`. Missing build output or public files return `404`. Run the build command again after frontend source changes.
