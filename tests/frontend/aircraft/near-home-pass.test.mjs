@@ -49,3 +49,13 @@ test("limits an ascending path to its portion below the altitude ceiling", () =>
 test("checks a stationary aircraft at the home point", () => {
   expect(isAircraftProjectedNearHome(aircraft({ speed: 0 }), home, 0)).toBe(true);
 });
+
+test("measures the pass altitude above an elevated home location", () => {
+  expect(
+    isAircraftProjectedNearHome(aircraft({ altitudeFeet: 4500, northNm: -2 }), home, 4500),
+  ).toBe(true);
+});
+
+test("uses zero home elevation when the elevation setting is omitted", () => {
+  expect(isAircraftProjectedNearHome(aircraft({ northNm: -2 }), home)).toBe(true);
+});

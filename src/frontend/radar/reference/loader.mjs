@@ -14,6 +14,7 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
   let timer;
   let applyTimer;
   let loading;
+  let failures = 0;
 
   function loadNext() {
     const start = loadedThrough;
@@ -23,13 +24,20 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
       .then((collections) => {
         cache.add(collections);
         loadedThrough = end;
+        failures = 0;
         applyLatest();
       })
-      .catch(() => {})
+      .catch(() => {
+        requestedThrough = Math.max(requestedThrough, end);
+        failures = Math.min(failures + 1, 8);
+      })
       .finally(() => {
         loading = null;
         if (requestedThrough > loadedThrough)
-          timer = setTimeout(() => ((timer = null), loadNext()), 180);
+          timer = setTimeout(
+            () => ((timer = null), loadNext()),
+            Math.min(30_000, 180 * 2 ** Math.max(0, failures - 1)),
+          );
       });
   }
 

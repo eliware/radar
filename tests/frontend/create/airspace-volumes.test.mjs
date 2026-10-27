@@ -68,3 +68,40 @@ test("skips airports without airspace flags or usable positions", () => {
   expect(scene.add).not.toHaveBeenCalled();
   expect(scene.remove).not.toHaveBeenCalled();
 });
+
+test("rebuilds cached geometry when an airport record changes", () => {
+  class Geometry {
+    setAttribute = jest.fn((_, attribute) => {
+      this.vertices = attribute.values;
+    });
+    dispose = jest.fn();
+  }
+  class Lines {
+    constructor(geometry) {
+      this.geometry = geometry;
+    }
+  }
+  const THREE = {
+    BufferGeometry: Geometry,
+    Float32BufferAttribute: class {
+      constructor(values) {
+        this.values = values;
+      }
+    },
+    LineSegments: Lines,
+    LineBasicMaterial: class {
+      dispose() {}
+    },
+  };
+  const scene = { add: jest.fn(), remove: jest.fn() };
+  const volumes = createAirspaceVolumes(THREE, scene, { latitude: 43, longitude: -70 }, 0);
+  const airport = { faaId: "PWM", latitude: 43, longitude: -70, elevationFeet: 100, classC: "Y" };
+  volumes.update([airport]);
+  const previous = scene.add.mock.calls[0][0];
+  volumes.update([{ ...airport, elevationFeet: 500, classC: undefined, classD: "Y" }]);
+  const updated = scene.add.mock.calls[1][0];
+  expect(scene.remove).toHaveBeenCalledWith(previous);
+  expect(previous.geometry.dispose).toHaveBeenCalled();
+  expect(updated.geometry.vertices).not.toEqual(previous.geometry.vertices);
+  volumes.dispose();
+});

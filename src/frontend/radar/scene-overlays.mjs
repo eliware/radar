@@ -27,11 +27,12 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
         ? radarRange.getRadarLabelGapAngle(distance, labelWidth, 0.12 * (range / 20))
         : 0;
       const arc = 2 * Math.PI - gap;
-      ring.rotation.x = Math.PI / 2;
+      ring.rotation.x = 0;
       if (ring.userData.tube !== tube || ring.userData.arc !== arc) {
         ring.geometry.dispose?.();
         ring.geometry = new THREE.TorusGeometry(distance, tube, 6, 192, arc);
         if (labelVisible) ring.geometry.rotateZ(radarRange.RADAR_RING_LABEL_ANGLE + gap / 2);
+        ring.geometry.rotateX(Math.PI / 2);
         ring.userData.tube = tube;
         ring.userData.arc = arc;
       }
@@ -71,7 +72,8 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
       new THREE.TorusGeometry(range, baseTube, 6, 192),
       new THREE.MeshBasicMaterial({ color: getRadarRingColor(connected, major) }),
     );
-    ring.rotation.x = Math.PI / 2;
+    ring.geometry.rotateX(Math.PI / 2);
+    ring.rotation.x = 0;
     ring.userData = { baseTube, tube: baseTube, major };
     scene.add(ring);
     paletteObjects.push({ material: ring.material, ring });

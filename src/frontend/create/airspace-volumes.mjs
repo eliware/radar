@@ -14,14 +14,21 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
     for (const airport of airports) {
       const id = airport.faaId;
       visibleIds.add(id);
-      if (shapes.has(id)) continue;
       const bands = airportAirspaceBands(airport);
-      if (!bands.length) continue;
       const position = projectAircraftPosition(airport, location, 0);
-      if (!position) continue;
       const airportElevationFeet = Number.isFinite(airport.elevationFeet)
         ? airport.elevationFeet
         : 0;
+      const signature = JSON.stringify([
+        airport.latitude,
+        airport.longitude,
+        airportElevationFeet,
+        bands,
+      ]);
+      const existing = shapes.get(id);
+      if (existing?.signature === signature) continue;
+      if (existing) removeShape(id, existing);
+      if (!bands.length || !position) continue;
       material ??= new THREE.LineBasicMaterial({
         color: AIRSPACE_COLOR,
         transparent: true,
@@ -38,19 +45,21 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
       const lines = new THREE.LineSegments(geometry, material);
       lines.visible = visible;
       scene.add(lines);
-      shapes.set(id, lines);
+      shapes.set(id, { lines, signature });
     }
-    for (const [id, shape] of shapes) shape.visible = visible && visibleIds.has(id);
+    for (const [id, shape] of shapes) shape.lines.visible = visible && visibleIds.has(id);
   }
   function setVisible(value) {
     visible = Boolean(typeof value === "object" ? value.airportsVisible : value);
-    for (const [id, shape] of shapes) shape.visible = visible && visibleIds.has(id);
+    for (const [id, shape] of shapes) shape.lines.visible = visible && visibleIds.has(id);
+  }
+  function removeShape(id, shape) {
+    scene.remove(shape.lines);
+    shape.lines.geometry.dispose();
+    shapes.delete(id);
   }
   function dispose() {
-    for (const shape of shapes.values()) {
-      scene.remove(shape);
-      shape.geometry.dispose();
-    }
+    for (const [id, shape] of shapes) removeShape(id, shape);
     shapes.clear();
     material?.dispose();
   }

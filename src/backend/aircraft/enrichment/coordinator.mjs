@@ -29,15 +29,15 @@ export function createAircraftEnrichmentCoordinator(lookup) {
   function update(aircraft, publish) {
     if (closed || !aircraft?.icao) return;
     const icao = normalizeAircraftMetadataKey(aircraft.icao);
-    const callsign = normalizeAircraftMetadataKey(aircraft.callsign);
     const latest = { ...lastAircraft.get(icao), ...aircraft };
-    const enriched = enrich(latest);
     const usefulCallsign = retainUsefulCallsign(
       lastAircraft.get(icao)?.callsign,
       aircraft.callsign,
     );
     if (usefulCallsign === null || usefulCallsign === undefined) delete latest.callsign;
     else latest.callsign = usefulCallsign;
+    const callsign = normalizeAircraftMetadataKey(latest.callsign);
+    const enriched = enrich(latest);
     lastAircraft.set(icao, latest);
     publish(enrich(latest));
     if (!enriched.aircraftTypeCode)

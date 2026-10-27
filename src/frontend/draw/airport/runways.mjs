@@ -64,13 +64,14 @@ function drawRunwayExtension(context, end, project, extensionsVisible, baseLegsV
   const right = baseLegsVisible
     ? project({ ...runwayDestination(farEnd, outward + 90, 5), elevationFeet: farAltitude })
     : null;
-  if (extensionsVisible && (!validPoint(origin) || !validPoint(outerPoint))) return;
-  if (baseLegsVisible && (!validPoint(left) || !validPoint(right))) return;
+  const canDrawExtension = extensionsVisible && validPoint(origin) && validPoint(outerPoint);
+  const canDrawBaseLegs = baseLegsVisible && validPoint(left) && validPoint(right);
+  if (!canDrawExtension && !canDrawBaseLegs) return;
   context.strokeStyle = "#333333";
   context.lineCap = "round";
   context.setLineDash([1, 5]);
-  if (extensionsVisible) drawLine(context, origin, outerPoint);
-  if (baseLegsVisible) drawLine(context, left, right);
+  if (canDrawExtension) drawLine(context, origin, outerPoint);
+  if (canDrawBaseLegs) drawLine(context, left, right);
   context.setLineDash([]);
 }
 

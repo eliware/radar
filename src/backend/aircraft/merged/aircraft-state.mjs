@@ -58,7 +58,7 @@ function merge({ local, remote }, now, localFreshnessMs) {
     if (primary[key] === null || primary[key] === undefined || primary[key] === "")
       combined[key] = value;
   }
-  combined.remoteOnly = useNewerRemote;
+  combined.remoteOnly = false;
   return combined;
 }
 

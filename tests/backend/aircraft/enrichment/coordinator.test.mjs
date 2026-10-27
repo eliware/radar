@@ -111,6 +111,26 @@ test("retains route data when a placeholder replaces a useful callsign", async (
   });
 });
 
+test("looks up retained callsigns when a placeholder arrives before route data", async () => {
+  const state = createState();
+  let resolveFirst;
+  state.lookup.getCallsignRoute
+    .mockImplementationOnce(() => new Promise((resolve) => (resolveFirst = resolve)))
+    .mockResolvedValueOnce({ origin: "EGLL", destination: "KBOS" });
+  const aircraft = { icao: "ABC123", callsign: "BAW183" };
+  state.coordinator.update(aircraft, state.publish);
+  state.coordinator.update({ ...aircraft, callsign: "AD" }, state.publish);
+  expect(state.lookup.getCallsignRoute.mock.calls).toEqual([["BAW183"], ["BAW183"]]);
+  resolveFirst(null);
+  await Promise.resolve();
+  await Promise.resolve();
+  expect(state.changes.at(-1)).toMatchObject({
+    callsign: "BAW183",
+    origin: "EGLL",
+    destination: "KBOS",
+  });
+});
+
 test("skips lookups when re-api metadata already has type and complete route fields", () => {
   const state = createState();
   state.coordinator.update(

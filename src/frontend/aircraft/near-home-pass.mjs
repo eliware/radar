@@ -3,9 +3,9 @@ import { predictAircraftPosition } from "../predict-aircraft-position.mjs";
 
 const FEET_PER_NAUTICAL_MILE = 6076.12;
 const MAX_DISTANCE_NM = 1;
-const MAX_ALTITUDE_NM = 2000 / FEET_PER_NAUTICAL_MILE;
+const MAX_AGL_NM = 2000 / FEET_PER_NAUTICAL_MILE;
 
-export function isAircraftProjectedNearHome(aircraft, location, elevationFeet) {
+export function isAircraftProjectedNearHome(aircraft, location, elevationFeet = 0) {
   if (!Number.isFinite(aircraft?.altitudeFeet)) return false;
   const start = projectAircraftPosition(aircraft, location, elevationFeet);
   const end = start && predictAircraftPosition(start, aircraft);
@@ -13,10 +13,10 @@ export function isAircraftProjectedNearHome(aircraft, location, elevationFeet) {
 
   let minT = 0;
   let maxT = 1;
-  if (start.y > MAX_ALTITUDE_NM && end.y > MAX_ALTITUDE_NM) return false;
-  if (start.y <= MAX_ALTITUDE_NM !== end.y <= MAX_ALTITUDE_NM) {
-    const crossing = (MAX_ALTITUDE_NM - start.y) / (end.y - start.y);
-    if (start.y > MAX_ALTITUDE_NM) minT = crossing;
+  if (start.y > MAX_AGL_NM && end.y > MAX_AGL_NM) return false;
+  if (start.y <= MAX_AGL_NM !== end.y <= MAX_AGL_NM) {
+    const crossing = (MAX_AGL_NM - start.y) / (end.y - start.y);
+    if (start.y > MAX_AGL_NM) minT = crossing;
     else maxT = crossing;
   }
 

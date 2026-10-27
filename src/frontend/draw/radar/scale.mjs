@@ -17,7 +17,7 @@ export function drawRadarScale(context, range, radius, height) {
 }
 
 export function selectScaleDistance(range, radius, maxLength) {
-  const maxDistance = (maxLength * range) / radius;
+  const maxDistance = Math.min(range, (maxLength * range) / radius);
   let selected = 1;
   for (let exponent = 0; exponent <= 3; exponent += 1) {
     for (const factor of [1, 2, 5]) {

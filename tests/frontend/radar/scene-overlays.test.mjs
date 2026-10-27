@@ -22,8 +22,13 @@ test("shows matching rings and center axes for the selected range", () => {
   class TorusGeometry {
     constructor(...values) {
       this.values = values;
+      this.transforms = [];
       this.rotateZ = jest.fn((angle) => {
         this.startAngle = angle;
+        this.transforms.push(["z", angle]);
+      });
+      this.rotateX = jest.fn((angle) => {
+        this.transforms.push(["x", angle]);
       });
     }
   }
@@ -87,12 +92,13 @@ test("shows matching rings and center axes for the selected range", () => {
     -20 / Math.sqrt(2),
   );
   const labeledRing = rings.find((ring) => ring.geometry.values[0] === 10);
-  expect(labeledRing.rotation.x).toBe(Math.PI / 2);
+  expect(labeledRing.rotation.x).toBe(0);
   expect(labeledRing.rotation.z).toBe(0);
   expect(labeledRing.geometry.values[4]).toBeLessThan(2 * Math.PI);
   expect(labeledRing.geometry.startAngle).toBeCloseTo(
     RADAR_RING_LABEL_ANGLE + (2 * Math.PI - labeledRing.geometry.values[4]) / 2,
   );
+  expect(labeledRing.geometry.transforms.at(-1)).toEqual(["x", Math.PI / 2]);
   expect(rings.filter((ring) => ring.visible).map((ring) => ring.geometry.values[0])).toEqual([
     5, 10, 15, 20,
   ]);
@@ -130,6 +136,8 @@ test("draws rings when the browser cannot create text labels", () => {
     }
 
     rotateZ() {}
+
+    rotateX() {}
   }
   class Material {
     constructor() {

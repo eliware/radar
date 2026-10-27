@@ -60,6 +60,8 @@ Remote aircraft do not change auto-zoom. The range limits are 1 and 300 nautical
 
 The app renders rings every nautical mile under 10 miles. It renders rings every five miles under 60 miles, every 10 miles under 150 miles, and every 25 miles at greater ranges. Bold labels mark rings at 2, 10, 20, or 50-mile intervals. Dark minor rings sit halfway between. Ring labels omit units and sit along a northwest radial, leaving an opening in the rings without a radial line.
 
+The scale bar shows a distance no greater than the selected radar range and fits the available scope width.
+
 The radar shows green symbols while connected. It shows dark gray symbols when the receiver connection drops. Aircraft symbols are hollow diamonds.
 
 Labels show callsign, altitude, vertical trend, speed, and known type. If callsign is missing or a placeholder, the label uses the ICAO address. Aircraft marks and labels fade with age. Targets are removed after two minutes without an update.

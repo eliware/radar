@@ -124,7 +124,7 @@ test("uses zero feet when both NASR and airport elevations are missing", () => {
   expect(elevations).toContain(3000);
 });
 
-test("skips an extension when its projected points are invalid", () => {
+test("draws valid base legs when an extension endpoint is invalid", () => {
   const context = {
     beginPath: jest.fn(),
     lineTo: jest.fn(),
@@ -140,13 +140,35 @@ test("skips an extension when its projected points are invalid", () => {
   drawAirportRunways(
     context,
     new Map([["PWM", { rangeNm: 1, runways: [runway] }]]),
-    () => (++calls < 3 ? { x: 1, y: 2 } : null),
+    () => (++calls <= 2 || calls > 4 ? { x: 1, y: 2 } : null),
+    20,
+  );
+  expect(context.stroke).toHaveBeenCalledTimes(4);
+});
+
+test("skips guides when all projected guide endpoints are invalid", () => {
+  const context = {
+    beginPath: jest.fn(),
+    lineTo: jest.fn(),
+    moveTo: jest.fn(),
+    setLineDash: jest.fn(),
+    stroke: jest.fn(),
+  };
+  let calls = 0;
+  const runway = [
+    { latitude: 43, longitude: -70, elevationFeet: 50, alignmentDegrees: 10 },
+    { latitude: 43.01, longitude: -70, elevationFeet: 50, alignmentDegrees: 190 },
+  ];
+  drawAirportRunways(
+    context,
+    new Map([["PWM", { rangeNm: 1, runways: [runway] }]]),
+    () => (++calls <= 2 ? { x: 1, y: 2 } : null),
     20,
   );
   expect(context.stroke).toHaveBeenCalledTimes(1);
 });
 
-test("skips base legs when a projected leg endpoint is invalid", () => {
+test("draws extensions when a projected base-leg endpoint is invalid", () => {
   const context = {
     beginPath: jest.fn(),
     lineTo: jest.fn(),
@@ -165,7 +187,7 @@ test("skips base legs when a projected leg endpoint is invalid", () => {
     () => (++calls === 5 ? null : { x: 1, y: 2 }),
     20,
   );
-  expect(context.stroke).toHaveBeenCalledTimes(3);
+  expect(context.stroke).toHaveBeenCalledTimes(4);
 });
 
 test("can toggle runways, ERCL, and base legs independently", () => {

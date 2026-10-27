@@ -49,10 +49,12 @@ test("polls every six seconds for the largest connected-client radius", async ()
   state.source.connectClient("desktop");
   state.source.setClientRadius("phone", 42.1);
   state.source.setClientRadius("desktop", 530);
+  state.source.setClientLocalOnly("desktop", true);
   expect([...state.timers.values()][0].delay).toBe(6000);
   await tick(state);
-  expect(state.request.mock.calls[0][0]).toContain("circle=43.8,-70.4,300");
+  expect(state.request.mock.calls[0][0]).toContain("circle=43.8,-70.4,43");
   expect(state.request.mock.calls[0][1].headers["user-agent"]).toContain("radar@eliware.org");
+  state.source.setClientLocalOnly("desktop", false);
   expect(state.source.list()).toMatchObject([{ icao: "ABC123", aircraftTypeCode: "E75L" }]);
   expect([...state.timers.values()][0].delay).toBe(6000);
   expect(subscriber).toHaveBeenCalledTimes(1);

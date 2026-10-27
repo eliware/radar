@@ -129,13 +129,15 @@ test("clears references when viewport bounds omit the visible range", () => {
   Object.values(updates).forEach((update) => expect(update).toHaveBeenCalledWith([]));
 });
 
-test("leaves current references intact when a range request fails", async () => {
+test("retries a failed range request while the viewport stays stationary", async () => {
   jest.useFakeTimers();
   const updates = scene();
-  const fetchData = jest.fn().mockResolvedValue({ ok: false });
+  const fetchData = jest.fn().mockResolvedValueOnce({ ok: false }).mockResolvedValue(response());
   createRadarReferenceLoader(fetchData, updates, location).load(bounds);
   await flush();
   expect(fetchData).toHaveBeenCalledTimes(6);
+  await flush(180);
+  expect(fetchData).toHaveBeenCalledTimes(12);
   Object.values(updates).forEach((update) => expect(update).not.toHaveBeenCalled());
 });
 

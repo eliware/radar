@@ -53,7 +53,7 @@ test("supports local-only entries without distance or remote fields", () => {
   expect(state.localFurthestDistanceNm()).toBe(3);
 });
 
-test("hands off to a newer remote position only after local data goes stale", () => {
+test("uses newer remote fields while retaining the local source classification", () => {
   let now = 20_000;
   const state = createMergedAircraftState({ clock: () => now, localFreshnessMs: 8_000 });
   state.replaceLocal([
@@ -67,7 +67,7 @@ test("hands off to a newer remote position only after local data goes stale", ()
       aircraftTypeCode: "B712",
       callsign: "REMOTE",
       lastSeen: 19_000,
-      remoteOnly: true,
+      remoteOnly: false,
     },
   ]);
 
@@ -93,7 +93,7 @@ test("hands off to a newer remote position only after local data goes stale", ()
       longitude: -70.2,
       callsign: "REMOTE",
       aircraftTypeCode: "B712",
-      remoteOnly: true,
+      remoteOnly: false,
     }),
   );
 });

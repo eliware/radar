@@ -40,14 +40,10 @@ export function createAdsbLolRemoteSource({
     if (!Number.isFinite(location?.latitude) || !Number.isFinite(location?.longitude)) {
       return;
     }
-    const radius = Math.min(
-      MAX_RADIUS_NM,
-      Math.max(
-        ...[...clients.values()]
-          .filter((client) => !client.localOnly)
-          .map((client) => client.radiusNm),
-      ),
-    );
+    let radius = 0;
+    for (const client of clients.values())
+      if (!client.localOnly) radius = Math.max(radius, client.radiusNm);
+    radius = Math.min(MAX_RADIUS_NM, radius);
     const records = await requestAdsbLolCircle(request, location, radius);
     if (!isCurrent()) return;
     records.forEach((item) => aircraft.update(item));
