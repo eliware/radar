@@ -1,8 +1,7 @@
 import { projectAircraftDisplayItems } from "../../project/aircraft-display-items.mjs";
 import { drawAircraftDisplay } from "../aircraft-display.mjs";
 import { drawRadarScaleLegend } from "../radar/scale-legend.mjs";
-import { drawCanvasRadarReferences } from "./radar-references.mjs";
-import { drawWaterOutlines } from "../water-outlines.mjs";
+import { drawCanvasRadarReferences, drawCanvasRadarWater } from "./radar-references.mjs";
 import { createCanvasRadarScope } from "./scope.mjs";
 export function drawCanvasRadar(
   ctx,
@@ -43,7 +42,7 @@ export function drawCanvasRadar(
     connected,
   );
   const { width, height, radius, centerX, centerY, project, palette } = scope;
-  if (waterVisible) drawWaterOutlines(ctx, waterPaths, project, location, width, height);
+  drawCanvasRadarWater(ctx, waterVisible, waterPaths, project, location, width, height);
   scope.drawRings();
   drawCanvasRadarReferences({
     ctx,

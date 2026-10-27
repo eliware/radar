@@ -1,12 +1,9 @@
-import { parseMetar } from "metar-taf-parser";
 import { decodedFields } from "./format-fields.mjs";
+import { parseMetarReport } from "./parser.mjs";
 
-export function decodeMetarReport(report, parse = parseMetar) {
+export function decodeMetarReport(report, parse = undefined) {
   try {
-    const { id, metar } = report;
-    const source = String(metar ?? "").trim();
-    const message = /^(METAR|SPECI)\s/i.test(source) ? source : ["METAR", id, source].join(" ");
-    const data = parse(message);
+    const data = parseMetarReport(report, parse);
     const decoded = decodedFields(data);
     return {
       ...report,

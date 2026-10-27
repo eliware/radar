@@ -1,17 +1,12 @@
 import { copyFileSync, existsSync, mkdirSync, renameSync, rmSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { fileURLToPath } from "node:url";
 import { NASR_INDEXES } from "./indexes.mjs";
+import { DEFAULT_OUTPUT } from "./output-path.mjs";
 import { verifyNasrQueryPlans } from "./query-plans.mjs";
 import { validateNasrDatabase, verifyNasrIndexes } from "./validation.mjs";
 
 export { validateNasrDatabase, verifyNasrIndexes } from "./validation.mjs";
-
-const DEFAULT_OUTPUT = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../nasr/NASR.sqlite",
-);
 
 export function importNasrDatabase(
   inputPath,

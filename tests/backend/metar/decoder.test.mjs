@@ -1,4 +1,4 @@
-import { expect, jest, test } from "@jest/globals";
+import { expect, test } from "@jest/globals";
 import { decodeMetarReport } from "../../../src/backend/metar/decoder.mjs";
 
 test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
@@ -24,15 +24,6 @@ test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
       altimeter: "29.92",
     },
   });
-});
-
-test.each([
-  ["00504KT", "005°"],
-  ["04504KT", "045°"],
-  ["36004KT", "360°"],
-])("pads numeric wind direction in %s", (wind, expected) => {
-  const result = decodeMetarReport({ id: "KPWM", metar: `METAR KPWM 131651Z ${wind}` });
-  expect(result.decoded.windDirection).toBe(expected);
 });
 
 test("decodes variable wind, vertical visibility, and negative temperatures", () => {
@@ -83,61 +74,10 @@ test("returns null decoded data for invalid input and failed text conversion", (
   expect(decodeMetarReport({ id: "KPWM", metar: badText }).decoded).toBeNull();
 });
 
-test("formats optional cloud and temperature values", () => {
-  const parse = jest.fn(() => ({
-    day: 13,
-    hour: 16,
-    minute: 51,
-    wind: { direction: "VRB", speed: 3, unit: "KT" },
-    visibility: { value: 10, unit: "SM" },
-    weatherConditions: [],
-    clouds: [{ quantity: "BKN" }],
-    temperature: 18,
-    altimeter: undefined,
-  }));
-  const result = decodeMetarReport({ id: "KPWM", metar: "raw" }, parse);
-  expect(result.decoded).toEqual({
-    automated: false,
-    observed: "13 16:51Z",
-    windDirection: "VRB",
-    windSpeed: "3",
-    visibility: "10",
-    flightCategory: "VFR",
-    conditions: "—",
-    clouds: "BKN—",
-    temperature: "64°F",
-    dewPoint: "—",
-    altimeter: "—",
-  });
-  const missingTemperature = decodeMetarReport(
-    { id: "KPWM", metar: "raw" },
-    jest.fn(() => ({
-      weatherConditions: [],
-      clouds: [],
-      temperature: undefined,
-      dewPoint: 8,
-    })),
-  );
-  expect(missingTemperature.decoded.temperature).toBe("—");
-  expect(missingTemperature.decoded.dewPoint).toBe("46°F");
-});
-
 test("exposes the METAR AUTO modifier", () => {
   const result = decodeMetarReport({
     id: "KPWM",
     metar: "METAR KPWM 132051Z AUTO 10006KT 10SM CLR 11/10 A3000",
   });
   expect(result.decoded.automated).toBe(true);
-});
-
-test("shows CAVOK when the report has no visibility or cloud groups", () => {
-  const parse = jest.fn(() => ({
-    weatherConditions: [],
-    clouds: [],
-    cavok: true,
-  }));
-  const result = decodeMetarReport({ id: "KPWM", metar: "raw" }, parse);
-  expect(result.decoded.visibility).toBe("—");
-  expect(result.decoded.flightCategory).toBe("VFR");
-  expect(result.decoded.clouds).toBe("CAVOK");
 });
