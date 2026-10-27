@@ -72,14 +72,14 @@ test("reads the configured origin before it opens the feed", () => {
   expect(state.dependencies.createAircraftList).toHaveBeenCalledTimes(1);
 });
 
-test("uses default feed settings and accepts errors without a callback", () => {
+test("uses explicit feed settings and accepts errors without a callback", () => {
   let options;
   const connection = { close: jest.fn() };
   jest.spyOn(aircraftFeedDependencies, "connectSbsFeed").mockImplementation((value) => {
     options = value;
     return connection;
   });
-  const feed = createAircraftFeed({});
+  const feed = createAircraftFeed({ host: "127.0.0.1", port: 30003 });
   options.onError(new Error("offline"));
   options.onLine("MSG,3,1,1,abc123,2,,,,,,,,,,,,,,,");
   expect(options).toEqual(expect.objectContaining({ host: "127.0.0.1", port: 30003 }));

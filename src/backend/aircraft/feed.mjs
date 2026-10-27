@@ -13,10 +13,10 @@ export const aircraftFeedDependencies = {
 };
 
 export function createAircraftFeed({
-  host = process.env.ADSB_HOST ?? "127.0.0.1",
-  port = Number(process.env.ADSB_PORT ?? 30003),
-  locationLatitude = process.env.ADSB_LAT,
-  locationLongitude = process.env.ADSB_LON,
+  host,
+  port,
+  locationLatitude,
+  locationLongitude,
   onError = () => undefined,
   dependencies = aircraftFeedDependencies,
 }) {

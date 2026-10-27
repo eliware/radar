@@ -1,5 +1,5 @@
 import { createProcedurePaths } from "./paths.mjs";
-import { selectProcedurePaths } from "../select-procedure-paths.mjs";
+import { selectProcedurePaths } from "./select-paths.mjs";
 import { SID_QUERY, STAR_QUERY } from "./query-rules.mjs";
 
 export function createProcedureQuery(database) {

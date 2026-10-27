@@ -1,6 +1,7 @@
 import { MAX_RADAR_RANGE } from "../range.mjs";
 import { createRadarReferenceCache } from "./cache.mjs";
 import { createRadarReferenceRequestScheduler } from "./request-scheduler.mjs";
+import { createRadarReferenceViewApplier } from "./view-applier.mjs";
 
 const PATHS = ["airports", "navaids", "airspace-boundaries", "ils", "procedures", "airways"];
 const RANGE_STEP_NM = 25;
@@ -9,18 +10,14 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
   const cache = createRadarReferenceCache();
   let latestBounds = null;
   let lastKey = "";
-  let applyTimer;
+  const applier = createRadarReferenceViewApplier(cache, scene, location);
   const scheduler = createRadarReferenceRequestScheduler(
     (minimum, maximum) => fetchLayers(fetchData, minimum, maximum),
     (collections) => (cache.add(collections), applyLatest()),
   );
 
   function applyLatest() {
-    clearTimeout(applyTimer);
-    applyTimer = setTimeout(() => {
-      applyTimer = undefined;
-      cache.apply(scene, latestBounds, location);
-    }, 80);
+    applier.schedule(latestBounds);
   }
 
   return {
@@ -29,8 +26,7 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
       if (!bounds) {
         lastKey = "";
         latestBounds = null;
-        clearTimeout(applyTimer);
-        applyTimer = undefined;
+        applier.cancel();
         return cache.clear(scene);
       }
       const minimum = bounds.minRangeNm ?? 0;
@@ -42,8 +38,7 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
       lastKey = key;
       latestBounds = bounds;
       if (maximum <= minimum) {
-        clearTimeout(applyTimer);
-        applyTimer = undefined;
+        applier.cancel();
         return cache.clear(scene);
       }
       if (scheduler.loadedThrough) applyLatest();
