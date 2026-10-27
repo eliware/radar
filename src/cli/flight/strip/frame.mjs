@@ -1,4 +1,4 @@
-import { tableBorder, tableRow } from "./layout.mjs";
+import { tableBorder, tableRow } from "./table.mjs";
 
 export function horizontalRule(width, left, right, line) {
   return `${left}${line.repeat(width - 2)}${right}`;

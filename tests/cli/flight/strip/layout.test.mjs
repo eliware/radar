@@ -1,21 +1,12 @@
 import { expect, test } from "@jest/globals";
 import {
   createFlightStripLayout,
-  fitCell,
   flightStripColumns,
-  tableBorder,
-  tableRow,
   wideTableWidth,
 } from "../../../../src/cli/flight/strip/layout.mjs";
 
 const renderedWidth = (layout) =>
   layout[0].widths.reduce((sum, width) => sum + width, 3 * layout[0].widths.length + 1);
-
-test("fits, pads, and truncates table cells", () => {
-  expect(fitCell(undefined, 4)).toBe("-   ");
-  expect(fitCell("ok", 4)).toBe("ok  ");
-  expect(fitCell("long", 3)).toBe("lo…");
-});
 
 test("uses full headers and fills a wide terminal", () => {
   const layout = createFlightStripLayout(180);
@@ -62,10 +53,4 @@ test("keeps a three-row table inside a very narrow terminal", () => {
   expect(layout).toHaveLength(3);
   expect(renderedWidth(layout)).toBe(20);
   expect(layout.flatMap((group) => group.widths).every((width) => width > 0)).toBe(true);
-});
-
-test("draws matching borders and rows", () => {
-  expect(tableBorder([2, 3], "╔", "╦", "╗", "═")).toBe("╔════╦═════╗");
-  expect(tableRow(["A", "B"], [2, 2])).toBe("║ A  ║  B ║");
-  expect(tableRow(["A"], [2], "│", "┼", "│")).toBe("│ A  │");
 });

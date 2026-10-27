@@ -1,10 +1,8 @@
 import { attachDashboardCompassControls } from "./attach/dashboard/compass-controls.mjs";
-import { connectWebSocketFeed } from "./websocket-feed.mjs";
-import { createRadarReferenceLoader } from "./radar/reference/loader.mjs";
+import { loadDashboardReferences } from "./dashboard/references.mjs";
+import { connectDashboardFeed } from "./dashboard/feed.mjs";
 import { createFlightStripView } from "./flight/strips.mjs";
 import { startMetarRefresh } from "./start/metar-refresh.mjs";
-import { handleDashboardFeedUpdate } from "./handle-dashboard-feed-update.mjs";
-import { dashboardWebSocketUrl } from "./dashboard-websocket-url.mjs";
 import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
 import { destroyDashboardResources } from "./destroy/dashboard-resources.mjs";
 import { attachDashboardDisplayToggles } from "./attach/dashboard/display-toggles.mjs";
@@ -49,30 +47,15 @@ export async function startDashboard({
     });
     resources.scene = scene;
     Object.assign(resources, attachDashboardCompassControls(document, windowRef, scene));
-    let detachReferences = () => {};
-    const referenceLoader =
-      scene.updateAirports &&
-      scene.updateNavaids &&
-      scene.updateBoundaries &&
-      scene.updateIls &&
-      scene.updateProcedures &&
-      scene.updateAirways &&
-      scene.getViewportBounds
-        ? createRadarReferenceLoader(fetchData, scene, config.location)
-        : null;
-    if (referenceLoader)
-      detachReferences =
-        scene.onViewChange(() => referenceLoader.load(scene.getViewportBounds())) ?? (() => {});
-    resources.detachReferences = detachReferences;
-    if (referenceLoader) referenceLoader.load(scene.getViewportBounds());
+    resources.detachReferences = loadDashboardReferences(fetchData, scene, config.location);
     const sendViewport = createViewportReporter(scene, document);
     resources.detachViewportReporter = sendViewport.destroy;
-    const feed = connectWebSocketFeed({
+    const feed = connectDashboardFeed({
       WebSocketClass,
-      url: dashboardWebSocketUrl(document.location),
-      onState: (connected) => scene.setConnected?.(connected),
-      onMessage: (data) => handleDashboardFeedUpdate(scene, flightStrips, data),
-      onOpen: (socket) => sendViewport(socket, true),
+      document,
+      scene,
+      flightStrips,
+      sendViewport,
     });
     resources.feed = feed;
     resources.detachViewport = scene.onViewChange?.(() => sendViewport(feed.socket));
