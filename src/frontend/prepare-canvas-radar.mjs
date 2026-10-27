@@ -7,7 +7,5 @@ export function prepareCanvasRadar(context, canvas, windowRef) {
   if (canvas.width !== backingWidth) canvas.width = backingWidth;
   if (canvas.height !== backingHeight) canvas.height = backingHeight;
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
-  context.fillStyle = "#000";
-  context.fillRect(0, 0, width, height);
   return { width, height };
 }

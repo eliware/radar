@@ -1,31 +1,6 @@
 import { createFlightStripLayout, tableRow, wideTableWidth } from "./strip/layout.mjs";
 import { aircraftDivider, flightStripFooter, flightStripHeader } from "./strip/frame.mjs";
-
-function positionOf(aircraft) {
-  if (!Number.isFinite(aircraft.latitude) || !Number.isFinite(aircraft.longitude)) return null;
-  return `${aircraft.latitude.toFixed(4)}, ${aircraft.longitude.toFixed(4)}`;
-}
-
-function valuesOf(aircraft, now) {
-  const withUnit = (value, suffix) =>
-    value === null || value === undefined ? "-" : `${value}${suffix}`;
-  const altitude = aircraft.altitudeFeet?.toLocaleString("en-US");
-  const heading = aircraft.trackDegrees?.toString().padStart(3, "0");
-  const bearing = aircraft.bearingDegrees?.toString().padStart(3, "0");
-  return [
-    aircraft.callsign ?? "-",
-    aircraft.icao ?? "-",
-    withUnit(altitude, " ft"),
-    withUnit(aircraft.groundSpeedKnots, " kt"),
-    withUnit(heading, "°"),
-    withUnit(aircraft.verticalRateFeetPerMinute, " fpm"),
-    aircraft.squawk ?? "-",
-    positionOf(aircraft) ?? "-",
-    withUnit(aircraft.distanceNauticalMiles, " nm"),
-    withUnit(bearing, "°"),
-    `${Math.max(0, Math.floor((now - aircraft.lastSeen) / 1000))}s`,
-  ];
-}
+import { aircraftValuesOf } from "./strip/aircraft-values.mjs";
 
 function renderAircraft(rows, layout, lines, width) {
   for (const [index, values] of rows.entries()) {
@@ -47,7 +22,7 @@ function renderAircraft(rows, layout, lines, width) {
 }
 
 function renderTable(aircraft, width, now) {
-  const rows = aircraft.map((item) => valuesOf(item, now()));
+  const rows = aircraft.map((item) => aircraftValuesOf(item, now()));
   const layout = createFlightStripLayout(width, rows);
   const widths = layout[0].widths;
   const lines = flightStripHeader(layout, aircraft.length, width);

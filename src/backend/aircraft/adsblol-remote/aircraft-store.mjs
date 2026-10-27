@@ -1,4 +1,5 @@
 import { normalizeRemoteAircraft } from "../remote-aircraft.mjs";
+import { createAdsbLolRouteEnrichment } from "./route-enrichment.mjs";
 
 const AIRCRAFT_MAX_AGE_MS = 120_000;
 
@@ -9,7 +10,7 @@ export function createAdsbLolAircraftStore({
   onRouteUpdate = () => {},
 }) {
   const aircraft = new Map();
-  let routeLookupsEnabled = true;
+  const routes = createAdsbLolRouteEnrichment({ lookup, onRouteUpdate });
 
   function list() {
     const now = clock();
@@ -23,33 +24,15 @@ export function createAdsbLolAircraftStore({
     const mapped = normalizeRemoteAircraft(record, location, clock());
     if (!mapped) return;
     const previous = aircraft.get(mapped.icao);
-    const route = previous?.callsign === mapped.callsign ? previous : {};
-    const stored = { ...route, ...mapped };
+    const stored = { ...routes.preserve(mapped, previous), ...mapped };
     aircraft.set(mapped.icao, stored);
-    if (
-      !routeLookupsEnabled ||
-      !lookup ||
-      !mapped.callsign ||
-      (stored.origin && stored.destination)
-    )
-      return;
-    lookup
-      .getCallsignRoute(mapped.callsign)
-      .then((result) => {
-        if (result && aircraft.get(mapped.icao)?.callsign === mapped.callsign) {
-          aircraft.set(mapped.icao, { ...aircraft.get(mapped.icao), ...result });
-          onRouteUpdate();
-        }
-      })
-      .catch(() => {});
+    routes.enrich(mapped, aircraft);
   }
 
   return {
     list,
     update,
     clear: () => aircraft.clear(),
-    setRouteLookupsEnabled: (value) => {
-      routeLookupsEnabled = Boolean(value);
-    },
+    setRouteLookupsEnabled: routes.setEnabled,
   };
 }
