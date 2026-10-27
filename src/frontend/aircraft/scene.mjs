@@ -7,7 +7,6 @@ import { createRadarTargets } from "../radar/targets.mjs";
 import { createRadarSceneOverlays } from "../radar/scene-overlays.mjs";
 import { createAircraftTrails } from "./trails.mjs";
 import { createAircraftDisplayOverlay } from "./display-overlay.mjs";
-import { createOrbitRadarState } from "../create/orbit-radar-state.mjs";
 import { createRadarHome } from "../create/radar/home.mjs";
 import { createAirspaceVolumes } from "../create/airspace-volumes.mjs";
 import { createRadarReferenceStore } from "../radar/reference/store.mjs";
@@ -16,6 +15,8 @@ import { createSceneWater } from "../create/scene-water.mjs";
 import { createAircraftRadarCamera } from "../create/aircraft/radar/camera.mjs";
 import { createRadarConnectionState } from "../create/radar/connection-state.mjs";
 import { createAircraftSceneWorkflow } from "../create/aircraft/scene-workflow.mjs";
+import { createAircraftSceneView } from "./scene-view.mjs";
+import { createOrbitRadarState } from "../create/orbit-radar-state.mjs";
 import { destroyAircraftSceneResources } from "../destroy/aircraft-scene-resources.mjs";
 import { createRadarViewport } from "../radar/viewport/radius.mjs";
 export function createAircraftScene({
@@ -73,17 +74,15 @@ export function createAircraftScene({
     water,
     references,
   });
-  return {
-    ...connection,
-    update: workflow.update,
-    updateRemote: workflow.updateRemote,
-    updateSnapshot: workflow.updateSnapshot,
-    isLocalOnly: layers.aircraft.isLocalOnly,
-    ...references.updates((items) => airspace.update(items)),
-    setIlsVisible: layers.ils.setVisible,
-    ...createRadarViewport(THREE, camera, controls, container, elevationFeet),
-    ...createOrbitRadarState(controls, radarCamera),
-    reset,
+  return createAircraftSceneView({
+    connection,
+    workflow,
+    layers,
+    references,
+    updateAirspace: (items) => airspace.update(items),
+    viewport: createRadarViewport(THREE, camera, controls, container, elevationFeet),
+    orbit: createOrbitRadarState(controls, radarCamera),
+    radar: { reset },
     destroy: () =>
       destroyAircraftSceneResources({
         workflow,
@@ -96,5 +95,5 @@ export function createAircraftScene({
         renderer,
         container,
       }),
-  };
+  });
 }
