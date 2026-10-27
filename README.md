@@ -29,31 +29,31 @@ Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.
 
 ## Features
 
-Radar provides a web app and a CLI for ADS-B aircraft data. Read the [web guide](docs/web-api.md) and [CLI guide](docs/adsb-cli.md).
+Radar provides a web app and terminal client for decoded ADS-B aircraft data. See the [user guides](docs/README.md).
 
 ## Requirements
 
-Use Node.js 26 or later. Use Git LFS to clone the source repository.
+Use Node.js 26 or later and Git LFS for the FAA database.
 
 ## Setup
 
-Read the [user guides](docs/README.md) to install and configure Radar.
+Follow [docs/README.md](docs/README.md) to install, configure, and run Radar.
 
 ## Usage
 
-Use the [web guide](docs/web-api.md) or [CLI guide](docs/adsb-cli.md) to start Radar. Read the [release notes](RELEASE_NOTES.md) for released changes.
+Start the [web app](docs/web-api.md) or [CLI](docs/adsb-cli.md). See [release notes](RELEASE_NOTES.md) for released changes.
 
 ## Development
 
-Read [AGENTS.md](AGENTS.md) and [specifications](specs/README.md) before you change the source.
+Follow [AGENTS.md](AGENTS.md) and the [specifications](specs/README.md) when changing the repository.
 
 ## Testing
 
-Run `npm test` to validate the repository.
+Run `npm test` for aggregate validation.
 
 ## Troubleshooting
 
-Use the [user guides](docs/README.md) to check incoming aircraft data, the web app, and receiver.
+Use the [user guides](docs/README.md) to resolve setup and runtime issues.
 
 ## Security
 
@@ -61,41 +61,41 @@ The web API has no authentication. Limit access to a trusted network.
 
 ## Configuration
 
-Set runtime options in `.env` or in the process environment. See [.env.example](.env.example).
+Set runtime options in `.env` or the process environment. See [.env.example](.env.example) and [configuration guide](docs/configuration.md).
 
 ## Operations
 
-For the Linux Docker deployment, read the [Linux Compose guide](docs/linux-compose.md). The [web task guide](docs/web-service-background.md) and [RTL1090 task guide](docs/rtl1090-background.md) cover Windows setup.
+Use the [Linux Compose guide](docs/linux-compose.md) or Windows [web task guide](docs/web-service-background.md) and [receiver guide](docs/rtl1090-background.md).
 
 ## Commands
 
 - `node bin/adsb.mjs` starts the CLI.
-- `node bin/adsb.mjs --help` shows CLI options.
-- `node bin/adsb.mjs --version` shows the app version.
+- `node bin/adsb.mjs --help` prints its options.
+- `node bin/adsb.mjs --version` prints the app version.
 
 ## Exit codes
 
-The CLI returns code 0 after help, version, or signal shutdown. It returns code 1 after an unrecoverable error. It returns code 2 after invalid options.
+The CLI returns `0` after help, version, or signal shutdown. It returns `1` after an unrecoverable error and `2` after invalid options.
 
 ## Routes
 
-Read the [web guide](docs/web-api.md) for HTTP and WebSocket endpoints.
+See the [web guide](docs/web-api.md) for HTTP and WebSocket routes.
 
 ## Assets
 
-The app serves assets from `public/`. The build writes browser files to `dist/`.
+The app serves public files from `public/` and built browser files from `dist/`.
 
 ## Development server
 
-Run `npm run build`, then run `node bin/radar.mjs`. Read the [web guide](docs/web-api.md) for browser checks.
+Run `npm run build`, then `node bin/radar.mjs`. Open `http://localhost:3000` by default. See the [web guide](docs/web-api.md).
 
 ## Build
 
-Run `npm run build` to build the browser app.
+Run `npm run build` to write the browser bundle to `dist/`.
 
 ## Deployment
 
-When a push targets the `dev` deployment, it pulls `main`, installs dependencies with `npm ci`, and runs `npm test`. It does not start or publish the app.
+The `dev` deployment target runs `git pull`, `npm ci`, and `npm test`. It does not start or publish the app.
 
 ## Support
 

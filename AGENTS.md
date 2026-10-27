@@ -2,38 +2,35 @@
 
 ## Project
 
-Maintain the Radar web app and CLI for ADS-B data.
+Maintain @eliware/radar, Eliware's web app and CLI for decoded ADS-B data.
 
 ## Scope and boundaries
 
-Apply these rules across this repository.
+Apply these instructions to this repository's application, CLI, tests, and documentation.
 
 ## Layout
 
-Keep source in `src/`. Put `webpack.config.mjs` at the repository root for the browser build. Keep launchers in `bin/` and tests in `tests/`. Keep docs in `docs/` and specifications in `specs/`. Put each `.mjs` source file in `src/` and mirror it with one test file under `tests/`.
+Keep source in `src/`, launchers in `bin/`, tests in `tests/`, fixtures in `test-fixtures/`, docs in `docs/`, and specifications in `specs/`. Keep `webpack.config.mjs` at the repository root. Mirror each `src/` `.mjs` file with one same-path `tests/` `.test.mjs` file.
 
 ## Development
 
-Use Node.js 26 or later, npm, and native ESM. Keep each source file under 100 lines and each test file under 200 lines.
+Use Node.js 26 or later, npm, and native ESM. Keep repository documentation current with maintained behavior and workflows.
 
 ## Validation
 
-Run `npm ci`, then `npm test`. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` for focused checks.
+Run `npm test` for aggregate validation. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` for focused checks.
 
 ## Security
 
-Keep secrets, tokens, private keys, and credentials out of source and package files.
+Keep credentials and private data out of tracked files.
 
 ## Changes
 
-Document supported workflows, runtime settings, and how to start and stop the app.
-After commits to the running app, run `docker compose up -d --build` on Linux and check `/health` and `/ready`.
-If the app is unavailable, report that it did not start.
+Keep tests and documentation aligned with behavior changes.
 
 ## Application
 
-Keep implementation under `src/` and launchers under `bin/`.
-Validate settings before opening connections. Make shutdown repeatable.
+Validate configuration before opening connections. Make shutdown repeatable.
 
 Run focused tests first during development.
 Run one test file with `npm test -- tests/path/to/example.test.mjs`.
@@ -43,8 +40,8 @@ Run the full `npm test` suite for final validation before a commit, milestone, o
 
 ## CLI
 
-Document installation, commands, options, defaults, errors, and exit codes. Support `--help` and `--version`.
+Keep command behavior, options, defaults, help, and exit codes documented in the user guides.
 
 ## Web
 
-Document routes, assets, ports, build output, and browser checks. Keep public assets in `public/`. Build output goes to `dist/`.
+Keep public assets in `public/` and build output in `dist/`. Document routes, assets, bundles, build settings, ports, and browser checks.
