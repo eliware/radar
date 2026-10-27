@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { NASR_INDEXES } from "./indexes.mjs";
+import { installNasrIndexes } from "./index-installer.mjs";
 import { DEFAULT_OUTPUT } from "./output-path.mjs";
 import { createNasrImportFiles } from "./import-files.mjs";
 import { verifyNasrQueryPlans } from "./query-plans.mjs";
@@ -30,11 +30,9 @@ export function importNasrDatabase(
   try {
     files.copyInput(input, temporary);
     const database = new Database(temporary);
+    let indexes;
     try {
-      database.exec("BEGIN");
-      for (const statement of NASR_INDEXES) database.exec(statement);
-      database.exec("COMMIT");
-      database.exec("ANALYZE");
+      indexes = installNasrIndexes(database);
       validateNasrDatabase(database);
       verifyNasrIndexes(database);
       verifyNasrQueryPlans(database);
@@ -42,7 +40,7 @@ export function importNasrDatabase(
       database.close();
     }
     files.install(temporary, output);
-    return { output, indexes: NASR_INDEXES.length };
+    return { output, indexes };
   } catch (error) {
     files.cleanup(temporary);
     throw error;

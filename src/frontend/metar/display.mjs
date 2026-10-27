@@ -1,5 +1,6 @@
-import { formatMetarAge, getMetarAgeMinutes } from "../../shared/metar/age.mjs";
+import { formatMetarAge } from "../../shared/metar/age.mjs";
 import { metarCategoryLabel } from "../../shared/metar/category.mjs";
+import { metarAgeStatusClass } from "./age-status.mjs";
 import { escapeMetarHtml, renderMetarTicker } from "./ticker.mjs";
 
 export function updateMetarDisplay(element, ticker, data, now = new Date()) {
@@ -53,7 +54,7 @@ function reportRow({ id, metar, decoded }, now) {
     .map((value, index) => {
       if (index === 2) return `<td>${metarCategoryLabel(value)}</td>`;
       if (index === 3) {
-        const oldClass = getMetarAgeMinutes(decoded.observed, now) > 60 ? " metar-age-old" : "";
+        const oldClass = metarAgeStatusClass(decoded.observed, now);
         return `<td class="metar-age${oldClass}">${escapeMetarHtml(value)}</td>`;
       }
       if (index === 6) return `<td class="metar-visibility">${escapeMetarHtml(value)}</td>`;

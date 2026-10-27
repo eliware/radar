@@ -1,8 +1,5 @@
 import { MAX_RADAR_RANGE } from "../../radar/range.mjs";
-import { runwayDestination } from "../../runway-destination.mjs";
-
-const EXTENSION_NM = 10;
-const EXTENSION_ALTITUDE_FEET = 3000;
+import { createRunwayGuidePoints } from "./runway-guides.mjs";
 
 export function drawAirportRunways(
   context,
@@ -52,18 +49,10 @@ function drawRunway(
 }
 
 function drawRunwayExtension(context, end, project, extensionsVisible, baseLegsVisible) {
-  const outward = (end.alignmentDegrees + 180) % 360;
-  const farEnd = runwayDestination(end, outward, EXTENSION_NM);
-  const baseElevation = Number.isFinite(end.elevationFeet) ? end.elevationFeet : 0;
-  const farAltitude = baseElevation + EXTENSION_ALTITUDE_FEET;
-  const outerPoint = extensionsVisible ? project({ ...farEnd, elevationFeet: farAltitude }) : null;
-  const origin = extensionsVisible ? project({ ...end, elevationFeet: baseElevation }) : null;
-  const left = baseLegsVisible
-    ? project({ ...runwayDestination(farEnd, outward - 90, 5), elevationFeet: farAltitude })
-    : null;
-  const right = baseLegsVisible
-    ? project({ ...runwayDestination(farEnd, outward + 90, 5), elevationFeet: farAltitude })
-    : null;
+  const guide = createRunwayGuidePoints(end);
+  const outerPoint = extensionsVisible ? project(guide.extensionEnd) : null;
+  const origin = extensionsVisible ? project(guide.extensionStart) : null;
+  const [left, right] = baseLegsVisible ? guide.baseLegs.map(project) : [null, null];
   const canDrawExtension = extensionsVisible && validPoint(origin) && validPoint(outerPoint);
   const canDrawBaseLegs = baseLegsVisible && validPoint(left) && validPoint(right);
   if (!canDrawExtension && !canDrawBaseLegs) return;
