@@ -47,7 +47,7 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@eliware/common": "^15.0.0",
+    "@eliware/common": "^15.0.1",
     "@fastify/websocket": "^11.3.4",
     "@mapbox/vector-tile": "^3.0.0",
     "dotenv": "^18.0.9",
@@ -57,11 +57,11 @@
     "pbf": "^5.1.2",
     "puppeteer": "^25.16.0",
     "three": "^0.186.1",
-    "webpack": "^5.112.0",
+    "webpack": "^5.112.2",
     "webpack-cli": "^7.2.3"
   },
   "devDependencies": {
-    "@eliware/test": "^15.0.0"
+    "@eliware/test": "^15.0.1"
   },
   "jest": {
     "testEnvironment": "node",
