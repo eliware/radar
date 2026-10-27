@@ -2,22 +2,14 @@ import { expect, jest, test } from "@jest/globals";
 
 const calls = [];
 const layer = (name) => jest.fn((...args) => calls.push([name, ...args]));
-const drawAirportMarkers = layer("airport-markers");
-const drawAirspaceRings = layer("airspace-rings");
-const drawAirportRunways = layer("runways");
+const drawAirportLayer = layer("airport-layer");
 const drawNavaidMarkers = layer("navaids");
 const drawArtccBoundaries = layer("boundaries");
 const drawIlsApproaches = layer("ils");
 const drawProcedures = layer("procedures");
 const drawAirways = layer("airways");
-jest.unstable_mockModule("../../../../src/frontend/draw/airport/markers.mjs", () => ({
-  drawAirportMarkers,
-}));
-jest.unstable_mockModule("../../../../src/frontend/draw/airspace-rings.mjs", () => ({
-  drawAirspaceRings,
-}));
-jest.unstable_mockModule("../../../../src/frontend/draw/airport/runways.mjs", () => ({
-  drawAirportRunways,
+jest.unstable_mockModule("../../../../src/frontend/draw/radar/airport-layer.mjs", () => ({
+  drawAirportLayer,
 }));
 jest.unstable_mockModule("../../../../src/frontend/draw/navaid-markers.mjs", () => ({
   drawNavaidMarkers,
@@ -34,7 +26,24 @@ jest.unstable_mockModule("../../../../src/frontend/draw/procedures.mjs", () => (
 jest.unstable_mockModule("../../../../src/frontend/draw/airways.mjs", () => ({ drawAirways }));
 const { drawRadarReferences } = await import("../../../../src/frontend/draw/radar/references.mjs");
 
+const runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true };
+const referenceVisibility = { airportsVisible: true, navaidsVisible: true };
+const airwayVisibility = { Q: true, J: true, V: true };
+
+function resetCalls() {
+  calls.length = 0;
+  [
+    drawAirportLayer,
+    drawNavaidMarkers,
+    drawArtccBoundaries,
+    drawIlsApproaches,
+    drawProcedures,
+    drawAirways,
+  ].forEach((draw) => draw.mockClear());
+}
+
 test("routes each reference layer in draw order with visibility", () => {
+  resetCalls();
   const context = {};
   const project = jest.fn();
   const airports = new Map();
@@ -48,18 +57,21 @@ test("routes each reference layer in draw order with visibility", () => {
   drawRadarReferences(context, references, project, false, false);
 
   expect(calls.map(([name]) => name)).toEqual([
-    "airspace-rings",
-    "runways",
-    "airport-markers",
+    "airport-layer",
     "navaids",
     "boundaries",
     "ils",
     "procedures",
     "airways",
   ]);
-  expect(drawAirspaceRings).toHaveBeenCalledWith(context, airports, project);
-  expect(drawAirportRunways).toHaveBeenCalledWith(context, airports, project, true, true, true);
-  expect(drawAirportMarkers).toHaveBeenCalledWith(context, airports, project);
+  expect(drawAirportLayer).toHaveBeenCalledWith(
+    context,
+    airports,
+    project,
+    runwayVisibility,
+    referenceVisibility,
+    true,
+  );
   expect(drawNavaidMarkers).toHaveBeenCalledWith(context, navaids, project);
   expect(drawArtccBoundaries).toHaveBeenCalledWith(context, boundaries, project);
   expect(drawIlsApproaches).toHaveBeenCalledWith(context, ilsApproaches, project, false);
@@ -67,17 +79,13 @@ test("routes each reference layer in draw order with visibility", () => {
     sidVisible: false,
     starVisible: false,
   });
-  expect(drawAirways).toHaveBeenCalledWith(context, airways, project, {
-    Q: true,
-    J: true,
-    V: true,
-  });
+  expect(drawAirways).toHaveBeenCalledWith(context, airways, project, airwayVisibility);
 });
 
 test("uses empty layer maps when reference data is missing", () => {
-  calls.length = 0;
+  resetCalls();
   drawRadarReferences({}, {}, () => null);
-  expect(drawAirportMarkers.mock.calls.at(-1)[1]).toEqual(new Map());
+  expect(drawAirportLayer.mock.calls.at(-1)[1]).toEqual(new Map());
   expect(drawNavaidMarkers.mock.calls.at(-1)[1]).toEqual(new Map());
   expect(drawArtccBoundaries.mock.calls.at(-1)[1]).toEqual(new Map());
   expect(drawIlsApproaches.mock.calls.at(-1)[1]).toEqual(new Map());
@@ -85,39 +93,32 @@ test("uses empty layer maps when reference data is missing", () => {
   expect(drawAirways.mock.calls.at(-1)[1]).toEqual(new Map());
 });
 
-test("hides airport, airspace, VOR and runway layers with airport and VOR switches", () => {
-  calls.length = 0;
-  drawAirspaceRings.mockClear();
-  drawAirportMarkers.mockClear();
-  drawNavaidMarkers.mockClear();
-  drawAirportRunways.mockClear();
+test("passes airport and VOR visibility to their layer coordinators", () => {
+  resetCalls();
+  const visibility = { airportsVisible: false, navaidsVisible: false };
   drawRadarReferences(
     {},
     {},
     () => null,
     true,
     { sidVisible: true, starVisible: true },
-    { Q: true, J: true, V: true },
-    { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
-    { airportsVisible: false, navaidsVisible: false },
+    airwayVisibility,
+    runwayVisibility,
+    visibility,
   );
-  expect(drawAirspaceRings).not.toHaveBeenCalled();
-  expect(drawAirportMarkers).not.toHaveBeenCalled();
+  expect(drawAirportLayer).toHaveBeenLastCalledWith(
+    expect.anything(),
+    expect.anything(),
+    expect.anything(),
+    runwayVisibility,
+    visibility,
+    true,
+  );
   expect(drawNavaidMarkers).not.toHaveBeenCalled();
-  expect(drawAirportRunways).toHaveBeenLastCalledWith(
-    expect.anything(),
-    expect.anything(),
-    expect.anything(),
-    false,
-    false,
-    false,
-  );
 });
 
-test("can omit flat airspace rings while retaining airport references", () => {
-  calls.length = 0;
-  drawAirspaceRings.mockClear();
-  drawAirportMarkers.mockClear();
+test("passes the flat-airspace ring choice to the airport layer", () => {
+  resetCalls();
   drawRadarReferences(
     {},
     { airports: new Map() },
@@ -129,7 +130,5 @@ test("can omit flat airspace rings while retaining airport references", () => {
     undefined,
     false,
   );
-
-  expect(drawAirspaceRings).not.toHaveBeenCalled();
-  expect(drawAirportMarkers).toHaveBeenCalledTimes(1);
+  expect(drawAirportLayer.mock.calls.at(-1)[5]).toBe(false);
 });

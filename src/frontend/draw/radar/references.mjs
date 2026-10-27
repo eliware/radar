@@ -1,6 +1,4 @@
-import { drawAirportMarkers } from "../airport/markers.mjs";
-import { drawAirspaceRings } from "../airspace-rings.mjs";
-import { drawAirportRunways } from "../airport/runways.mjs";
+import { drawAirportLayer } from "./airport-layer.mjs";
 import { drawNavaidMarkers } from "../navaid-markers.mjs";
 import { drawArtccBoundaries } from "../artcc-boundaries.mjs";
 import { drawIlsApproaches } from "../ils-approaches.mjs";
@@ -23,17 +21,14 @@ export function drawRadarReferences(
     typeof procedureVisibility === "boolean"
       ? { sidVisible: procedureVisibility, starVisible: procedureVisibility }
       : procedureVisibility;
-  if (referenceVisibility.airportsVisible && airspaceRingsVisible)
-    drawAirspaceRings(context, airports, project);
-  drawAirportRunways(
+  drawAirportLayer(
     context,
     airports,
     project,
-    referenceVisibility.airportsVisible && runwayVisibility.runwaysVisible,
-    referenceVisibility.airportsVisible && runwayVisibility.extensionsVisible,
-    referenceVisibility.airportsVisible && runwayVisibility.baseLegsVisible,
+    runwayVisibility,
+    referenceVisibility,
+    airspaceRingsVisible,
   );
-  if (referenceVisibility.airportsVisible) drawAirportMarkers(context, airports, project);
   if (referenceVisibility.navaidsVisible)
     drawNavaidMarkers(context, references.navaids ?? new Map(), project);
   drawArtccBoundaries(context, references.boundaries ?? new Map(), project);
