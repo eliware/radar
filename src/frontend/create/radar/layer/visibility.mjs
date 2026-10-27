@@ -23,7 +23,9 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
     },
     airways(value) {
       if (restoring) return;
-      Object.entries(value).forEach(([type, visible]) => persistLayerVisibility(`airway-${type}`, visible));
+      Object.entries(value).forEach(([type, visible]) =>
+        persistLayerVisibility(`airway-${type}`, visible),
+      );
       onChange?.(value);
     },
     runways(value) {
@@ -44,7 +46,9 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
       controllers.ils.setVisible(saved.ils);
       controllers.procedures.setSidVisible(saved.sid);
       controllers.procedures.setStarVisible(saved.star);
-      ["Q", "J", "V"].forEach((type) => controllers.airways.setVisible(type, saved[`airway-${type}`]));
+      ["Q", "J", "V"].forEach((type) =>
+        controllers.airways.setVisible(type, saved[`airway-${type}`]),
+      );
       controllers.runways.setRunwaysVisible(saved.runways);
       controllers.runways.setExtensionsVisible(saved.extensions);
       controllers.runways.setBaseLegsVisible(saved.baseLegs);

@@ -73,6 +73,5 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
     function project(position) {
       return projectCameraPosition(position, width, height);
     }
-  }
-
+  };
 }
