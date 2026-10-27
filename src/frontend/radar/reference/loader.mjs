@@ -1,52 +1,26 @@
 import { MAX_RADAR_RANGE } from "../range.mjs";
 import { createRadarReferenceCache } from "./cache.mjs";
+import { createRadarReferenceRequestScheduler } from "./request-scheduler.mjs";
 
 const PATHS = ["airports", "navaids", "airspace-boundaries", "ils", "procedures", "airways"];
 const RANGE_STEP_NM = 25;
-const APPLY_DELAY_MS = 80;
 
 export function createRadarReferenceLoader(fetchData, scene, location) {
   const cache = createRadarReferenceCache();
-  let loadedThrough = 0;
-  let requestedThrough = 0;
   let latestBounds = null;
   let lastKey = "";
-  let timer;
   let applyTimer;
-  let loading;
-  let failures = 0;
-
-  function loadNext() {
-    const start = loadedThrough;
-    const end = requestedThrough;
-    requestedThrough = start;
-    loading = fetchLayers(fetchData, start, end)
-      .then((collections) => {
-        cache.add(collections);
-        loadedThrough = end;
-        failures = 0;
-        applyLatest();
-      })
-      .catch(() => {
-        requestedThrough = Math.max(requestedThrough, end);
-        failures = Math.min(failures + 1, 8);
-      })
-      .finally(() => {
-        loading = null;
-        if (requestedThrough > loadedThrough)
-          timer = setTimeout(
-            () => ((timer = null), loadNext()),
-            Math.min(30_000, 180 * 2 ** Math.max(0, failures - 1)),
-          );
-      });
-  }
+  const scheduler = createRadarReferenceRequestScheduler(
+    (minimum, maximum) => fetchLayers(fetchData, minimum, maximum),
+    (collections) => (cache.add(collections), applyLatest()),
+  );
 
   function applyLatest() {
     clearTimeout(applyTimer);
     applyTimer = setTimeout(() => {
       applyTimer = undefined;
       cache.apply(scene, latestBounds, location);
-    }, APPLY_DELAY_MS);
+    }, 80);
   }
 
   return {
@@ -72,13 +46,10 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
         applyTimer = undefined;
         return cache.clear(scene);
       }
-      if (loadedThrough) applyLatest();
+      if (scheduler.loadedThrough) applyLatest();
       const target = Math.min(MAX_RADAR_RANGE, Math.ceil(maximum / RANGE_STEP_NM) * RANGE_STEP_NM);
-      if (target <= loadedThrough) return;
-      requestedThrough = Math.max(requestedThrough, target);
-      if (loading || timer) return;
-      if (loadedThrough) timer = setTimeout(() => ((timer = null), loadNext()), 180);
-      else loadNext();
+      if (target <= scheduler.loadedThrough) return;
+      scheduler.request(target);
     },
   };
 }

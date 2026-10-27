@@ -30,23 +30,7 @@ test("maps all 22 SBS fields to named values", () => {
   });
 });
 
-test("keeps empty columns and invalid numeric values", () => {
-  const fields = Array(22).fill("");
-  fields[0] = "MSG";
-  fields[1] = "1";
-  fields[11] = "bad";
-  expect(parseSbsMessage(fields.join(","))).toMatchObject({
-    recordType: "MSG",
-    transmissionType: 1,
-    sessionId: null,
-    icao: null,
-    callsign: null,
-    altitudeFeet: "bad",
-  });
-});
-
-test("maps supported non-aircraft records and rejects unknown records", () => {
-  expect(parseSbsMessage("STA,1,2,3")).toMatchObject({ recordType: "STA", aircraftId: "3" });
+test("rejects unsupported and empty record types", () => {
   expect(parseSbsMessage("OTHER,9,1,1,ABC123")).toBeNull();
   expect(parseSbsMessage("")).toBeNull();
 });

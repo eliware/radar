@@ -1,4 +1,5 @@
-import { formatMetarAge, getMetarAgeMinutes } from "./format-metar-age.mjs";
+import { formatMetarAge, getMetarAgeMinutes } from "../shared/metar/age.mjs";
+import { metarCategoryLabel } from "../shared/metar/fields.mjs";
 
 export function updateMetarDisplay(element, ticker, data, now = new Date()) {
   if (!element || !ticker) return;
@@ -57,7 +58,7 @@ function reportRow({ id, metar, decoded }, now) {
   ];
   return `<tr>${values
     .map((value, index) => {
-      if (index === 2) return `<td>${categoryLabel(value)}</td>`;
+      if (index === 2) return `<td>${metarCategoryLabel(value)}</td>`;
       if (index === 3) {
         const oldClass = getMetarAgeMinutes(decoded.observed, now) > 60 ? " metar-age-old" : "";
         return `<td class="metar-age${oldClass}">${escapeText(value)}</td>`;
@@ -70,12 +71,7 @@ function reportRow({ id, metar, decoded }, now) {
 }
 
 function tickerLine({ id, metar, decoded }) {
-  return `${escapeText(id)} ${categoryLabel(decoded?.flightCategory)} ${escapeText(metar)}`.trim();
-}
-
-function categoryLabel(category) {
-  if (!["VFR", "MVFR", "IFR", "LIFR"].includes(category)) return "—";
-  return `<span class="flight-category flight-category-${category.toLowerCase()}">${category}</span>`;
+  return `${escapeText(id)} ${metarCategoryLabel(decoded?.flightCategory)} ${escapeText(metar)}`.trim();
 }
 
 function escapeText(value) {

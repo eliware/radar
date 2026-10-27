@@ -1,4 +1,4 @@
-import { decodedFields } from "./format-fields.mjs";
+import { decodedFields } from "../../shared/metar/fields.mjs";
 import { parseMetarReport } from "./parser.mjs";
 
 export function decodeMetarReport(report, parse = undefined) {

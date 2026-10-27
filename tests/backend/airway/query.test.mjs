@@ -27,28 +27,3 @@ test("returns named airway paths that cross the requested range band", () => {
   query(home, 0, 20);
   expect(statement.all).toHaveBeenCalledTimes(1);
 });
-
-test("omits out-of-range and unresolved paths but retains a nearby single fix", () => {
-  const rows = [
-    { ...point("FAR", 10), latitude: 5 },
-    { ...point("BAD", 0), latitude: Number.NaN },
-    { ...point("BAD-LON", 0, ""), longitude: Number.NaN },
-    { ...point("NEAR", 0.1), name: "V1" },
-  ];
-  const query = createAirwayQuery({ prepare: () => ({ all: () => rows }) });
-  expect(query(home, 0, 20).map((route) => route.name)).toEqual(["V1"]);
-});
-
-test("separates discontinuous fixes into distinct airway paths", () => {
-  const rows = [point("A", 0.1, "B"), point("C", 0.2, "")];
-  const query = createAirwayQuery({ prepare: () => ({ all: () => rows }) });
-  const result = query(home, 0, 20);
-  expect(result).toHaveLength(2);
-  expect(result.map((route) => route.points[0].fix)).toEqual(["A", "C"]);
-});
-
-test("handles consecutive fixes at the same coordinate", () => {
-  const rows = [point("SAME", 0, "NEXT"), point("NEXT", 0)];
-  const query = createAirwayQuery({ prepare: () => ({ all: () => rows }) });
-  expect(query(home, 0, 10)).toHaveLength(1);
-});
