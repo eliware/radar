@@ -17,9 +17,9 @@ test("draws a gray identifier for airports inside the current range", () => {
   const airports = new Map([
     ["PWM", { faaId: "PWM", icao: "KPWM", rangeNm: 10 }],
     ["BGR-FALLBACK", { faaId: "BGR", rangeNm: 5 }],
-    ["FAR", { faaId: "FAR", icao: "KFAR", rangeNm: 40 }],
+    ["FAR", { faaId: "FAR", icao: "KFAR", rangeNm: 301 }],
   ]);
-  drawAirportMarkers(context, airports, () => ({ x: 20, y: 30 }), 20);
+  drawAirportMarkers(context, airports, () => ({ x: 20, y: 30 }));
   expect(context.fillStyle).toBe("#b8b8b8");
   expect(context.textAlign).toBe("center");
   expect(context.font).toBe('12px Consolas, "Courier New", monospace');
@@ -43,7 +43,6 @@ test("uses smaller airport labels on narrow 2D canvases", () => {
     context,
     new Map([["PWM", { faaId: "PWM", icao: "KPWM", rangeNm: 5 }]]),
     () => ({ x: 20, y: 30 }),
-    20,
   );
 
   expect(context.font).toBe('9px Consolas, "Courier New", monospace');
@@ -65,7 +64,7 @@ test("skips airport markers with invalid projected coordinates", () => {
   };
   const airports = new Map([["BAD", { faaId: "BAD", icao: "KBAD", rangeNm: 4 }]]);
 
-  drawAirportMarkers(context, airports, () => ({ x: 1, y: Number.NaN }), 10);
+  drawAirportMarkers(context, airports, () => ({ x: 1, y: Number.NaN }));
 
   expect(context.fillText).not.toHaveBeenCalled();
   expect(context.arc).not.toHaveBeenCalled();

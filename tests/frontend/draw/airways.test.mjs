@@ -28,7 +28,7 @@ test("draws airway segments, midpoint identifiers, and labeled fix markers", () 
     type: "V",
     points: [point("FIXA", -2, 0), point("FIXB", 2, 0)],
   };
-  drawAirways(ctx, new Map([[airway.id, airway]]), (item) => ({ x: item.x, y: item.z }), 5, {
+  drawAirways(ctx, new Map([[airway.id, airway]]), (item) => ({ x: item.x, y: item.z }), {
     Q: true,
     J: true,
     V: true,
@@ -51,7 +51,6 @@ test("uses distinct muted colors for Q, J, and V airway layers", () => {
       ctx,
       new Map([[type, { name: `${type}1`, type, points: [point("A", 1, 0)] }]]),
       (item) => ({ x: item.x, y: item.z }),
-      5,
       { Q: true, J: true, V: true },
     );
     expect(ctx.strokeStyle).toBe(color);
@@ -62,11 +61,11 @@ test("omits hidden, distant, unknown, and invalid airway content", () => {
   const ctx = context();
   const routes = new Map([
     ["Q", { name: "Q1", type: "Q", points: [point("A", 1, 0), point("B", 2, 0)] }],
-    ["J", { name: "J1", type: "J", points: [point("C", 10, 0), point("D", 12, 0)] }],
+    ["J", { name: "J1", type: "J", points: [point("C", 301, 0), point("D", 302, 0)] }],
     ["X", { name: "X1", type: "X", points: [point("E", 0, 0)] }],
     ["V", { name: "V1", type: "V", points: [point("BAD", 0, 0)] }],
   ]);
-  drawAirways(ctx, routes, (item) => (item.fix === "BAD" ? null : { x: item.x, y: item.z }), 5, {
+  drawAirways(ctx, routes, (item) => (item.fix === "BAD" ? null : { x: item.x, y: item.z }), {
     Q: false,
     J: true,
     V: true,
@@ -80,6 +79,6 @@ test("draws a segment whose endpoints share a coordinate", () => {
   const routes = new Map([
     ["Q", { name: "Q1", type: "Q", points: [point("A", 0, 0), point("B", 0, 0)] }],
   ]);
-  drawAirways(ctx, routes, (item) => ({ x: item.x, y: item.z }), 5, { Q: true, J: true, V: true });
+  drawAirways(ctx, routes, (item) => ({ x: item.x, y: item.z }), { Q: true, J: true, V: true });
   expect(ctx.stroke).toHaveBeenCalled();
 });

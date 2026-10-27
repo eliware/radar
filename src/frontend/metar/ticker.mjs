@@ -1,4 +1,4 @@
-import { metarCategoryLabel } from "../../shared/metar/fields.mjs";
+import { metarCategoryLabel } from "../../shared/metar/category.mjs";
 
 export function renderMetarTicker(ticker, reports) {
   ticker.innerHTML = `<span>${reports.map(tickerLine).join("　•　")}</span>`;

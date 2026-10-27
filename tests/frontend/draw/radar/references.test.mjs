@@ -58,14 +58,7 @@ test("routes each reference layer in draw order with visibility", () => {
     "airways",
   ]);
   expect(drawAirspaceRings).toHaveBeenCalledWith(context, airports, project);
-  expect(drawAirportRunways).toHaveBeenCalledWith(
-    context,
-    airports,
-    project,
-    true,
-    true,
-    true,
-  );
+  expect(drawAirportRunways).toHaveBeenCalledWith(context, airports, project, true, true, true);
   expect(drawAirportMarkers).toHaveBeenCalledWith(context, airports, project);
   expect(drawNavaidMarkers).toHaveBeenCalledWith(context, navaids, project);
   expect(drawArtccBoundaries).toHaveBeenCalledWith(context, boundaries, project);

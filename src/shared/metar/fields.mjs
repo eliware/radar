@@ -1,4 +1,4 @@
-const labels = ["VFR", "MVFR", "IFR", "LIFR"];
+import { metarFlightCategory } from "./category.mjs";
 
 export function decodedFields(data) {
   return {
@@ -16,42 +16,6 @@ export function decodedFields(data) {
   };
 }
 
-export function metarFlightCategory(data) {
-  const visibility = Number.isFinite(data.visibility?.value)
-    ? categoryForVisibility(data.visibility.value)
-    : data.cavok
-      ? 0
-      : null;
-  const ceiling = data.verticalVisibility ?? lowestCeiling(data.clouds);
-  const ceilingCategory = ceiling != null ? categoryForCeiling(ceiling) : data.cavok ? 0 : null;
-  const categories = [visibility, ceilingCategory].filter((value) => value != null);
-  return categories.length ? labels[Math.max(...categories)] : null;
-}
-
-export function metarCategoryLabel(category) {
-  if (!labels.includes(category)) return "—";
-  return `<span class="flight-category flight-category-${category.toLowerCase()}">${category}</span>`;
-}
-
-function categoryForVisibility(miles) {
-  if (miles < 1) return 3;
-  if (miles < 3) return 2;
-  if (miles <= 5) return 1;
-  return 0;
-}
-function categoryForCeiling(feet) {
-  if (feet < 500) return 3;
-  if (feet < 1000) return 2;
-  if (feet <= 3000) return 1;
-  return 0;
-}
-function lowestCeiling(clouds = []) {
-  const heights = clouds
-    .filter(({ quantity }) => ["BKN", "OVC"].includes(quantity))
-    .map(({ height }) => height)
-    .filter(Number.isFinite);
-  return heights.length ? Math.min(...heights) : null;
-}
 function timeText({ day, hour, minute }) {
   if (day == null || hour == null || minute == null) return "—";
   return `${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}Z`;

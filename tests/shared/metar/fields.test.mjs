@@ -1,16 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  decodedFields,
-  metarCategoryLabel,
-  metarFlightCategory,
-} from "../../../src/shared/metar/fields.mjs";
-
-test("renders only known flight category labels", () => {
-  expect(metarCategoryLabel("IFR")).toBe(
-    '<span class="flight-category flight-category-ifr">IFR</span>',
-  );
-  expect(metarCategoryLabel("unknown")).toBe("—");
-});
+import { decodedFields } from "../../../src/shared/metar/fields.mjs";
 
 test("formats parsed METAR display fields", () => {
   expect(
@@ -95,17 +84,4 @@ test("formats optional cloud and temperature values", () => {
     flightCategory: "VFR",
     altimeter: "—",
   });
-});
-
-test.each([
-  ["VFR", { visibility: { value: 6 }, clouds: [] }],
-  ["MVFR", { visibility: { value: 5 }, clouds: [] }],
-  ["IFR", { visibility: { value: 2 }, clouds: [] }],
-  ["LIFR", { visibility: { value: 0.5 }, clouds: [] }],
-  ["IFR", { clouds: [{ quantity: "OVC", height: 900 }] }],
-  ["LIFR", { verticalVisibility: 400, visibility: { value: 10 } }],
-  ["VFR", { cavok: true }],
-  [null, {}],
-])("classifies flight category %s", (expected, data) => {
-  expect(metarFlightCategory(data)).toBe(expected);
 });

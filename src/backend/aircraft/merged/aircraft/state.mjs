@@ -1,3 +1,5 @@
+import { compareAircraftDistance, mergeAircraftRecord } from "./merge.mjs";
+
 const LOCAL_FRESHNESS_MS = 8000;
 
 export function createMergedAircraftState({
@@ -31,8 +33,8 @@ export function createMergedAircraftState({
     list() {
       const now = clock();
       return [...entries.values()]
-        .map((entry) => merge(entry, now, localFreshnessMs))
-        .sort(byDistance);
+        .map((entry) => mergeAircraftRecord(entry, now, localFreshnessMs))
+        .sort(compareAircraftDistance);
     },
     localFurthestDistanceNm() {
       return Math.max(
@@ -43,25 +45,4 @@ export function createMergedAircraftState({
       );
     },
   };
-}
-
-function merge({ local, remote }, now, localFreshnessMs) {
-  if (!local) return { ...remote, remoteOnly: true };
-  const localIsFresh = !Number.isFinite(local.lastSeen) || now - local.lastSeen <= localFreshnessMs;
-  const useNewerRemote =
-    !localIsFresh && Number.isFinite(remote?.lastSeen) && remote.lastSeen > local.lastSeen;
-  const primary = useNewerRemote ? remote : local;
-  const fallback = useNewerRemote ? local : remote;
-  const combined = { ...fallback, ...primary };
-  for (const [key, value] of Object.entries(fallback ?? {})) {
-    if (key === "remoteOnly") continue;
-    if (primary[key] === null || primary[key] === undefined || primary[key] === "")
-      combined[key] = value;
-  }
-  combined.remoteOnly = false;
-  return combined;
-}
-
-function byDistance(left, right) {
-  return (left.distanceNauticalMiles ?? Infinity) - (right.distanceNauticalMiles ?? Infinity);
 }

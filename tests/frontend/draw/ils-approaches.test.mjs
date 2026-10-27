@@ -25,7 +25,7 @@ test("draws a dashed ten-mile approach line with a descending glide path", () =>
   const ctx = context();
   const points = [];
   const marker = { latitude: 43.01, longitude: -70, elevationFeet: 120, rangeNm: 2 };
-  const farMarker = { ...marker, rangeNm: 21 };
+  const farMarker = { ...marker, rangeNm: 301 };
   const invalidMarker = { ...marker, facilityType: "BAD" };
   drawIlsApproaches(
     ctx,
@@ -37,7 +37,6 @@ test("draws a dashed ten-mile approach line with a descending glide path", () =>
         y: point.elevationFeet,
       };
     },
-    20,
   );
   expect(ctx.strokeStyle).toBe("#604080");
   expect(ctx.setLineDash).toHaveBeenNthCalledWith(1, [4, 4]);
@@ -51,7 +50,7 @@ test("draws a dashed ten-mile approach line with a descending glide path", () =>
 test("skips hidden, distant, invalid, and out-of-range courses", () => {
   const ctx = context();
   const rows = new Map([
-    ["FAR", { ...approach, rangeNm: 30 }],
+    ["FAR", { ...approach, rangeNm: 301 }],
     ["NO-COURSE", { ...approach, magneticCourse: Number.NaN }],
     ["BAD-PROJECTION", { ...approach, runwayEnd: "BAD" }],
   ]);
@@ -59,11 +58,10 @@ test("skips hidden, distant, invalid, and out-of-range courses", () => {
     ctx,
     rows,
     (point) => (point.runwayEnd === "BAD" ? null : { x: 1, y: 2 }),
-    20,
     false,
   );
   expect(ctx.stroke).not.toHaveBeenCalled();
-  drawIlsApproaches(ctx, rows, (point) => (point.runwayEnd === "BAD" ? null : { x: 1, y: 2 }), 20);
+  drawIlsApproaches(ctx, rows, (point) => (point.runwayEnd === "BAD" ? null : { x: 1, y: 2 }));
   expect(ctx.stroke).not.toHaveBeenCalled();
   expect(ctx.restore).toHaveBeenCalledTimes(1);
 });
@@ -81,11 +79,10 @@ test("uses east variation and a flat path when glide-slope data is absent", () =
     ctx,
     new Map([["X", item]]),
     (point) => (points.push(point), { x: 1, y: point.elevationFeet }),
-    20,
   );
   expect(points[1].elevationFeet).toBe(0);
   expect(points[1].longitude).toBeLessThan(item.longitude);
   const missingVariation = { ...item, magneticCourse: 180, magneticVariation: Number.NaN };
-  drawIlsApproaches(ctx, new Map([["MISSING-VAR", missingVariation]]), () => ({ x: 1, y: 2 }), 20);
+  drawIlsApproaches(ctx, new Map([["MISSING-VAR", missingVariation]]), () => ({ x: 1, y: 2 }));
   expect(ctx.stroke).toHaveBeenCalledTimes(2);
 });

@@ -1,4 +1,4 @@
-import { createMergedAircraftState } from "./aircraft-state.mjs";
+import { createMergedAircraftState } from "./aircraft/state.mjs";
 import { createMergedAircraftClients } from "./clients.mjs";
 
 const SNAPSHOT_INTERVAL_MS = 1000;

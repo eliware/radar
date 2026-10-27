@@ -1,5 +1,6 @@
 import { hasUsefulCallsign } from "../../shared/aircraft/callsign.mjs";
 import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
+import { formatAircraftSpeed } from "./speed.mjs";
 
 export function formatAircraftTag(aircraft) {
   const callsign = aircraft.callsign?.trim();
@@ -14,12 +15,6 @@ export function formatAircraftTag(aircraft) {
   const lines = [name, altitudeLine, typeCode ? `${speed} ${typeCode}` : speed];
   const emergency = getAircraftEmergencyLabel(aircraft);
   return emergency ? [...lines, emergency] : lines;
-}
-
-export function formatAircraftSpeed(aircraft) {
-  return Number.isFinite(aircraft.groundSpeedKnots)
-    ? String(Math.round(aircraft.groundSpeedKnots))
-    : "-";
 }
 
 function formatAltitude(altitude, rate) {

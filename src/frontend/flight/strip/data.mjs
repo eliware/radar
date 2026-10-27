@@ -1,4 +1,5 @@
-import { formatAircraftSpeed, formatAircraftTag } from "../../aircraft/tag-data.mjs";
+import { formatAircraftTag } from "../../aircraft/tag-data.mjs";
+import { formatAircraftSpeed } from "../../aircraft/speed.mjs";
 import { buildFlightStripLayout } from "./layout.mjs";
 import { getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
 

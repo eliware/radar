@@ -1,5 +1,5 @@
 import { formatMetarAge, getMetarAgeMinutes } from "../../shared/metar/age.mjs";
-import { metarCategoryLabel } from "../../shared/metar/fields.mjs";
+import { metarCategoryLabel } from "../../shared/metar/category.mjs";
 import { escapeMetarHtml, renderMetarTicker } from "./ticker.mjs";
 
 export function updateMetarDisplay(element, ticker, data, now = new Date()) {

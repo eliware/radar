@@ -12,12 +12,10 @@ test("draws a blue identifier and symbol for in-range VORs", () => {
     lineTo: jest.fn(),
     fillText: jest.fn(),
   };
-  drawNavaidMarkers(
-    context,
-    new Map([["ME:ENE", { identifier: "ENE", rangeNm: 4 }]]),
-    () => ({ x: 10, y: 20 }),
-    20,
-  );
+  drawNavaidMarkers(context, new Map([["ME:ENE", { identifier: "ENE", rangeNm: 4 }]]), () => ({
+    x: 10,
+    y: 20,
+  }));
   expect(context.strokeStyle).toBe("#4da3ff");
   expect(context.fillStyle).toBe("#4da3ff");
   expect(context.fillText).toHaveBeenCalledWith("ENE", 17, 15);
@@ -35,21 +33,16 @@ test("skips distant and invalid navaid positions", () => {
     fillText: jest.fn(),
   };
   const navaids = new Map([
-    ["FAR", { identifier: "FAR", rangeNm: 25 }],
+    ["FAR", { identifier: "FAR", rangeNm: 301 }],
     ["NO-PROJECTION", { identifier: "NONE", rangeNm: 1, bad: true }],
     ["BAD-X", { identifier: "BAD-X", rangeNm: 2, badX: true }],
     ["BAD-Y", { identifier: "BAD-Y", rangeNm: 3, badY: true }],
   ]);
 
-  drawNavaidMarkers(
-    context,
-    navaids,
-    (navaid) => {
-      if (navaid.bad) return null;
-      return { x: navaid.badX ? Number.NaN : 1, y: navaid.badY ? Number.NaN : 2 };
-    },
-    10,
-  );
+  drawNavaidMarkers(context, navaids, (navaid) => {
+    if (navaid.bad) return null;
+    return { x: navaid.badX ? Number.NaN : 1, y: navaid.badY ? Number.NaN : 2 };
+  });
 
   expect(context.fillText).not.toHaveBeenCalled();
   expect(context.arc).not.toHaveBeenCalled();

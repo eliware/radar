@@ -39,7 +39,6 @@ test("draws separate SID and STAR paths, hollow fix symbols, and selected labels
       ["other", { type: "OTHER", points: [point("X", 5, 2), point("Y", 6, 2)] }],
     ]),
     project,
-    10,
   );
   expect(ctx.stroke).toHaveBeenCalledTimes(6);
   expect(ctx.fillText.mock.calls.map(([text]) => text)).toEqual(["LBSTA", "ENE"]);
@@ -53,17 +52,12 @@ test("draws separate SID and STAR paths, hollow fix symbols, and selected labels
 test("skips hidden, distant, and invalid points and segments", () => {
   const ctx = context();
   const records = new Map([
-    ["path", { type: "STAR", points: [point("FAR", 1, 11, true), point("BAD", 2, 2, true)] }],
-    ["outside", { type: "SID", points: [point("A", 3, 12), point("B", 4, 11)] }],
+    ["path", { type: "STAR", points: [point("FAR", 1, 301, true), point("BAD", 2, 302, true)] }],
+    ["outside", { type: "SID", points: [point("A", 3, 302), point("B", 4, 301)] }],
   ]);
-  drawProcedures(ctx, records, () => null, 10, false);
+  drawProcedures(ctx, records, () => null, false);
   expect(ctx.save).not.toHaveBeenCalled();
-  drawProcedures(
-    ctx,
-    records,
-    (item) => (item.fix === "BAD" ? null : { x: item.x, y: item.y }),
-    10,
-  );
+  drawProcedures(ctx, records, (item) => (item.fix === "BAD" ? null : { x: item.x, y: item.y }));
   expect(ctx.stroke).not.toHaveBeenCalled();
   expect(ctx.fillText).not.toHaveBeenCalled();
 });
@@ -74,7 +68,6 @@ test("keeps STAR routes in their existing color", () => {
     ctx,
     new Map([["star", { type: "STAR", points: [point("A", 1, 2), point("B", 2, 2)] }]]),
     (item) => ({ x: item.x, y: item.y }),
-    10,
   );
   expect(ctx.strokeStyle).toBe("#50402e");
 });
@@ -85,7 +78,7 @@ test("can hide SIDs while keeping STAR routes visible", () => {
     ["sid", { type: "SID", points: [point("A", 1, 2, true), point("B", 2, 2)] }],
     ["star", { type: "STAR", points: [point("C", 3, 2, true), point("D", 4, 2)] }],
   ]);
-  drawProcedures(ctx, routes, (item) => ({ x: item.x, y: item.y }), 10, {
+  drawProcedures(ctx, routes, (item) => ({ x: item.x, y: item.y }), {
     sidVisible: false,
     starVisible: true,
   });

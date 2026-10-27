@@ -29,7 +29,6 @@ test("draws endpoint-height runways with rising extensions and level base legs",
     context,
     new Map([["PWM", { elevationFeet: 75, rangeNm: 1, runways: [runway] }]]),
     project,
-    20,
   );
 
   expect(projected.slice(0, 2).map((point) => point.elevationFeet)).toEqual([100, 250]);
@@ -65,7 +64,6 @@ test("uses airport elevation when a runway end elevation is missing", () => {
       elevations.push(point.elevationFeet);
       return { x: point.longitude, y: point.latitude };
     },
-    20,
   );
 
   expect(elevations.slice(0, 2)).toEqual([80, 50]);
@@ -88,12 +86,11 @@ test("skips airports outside range and runways with invalid projected ends", () 
   drawAirportRunways(
     context,
     new Map([
-      ["FAR", { rangeNm: 30, runways: [runway] }],
+      ["FAR", { rangeNm: 301, runways: [runway] }],
       ["EMPTY", { rangeNm: 1 }],
       ["BAD", { rangeNm: 1, runways: [runway] }],
     ]),
     (point) => (point.latitude === 43 ? null : { x: 1, y: 2 }),
-    20,
   );
   expect(context.stroke).not.toHaveBeenCalled();
 });
@@ -118,7 +115,6 @@ test("uses zero feet when both NASR and airport elevations are missing", () => {
       elevations.push(point.elevationFeet);
       return { x: point.longitude, y: point.latitude };
     },
-    20,
   );
   expect(elevations).toContain(0);
   expect(elevations).toContain(3000);
@@ -137,11 +133,8 @@ test("draws valid base legs when an extension endpoint is invalid", () => {
     { latitude: 43, longitude: -70, elevationFeet: 50, alignmentDegrees: 10 },
     { latitude: 43.01, longitude: -70, elevationFeet: 50, alignmentDegrees: 190 },
   ];
-  drawAirportRunways(
-    context,
-    new Map([["PWM", { rangeNm: 1, runways: [runway] }]]),
-    () => (++calls <= 2 || calls > 4 ? { x: 1, y: 2 } : null),
-    20,
+  drawAirportRunways(context, new Map([["PWM", { rangeNm: 1, runways: [runway] }]]), () =>
+    ++calls <= 2 || calls > 4 ? { x: 1, y: 2 } : null,
   );
   expect(context.stroke).toHaveBeenCalledTimes(4);
 });
@@ -159,11 +152,8 @@ test("skips guides when all projected guide endpoints are invalid", () => {
     { latitude: 43, longitude: -70, elevationFeet: 50, alignmentDegrees: 10 },
     { latitude: 43.01, longitude: -70, elevationFeet: 50, alignmentDegrees: 190 },
   ];
-  drawAirportRunways(
-    context,
-    new Map([["PWM", { rangeNm: 1, runways: [runway] }]]),
-    () => (++calls <= 2 ? { x: 1, y: 2 } : null),
-    20,
+  drawAirportRunways(context, new Map([["PWM", { rangeNm: 1, runways: [runway] }]]), () =>
+    ++calls <= 2 ? { x: 1, y: 2 } : null,
   );
   expect(context.stroke).toHaveBeenCalledTimes(1);
 });
@@ -181,11 +171,8 @@ test("draws extensions when a projected base-leg endpoint is invalid", () => {
     { latitude: 43, longitude: -70, elevationFeet: 50, alignmentDegrees: 10 },
     { latitude: 43.01, longitude: -70, elevationFeet: 50, alignmentDegrees: 190 },
   ];
-  drawAirportRunways(
-    context,
-    new Map([["PWM", { rangeNm: 1, runways: [runway] }]]),
-    () => (++calls === 5 ? null : { x: 1, y: 2 }),
-    20,
+  drawAirportRunways(context, new Map([["PWM", { rangeNm: 1, runways: [runway] }]]), () =>
+    ++calls === 5 ? null : { x: 1, y: 2 },
   );
   expect(context.stroke).toHaveBeenCalledTimes(4);
 });
@@ -205,15 +192,15 @@ test("can toggle runways, ERCL, and base legs independently", () => {
   const airports = new Map([["PWM", { rangeNm: 1, runways: [runway] }]]);
   const project = (point) => ({ x: point.longitude, y: point.latitude });
   const noRunways = makeContext();
-  drawAirportRunways(noRunways, airports, project, 20, false, true);
+  drawAirportRunways(noRunways, airports, project, false, true);
   expect(noRunways.stroke).toHaveBeenCalledTimes(4);
   const noExtensions = makeContext();
-  drawAirportRunways(noExtensions, airports, project, 20, true, false);
+  drawAirportRunways(noExtensions, airports, project, true, false);
   expect(noExtensions.stroke).toHaveBeenCalledTimes(3);
   const noBaseLegs = makeContext();
-  drawAirportRunways(noBaseLegs, airports, project, 20, true, true, false);
+  drawAirportRunways(noBaseLegs, airports, project, true, true, false);
   expect(noBaseLegs.stroke).toHaveBeenCalledTimes(3);
   const neitherGuide = makeContext();
-  drawAirportRunways(neitherGuide, airports, project, 20, true, false, false);
+  drawAirportRunways(neitherGuide, airports, project, true, false, false);
   expect(neitherGuide.stroke).toHaveBeenCalledTimes(1);
 });
