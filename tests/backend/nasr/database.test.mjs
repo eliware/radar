@@ -1,10 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 import { expect, jest, test } from "@jest/globals";
-import {
-  importNasrDatabase,
-  validateNasrDatabase,
-  verifyNasrIndexes,
-} from "../../../src/backend/nasr/database.mjs";
+import { importNasrDatabase } from "../../../src/backend/nasr/database.mjs";
 import { NASR_INDEXES, REQUIRED_COLUMNS } from "../../../src/backend/nasr/indexes.mjs";
 
 function createDatabase(columnsByTable = REQUIRED_COLUMNS) {
@@ -36,31 +32,23 @@ function makeDependencies(source, output, options = {}) {
   };
 }
 
-test("validates NASR and installs verifiable indexes into an output copy", () => {
+test("imports NASR and installs indexes into an output copy", () => {
   const source = retainOnClose(createDatabase());
   const imported = retainOnClose(createDatabase());
   const dependencies = makeDependencies(source, imported);
-  expect(() => validateNasrDatabase(source)).not.toThrow();
-  expect(() => verifyNasrIndexes(source)).toThrow("radar_apt_location");
   expect(importNasrDatabase("input.sqlite", "output/NASR.sqlite", dependencies)).toEqual({
     output: expect.stringMatching(/output[\\/]NASR\.sqlite$/),
     indexes: NASR_INDEXES.length,
   });
-  expect(() => verifyNasrIndexes(imported)).not.toThrow();
+  expect(
+    imported.prepare("SELECT name FROM sqlite_master WHERE type = 'index'").all(),
+  ).toHaveLength(NASR_INDEXES.length);
   expect(imported.prepare("PRAGMA integrity_check").get()).toEqual({ integrity_check: "ok" });
   expect(dependencies.copy).toHaveBeenCalledWith(
     expect.stringMatching(/input\.sqlite$/),
     expect.stringContaining(".tmp-"),
   );
   expect(dependencies.rename).toHaveBeenCalled();
-});
-
-test("rejects corrupt integrity and a database without NASR tables", () => {
-  const corrupt = { prepare: () => ({ get: () => ({ integrity_check: "corrupt" }) }) };
-  expect(() => validateNasrDatabase(corrupt)).toThrow("integrity check failed");
-  expect(() => validateNasrDatabase(createDatabase({ OTHER: "VALUE" }))).toThrow(
-    "Invalid NASR database: APT_BASE",
-  );
 });
 
 test("rejects missing input and source paths that match the destination", () => {

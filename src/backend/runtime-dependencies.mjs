@@ -8,7 +8,8 @@ import { createAdsbLolLookup } from "./adsblol-lookup.mjs";
 import { createAircraftEnrichmentFeed } from "./aircraft/enrichment/feed.mjs";
 import { createAdsbLolRemoteSource } from "./aircraft/adsblol-remote/source.mjs";
 import { createMergedAircraftFeed } from "./aircraft/merged/feed.mjs";
-import { createMetarLookup, parseMetarStations } from "./metar/lookup.mjs";
+import { createMetarLookup } from "./metar/lookup.mjs";
+import { parseMetarStations } from "./metar/stations.mjs";
 
 export const runtimeDependencies = {
   loadEnvironment: config,

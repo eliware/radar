@@ -1,15 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createMetarLookup, parseMetarStations } from "../../../src/backend/metar/lookup.mjs";
-
-test("parses unique four-character station codes", () => {
-  expect(parseMetarStations(" klew, KPWM,klew, bad, KBXM ")).toEqual(["KLEW", "KPWM", "KBXM"]);
-});
-
-test("ignores empty and invalid station codes", () => {
-  expect(parseMetarStations()).toEqual(["KLEW", "KPWM", "KBXM"]);
-  expect(parseMetarStations("")).toEqual([]);
-  expect(parseMetarStations(",abcde, K-, ,")).toEqual([]);
-});
+import { createMetarLookup } from "../../../src/backend/metar/lookup.mjs";
 
 test("returns no reports and makes no request when no stations are set", async () => {
   const fetchData = jest.fn();
