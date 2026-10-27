@@ -1,6 +1,7 @@
+import { MAX_RADAR_RANGE } from "../../radar/range.mjs";
 const AIRPORT_COLOR = "#b8b8b8";
 
-export function drawAirportMarkers(context, airports, project, range) {
+export function drawAirportMarkers(context, airports, project) {
   context.save();
   context.fillStyle = AIRPORT_COLOR;
   context.strokeStyle = AIRPORT_COLOR;
@@ -8,7 +9,7 @@ export function drawAirportMarkers(context, airports, project, range) {
   context.font = `${fontSize}px Consolas, "Courier New", monospace`;
   context.textAlign = "center";
   for (const airport of airports.values()) {
-    if (airport.rangeNm > range) continue;
+    if (airport.rangeNm > MAX_RADAR_RANGE) continue;
     const point = project(airport);
     if (!Number.isFinite(point?.x) || !Number.isFinite(point?.y)) continue;
     context.beginPath();

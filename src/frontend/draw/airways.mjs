@@ -1,6 +1,7 @@
+import { MAX_RADAR_RANGE } from "../radar/range.mjs";
 const COLORS = { Q: "#31534d", J: "#54394b", V: "#4f4d32" };
 
-export function drawAirways(context, airways, project, range, visibility) {
+export function drawAirways(context, airways, project, visibility) {
   context.save();
   context.font = '10px Consolas, "Courier New", monospace';
   context.textAlign = "center";
@@ -12,10 +13,10 @@ export function drawAirways(context, airways, project, range, visibility) {
     context.lineWidth = 1;
     context.setLineDash([3, 3]);
     const points = airway.points.map((item) => ({ ...item, screen: project(item) }));
-    drawSegments(context, airway.name, points, range);
+    drawSegments(context, airway.name, points, MAX_RADAR_RANGE);
     context.setLineDash([]);
     for (const point of points) {
-      if (point.viewportCut || point.rangeNm > range || !valid(point.screen)) continue;
+      if (point.viewportCut || point.rangeNm > MAX_RADAR_RANGE || !valid(point.screen)) continue;
       drawFix(context, point.screen);
       context.fillText(point.fix, point.screen.x + 7, point.screen.y - 5);
     }

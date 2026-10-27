@@ -1,3 +1,4 @@
+import { MAX_RADAR_RANGE } from "../radar/range.mjs";
 import { clipProcedureSegment } from "../clip/procedure-segment.mjs";
 
 const COLORS = { SID: "#2b3d4d", STAR: "#50402e" };
@@ -6,7 +7,6 @@ export function drawProcedures(
   context,
   procedures,
   project,
-  range,
   visibility = { sidVisible: true, starVisible: true },
 ) {
   if (visibility === false) return;
@@ -19,32 +19,32 @@ export function drawProcedures(
     if (procedure.type !== "SID" && procedure.type !== "STAR") continue;
     const visible =
       procedure.type === "SID" ? visibility.sidVisible !== false : visibility.starVisible !== false;
-    if (visible) drawProcedure(context, procedure, project, range);
+    if (visible) drawProcedure(context, procedure, project);
   }
   context.setLineDash([]);
   context.restore();
 }
 
-function drawProcedure(context, procedure, project, range) {
+function drawProcedure(context, procedure, project) {
   context.strokeStyle = COLORS[procedure.type];
   context.fillStyle = context.strokeStyle;
   const points = procedure.points.map((point) => ({ ...point, screen: project(point) }));
-  drawRoute(context, points, range);
+  drawRoute(context, points);
   context.setLineDash([]);
   for (const point of points) {
-    if (point.viewportCut || point.rangeNm > range || !valid(point.screen)) continue;
+    if (point.viewportCut || point.rangeNm > MAX_RADAR_RANGE || !valid(point.screen)) continue;
     drawPyramid(context, point.screen);
     if (point.label) context.fillText(point.fix, point.screen.x, point.screen.y - 6);
   }
   context.setLineDash([3, 3]);
 }
 
-function drawRoute(context, points, range) {
+function drawRoute(context, points) {
   for (let index = 1; index < points.length; index += 1) {
     const from = points[index - 1];
     const to = points[index];
     if (!valid(from.screen) || !valid(to.screen)) continue;
-    const segment = clipProcedureSegment(from, to, range);
+    const segment = clipProcedureSegment(from, to, MAX_RADAR_RANGE);
     if (!segment) continue;
     context.beginPath();
     context.moveTo(segment.from.x, segment.from.y);

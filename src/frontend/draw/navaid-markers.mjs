@@ -1,6 +1,7 @@
+import { MAX_RADAR_RANGE } from "../radar/range.mjs";
 const NAVAID_COLOR = "#4da3ff";
 
-export function drawNavaidMarkers(context, navaids, project, range) {
+export function drawNavaidMarkers(context, navaids, project) {
   context.save();
   context.strokeStyle = NAVAID_COLOR;
   context.fillStyle = NAVAID_COLOR;
@@ -8,7 +9,7 @@ export function drawNavaidMarkers(context, navaids, project, range) {
   context.font = '12px Consolas, "Courier New", monospace';
   context.textAlign = "left";
   for (const navaid of navaids.values()) {
-    if (navaid.rangeNm > range) continue;
+    if (navaid.rangeNm > MAX_RADAR_RANGE) continue;
     const point = project(navaid);
     if (!Number.isFinite(point?.x) || !Number.isFinite(point?.y)) continue;
     context.beginPath();

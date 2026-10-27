@@ -1,15 +1,16 @@
+import { MAX_RADAR_RANGE } from "../radar/range.mjs";
 import { buildIlsCourseGeometry, safeIlsElevation } from "../ils-course-geometry.mjs";
 
 const ILS_COLOR = "#604080";
 
-export function drawIlsApproaches(context, approaches, project, range, visible = true) {
+export function drawIlsApproaches(context, approaches, project, visible = true) {
   if (!visible) return;
   context.save();
   context.strokeStyle = ILS_COLOR;
   context.lineWidth = 1.25;
   context.setLineDash([4, 4]);
   for (const approach of approaches.values()) {
-    if (approach.rangeNm > range) continue;
+    if (approach.rangeNm > MAX_RADAR_RANGE) continue;
     const course = buildIlsCourseGeometry(approach);
     if (!course) continue;
     const origin = project({ ...approach, elevationFeet: course.elevationFeet });
@@ -19,15 +20,15 @@ export function drawIlsApproaches(context, approaches, project, range, visible =
     context.moveTo(endpoint.x, endpoint.y);
     context.lineTo(origin.x, origin.y);
     context.stroke();
-    drawMarkers(context, approach.markers ?? [], project, range);
+    drawMarkers(context, approach.markers ?? [], project);
   }
   context.restore();
 }
 
-function drawMarkers(context, markers, project, range) {
+function drawMarkers(context, markers, project) {
   context.setLineDash([]);
   for (const marker of markers) {
-    if (marker.rangeNm > range) continue;
+    if (marker.rangeNm > MAX_RADAR_RANGE) continue;
     const point = project({ ...marker, elevationFeet: safeIlsElevation(marker) });
     if (!validPoint(point)) continue;
     context.beginPath();

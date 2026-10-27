@@ -1,3 +1,4 @@
+import { MAX_RADAR_RANGE } from "../../radar/range.mjs";
 import { runwayDestination } from "../../runway-destination.mjs";
 
 const EXTENSION_NM = 10;
@@ -7,7 +8,6 @@ export function drawAirportRunways(
   context,
   airports,
   project,
-  range,
   runwaysVisible = true,
   extensionsVisible = true,
   baseLegsVisible = true,
@@ -16,7 +16,7 @@ export function drawAirportRunways(
   context.lineWidth = 1.5;
   context.setLineDash([]);
   for (const airport of airports.values()) {
-    if (airport.rangeNm > range) continue;
+    if (airport.rangeNm > MAX_RADAR_RANGE) continue;
     for (const runway of airport.runways ?? [])
       drawRunway(
         context,

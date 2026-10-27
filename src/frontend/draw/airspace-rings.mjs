@@ -1,13 +1,14 @@
+import { MAX_RADAR_RANGE } from "../radar/range.mjs";
 import { airportAirspaceBands } from "../airport-airspace-bands.mjs";
 
 const RING_COLOR = "#777777";
 
-export function drawAirspaceRings(context, airports, project, range) {
+export function drawAirspaceRings(context, airports, project) {
   context.strokeStyle = RING_COLOR;
   context.lineWidth = 1;
   context.setLineDash([]);
   for (const airport of airports.values()) {
-    if (airport.rangeNm > range) continue;
+    if (airport.rangeNm > MAX_RADAR_RANGE) continue;
     const bands = airportAirspaceBands(airport);
     if (!bands.length) continue;
     const radii = new Set(
