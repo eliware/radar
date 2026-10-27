@@ -25,7 +25,7 @@ export function attachMobileCompassTracking(documentRef, windowRef, view) {
     setStatus("FOLLOW");
   };
   const start = async () => {
-    if (windowRef.isSecureContext === false) return setStatus("HTTPS REQUIRED");
+    if (windowRef.isSecureContext !== true) return setStatus("HTTPS REQUIRED");
     const sensor = windowRef.DeviceOrientationEvent;
     if (!sensor) return setStatus("NO COMPASS");
     if (typeof sensor.requestPermission === "function") {

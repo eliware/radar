@@ -64,6 +64,13 @@ test("reports unsupported, insecure, and denied access", async () => {
   await insecure.click();
   expect(insecure.button.textContent).toBe("HTTPS REQUIRED");
 
+  const unknown = setup();
+  delete unknown.windowRef.isSecureContext;
+  attachMobileCompassTracking(unknown.documentRef, unknown.windowRef, unknown.view);
+  await unknown.click();
+  expect(unknown.button.textContent).toBe("HTTPS REQUIRED");
+  expect(unknown.windowRef.addEventListener).not.toHaveBeenCalled();
+
   const denied = setup({ sensor: { requestPermission: jest.fn().mockResolvedValue("denied") } });
   attachMobileCompassTracking(denied.documentRef, denied.windowRef, denied.view);
   await denied.click();
