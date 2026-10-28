@@ -5,7 +5,7 @@ import { drawRadarReferences } from "../draw/radar/references.mjs";
 import { projectAircraftDisplayItems } from "../project/aircraft-display-items.mjs";
 import { projectRadarReference } from "../project/radar-reference.mjs";
 import { drawCameraReadout } from "./overlay/readout.mjs";
-import { resizeOverlayCanvas } from "./resize-overlay-canvas.mjs";
+import { resizeCanvasBackingStore } from "../canvas/resize.mjs";
 import { createCameraProjector } from "../project/camera-position.mjs";
 
 export function createOverlayDrawer({ THREE, container, windowRef, canvas, context }) {
@@ -34,7 +34,7 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
     const width = container.clientWidth || 1;
     const height = container.clientHeight || 1;
     const ratio = Math.min(windowRef.devicePixelRatio || 1, 2);
-    resizeOverlayCanvas(canvas, context, width, height, ratio);
+    resizeCanvasBackingStore(canvas, context, width, height, ratio);
     if (projectorCamera !== camera) {
       projectorCamera = camera;
       projectCameraPosition = createCameraProjector(THREE, camera);

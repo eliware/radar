@@ -25,5 +25,18 @@ export function createNasrImportFiles({
     cleanup(temporary) {
       remove(temporary, { force: true });
     },
+    installCopy(input, output, prepare) {
+      this.prepareOutput(output);
+      const temporary = this.temporaryPath(output);
+      try {
+        this.copyInput(input, temporary);
+        const result = prepare(temporary);
+        this.install(temporary, output);
+        return result;
+      } catch (error) {
+        this.cleanup(temporary);
+        throw error;
+      }
+    },
   };
 }

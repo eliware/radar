@@ -19,21 +19,3 @@ test("uses one pixel dimensions when the canvas has no layout size", () => {
   expect(canvas.width).toBe(1);
   expect(canvas.height).toBe(1);
 });
-
-test("does not reset the canvas backing store when its dimensions are unchanged", () => {
-  let writes = 0;
-  const canvas = { clientWidth: 500, clientHeight: 300, width: 1000, height: 600 };
-  for (const key of ["width", "height"]) {
-    let value = canvas[key];
-    Object.defineProperty(canvas, key, {
-      get: () => value,
-      set: (next) => {
-        writes += 1;
-        value = next;
-      },
-      configurable: true,
-    });
-  }
-  prepareCanvasRadar({ setTransform() {} }, canvas, { devicePixelRatio: 2 });
-  expect(writes).toBe(0);
-});

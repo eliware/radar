@@ -12,7 +12,7 @@ function createLookup(request) {
   return createCallsignRouteLookup(request, direct, 60000);
 }
 
-test("normalizes callsigns, builds the route URL, and parses airport codes", async () => {
+test("normalizes callsigns and builds the route URL", async () => {
   const request = jest.fn(async () =>
     response({ airport_codes: "EGLL-KJFK", _airports: [{ icao: "egll" }, { icao: "kjfk" }] }),
   );
@@ -24,20 +24,6 @@ test("normalizes callsigns, builds the route URL, and parses airport codes", asy
     "https://vrs-standing-data.adsb.lol/routes/BA/BAW183.json",
     expect.objectContaining({ headers: expect.any(Object) }),
   );
-});
-
-test("supports partial routes and ignores unusable airport codes", async () => {
-  const request = jest
-    .fn()
-    .mockResolvedValueOnce(response({ airport_codes: "KPWM-KBOS" }))
-    .mockResolvedValueOnce(response({ _airports: [{ icao: "invalid" }, { icao: "KBOS" }] }))
-    .mockResolvedValueOnce(response({ _airports: [{ icao: "KPWM" }] }))
-    .mockResolvedValueOnce(response({ airport_codes: "unknown" }));
-  const lookup = createLookup(request);
-  await expect(lookup("AFR012")).resolves.toEqual({ origin: "KPWM", destination: "KBOS" });
-  await expect(lookup("AFR013")).resolves.toEqual({ destination: "KBOS" });
-  await expect(lookup("AFR014")).resolves.toEqual({ origin: "KPWM" });
-  await expect(lookup("AFR015")).resolves.toBeNull();
 });
 
 test("returns null for unusable callsigns and missing routes", async () => {

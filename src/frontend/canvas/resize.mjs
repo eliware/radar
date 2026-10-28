@@ -1,6 +1,6 @@
 const ratios = new WeakMap();
 
-export function resizeOverlayCanvas(canvas, context, width, height, ratio) {
+export function resizeCanvasBackingStore(canvas, context, width, height, ratio) {
   const pixelWidth = Math.round(width * ratio);
   const pixelHeight = Math.round(height * ratio);
   const changed = canvas.width !== pixelWidth || canvas.height !== pixelHeight;

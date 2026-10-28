@@ -12,15 +12,8 @@ export function importNasrDatabaseLifecycle(
   const files = createNasrImportFiles({ exists, copy, mkdir, rename, remove });
   const { input, output } = validateNasrImportPaths(inputPath, outputPath, files.exists);
   validateNasrSource(Database, input);
-  files.prepareOutput(output);
-  const temporary = files.temporaryPath(output);
-  try {
-    files.copyInput(input, temporary);
-    const indexes = prepareNasrTemporaryDatabase(Database, temporary);
-    files.install(temporary, output);
-    return { output, indexes };
-  } catch (error) {
-    files.cleanup(temporary);
-    throw error;
-  }
+  const indexes = files.installCopy(input, output, (temporary) =>
+    prepareNasrTemporaryDatabase(Database, temporary),
+  );
+  return { output, indexes };
 }
