@@ -3,7 +3,7 @@ import { loadDashboardReferences } from "./dashboard/references.mjs";
 import { connectDashboardFeed } from "./dashboard/feed.mjs";
 import { attachDashboardLifecycle } from "./attach/dashboard/lifecycle.mjs";
 import { cleanupDashboardSetup } from "./dashboard/cleanup.mjs";
-import { createViewportReporter } from "./report-viewport.mjs";
+import { createDashboardViewport } from "./dashboard/viewport.mjs";
 import { readJson } from "./read-json.mjs";
 import { createDashboardDisplaySetup } from "./dashboard/display-setup.mjs";
 export async function startDashboard({
@@ -41,17 +41,17 @@ export async function startDashboard({
     resources.scene = scene;
     Object.assign(resources, attachDashboardCompassControls(document, windowRef, scene));
     resources.detachReferences = loadDashboardReferences(fetchData, scene, config.location);
-    const sendViewport = createViewportReporter(scene, document);
-    resources.detachViewportReporter = sendViewport.destroy;
+    const viewport = createDashboardViewport(scene, document);
+    resources.detachViewportReporter = viewport.destroy;
     const feed = connectDashboardFeed({
       WebSocketClass,
       document,
       scene,
       flightStrips,
-      sendViewport,
+      sendViewport: viewport.send,
     });
     resources.feed = feed;
-    resources.detachViewport = scene.onViewChange?.(() => sendViewport(feed.socket));
+    resources.detachViewport = viewport.observe(() => feed.socket);
     const destroy = attachDashboardLifecycle(windowRef, resources);
     return { scene, socket: feed.socket, feed, flightStrips, destroy };
   } catch {
