@@ -1,8 +1,9 @@
 import { decodeWaterTile } from "../../decode-water-tile.mjs";
 import { createWaterTileRequest } from "./request.mjs";
+import { createWaterTileStore } from "./store.mjs";
 
 export function createWaterTileCache(fetchRef) {
-  const cache = new Map();
+  const cache = createWaterTileStore();
   const request = createWaterTileRequest(fetchRef);
 
   function retain(keys) {
@@ -14,13 +15,12 @@ export function createWaterTileCache(fetchRef) {
     return request.load(tileJson, tile, isRequested).then((buffer) => {
       if (buffer === null) return false;
       cache.set(tile.key, decodeWaterTile(buffer, tile));
-      if (cache.size > 96) cache.delete(cache.keys().next().value);
       return true;
     });
   }
 
   function pathsFor(tiles) {
-    return tiles.flatMap((tile) => cache.get(tile.key) ?? []);
+    return cache.pathsFor(tiles);
   }
 
   return { load, retain, pathsFor };
