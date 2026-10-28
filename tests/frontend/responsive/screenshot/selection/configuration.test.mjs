@@ -1,9 +1,12 @@
 import { expect, test } from "@jest/globals";
-import { readScreenshotSelectionOptions } from "../../../../../src/frontend/responsive/screenshot/selection/options.mjs";
+import { readScreenshotSelectionConfiguration } from "../../../../../src/frontend/responsive/screenshot/selection/configuration.mjs";
 
 test("selects primary viewport when the option is present", () => {
   expect(
-    readScreenshotSelectionOptions({ primary: true }, { RADAR_SCREENSHOT_VIEWPORTS: "mobile" }),
+    readScreenshotSelectionConfiguration(
+      { primary: true },
+      { RADAR_SCREENSHOT_VIEWPORTS: "mobile" },
+    ),
   ).toEqual({
     viewportSelection: "desktop-primary",
     modeSelection: "above-fold,full-page",
@@ -12,7 +15,7 @@ test("selects primary viewport when the option is present", () => {
 
 test("reads viewport and mode selections from the environment", () => {
   expect(
-    readScreenshotSelectionOptions(
+    readScreenshotSelectionConfiguration(
       {},
       {
         RADAR_SCREENSHOT_VIEWPORTS: "mobile",
@@ -28,7 +31,7 @@ test("uses parser defaults when arguments and environment are omitted", () => {
   delete process.env.RADAR_SCREENSHOT_VIEWPORTS;
   delete process.env.RADAR_SCREENSHOT_MODES;
   try {
-    expect(readScreenshotSelectionOptions()).toEqual({
+    expect(readScreenshotSelectionConfiguration()).toEqual({
       viewportSelection: "all",
       modeSelection: "above-fold,full-page",
     });

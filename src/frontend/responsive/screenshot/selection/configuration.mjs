@@ -1,4 +1,4 @@
-export function readScreenshotSelectionOptions(
+export function readScreenshotSelectionConfiguration(
   { primary = false } = {},
   environment = process.env,
 ) {
