@@ -1,5 +1,5 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
-import { airportAirspaceBands } from "../airport-airspace-bands.mjs";
+import { airportAirspaceBands } from "../airport-airspace/bands.mjs";
 
 const RING_COLOR = "#777777";
 

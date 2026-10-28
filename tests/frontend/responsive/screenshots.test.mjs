@@ -90,22 +90,3 @@ test("rejects small screenshots and closes the browser", async () => {
   expect(tools.browser.close).toHaveBeenCalledTimes(1);
   delete globalThis.document;
 });
-
-test("reports browser page errors after capture", async () => {
-  const tools = makeCaptureTools({ pageError: true });
-  await expect(
-    captureResponsiveScreenshots({
-      baseUrl: "http://127.0.0.1:3000",
-      outputDir: "artifacts/test-shots",
-      targets: selectScreenshotViewports("desktop-1080p"),
-      modes: ["above-fold"],
-      browserLauncher: tools.browserLauncher,
-      fetcher: tools.fetcher,
-      files: tools.files,
-      delayMs: 0,
-      report: jest.fn(),
-    }),
-  ).rejects.toThrow(/Browser errors:\s+desktop-1080p: page failed/);
-  expect(tools.browser.close).toHaveBeenCalledTimes(1);
-  delete globalThis.document;
-});

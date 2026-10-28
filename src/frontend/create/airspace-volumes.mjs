@@ -1,5 +1,6 @@
 import { projectAircraftPosition } from "../aircraft/space-position.mjs";
-import { airportAirspaceEdges, airportAirspaceBands } from "../airport-airspace-bands.mjs";
+import { airportAirspaceBands } from "../airport-airspace/bands.mjs";
+import { airportAirspaceEdges } from "../airport-airspace/edges.mjs";
 
 const AIRSPACE_COLOR = 0x777777;
 const FEET_PER_NM = 6076.12;

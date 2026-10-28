@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createNasrImportFiles } from "../../../src/backend/nasr/import-files.mjs";
+import { createNasrImportFiles } from "../../../../src/backend/nasr/import/files.mjs";
 
 test("provides default filesystem operations", () => {
   const files = createNasrImportFiles();
