@@ -1,6 +1,6 @@
 import { registerThreeSceneMocks } from "./three-scene-mocks.mjs";
 
-export function registerAircraftSceneMocks(jest) {
+export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/frontend") {
   registerThreeSceneMocks(jest);
   const scene = { rotation: {} };
   const camera = {
@@ -113,21 +113,21 @@ export function registerAircraftSceneMocks(jest) {
   };
   for (const [name, factory] of Object.entries(factories)) {
     const path = modules[name];
-    jest.unstable_mockModule(`../../../src/frontend/${path}.mjs`, () => ({
+    jest.unstable_mockModule(`${sourcePrefix}/${path}.mjs`, () => ({
       [name]: factory,
     }));
   }
-  jest.unstable_mockModule("../../../src/frontend/aircraft/space-position.mjs", () => ({
+  jest.unstable_mockModule(`${sourcePrefix}/aircraft/space-position.mjs`, () => ({
     projectAircraftPosition,
   }));
-  jest.unstable_mockModule("../../../src/frontend/radar/range.mjs", () => ({
+  jest.unstable_mockModule(`${sourcePrefix}/radar/range.mjs`, () => ({
     DEFAULT_RADAR_RANGE: 20,
     MAX_RADAR_RANGE: 300,
     RADAR_SCOPE_RADIUS_RATIO: 0.44,
     clampRadarRange: (range) => range,
     selectDefaultRadarRange,
   }));
-  jest.unstable_mockModule("../../../src/frontend/create/orbit-radar-state.mjs", () => ({
+  jest.unstable_mockModule(`${sourcePrefix}/create/orbit-radar-state.mjs`, () => ({
     createOrbitRadarState: jest.fn(() => orbitState),
   }));
   jest.unstable_mockModule("three/addons/controls/OrbitControls.js", () => ({

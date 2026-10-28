@@ -2,6 +2,7 @@ import { prepareScreenshotOutput } from "./screenshot/output.mjs";
 import { createScreenshotBrowserSession } from "./screenshot/browser-session.mjs";
 import { checkScreenshotHealth } from "./screenshot/health.mjs";
 import { captureScreenshotTargets } from "./screenshot/capture.mjs";
+import { reportScreenshotResults } from "./screenshot/report.mjs";
 
 export async function captureResponsiveScreenshots({
   baseUrl,
@@ -24,6 +25,5 @@ export async function captureResponsiveScreenshots({
     await session.close();
   }
   session.assertNoPageErrors();
-  report(`Saved ${targets.length * modes.length} screenshots to ${folder}`);
-  return { count: targets.length * modes.length, outputDir: folder };
+  return reportScreenshotResults(report, targets, modes, folder);
 }
