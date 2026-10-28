@@ -1,25 +1,17 @@
+import { reconcileAircraftSource } from "./reconcile.mjs";
+
 export function createMergedAircraftSourceState(entries) {
   function set(source, item) {
-    if (typeof item?.icao !== "string" || !item.icao.trim()) return;
+    if (typeof item?.icao !== "string" || !item.icao.trim()) return undefined;
     const icao = item.icao.trim().toUpperCase();
     const entry = entries.get(icao) ?? {};
     entry[source] = item;
     entries.set(icao, entry);
+    return icao;
   }
 
-  function replace(source, items) {
-    const current = new Set();
-    for (const item of items) {
-      set(source, item);
-      if (typeof item?.icao === "string" && item.icao.trim()) {
-        current.add(item.icao.trim().toUpperCase());
-      }
-    }
-    for (const [icao, entry] of entries) {
-      if (!current.has(icao)) delete entry[source];
-      if (!entry.local && !entry.remote) entries.delete(icao);
-    }
-  }
-
-  return { set, replace };
+  return {
+    set,
+    replace: (source, items) => reconcileAircraftSource(entries, source, items, set),
+  };
 }

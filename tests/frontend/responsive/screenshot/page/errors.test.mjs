@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createScreenshotPageErrors } from "../../../../src/frontend/responsive/screenshot/page-errors.mjs";
+import { createScreenshotPageErrors } from "../../../../../src/frontend/responsive/screenshot/page/errors.mjs";
 
 test("collects named errors and reports them together", () => {
   const errors = createScreenshotPageErrors();

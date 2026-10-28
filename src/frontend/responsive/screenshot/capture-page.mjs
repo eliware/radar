@@ -1,5 +1,5 @@
 import { createScreenshotPageSession } from "./page/session.mjs";
-import { createScreenshotPageErrors } from "./page-errors.mjs";
+import { createScreenshotPageErrors } from "./page/errors.mjs";
 
 export function createScreenshotPageCapture(browser) {
   const errors = createScreenshotPageErrors();

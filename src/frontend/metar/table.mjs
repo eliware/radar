@@ -1,6 +1,7 @@
 import { metarCategoryLabel } from "../../shared/metar/category.mjs";
 import { formatMetarAgeDisplay } from "./age/display.mjs";
 import { escapeMetarHtml } from "./escape.mjs";
+import { updateMetarDisplayElement } from "./table/display.mjs";
 
 export function renderMetarTable(reports, now = new Date()) {
   return `<table><thead><tr>${headers()}</tr></thead><tbody>${reports
@@ -9,13 +10,7 @@ export function renderMetarTable(reports, now = new Date()) {
 }
 
 export function updateMetarDisplay(element, data, now = new Date()) {
-  if (!element) return;
-  const reports = Array.isArray(data?.reports) ? data.reports : [];
-  if (!reports.length) {
-    element.textContent = "No METAR reports available.";
-    return;
-  }
-  element.innerHTML = renderMetarTable(reports, now);
+  return updateMetarDisplayElement(element, data, renderMetarTable, now);
 }
 
 function headers() {

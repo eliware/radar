@@ -48,7 +48,7 @@ test("renders decoded METAR table rows", () => {
 
 test("shows raw METAR text when the parser cannot decode a report", () => {
   const [panel] = nodes();
-  updateMetarDisplay(
+  render(
     panel,
     { reports: [{ id: "KPWM", metar: "bad <data>", decoded: null }] },
     new Date("2026-10-13T18:00:00Z"),
@@ -79,14 +79,9 @@ test("renders placeholders for missing decoded values", () => {
   expect(panel.innerHTML).toContain("<td>KBXM</td><td>—</td>");
 });
 
-test("updates the display with reports or an unavailable message", () => {
+test("updates the METAR display through the public table module", () => {
   const panel = { textContent: "", innerHTML: "" };
   updateMetarDisplay(panel, { reports: [{ id: "KPWM", metar: "raw", decoded: null }] });
   expect(panel.innerHTML).toContain("<table>");
   expect(panel.innerHTML).toContain("KPWM");
-  updateMetarDisplay(panel, { reports: [] });
-  expect(panel.textContent).toBe("No METAR reports available.");
-  updateMetarDisplay(panel, {});
-  expect(panel.textContent).toBe("No METAR reports available.");
-  expect(() => updateMetarDisplay(null, {})).not.toThrow();
 });

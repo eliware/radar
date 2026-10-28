@@ -1,4 +1,5 @@
 import { createAdsbLolRouteLookup } from "./lookup.mjs";
+import { applyAdsbLolRouteResult } from "./apply.mjs";
 
 export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} }) {
   const routeLookup = createAdsbLolRouteLookup(lookup);
@@ -7,8 +8,7 @@ export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} 
     const stored = aircraft.get(mapped.icao);
     if (stored?.origin && stored?.destination) return;
     routeLookup.request(mapped, aircraft, (result) => {
-      const current = aircraft.get(mapped.icao);
-      aircraft.set(mapped.icao, { ...current, ...result });
+      applyAdsbLolRouteResult(aircraft, mapped.icao, result);
       onRouteUpdate();
     });
   }
