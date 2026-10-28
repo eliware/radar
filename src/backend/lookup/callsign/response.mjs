@@ -1,3 +1,9 @@
+export async function parseCallsignRouteResponse(response) {
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error("ADSB.lol request failed");
+  return parseRoute(await response.json());
+}
+
 export function parseRoute(route) {
   if (!route) return null;
   const codes = typeof route.airport_codes === "string" ? route.airport_codes.split("-") : [];

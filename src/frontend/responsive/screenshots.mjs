@@ -1,8 +1,5 @@
-import { createScreenshotBrowserSession } from "./screenshot/browser-session.mjs";
-import { captureScreenshotTargets } from "./screenshot/capture.mjs";
-import { reportScreenshotResults } from "./screenshot/report.mjs";
 import { setupScreenshotCapture } from "./screenshot/setup.mjs";
-import { finalizeScreenshotSession } from "./screenshot/finalize.mjs";
+import { runScreenshotCapture } from "./screenshot/run.mjs";
 
 export async function captureResponsiveScreenshots({
   baseUrl,
@@ -17,9 +14,15 @@ export async function captureResponsiveScreenshots({
   report,
 }) {
   const folder = await setupScreenshotCapture({ baseUrl, outputDir, fetcher, files });
-  const session = await createScreenshotBrowserSession(browserLauncher, browserArgs);
-  await finalizeScreenshotSession(session, () =>
-    captureScreenshotTargets(session, folder, baseUrl, targets, modes, delayMs, files),
-  );
-  return reportScreenshotResults(report, targets, modes, folder);
+  return runScreenshotCapture({
+    folder,
+    baseUrl,
+    targets,
+    modes,
+    browserLauncher,
+    browserArgs,
+    files,
+    delayMs,
+    report,
+  });
 }
