@@ -1,11 +1,8 @@
 import { mkdir, stat } from "node:fs/promises";
 import puppeteer from "puppeteer";
 import { captureResponsiveScreenshots } from "../screenshots.mjs";
+import { selectScreenshotBrowserArgs } from "./browser/launch-options.mjs";
 import { createScreenshotLaunchOptions } from "./launcher.mjs";
-
-export function selectScreenshotBrowserArgs(uid = process.getuid?.()) {
-  return uid === 0 ? ["--no-sandbox", "--disable-setuid-sandbox"] : [];
-}
 
 export async function runScreenshotCli({
   args = process.argv.slice(2),

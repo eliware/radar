@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createScreenshotBrowserSession } from "../../../../src/frontend/responsive/screenshot/browser-session.mjs";
+import { createScreenshotBrowserSession } from "../../../../../src/frontend/responsive/screenshot/browser/session.mjs";
 
 test("composes browser launch and page capture into a session", async () => {
   const page = {

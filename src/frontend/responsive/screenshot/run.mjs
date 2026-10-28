@@ -1,4 +1,4 @@
-import { createScreenshotBrowserSession } from "./browser-session.mjs";
+import { createScreenshotBrowserSession } from "./browser/session.mjs";
 import { captureScreenshotTargets } from "./capture.mjs";
 import { finalizeScreenshotSession } from "./finalize.mjs";
 import { reportScreenshotResults } from "./report.mjs";

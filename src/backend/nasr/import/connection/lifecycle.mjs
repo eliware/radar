@@ -1,5 +1,9 @@
-export function withNasrDatabase(Database, path, options, operation) {
-  const database = options === undefined ? new Database(path) : new Database(path, options);
+export function withNasrDatabase(Database, path, operation) {
+  const database = new Database(path);
+  return withNasrDatabaseConnection(database, operation);
+}
+
+export function withNasrDatabaseConnection(database, operation) {
   try {
     return operation(database);
   } finally {

@@ -3,13 +3,7 @@ const defaultCapture = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/responsive/screenshots.mjs", () => ({
   captureResponsiveScreenshots: defaultCapture,
 }));
-const { runScreenshotCli, selectScreenshotBrowserArgs } =
-  await import("../../../../src/frontend/responsive/screenshot/cli.mjs");
-
-test("selects browser flags for root and non-root processes", () => {
-  expect(selectScreenshotBrowserArgs(0)).toEqual(["--no-sandbox", "--disable-setuid-sandbox"]);
-  expect(selectScreenshotBrowserArgs(1000)).toEqual([]);
-});
+const { runScreenshotCli } = await import("../../../../src/frontend/responsive/screenshot/cli.mjs");
 
 test("selects defaults and runs the screenshot capture", async () => {
   defaultCapture.mockResolvedValue({ count: 0 });

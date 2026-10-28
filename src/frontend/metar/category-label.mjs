@@ -1,6 +1,6 @@
-const labels = ["VFR", "MVFR", "IFR", "LIFR"];
+import { isMetarCategory } from "./category.mjs";
 
 export function metarCategoryLabel(category) {
-  if (!labels.includes(category)) return "—";
+  if (!isMetarCategory(category)) return "—";
   return `<span class="flight-category flight-category-${category.toLowerCase()}">${category}</span>`;
 }

@@ -1,5 +1,6 @@
-import { withNasrDatabase } from "../connection/lifecycle.mjs";
+import { withNasrDatabaseConnection } from "../connection/lifecycle.mjs";
 
 export function withNasrSourceDatabase(Database, inputPath, operation) {
-  return withNasrDatabase(Database, inputPath, { readOnly: true }, operation);
+  const database = new Database(inputPath, { readOnly: true });
+  return withNasrDatabaseConnection(database, operation);
 }
