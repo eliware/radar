@@ -1,15 +1,15 @@
 import { MAX_RADAR_RANGE } from "../range.mjs";
 import { createRadarReferenceCacheSession } from "./cache-session.mjs";
+import { fetchRadarReferenceLayers } from "./layer-requests.mjs";
 import { createRadarReferenceRequestScheduler } from "./request-scheduler.mjs";
 
-const PATHS = ["airports", "navaids", "airspace-boundaries", "ils", "procedures", "airways"];
 const RANGE_STEP_NM = 25;
 
 export function createRadarReferenceLoader(fetchData, scene, location) {
   const session = createRadarReferenceCacheSession(scene, location);
   let lastKey = "";
   const scheduler = createRadarReferenceRequestScheduler(
-    (minimum, maximum) => fetchLayers(fetchData, minimum, maximum),
+    (minimum, maximum) => fetchRadarReferenceLayers(fetchData, minimum, maximum),
     (collections) => session.add(collections),
   );
 
@@ -37,14 +37,4 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
       scheduler.request(target);
     },
   };
-}
-
-async function fetchLayers(fetchData, minimum, maximum) {
-  return Promise.all(
-    PATHS.map(async (path) => {
-      const response = await fetchData(`/api/${path}?minRangeNm=${minimum}&maxRangeNm=${maximum}`);
-      if (!response.ok) throw new Error(`${path} request failed.`);
-      return response.json();
-    }),
-  );
 }

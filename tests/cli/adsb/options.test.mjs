@@ -78,6 +78,11 @@ test("rejects an invalid port from the environment", () => {
   );
 });
 
+test("uses a validated command-line port without validating the overridden environment port", () => {
+  process.env.ADSB_PORT = "bad";
+  expect(parseAdsbOptions(["--port", "30004"]).port).toBe(30004);
+});
+
 test("rejects unknown command-line options", () => {
   expect(() => parseAdsbOptions(["--bad"])).toThrow("Unknown option: --bad");
 });

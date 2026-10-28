@@ -1,6 +1,4 @@
-export function writeAdsbUpdate({ aircraft, debug, write, renderTable }) {
-  write(debug ? JSON.stringify(aircraft) : renderTable());
-}
+import { writeAdsbUpdate } from "./write-update.mjs";
 
 export function createAdsbCliOutput({ debug, write, renderTable }) {
   let hasAircraft = false;
