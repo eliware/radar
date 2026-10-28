@@ -1,22 +1,17 @@
 import { selectWaterTiles, selectWaterZoom } from "./tile/coordinates.mjs";
 import { createWaterTileCache } from "./tile/cache.mjs";
-
-const TILE_JSON_URL = "https://tiles.openfreemap.org/planet";
+import { createWaterTileMetadataLoader } from "./tile/metadata.mjs";
 
 export function createWaterOutlineLoader(fetchRef = fetch) {
-  let tileJsonPromise;
   let generation = 0;
   let requestedKeys = new Set();
   const cache = createWaterTileCache(fetchRef);
+  const metadata = createWaterTileMetadataLoader(fetchRef);
   return {
     async load(center, rangeNm, onChange) {
       const current = ++generation;
       try {
-        tileJsonPromise ??= getTileJson(fetchRef).catch((error) => {
-          tileJsonPromise = null;
-          throw error;
-        });
-        const tileJson = await tileJsonPromise;
+        const tileJson = await metadata.load();
         if (current !== generation) return;
         const zoom = selectWaterZoom(center.latitude, rangeNm);
         const tiles = selectWaterTiles(center, rangeNm, zoom);
@@ -36,10 +31,4 @@ export function createWaterOutlineLoader(fetchRef = fetch) {
       generation += 1;
     },
   };
-}
-
-async function getTileJson(fetchRef) {
-  const response = await fetchRef(TILE_JSON_URL);
-  if (!response.ok) throw new Error("Water tile metadata request failed.");
-  return response.json();
 }

@@ -108,23 +108,22 @@ test("reuses pending tile requests and ignores failed tile responses", async () 
   expect(onChange).toHaveBeenCalledWith([], false);
 });
 
-test("evicts old tile data and retries metadata after a request failure", async () => {
-  let metadataCalls = 0;
+test("evicts old tile data after loading many different views", async () => {
+  const tileCalls = [];
   const fetchRef = jest.fn(async (url) => {
-    if (url.endsWith("/planet")) {
-      metadataCalls += 1;
-      return metadataCalls === 1
-        ? { ok: false }
-        : response({ tiles: ["https://tile/{z}/{x}/{y}"] });
-    }
+    if (url.endsWith("/planet")) return response({ tiles: ["https://tile/{z}/{x}/{y}"] });
+    tileCalls.push(url);
     return response(null, new ArrayBuffer(0));
   });
   const loader = createWaterOutlineLoader(fetchRef);
-  await loader.load({ latitude: 43.8, longitude: -70.3 }, 1, jest.fn());
+  const firstCenter = { latitude: 43.8, longitude: -70.3 };
+  await loader.load(firstCenter, 1, jest.fn());
   for (let index = 0; index < 40; index += 1) {
-    await loader.load({ latitude: 43 + index * 0.1, longitude: -70.3 }, 1, jest.fn());
+    await loader.load({ latitude: 20 + index, longitude: -70.3 }, 1, jest.fn());
   }
-  expect(metadataCalls).toBe(2);
+  const beforeReload = tileCalls.length;
+  await loader.load(firstCenter, 1, jest.fn());
+  expect(tileCalls.length).toBeGreaterThan(beforeReload);
 });
 
 test("does not publish errors from canceled tile requests", async () => {

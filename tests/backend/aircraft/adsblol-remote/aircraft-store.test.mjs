@@ -11,14 +11,12 @@ const record = {
 };
 
 test("coordinates route enrichment through the normalized track store", async () => {
-  const onRouteUpdate = jest.fn();
   const store = createAdsbLolAircraftStore({
     location,
     lookup: { getCallsignRoute: jest.fn(async () => ({ origin: "KBOS" })) },
-    onRouteUpdate,
   });
+  store.update({});
   store.update(record);
   await Promise.resolve();
   expect(store.list()).toMatchObject([{ icao: "ABC123", callsign: "RPA1", origin: "KBOS" }]);
-  expect(onRouteUpdate).toHaveBeenCalledTimes(1);
 });

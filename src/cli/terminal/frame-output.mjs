@@ -1,28 +1,17 @@
-import { renderTerminalFrame } from "./frame.mjs";
+import { createTerminalScreenSession } from "./screen-session.mjs";
 
 const FRAME_PREFIX = "\u001b[2J\u001b[H";
 
 export function createTerminalFrameOutput(stdout, environment) {
-  let alternateScreenActive = false;
+  const screen = createTerminalScreenSession(stdout, environment);
   return {
     write(text) {
       if (!text.startsWith(FRAME_PREFIX)) {
         stdout.write(`${text}\n`);
         return;
       }
-      const rendered = renderTerminalFrame(text.slice(FRAME_PREFIX.length), {
-        isTTY: stdout.isTTY,
-        rows: stdout.rows,
-        environment,
-        alternateScreenActive,
-      });
-      alternateScreenActive = rendered.alternateScreenActive;
-      stdout.write(rendered.output);
+      screen.render(text.slice(FRAME_PREFIX.length));
     },
-    restore() {
-      if (!alternateScreenActive) return;
-      stdout.write("\u001b[?25h\u001b[?1049l");
-      alternateScreenActive = false;
-    },
+    restore: screen.restore,
   };
 }

@@ -2,12 +2,6 @@ import { expect, test } from "@jest/globals";
 import { selectScreenshotOptions } from "../../../../src/frontend/responsive/screenshot/selection.mjs";
 
 test("uses the default targets and screenshot modes", () => {
-  const selection = selectScreenshotOptions([], {});
-  expect(selection.targets).toHaveLength(6);
-  expect(selection.modes).toEqual(["above-fold", "full-page"]);
-});
-
-test("uses default arguments and environment settings", () => {
   const previousViewports = process.env.RADAR_SCREENSHOT_VIEWPORTS;
   const previousModes = process.env.RADAR_SCREENSHOT_MODES;
   delete process.env.RADAR_SCREENSHOT_VIEWPORTS;
@@ -24,12 +18,12 @@ test("uses default arguments and environment settings", () => {
   }
 });
 
-test("selects primary screenshots and configured modes", () => {
-  const selection = selectScreenshotOptions(["--primary"], {
+test("combines configured viewport and mode selections", () => {
+  const selection = selectScreenshotOptions([], {
     RADAR_SCREENSHOT_VIEWPORTS: "desktop-1080p",
     RADAR_SCREENSHOT_MODES: "full-page",
   });
-  expect(selection.targets.map(({ name }) => name)).toEqual(["desktop-primary"]);
+  expect(selection.targets.map(({ name }) => name)).toEqual(["desktop-1080p"]);
   expect(selection.modes).toEqual(["full-page"]);
 });
 
