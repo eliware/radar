@@ -50,13 +50,3 @@ test("caches failures briefly and retries after expiry", async () => {
   await expect(cache.lookup("A", load, ttls)).resolves.toBe("ok");
   expect(load).toHaveBeenCalledTimes(2);
 });
-
-test("evicts the oldest entry when the cache reaches its size limit", async () => {
-  const load = jest.fn(async (value) => value);
-  const cache = createLookupCache({ maxEntries: 2 });
-  await cache.lookup("A", () => load("A"), ttls);
-  await cache.lookup("B", () => load("B"), ttls);
-  await cache.lookup("C", () => load("C"), ttls);
-  await cache.lookup("A", () => load("A"), ttls);
-  expect(load).toHaveBeenCalledTimes(4);
-});

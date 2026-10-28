@@ -1,5 +1,7 @@
+import { createLookupCacheEntries } from "./lookup-cache/entries.mjs";
+
 export function createLookupCache({ clock = Date.now, maxEntries = 256 } = {}) {
-  const entries = new Map();
+  const entries = createLookupCacheEntries(maxEntries);
 
   function lookup(key, load, { successTtlMs, missingTtlMs, failureTtlMs }) {
     const cached = entries.get(key);
@@ -12,7 +14,6 @@ export function createLookupCache({ clock = Date.now, maxEntries = 256 } = {}) {
       .then((value) => save(entry, value, value === null ? missingTtlMs : successTtlMs))
       .catch(() => save(entry, null, failureTtlMs));
     entries.set(key, entry);
-    if (entries.size > maxEntries) entries.delete(entries.keys().next().value);
     return entry.promise;
   }
 
