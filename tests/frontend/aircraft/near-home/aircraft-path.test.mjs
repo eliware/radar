@@ -52,6 +52,10 @@ test("detects a projected pass within one nautical mile and 2,000 feet AGL", () 
   expect(isAircraftProjectedNearHome(aircraft({ northNm: -2 }), home, 0)).toBe(true);
 });
 
+test("returns false when aircraft data is missing", () => {
+  expect(isAircraftProjectedNearHome(null, home, 0)).toBe(false);
+});
+
 test("rejects projected paths outside horizontal, altitude, or input limits", () => {
   expect(isAircraftProjectedNearHome(aircraft({ eastNm: 1.1 }), home, 0)).toBe(false);
   expect(isAircraftProjectedNearHome(aircraft({ altitudeFeet: 2001 }), home, 0)).toBe(false);

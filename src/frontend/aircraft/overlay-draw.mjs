@@ -4,13 +4,11 @@ import { drawRadarScale } from "../draw/radar/scale.mjs";
 import { drawRadarScaleLegend } from "../draw/radar/legend/table.mjs";
 import { drawRadarReferences } from "../draw/radar/references.mjs";
 import { projectAircraftDisplayItems } from "../project/aircraft-display-items.mjs";
-import { projectRadarReference } from "../project/radar-reference.mjs";
 import { drawCameraReadout } from "./overlay/readout.mjs";
-import { resizeCanvasBackingStore } from "../canvas/resize.mjs";
-import { createCameraProjector } from "../project/camera-position.mjs";
+import { createOverlayProjection } from "./overlay/projection.mjs";
 
 export function createOverlayDrawer({ THREE, container, windowRef, canvas, context }) {
-  let projectorCamera, projectCameraPosition;
+  const projection = createOverlayProjection({ THREE, container, windowRef, canvas, context });
   return function draw(
     aircraft,
     trails,
@@ -32,19 +30,16 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
     runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
     referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   ) {
-    const width = container.clientWidth || 1;
-    const height = container.clientHeight || 1;
-    const ratio = Math.min(windowRef.devicePixelRatio || 1, 2);
-    resizeCanvasBackingStore(canvas, context, width, height, ratio);
-    if (projectorCamera !== camera) {
-      projectorCamera = camera;
-      projectCameraPosition = createCameraProjector(THREE, camera);
-    }
+    const { width, height, project, projectReference } = projection.prepare(
+      camera,
+      location,
+      elevationFeet,
+    );
     context.clearRect(0, 0, width, height);
     drawRadarReferences(
       context,
       { airports, navaids, boundaries, ilsApproaches, procedures, airways },
-      (point) => projectRadarReference(point, location, elevationFeet, project),
+      projectReference,
       ilsVisible,
       procedureVisibility,
       airwayVisibility,
@@ -69,9 +64,5 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
     );
     drawRadarScale(context, range, Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO, height);
     drawCameraReadout(context, camera, location, elevationFeet, width);
-
-    function project(position) {
-      return projectCameraPosition(position, width, height);
-    }
   };
 }

@@ -1,12 +1,11 @@
 import { attachDashboardCompassControls } from "./attach/dashboard/compass-controls.mjs";
 import { loadDashboardReferences } from "./dashboard/references.mjs";
 import { connectDashboardFeed } from "./dashboard/feed.mjs";
-import { createFlightStripView } from "./flight/strips.mjs";
 import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
 import { cleanupDashboardSetup } from "./dashboard/cleanup.mjs";
 import { createViewportReporter } from "./report-viewport.mjs";
 import { readJson } from "./read-json.mjs";
-import { createDashboardDisplay } from "./dashboard/display.mjs";
+import { createDashboardDisplaySetup } from "./dashboard/display-setup.mjs";
 export async function startDashboard({
   document,
   fetchData,
@@ -16,19 +15,16 @@ export async function startDashboard({
 }) {
   const container = document.querySelector("[data-scene]");
   if (!container) return null;
-  const stripPanel = document.querySelector("[data-flight-strips]");
-  const flightStrips = createFlightStripView(stripPanel, windowRef);
-  const resources = {
-    windowRef,
-    flightStrips,
-  };
-  const display = createDashboardDisplay({
+  const resources = { windowRef };
+  const display = createDashboardDisplaySetup({
     document,
     fetchData,
     windowRef,
     onMetarEnabled: (enabled) => resources.metarRefresh?.setEnabled(enabled),
   });
+  resources.flightStrips = display.flightStrips;
   Object.assign(resources, display.toggles);
+  const { flightStrips } = display;
   try {
     const config = await readJson(fetchData, "/api/config");
     flightStrips.setHome(config.location, config.elevationFeet);

@@ -2,7 +2,7 @@ import { projectAircraftPosition } from "../aircraft/space-position.mjs";
 import { predictAircraftPosition } from "../predict-aircraft-position.mjs";
 import { formatAircraftTag } from "../aircraft/tag-data.mjs";
 import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
-import { isAircraftDisplayNearHome } from "./aircraft-display/near-home.mjs";
+import { isAircraftProjectedNearHome } from "../aircraft/near-home/aircraft-path.mjs";
 import { projectAircraftHistory } from "./aircraft-display/history.mjs";
 
 export function projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project) {
@@ -19,7 +19,7 @@ export function projectAircraftDisplayItems(aircraft, trails, location, elevatio
       ...marker,
       receivedAt: item.receivedAt,
       remoteOnly: item.remoteOnly === true,
-      nearHomePass: isAircraftDisplayNearHome(item, location, elevationFeet),
+      nearHomePass: isAircraftProjectedNearHome(item, location, elevationFeet),
       emergencyTag,
       emergency: Boolean(emergencyTag),
       futureX: Number.isFinite(futureMarker?.x) ? futureMarker.x : null,
