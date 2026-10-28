@@ -2,12 +2,11 @@ import { attachDashboardCompassControls } from "./attach/dashboard/compass-contr
 import { loadDashboardReferences } from "./dashboard/references.mjs";
 import { connectDashboardFeed } from "./dashboard/feed.mjs";
 import { createFlightStripView } from "./flight/strips.mjs";
-import { startMetarRefresh } from "./start/metar-refresh.mjs";
 import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
 import { destroyDashboardResources } from "./destroy/dashboard-resources.mjs";
-import { attachDashboardDisplayToggles } from "./attach/dashboard/display-toggles.mjs";
 import { createViewportReporter } from "./report-viewport.mjs";
 import { readJson } from "./read-json.mjs";
+import { createDashboardDisplay } from "./dashboard/display.mjs";
 export async function startDashboard({
   document,
   fetchData,
@@ -23,20 +22,17 @@ export async function startDashboard({
     windowRef,
     flightStrips,
   };
-  const displayToggles = attachDashboardDisplayToggles(document, fetchData, (enabled) =>
-    resources.metarRefresh?.setEnabled(enabled),
-  );
-  Object.assign(resources, displayToggles);
+  const display = createDashboardDisplay({
+    document,
+    fetchData,
+    windowRef,
+    onMetarEnabled: (enabled) => resources.metarRefresh?.setEnabled(enabled),
+  });
+  Object.assign(resources, display.toggles);
   try {
     const config = await readJson(fetchData, "/api/config");
     flightStrips.setHome(config.location, config.elevationFeet);
-    resources.metarRefresh = startMetarRefresh({
-      fetchData,
-      panel: document.querySelector("[data-metar-reports]"),
-      ticker: document.querySelector("[data-metar-ticker]"),
-      timerHost: windowRef,
-      enabled: !displayToggles.panel?.hidden,
-    });
+    resources.metarRefresh = display.startMetarRefresh();
     const scene = await createScene({
       container,
       location: config.location,

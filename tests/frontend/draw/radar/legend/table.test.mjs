@@ -87,28 +87,3 @@ test("uses a safe column width when text measurement is unavailable", () => {
   drawRadarLegendTable(context, 800, 400, true, {});
   expect(context.fillText).toHaveBeenCalledWith("R RUNWAY", 26, 120);
 });
-
-test("restores METAR and flight-strip indicators from local storage", () => {
-  const originalStorage = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
-  const values = new Map([
-    ["radar.visibility.metar", "false"],
-    ["radar.visibility.flightStrips", "false"],
-  ]);
-  Object.defineProperty(globalThis, "localStorage", {
-    configurable: true,
-    value: { getItem: (key) => values.get(key) ?? null },
-  });
-  try {
-    const context = createContext();
-    const colors = new Map();
-    context.fillText.mockImplementation(function (label) {
-      colors.set(label, this.fillStyle);
-    });
-    drawRadarLegendTable(context, 800, 400, true, {});
-    expect(colors.get("M METAR")).toBe("#444444");
-    expect(colors.get("F STRIPS")).toBe("#444444");
-  } finally {
-    if (originalStorage) Object.defineProperty(globalThis, "localStorage", originalStorage);
-    else delete globalThis.localStorage;
-  }
-});

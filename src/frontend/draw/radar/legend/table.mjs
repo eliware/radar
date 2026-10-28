@@ -1,6 +1,6 @@
 import { getRadarPalette } from "../../../radar/palette.mjs";
 import { radarLegendLayout } from "./entries.mjs";
-import { readToggleState } from "../../../toggle-state-storage.mjs";
+import { getRadarLegendVisibility } from "./visibility.mjs";
 
 const COLORS = {
   airport: "#b8b8b8",
@@ -24,20 +24,13 @@ export function drawRadarLegendTable(context, width, height, connected, visibili
   context.textAlign = "left";
   radarLegendLayout(width, height, topInset).forEach(({ entry, x, y }) => {
     const [icon, label, color, toggle] = entry;
-    const enabled = !toggle || getVisibility(toggle, visibility);
+    const enabled = !toggle || getRadarLegendVisibility(toggle, visibility);
     const ink = connected && enabled ? (palette[color] ?? COLORS[color]) : "#444444";
     context.fillStyle = ink;
     context.strokeStyle = ink;
     drawIcon(context, icon, x, y - 4);
     context.fillText(label, x + 14, y);
   });
-}
-
-function getVisibility(toggle, visibility) {
-  if (toggle === "aircraftVisible") return true;
-  if (toggle === "metarVisible") return readToggleState("metar");
-  if (toggle === "flightStripsVisible") return readToggleState("flightStrips");
-  return visibility[toggle];
 }
 
 function drawIcon(context, icon, x, y) {

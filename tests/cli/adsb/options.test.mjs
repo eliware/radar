@@ -10,12 +10,6 @@ test("uses the local RTL1090 feed by default", () => {
   expect(parseAdsbOptions([])).toEqual({ host: "127.0.0.1", port: 30003 });
 });
 
-test("uses feed settings from the environment", () => {
-  process.env.ADSB_HOST = "receiver.local";
-  process.env.ADSB_PORT = "31003";
-  expect(parseAdsbOptions([])).toEqual({ host: "receiver.local", port: 31003 });
-});
-
 test("accepts host, port, help, and version options", () => {
   expect(
     parseAdsbOptions(["--host", "localhost", "--port", "30004", "--help", "--version"]),

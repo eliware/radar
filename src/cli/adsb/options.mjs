@@ -1,8 +1,7 @@
+import { readAdsbEnvironment } from "./environment.mjs";
+
 export function parseAdsbOptions(args) {
-  const options = {
-    host: process.env.ADSB_HOST ?? "127.0.0.1",
-    port: Number(process.env.ADSB_PORT ?? 30003),
-  };
+  const options = readAdsbEnvironment();
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
     if (argument === "--help") {
