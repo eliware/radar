@@ -1,10 +1,10 @@
-import { decodeMetarReport } from "./decoder.mjs";
+import { createMetarResponse } from "./response.mjs";
 
 export function registerMetarRoutes(app, lookup) {
   app.get("/api/metar", async (_request, reply) => {
     try {
-      const reports = (await lookup.get()).map((report) => decodeMetarReport(report));
-      return { stations: lookup.stations, reports };
+      const reports = await lookup.get();
+      return createMetarResponse(lookup.stations, reports);
     } catch {
       return reply.code(502).send({ error: "VATSIM METAR data is not available." });
     }

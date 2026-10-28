@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { validateNasrSource } from "../../../../src/backend/nasr/import/connection-checks.mjs";
-import { createNasrTestDatabase } from "../../../../test-fixtures/nasr-database.mjs";
+import { validateNasrSource } from "../../../../../src/backend/nasr/import/source/validation.mjs";
+import { createNasrTestDatabase } from "../../../../../test-fixtures/nasr-database.mjs";
 
 function retainOnClose(database) {
   return {
@@ -10,7 +10,7 @@ function retainOnClose(database) {
   };
 }
 
-test("validates the read-only source database and closes its connection", () => {
+test("validates the schema through a read-only source connection", () => {
   const database = retainOnClose(createNasrTestDatabase());
   const Database = jest.fn(() => database);
   expect(validateNasrSource(Database, "source.sqlite")).toBeUndefined();

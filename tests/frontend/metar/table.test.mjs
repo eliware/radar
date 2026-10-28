@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderMetarTable, updateMetarDisplay } from "../../../src/frontend/metar/table.mjs";
+import { renderMetarTable } from "../../../src/frontend/metar/table.mjs";
 
 function nodes() {
   return [{ textContent: "", innerHTML: "" }, { textContent: "" }];
@@ -77,11 +77,4 @@ test("renders placeholders for missing decoded values", () => {
     reports: [{ id: "KBXM", metar: "raw", decoded: { observed: null } }],
   });
   expect(panel.innerHTML).toContain("<td>KBXM</td><td>—</td>");
-});
-
-test("updates the METAR display through the public table module", () => {
-  const panel = { textContent: "", innerHTML: "" };
-  updateMetarDisplay(panel, { reports: [{ id: "KPWM", metar: "raw", decoded: null }] });
-  expect(panel.innerHTML).toContain("<table>");
-  expect(panel.innerHTML).toContain("KPWM");
 });

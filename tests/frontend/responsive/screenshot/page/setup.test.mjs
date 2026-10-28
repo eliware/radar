@@ -3,7 +3,7 @@ import { prepareScreenshotPage } from "../../../../../src/frontend/responsive/sc
 
 afterEach(() => delete globalThis.document);
 
-test("sets the viewport, waits for the scene, and waits for fonts", async () => {
+test("sets the viewport and navigates to the screenshot page", async () => {
   const page = {
     setViewport: jest.fn(),
     goto: jest.fn(),
@@ -21,20 +21,4 @@ test("sets the viewport, waits for the scene, and waits for fonts", async () => 
     waitUntil: "domcontentloaded",
     timeout: 30000,
   });
-  expect(page.waitForSelector).toHaveBeenCalledWith("[data-scene] canvas", { timeout: 30000 });
-  expect(page.evaluate).toHaveBeenCalledTimes(1);
-});
-
-test("continues when the page has no font readiness promise", async () => {
-  const page = {
-    setViewport: jest.fn(),
-    goto: jest.fn(),
-    waitForSelector: jest.fn(),
-    evaluate: jest.fn((callback) => {
-      globalThis.document = {};
-      return callback();
-    }),
-  };
-
-  await expect(prepareScreenshotPage(page, "http://127.0.0.1", {})).resolves.toBeUndefined();
 });
