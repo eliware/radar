@@ -1,7 +1,12 @@
-import { updateAircraftTargetAndTrail } from "../../../aircraft/target-updates.mjs";
-import { selectDefaultRadarRange } from "../../../radar/range.mjs";
 import { createRadarTargets } from "../../../radar/targets.mjs";
 import { createAircraftTrails } from "../../../aircraft/trails.mjs";
+import { updateCanvasRadarAutoZoom } from "./auto-zoom.mjs";
+import {
+  listCanvasRadarTargets,
+  updateCanvasRadarRemoteTargets,
+  updateCanvasRadarTarget,
+} from "./targets.mjs";
+import { reconcileCanvasRadarSnapshot } from "./snapshots.mjs";
 
 export function createCanvasRadarAircraftState(location, state, draw) {
   const targets = createRadarTargets();
@@ -10,37 +15,23 @@ export function createCanvasRadarAircraftState(location, state, draw) {
     targets,
     trails,
     update(item, shouldDraw = true) {
-      const update = updateAircraftTargetAndTrail({ aircraft: item, location, targets, trails });
+      const update = updateCanvasRadarTarget(item, location, targets, trails);
       if (!update) return;
-      if (state.autoZoom)
-        state.range = selectDefaultRadarRange(targets.localDistances(), state.defaultRangeNm);
+      updateCanvasRadarAutoZoom(state, targets.localDistances());
       if (shouldDraw) draw();
     },
     updateSnapshot(items, localFurthestDistanceNm) {
-      const aircraft = Array.isArray(items) ? items : [];
-      trails.remove(targets.retain(aircraft.map((item) => item.icao)));
-      for (const item of aircraft) this.update(item, false);
-      if (state.autoZoom && Number.isFinite(localFurthestDistanceNm))
-        state.range = selectDefaultRadarRange([localFurthestDistanceNm], state.defaultRangeNm);
+      reconcileCanvasRadarSnapshot(items, targets, trails, this.update);
+      if (Number.isFinite(localFurthestDistanceNm))
+        updateCanvasRadarAutoZoom(state, [localFurthestDistanceNm]);
       draw();
     },
     updateRemote(items) {
-      const remote = items.filter((item) => item.remoteOnly);
-      trails.remove(targets.removeRemoteOnlyExcept(remote.map((item) => item.icao)));
-      for (const item of remote) {
-        updateAircraftTargetAndTrail({
-          aircraft: item,
-          location,
-          targets,
-          trails,
-          addTrail: false,
-          removeExpiredTrails: false,
-        });
-      }
+      updateCanvasRadarRemoteTargets(items, location, targets, trails);
       draw();
     },
     items() {
-      return trails.withReceivedAt(targets.items());
+      return listCanvasRadarTargets(targets, trails);
     },
   };
 }

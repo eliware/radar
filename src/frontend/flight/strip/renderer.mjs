@@ -1,7 +1,5 @@
-import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
 import { escapeHtml } from "../../html/escape.mjs";
-
-const MIN_FLIGHT_STRIP_OPACITY = 0.25;
+import { getFlightStripStatus } from "./status.mjs";
 
 function rowMarkup(values, weights, labels) {
   const columns = weights.map((weight) => `minmax(0, ${weight}fr)`).join(" ");
@@ -21,20 +19,8 @@ export function renderFlightStripMarkup(data, now = Date.now()) {
       const body = item.groups
         .map((row, index) => rowMarkup(row, data.weights[index], item.labels[index]))
         .join("");
-      const opacity = Math.max(
-        MIN_FLIGHT_STRIP_OPACITY,
-        getAircraftAgeBrightness(item.lastSeen, now),
-      );
-      const classes = [
-        item.remoteOnly && "remote-only",
-        item.emergency && "emergency",
-        item.nearHomePass && !item.remoteOnly && !item.emergency && "near-home-pass",
-        item.nearHomePass &&
-          !item.remoteOnly &&
-          !item.emergency &&
-          (Math.floor(now / 500) % 2 ? "flash-white" : "flash-green"),
-      ].filter(Boolean);
-      const classNames = classes.length ? ` ${classes.join(" ")}` : "";
+      const { opacity, classNames: statusClasses } = getFlightStripStatus(item, now);
+      const classNames = statusClasses ? ` ${statusClasses}` : "";
       return `<div class="flight-strip-aircraft${classNames}" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
     })
     .join("");
