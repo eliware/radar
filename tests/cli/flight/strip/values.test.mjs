@@ -1,9 +1,9 @@
 import { expect, test } from "@jest/globals";
-import { aircraftValuesOf } from "../../../../src/cli/flight/strip/values.mjs";
+import { aircraftFieldsOf } from "../../../../src/cli/flight/strip/values.mjs";
 
 test("formats aircraft fields for flight strip columns", () => {
   expect(
-    aircraftValuesOf(
+    aircraftFieldsOf(
       {
         callsign: "TEST123",
         icao: "ABC123",
@@ -20,33 +20,33 @@ test("formats aircraft fields for flight strip columns", () => {
       },
       4000,
     ),
-  ).toEqual([
-    "TEST123",
-    "ABC123",
-    "12,000 ft",
-    "250 kt",
-    "031°",
-    "-500 fpm",
-    "1200",
-    "43.6875, -70.4425",
-    "1.5 nm",
-    "270°",
-    "3s",
-  ]);
+  ).toEqual({
+    callsign: "TEST123",
+    icao: "ABC123",
+    altitude: "12,000 ft",
+    groundSpeed: "250 kt",
+    heading: "031°",
+    verticalRate: "-500 fpm",
+    squawk: "1200",
+    position: "43.6875, -70.4425",
+    distance: "1.5 nm",
+    bearing: "270°",
+    age: "3s",
+  });
 });
 
 test("formats missing fields and invalid positions safely", () => {
-  expect(aircraftValuesOf({ lastSeen: 5000, latitude: "43", longitude: -70 }, 4000)).toEqual([
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "0s",
-  ]);
+  expect(aircraftFieldsOf({ lastSeen: 5000, latitude: "43", longitude: -70 }, 4000)).toEqual({
+    callsign: "-",
+    icao: "-",
+    altitude: "-",
+    groundSpeed: "-",
+    heading: "-",
+    verticalRate: "-",
+    squawk: "-",
+    position: "-",
+    distance: "-",
+    bearing: "-",
+    age: "0s",
+  });
 });

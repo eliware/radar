@@ -1,8 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  formatMetarReportRow,
-  formatMetarTableHeaders,
-} from "../../../../src/frontend/metar/table/formatting.mjs";
+import { formatMetarReportRow } from "../../../../src/frontend/metar/table/formatting.mjs";
 
 const decoded = {
   automated: true,
@@ -17,13 +14,6 @@ const decoded = {
   dewPoint: "65°F",
   altimeter: "30.01",
 };
-
-test("formats METAR table headers", () => {
-  const headers = formatMetarTableHeaders();
-  expect(headers).toContain('<th class="metar-age-header">AGE</th>');
-  expect(headers).toContain('<th class="metar-wind-header" colspan="2">WIND</th>');
-  expect(headers).toContain('<th class="metar-sky-header">SKY</th>');
-});
 
 test("formats decoded METAR values with category, age, weather, and field classes", () => {
   const row = formatMetarReportRow(

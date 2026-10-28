@@ -2,22 +2,6 @@ import { metarCategoryLabel } from "../category-label.mjs";
 import { formatMetarAgeDisplay } from "../age/display.mjs";
 import { escapeHtml } from "../../html/escape.mjs";
 
-export function formatMetarTableHeaders() {
-  return [
-    "<th></th>",
-    "<th>APT</th>",
-    "<th>FLT</th>",
-    '<th class="metar-age-header">AGE</th>',
-    '<th class="metar-wind-header" colspan="2">WIND</th>',
-    '<th class="metar-vis-header">VIS</th>',
-    '<th class="metar-wx-header">WX</th>',
-    '<th class="metar-sky-header">SKY</th>',
-    "<th>TMP</th>",
-    "<th>DEW</th>",
-    "<th>ALT</th>",
-  ].join("");
-}
-
 export function formatMetarReportRow({ id, metar, decoded }, now) {
   if (!decoded)
     return `<tr><td></td><th>${escapeHtml(id)}</th><td>—</td><td colspan="9">${escapeHtml(metar)}</td></tr>`;
