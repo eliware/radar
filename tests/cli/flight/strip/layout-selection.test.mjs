@@ -1,9 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  createFlightStripLayout,
-  flightStripColumns,
-  wideTableWidth,
-} from "../../../../src/cli/flight/strip/layout.mjs";
+import { createFlightStripLayout } from "../../../../src/cli/flight/strip/layout-selection.mjs";
 
 const renderedWidth = (layout) =>
   layout[0].widths.reduce((sum, width) => sum + width, 3 * layout[0].widths.length + 1);
@@ -14,8 +10,6 @@ test("uses full headers and fills a wide terminal", () => {
   expect(layout[0].labels[0]).toBe("CALLSIGN");
   expect(layout[0].labels[5]).toBe("VERTICAL RATE");
   expect(renderedWidth(layout)).toBe(180);
-  expect(wideTableWidth).toBe(156);
-  expect(flightStripColumns).toHaveLength(11);
 });
 
 test("uses short headers for a one-line aircraft table", () => {

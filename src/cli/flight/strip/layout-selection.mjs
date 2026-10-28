@@ -6,19 +6,6 @@ import {
   wideTableWidth,
 } from "./table-widths.mjs";
 
-export { flightStripColumns } from "./columns.mjs";
-
-export { wideTableWidth };
-const twoLineGroups = [
-  [0, 1, 2, 3, 4, 5],
-  [6, 7, 8, 9, 10],
-];
-const threeLineGroups = [
-  [0, 1, 2, 3],
-  [4, 5, 6, 7],
-  [8, 9, 10],
-];
-
 export function createFlightStripLayout(width, values = []) {
   const full = width >= wideTableWidth;
   const labels = flightStripColumns.map(([longName, shortName]) => (full ? longName : shortName));
@@ -37,3 +24,13 @@ export function createFlightStripLayout(width, values = []) {
     widths: calculateFlightStripWidths(indices, minimums, width),
   }));
 }
+
+const twoLineGroups = [
+  [0, 1, 2, 3, 4, 5],
+  [6, 7, 8, 9, 10],
+];
+const threeLineGroups = [
+  [0, 1, 2, 3],
+  [4, 5, 6, 7],
+  [8, 9, 10],
+];

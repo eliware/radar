@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createFlightStripLayout } from "../../../../src/cli/flight/strip/layout.mjs";
+import { createFlightStripLayout } from "../../../../src/cli/flight/strip/layout-selection.mjs";
 import { renderFlightStripFrame } from "../../../../src/cli/flight/strip/render.mjs";
 import { horizontalRule } from "../../../../src/cli/flight/strip/rule.mjs";
 
