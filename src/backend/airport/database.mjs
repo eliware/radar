@@ -1,18 +1,10 @@
 import { openAirportDatabase } from "../open-airport-database.mjs";
-import { createArtccBoundaryQuery } from "../artcc-boundary-query.mjs";
-import { createIlsApproachQuery } from "../ils/approach/query.mjs";
-import { createProcedureQuery } from "../procedure/query.mjs";
-import { createAirportReferenceQueries } from "../create-airport-reference-queries.mjs";
-import { createAirwayQuery } from "../airway/query.mjs";
+import { createAirportQueries } from "./queries.mjs";
 
 export function createAirportDatabase(path, options) {
   const database = openAirportDatabase(path, options);
   if (!database) return null;
-  const references = createAirportReferenceQueries(database);
-  const findBoundaries = createArtccBoundaryQuery(database);
-  const findIlsApproaches = createIlsApproachQuery(database);
-  const findProceduresBetween = createProcedureQuery(database);
-  const findAirwaysBetween = createAirwayQuery(database);
+  const queries = createAirportQueries(database);
   let closed = false;
   const guard =
     (query) =>
@@ -21,12 +13,12 @@ export function createAirportDatabase(path, options) {
       return query(...args);
     };
   return {
-    findBetween: guard(references.findBetween),
-    findNavaidsBetween: guard(references.findNavaidsBetween),
-    findIlsApproaches: guard(findIlsApproaches),
-    findProceduresBetween: guard(findProceduresBetween),
-    findAirwaysBetween: guard(findAirwaysBetween),
-    findBoundariesBetween: guard(findBoundaries),
+    findBetween: guard(queries.findBetween),
+    findNavaidsBetween: guard(queries.findNavaidsBetween),
+    findIlsApproaches: guard(queries.findIlsApproaches),
+    findProceduresBetween: guard(queries.findProceduresBetween),
+    findAirwaysBetween: guard(queries.findAirwaysBetween),
+    findBoundariesBetween: guard(queries.findBoundariesBetween),
     close() {
       if (closed) return;
       closed = true;

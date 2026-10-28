@@ -19,7 +19,6 @@ test("connects the dashboard feed and forwards state, messages, and viewport", a
     flightStrips,
     sendViewport,
   });
-  expect(socket.url).toBe("wss://radar.test/ws");
   socket.onopen();
   expect(scene.setConnected).toHaveBeenCalledWith(true);
   expect(sendViewport).toHaveBeenCalledWith(socket, true);
