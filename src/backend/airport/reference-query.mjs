@@ -1,4 +1,4 @@
-import { groupRunwayEnds } from "./runway/groups.mjs";
+import { attachAirportRunways } from "./runway/attach.mjs";
 import { RUNWAY_QUERY } from "./runway/query.mjs";
 import { AIRPORT_QUERY } from "../sql-query-rules.mjs";
 import { mapReferenceInRange, rowsWithinBounds } from "../reference/range/query.mjs";
@@ -10,13 +10,6 @@ export function createAirportReferenceQuery(database) {
     const airports = rowsWithinBounds(airportStatement, location, maxRangeNm)
       .map((row) => mapReferenceInRange(row, location, minRangeNm, maxRangeNm))
       .filter(Boolean);
-    if (!airports.length) return [];
-    const runways = groupRunwayEnds(
-      runwayStatement.all(JSON.stringify(airports.map(({ faaId }) => faaId))),
-    );
-    return airports.map((airport) => ({
-      ...airport,
-      runways: runways.get(airport.faaId) ?? [],
-    }));
+    return attachAirportRunways(airports, runwayStatement);
   };
 }
