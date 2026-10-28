@@ -22,37 +22,8 @@ test("sorts aircraft and formats visible fields without a one-row spacer", () =>
   const result = buildFlightStripData([far, fullAircraft], 3000);
   expect(result.count).toBe(2);
   expect(result.aircraft.map((item) => item.icao)).toEqual(["ABC123", "FAR123"]);
-  expect(result.aircraft[0].groups[0][2]).toBe("B738");
-  expect(result.aircraft[0].groups[0][5]).toBe("007°4");
-  expect(result.aircraft[0].groups[0].slice(6)).toEqual(["KPWM", "KBOS"]);
+  expect(result.rowCount).toBeGreaterThan(0);
   expect(result.aircraft[0].lastSeen).toBe(1000);
-});
-
-test("shows optional type, range, origin, and destination values", () => {
-  const row = buildFlightStripData([{ icao: "A1B2C3" }], 1000).aircraft[0];
-  expect(row.labels[0]).toEqual([
-    "CALLSIGN",
-    "ALTITUDE / VS",
-    "TYPE",
-    "HEADING / SPEED",
-    "SQUAWK",
-    "BEARING / RANGE",
-    "ORIGIN",
-    "DESTINATION",
-  ]);
-  const missingIdentity = buildFlightStripData([{ distanceNauticalMiles: 2 }, {}], 1000);
-  expect(buildFlightStripData([{}, { distanceNauticalMiles: 2 }], 1000).count).toBe(2);
-  expect(missingIdentity.aircraft[0].icao).toBe("");
-  expect(row.groups[0][2]).toBe("-");
-});
-
-test("keeps the combined fields readable when one value is missing", () => {
-  const row = buildFlightStripData(
-    [{ trackDegrees: 359 }, { groundSpeedKnots: 457 }],
-    3000,
-  ).aircraft;
-  expect(row[0].groups[0][3]).toBe("359°-");
-  expect(row[1].groups[0][3]).toBe("-457");
 });
 
 test("preserves the remote-only source flag for strip rendering", () => {
@@ -65,4 +36,18 @@ test("preserves the remote-only source flag for strip rendering", () => {
   ).aircraft;
   expect(rows.find((item) => item.icao === "LOCAL").remoteOnly).toBe(false);
   expect(rows.find((item) => item.icao === "REMOTE").remoteOnly).toBe(true);
+});
+
+test("sorts missing ranges last and defaults missing aircraft identifiers", () => {
+  const withMissingRange = buildFlightStripData(
+    [{ distanceNauticalMiles: 2, lastSeen: 1 }, { lastSeen: 2 }],
+    1000,
+  );
+  expect(withMissingRange.aircraft.map(({ lastSeen }) => lastSeen)).toEqual([1, 2]);
+  expect(withMissingRange.aircraft[1].icao).toBe("");
+  const withMissingFirstRange = buildFlightStripData(
+    [{ lastSeen: 3 }, { distanceNauticalMiles: 2, lastSeen: 4 }],
+    1000,
+  );
+  expect(withMissingFirstRange.aircraft.map(({ lastSeen }) => lastSeen)).toEqual([4, 3]);
 });

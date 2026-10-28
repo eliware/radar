@@ -1,4 +1,4 @@
-import { isAircraftProjectedNearHome } from "../aircraft/near-home-pass.mjs";
+import { isAircraftProjectedNearHome } from "../aircraft/near-home/pass.mjs";
 
 const AIRCRAFT_EXPIRY_MS = 120000;
 

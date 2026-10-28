@@ -1,7 +1,7 @@
 import { projectAircraftPosition } from "../aircraft/space-position.mjs";
 import { predictAircraftPosition } from "../predict-aircraft-position.mjs";
 import { formatAircraftTag } from "../aircraft/tag-data.mjs";
-import { isAircraftProjectedNearHome } from "../aircraft/near-home-pass.mjs";
+import { isAircraftProjectedNearHome } from "../aircraft/near-home/pass.mjs";
 import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
 
 export function projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project) {

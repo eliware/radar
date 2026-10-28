@@ -1,16 +1,8 @@
-import { projectAircraftPosition } from "./space-position.mjs";
-import { predictAircraftPosition } from "../predict-aircraft-position.mjs";
-
 const FEET_PER_NAUTICAL_MILE = 6076.12;
 const MAX_DISTANCE_NM = 1;
 const MAX_AGL_NM = 2000 / FEET_PER_NAUTICAL_MILE;
 
-export function isAircraftProjectedNearHome(aircraft, location, elevationFeet = 0) {
-  if (!Number.isFinite(aircraft?.altitudeFeet)) return false;
-  const start = projectAircraftPosition(aircraft, location, elevationFeet);
-  const end = start && predictAircraftPosition(start, aircraft);
-  if (!end) return false;
-
+export function isPredictedAircraftPathNearHome(start, end) {
   let minT = 0;
   let maxT = 1;
   if (start.y > MAX_AGL_NM && end.y > MAX_AGL_NM) return false;
