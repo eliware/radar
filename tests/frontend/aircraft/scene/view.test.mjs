@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftSceneView } from "../../../src/frontend/aircraft/scene-view.mjs";
+import { createAircraftSceneView } from "../../../../src/frontend/aircraft/scene/view.mjs";
 
 test("composes scene services into the public view API", () => {
   const items = [{ id: "airport" }];

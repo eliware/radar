@@ -19,6 +19,7 @@ test("reuses the camera projector when drawing repeatedly with the same camera",
       canvas: { clientWidth: 800 },
       globalAlpha: 1,
       clearRect: jest.fn(),
+      fillText: jest.fn(),
       measureText: () => ({ width: 20 }),
     },
     { get: (target, key) => target[key] ?? jest.fn() },
@@ -31,10 +32,12 @@ test("reuses the camera projector when drawing repeatedly with the same camera",
     context,
   });
   const camera = new THREE.PerspectiveCamera(48, 4 / 3, 0.05, 100);
+  camera.position.set(1, 2, -1);
   const args = [new Map(), new Map(), { latitude: 43, longitude: -70 }, 0, camera, 20];
 
   draw(...args);
   draw(...args);
 
   expect(context.clearRect).toHaveBeenCalledTimes(2);
+  expect(context.fillText).toHaveBeenCalledWith(expect.stringContaining("°"), 752, 30);
 });

@@ -1,5 +1,5 @@
 import { clipPolylineToViewport } from "./clip-polyline.mjs";
-import { intersectsViewport } from "./viewport.mjs";
+import { intersectsViewport } from "./intersection.mjs";
 
 const LAYERS = [
   ["airports", "updateAirports", 35, (item) => item.faaId],

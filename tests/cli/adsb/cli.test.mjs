@@ -155,7 +155,7 @@ test("does not render records without an aircraft address", () => {
   expect(deps.write).not.toHaveBeenCalled();
 });
 
-test("prints version and invalid option errors without opening the feed", () => {
+test("reports invalid option errors without opening the feed", () => {
   const invalid = dependencies();
   invalid.values.parseAdsbOptions.mockImplementation(() => {
     throw new Error("bad options");

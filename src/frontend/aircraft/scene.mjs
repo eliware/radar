@@ -15,7 +15,7 @@ import { createSceneWater } from "../create/scene-water.mjs";
 import { createAircraftRadarCamera } from "../create/aircraft/radar/camera.mjs";
 import { createRadarConnectionState } from "../create/radar/connection-state.mjs";
 import { createAircraftSceneWorkflow } from "../create/aircraft/scene-workflow.mjs";
-import { createAircraftSceneView } from "./scene-view.mjs";
+import { createAircraftSceneView } from "./scene/view.mjs";
 import { createOrbitRadarState } from "../create/orbit-radar-state.mjs";
 import { destroyAircraftSceneResources } from "../destroy/aircraft-scene-resources.mjs";
 import { createRadarViewport } from "../radar/viewport/radius.mjs";

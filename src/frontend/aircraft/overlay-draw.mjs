@@ -4,7 +4,7 @@ import { drawRadarScaleLegend } from "../draw/radar/scale-legend.mjs";
 import { drawRadarReferences } from "../draw/radar/references.mjs";
 import { projectAircraftDisplayItems } from "../project/aircraft-display-items.mjs";
 import { projectRadarReference } from "../project/radar-reference.mjs";
-import { drawCameraReadout } from "../draw/camera-readout.mjs";
+import { drawCameraReadout } from "./overlay/readout.mjs";
 import { resizeOverlayCanvas } from "./resize-overlay-canvas.mjs";
 import { createCameraProjector } from "../project/camera-position.mjs";
 
