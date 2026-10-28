@@ -1,3 +1,4 @@
+import { handleAircraftRecord } from "./record-handler.mjs";
 import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
 import { createAircraftList } from "../../shared/aircraft/list.mjs";
 import { parseAdsbLocation } from "../../shared/adsb-location.mjs";
@@ -28,12 +29,15 @@ export function createAircraftFeed({
     port,
     onError,
     onLine(line) {
-      const message = dependencies.parseSbsMessage(line);
-      if (!message?.icao) return;
-      let aircraft = aircraftList.update(message);
-      const range = dependencies.calculateAircraftRange(location, aircraft);
-      if (range) aircraft = aircraftList.update({ icao: message.icao, ...range });
-      for (const subscriber of subscribers) subscriber(aircraft);
+      handleAircraftRecord(line, {
+        parseSbsMessage: dependencies.parseSbsMessage,
+        aircraftList,
+        location,
+        calculateAircraftRange: dependencies.calculateAircraftRange,
+        onAircraft: (aircraft) => {
+          for (const subscriber of subscribers) subscriber(aircraft);
+        },
+      });
     },
   });
   return {

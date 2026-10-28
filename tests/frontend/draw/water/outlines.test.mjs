@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawWaterOutlines } from "../../../src/frontend/draw/water-outlines.mjs";
+import { drawWaterOutlines } from "../../../../src/frontend/draw/water/outlines.mjs";
 
 test("draws paths as faint gray strokes", () => {
   const context = Object.fromEntries(

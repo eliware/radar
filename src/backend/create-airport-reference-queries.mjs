@@ -1,4 +1,5 @@
 import { distanceNauticalMiles } from "../shared/distance-nautical-miles.mjs";
+import { groupRunwayEnds } from "./airport/runway-groups.mjs";
 import { AIRPORT_QUERY, NAVAID_QUERY, RUNWAY_QUERY } from "./sql-query-rules.mjs";
 
 export function createAirportReferenceQueries(database) {
@@ -46,23 +47,4 @@ function mapInRange(row, location, minRangeNm, maxRangeNm) {
     return null;
   }
   return { ...row, rangeNm };
-}
-
-function groupRunwayEnds(ends) {
-  const airports = new Map();
-  for (const end of ends) {
-    if (!Number.isFinite(end.latitude) || !Number.isFinite(end.longitude)) continue;
-    if (!Number.isFinite(end.alignmentDegrees)) continue;
-    const runways = airports.get(end.airportId) ?? new Map();
-    const group = runways.get(end.runwayId) ?? [];
-    group.push(end);
-    runways.set(end.runwayId, group);
-    airports.set(end.airportId, runways);
-  }
-  return new Map(
-    [...airports].map(([airportId, runways]) => [
-      airportId,
-      [...runways.values()].filter((group) => group.length === 2),
-    ]),
-  );
 }
