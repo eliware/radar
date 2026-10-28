@@ -2,7 +2,7 @@ import { expect, jest, test } from "@jest/globals";
 import {
   mapReferenceInRange,
   rowsWithinBounds,
-} from "../../../src/backend/reference/range-query.mjs";
+} from "../../../../src/backend/reference/range/query.mjs";
 
 test("queries a bounded range and clamps latitude and longitude", () => {
   const statement = { all: jest.fn(() => []) };

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { metarAgeStatusClass } from "../../../src/frontend/metar/age-status.mjs";
+import { metarAgeStatusClass } from "../../../../src/frontend/metar/age/status.mjs";
 
 const now = new Date("2026-10-13T18:00:00Z");
 

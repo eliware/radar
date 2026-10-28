@@ -1,5 +1,5 @@
 import { NAVAID_QUERY } from "../sql-query-rules.mjs";
-import { mapReferenceInRange, rowsWithinBounds } from "../reference/range-query.mjs";
+import { mapReferenceInRange, rowsWithinBounds } from "../reference/range/query.mjs";
 
 export function createNavaidQuery(database) {
   const statement = database.prepare(NAVAID_QUERY);

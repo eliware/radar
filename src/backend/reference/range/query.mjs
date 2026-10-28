@@ -1,4 +1,4 @@
-import { distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
+import { distanceNauticalMiles } from "../../../shared/distance-nautical-miles.mjs";
 
 export function rowsWithinBounds(statement, location, maxRangeNm) {
   const latitudeDelta = maxRangeNm / 60;

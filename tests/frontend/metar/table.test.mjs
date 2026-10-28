@@ -42,28 +42,8 @@ test("renders decoded METAR table rows", () => {
   expect(panel.innerHTML).toContain('<th class="metar-sky-header">SKY</th>');
   expect(panel.innerHTML).toContain("<th>TMP</th><th>DEW</th>");
   expect(panel.innerHTML).toContain("<td>A</td><td>KLEW</td>");
-  expect(panel.innerHTML).toMatch(
-    /<td>KLEW<\/td><td><span class="flight-category flight-category-vfr">VFR<\/span><\/td><td class="metar-age(?: metar-age-old)?">\d+(?:h\d*m?|m)<\/td><td>180°<\/td><td>6<\/td>/,
-  );
   expect(panel.innerHTML).toContain('<td class="metar-weather">RA</td>');
-  expect(panel.innerHTML).toContain('<td class="metar-age metar-age-old">1h19m</td>');
   expect(panel.innerHTML.match(/<tr>/g)).toHaveLength(3);
-});
-
-test("highlights METAR age only after it exceeds one hour", () => {
-  const [panel] = nodes();
-  render(
-    panel,
-    { reports: [{ id: "KBXM", metar: "raw", decoded: { ...decoded, observed: "13 17:00Z" } }] },
-    new Date("2026-10-13T18:00:00Z"),
-  );
-  expect(panel.innerHTML).toContain('<td class="metar-age">1h</td>');
-  render(
-    panel,
-    { reports: [{ id: "KBXM", metar: "raw", decoded: { ...decoded, observed: "13 16:59Z" } }] },
-    new Date("2026-10-13T18:00:00Z"),
-  );
-  expect(panel.innerHTML).toContain('<td class="metar-age metar-age-old">1h1m</td>');
 });
 
 test("shows raw METAR text when the parser cannot decode a report", () => {

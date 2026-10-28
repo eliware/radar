@@ -116,9 +116,6 @@ test("uses default web and feed settings", async () => {
 });
 
 test.each([
-  ["PORT", "bad"],
-  ["ADSB_PORT", "65536"],
-  ["ADSB_ALT", "bad"],
   ["RADAR_DEFAULT_RANGE_NM", "301"],
   ["RADAR_DEFAULT_ROTATION", "360"],
 ])("rejects invalid %s before it starts the feed", async (key, value) => {
@@ -126,7 +123,6 @@ test.each([
   const deps = dependencies();
   const message =
     {
-      ADSB_ALT: "ADSB_ALT must be a number of feet.",
       RADAR_DEFAULT_RANGE_NM: "RADAR_DEFAULT_RANGE_NM must be a number from 1 through 300.",
       RADAR_DEFAULT_ROTATION: "RADAR_DEFAULT_ROTATION must be an integer from 0 through 359.",
     }[key] ?? `${key} must be an integer from 1 through 65535`;

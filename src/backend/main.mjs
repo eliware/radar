@@ -1,11 +1,13 @@
 import { parseRadarViewSettings } from "../shared/radar-view-settings.mjs";
+import { parseElevation } from "./config/elevation.mjs";
+import { parsePort } from "./config/port.mjs";
 
 export async function startWebApplication(dependencies) {
   dependencies.loadEnvironment({ quiet: true });
-  const port = validPort(process.env.PORT ?? "3000", "PORT");
-  const feedPort = validPort(process.env.ADSB_PORT ?? "30003", "ADSB_PORT");
+  const port = parsePort(process.env.PORT ?? "3000", "PORT");
+  const feedPort = parsePort(process.env.ADSB_PORT ?? "30003", "ADSB_PORT");
   const location = dependencies.parseAdsbLocation(process.env.ADSB_LAT, process.env.ADSB_LON);
-  const elevationFeet = validElevation(process.env.ADSB_ALT ?? "300");
+  const elevationFeet = parseElevation(process.env.ADSB_ALT ?? "300");
   const radarViewSettings = parseRadarViewSettings(process.env);
   const airportDatabase = dependencies.createAirportDatabase(process.env.NASR_DATABASE_PATH);
   const metarLookup = dependencies.createMetarLookup(
@@ -52,18 +54,4 @@ export async function startWebApplication(dependencies) {
   await app.listen({ host: "0.0.0.0", port });
   log.info(`Web application listening at TCP endpoint ${port}`);
   return { app, feed: mergedFeed, shutdown };
-}
-
-function validPort(value, name) {
-  const port = Number(value);
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
-    throw new Error(`${name} must be an integer from 1 through 65535`);
-  }
-  return port;
-}
-
-function validElevation(value) {
-  const elevation = Number(value);
-  if (!Number.isFinite(elevation)) throw new Error("ADSB_ALT must be a number of feet.");
-  return elevation;
 }

@@ -1,4 +1,4 @@
-export function readScreenshotSelectionInput(args = [], environment = process.env) {
+export function readScreenshotSelectionOptions(args = [], environment = process.env) {
   return {
     viewportSelection: args.includes("--primary")
       ? "desktop-primary"

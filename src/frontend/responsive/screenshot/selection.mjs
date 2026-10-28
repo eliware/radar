@@ -1,9 +1,9 @@
 import { selectScreenshotViewports } from "./options.mjs";
 import { selectScreenshotModes } from "./modes.mjs";
-import { readScreenshotSelectionInput } from "./selection-settings.mjs";
+import { readScreenshotSelectionOptions } from "./selection/options.mjs";
 
 export function selectScreenshotOptions(args = [], environment = process.env) {
-  const { viewportSelection, modeSelection } = readScreenshotSelectionInput(args, environment);
+  const { viewportSelection, modeSelection } = readScreenshotSelectionOptions(args, environment);
   return {
     targets: selectScreenshotViewports(viewportSelection),
     modes: selectScreenshotModes(modeSelection),
