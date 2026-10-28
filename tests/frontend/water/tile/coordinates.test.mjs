@@ -2,7 +2,7 @@ import { expect, test } from "@jest/globals";
 import {
   selectWaterTiles,
   selectWaterZoom,
-} from "../../../src/frontend/water/tile-coordinates.mjs";
+} from "../../../../src/frontend/water/tile/coordinates.mjs";
 
 test("selects local tiles and zoom levels for the current range", () => {
   const tiles = selectWaterTiles({ latitude: 43.8, longitude: -70.3 }, 20, 8);

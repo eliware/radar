@@ -1,8 +1,8 @@
-import { layoutAircraftTags } from "../../layout-aircraft-tags.mjs";
 import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
 import { getRadarPalette } from "../../radar/palette.mjs";
 import { displayColor } from "./display-color.mjs";
 import { drawAircraftTrails } from "./trails.mjs";
+import { drawAircraftTags } from "./tags.mjs";
 
 export function drawAircraftDisplay(
   context,
@@ -25,14 +25,7 @@ export function drawAircraftDisplay(
     context.globalAlpha = previousAlpha * getAircraftAgeBrightness(item.receivedAt);
     drawTrack(context, item);
   }
-  context.font = `${fontSize}px Consolas, "Courier New", monospace`;
-  for (const tag of layoutAircraftTags(context, aircraft, fontSize, width, height)) {
-    const color = displayColor(tag.item, palette.bright, now);
-    context.fillStyle = color;
-    context.strokeStyle = color;
-    context.globalAlpha = previousAlpha * getAircraftAgeBrightness(tag.item.receivedAt);
-    drawTag(context, tag, fontSize);
-  }
+  drawAircraftTags(context, aircraft, fontSize, width, height, palette.bright, previousAlpha, now);
   context.globalAlpha = previousAlpha;
 }
 
@@ -51,21 +44,4 @@ function drawTrack(context, item) {
   context.lineTo(item.x - size, item.y);
   context.closePath();
   context.stroke();
-}
-
-function drawTag(context, tag, fontSize) {
-  const anchorX = Math.max(tag.x, Math.min(tag.item.x, tag.x + tag.width));
-  const anchorY = Math.max(tag.y, Math.min(tag.item.y, tag.y + tag.height));
-  const dx = anchorX - tag.item.x;
-  const dy = anchorY - tag.item.y;
-  const distance = Math.hypot(dx, dy);
-  const divisor = Math.max(distance, Number.EPSILON);
-  const gap = Math.min(9, distance);
-  context.beginPath();
-  context.moveTo(tag.item.x + (dx / divisor) * gap, tag.item.y + (dy / divisor) * gap);
-  context.lineTo(anchorX, anchorY);
-  context.stroke();
-  tag.item.lines.forEach((line, index) => {
-    context.fillText(line, tag.x + 7, tag.y + fontSize + index * fontSize * 1.15);
-  });
 }

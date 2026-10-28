@@ -5,6 +5,7 @@ import { registerIlsApproachRoutes } from "./ils/approach/routes.mjs";
 import { registerProcedureRoutes } from "./procedure/routes.mjs";
 import { registerAirwayRoutes } from "./airway/routes.mjs";
 import { registerMetarRoutes } from "./metar/routes.mjs";
+import { registerWebSocketRoutes } from "./websocket-routes.mjs";
 
 export function registerApiRoutes(
   app,
@@ -47,20 +48,5 @@ export function registerApiRoutes(
     feed.setRouteLookupsEnabled(enabled);
     return { enabled };
   });
-  app.get("/ws", { websocket: true }, (socket) => {
-    const unsubscribe = feed.subscribe((snapshot) => {
-      if (socket.readyState === 1) socket.send(JSON.stringify(snapshot));
-    }, socket);
-    socket.on("message", (message) => {
-      try {
-        const request = JSON.parse(message.toString());
-        if (request.type === "viewport") {
-          feed.setClientRadius?.(socket, request.radiusNm);
-          feed.setClientLocalOnly?.(socket, request.localOnly);
-        }
-      } catch {}
-    });
-    socket.on("close", unsubscribe);
-    socket.on("error", unsubscribe);
-  });
+  registerWebSocketRoutes(app, feed);
 }
