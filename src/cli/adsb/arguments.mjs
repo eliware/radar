@@ -1,5 +1,3 @@
-import { validateAdsbPort } from "./port.mjs";
-
 export function parseAdsbArguments(args) {
   const options = {};
   for (let index = 0; index < args.length; index += 1) {
@@ -30,7 +28,6 @@ export function parseAdsbArguments(args) {
       continue;
     }
     options.port = Number(value);
-    validateAdsbPort(options.port);
   }
   return options;
 }

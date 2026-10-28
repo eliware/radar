@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { connectWebSocketFeed } from "../../src/frontend/websocket-feed.mjs";
+import { connectWebSocketFeed } from "../../../src/frontend/websocket/connection.mjs";
 
 test("retries failed sockets with backoff and resets delay after open", async () => {
   const sockets = [];

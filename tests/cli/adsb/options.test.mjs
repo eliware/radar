@@ -78,6 +78,12 @@ test("rejects an invalid port from the environment", () => {
   );
 });
 
+test.each(["nope", "0", "65536", "1.5"])("rejects invalid command-line port %s", (port) => {
+  expect(() => parseAdsbOptions(["--port", port])).toThrow(
+    "TCP endpoint number must be an integer from 1 through 65535",
+  );
+});
+
 test("uses a validated command-line port without validating the overridden environment port", () => {
   process.env.ADSB_PORT = "bad";
   expect(parseAdsbOptions(["--port", "30004"]).port).toBe(30004);

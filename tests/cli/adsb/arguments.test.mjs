@@ -15,9 +15,3 @@ test.each([["--other"], ["--host"], ["--port"], ["--host", "--help"]])(
     expect(() => parseAdsbArguments(args)).toThrow();
   },
 );
-
-test.each(["nope", "0", "65536", "1.5"])("rejects invalid port %s", (port) => {
-  expect(() => parseAdsbArguments(["--port", port])).toThrow(
-    "TCP endpoint number must be an integer from 1 through 65535",
-  );
-});

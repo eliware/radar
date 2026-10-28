@@ -1,5 +1,5 @@
-import { createWebSocketRetry } from "./websocket/retry.mjs";
-import { createSocketConnection } from "./websocket/socket-connection.mjs";
+import { createWebSocketRetry } from "./retry.mjs";
+import { createSocketConnection } from "./socket-connection.mjs";
 
 export function connectWebSocketFeed({
   WebSocketClass,

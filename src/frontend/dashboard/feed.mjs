@@ -1,4 +1,4 @@
-import { connectWebSocketFeed } from "../websocket-feed.mjs";
+import { connectWebSocketFeed } from "../websocket/connection.mjs";
 import { dashboardWebSocketUrl } from "../dashboard-websocket-url.mjs";
 import { handleDashboardFeedUpdate } from "../handle-dashboard-feed-update.mjs";
 

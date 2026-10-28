@@ -22,6 +22,8 @@ test("requests reports at startup and schedules five-minute refreshes", async ()
   expect(timer.delay).toBe(300000);
   expect(timerHost.setInterval).toHaveBeenCalledTimes(1);
   expect(fetchData).toHaveBeenCalledWith("/api/metar");
+  expect(nodes.panel.innerHTML).toContain("KPWM");
+  expect(nodes.ticker.innerHTML).toContain("KPWM");
   refresh.destroy();
   expect(timerHost.clearInterval).toHaveBeenCalledWith(timer);
 });
@@ -87,11 +89,14 @@ test("ignores a failed request that finishes after METAR refresh is disabled", a
 });
 
 test("shows an empty state when the API returns an error", async () => {
+  const nodes = elements();
   const fetchData = jest.fn(async () => ({ ok: false }));
-  const refresh = startMetarRefresh({ fetchData, ...elements() });
+  const refresh = startMetarRefresh({ fetchData, ...nodes });
   await Promise.resolve();
   await Promise.resolve();
   expect(fetchData).toHaveBeenCalledWith("/api/metar");
+  expect(nodes.panel.textContent).toBe("No METAR reports available.");
+  expect(nodes.ticker.textContent).toBe("No METAR reports available.");
   refresh.destroy();
 });
 
