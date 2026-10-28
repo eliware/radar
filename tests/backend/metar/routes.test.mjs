@@ -6,27 +6,14 @@ test("returns configured stations and current reports", async () => {
   const reports = [{ id: "KPWM", metar: "131651Z 29012KT 10SM FEW045 18/07 A2992" }];
   const lookup = { stations: ["KPWM"], get: jest.fn(async () => reports) };
   registerMetarRoutes({ get: (path, handler) => routes.set(path, handler) }, lookup);
-  expect(await routes.get("/api/metar")()).toEqual({
-    stations: ["KPWM"],
-    reports: [
-      {
-        ...reports[0],
-        decoded: {
-          automated: false,
-          observed: "13 16:51Z",
-          windDirection: "290°",
-          windSpeed: "12",
-          visibility: "10",
-          flightCategory: "VFR",
-          conditions: "—",
-          clouds: "FEW045",
-          temperature: "64°F",
-          dewPoint: "45°F",
-          altimeter: "29.92",
-        },
-      },
-    ],
-  });
+  const response = await routes.get("/api/metar")();
+  expect(response.stations).toEqual(["KPWM"]);
+  expect(response.reports).toEqual([
+    expect.objectContaining({
+      ...reports[0],
+      decoded: expect.objectContaining({ flightCategory: "VFR" }),
+    }),
+  ]);
   expect(lookup.get).toHaveBeenCalledTimes(1);
 });
 

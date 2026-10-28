@@ -68,3 +68,9 @@ test("cleans up the temporary copy when replacing the destination fails", () => 
     force: true,
   });
 });
+
+test("uses default output and filesystem dependencies when input is missing", () => {
+  expect(() => importNasrDatabaseLifecycle("missing-nasr-input.sqlite")).toThrow(
+    "Input NASR database not found",
+  );
+});

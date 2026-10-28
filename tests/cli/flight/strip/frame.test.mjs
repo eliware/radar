@@ -3,9 +3,9 @@ import {
   aircraftDivider,
   flightStripFooter,
   flightStripHeader,
-  horizontalRule,
 } from "../../../../src/cli/flight/strip/frame.mjs";
 import { createFlightStripLayout } from "../../../../src/cli/flight/strip/layout.mjs";
+import { horizontalRule } from "../../../../src/cli/flight/strip/rule.mjs";
 
 test("aligns the title split with its double header border joint", () => {
   const layout = createFlightStripLayout(180);

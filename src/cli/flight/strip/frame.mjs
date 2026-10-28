@@ -1,8 +1,5 @@
 import { tableBorder, tableRow } from "./table.mjs";
-
-export function horizontalRule(width, left, right, line) {
-  return `${left}${line.repeat(width - 2)}${right}`;
-}
+import { horizontalRule } from "./rule.mjs";
 
 function titleSplitAfter(widths, tableWidth, countWidth) {
   const target = tableWidth - countWidth - 2;
