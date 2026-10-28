@@ -1,9 +1,7 @@
-import {
-  prepareScreenshotOutput,
-  screenshotOutputPath,
-  validateScreenshotFile,
-} from "./screenshot/output.mjs";
+import { prepareScreenshotOutput } from "./screenshot/output.mjs";
 import { createScreenshotBrowserSession } from "./screenshot/browser-session.mjs";
+import { checkScreenshotHealth } from "./screenshot/health.mjs";
+import { captureScreenshotTargets } from "./screenshot/capture.mjs";
 
 export async function captureResponsiveScreenshots({
   baseUrl,
@@ -17,20 +15,11 @@ export async function captureResponsiveScreenshots({
   delayMs,
   report,
 }) {
-  const health = await fetcher(new URL("/health", baseUrl));
-  if (!health.ok) throw new Error(`Radar health check failed with HTTP ${health.status}`);
+  await checkScreenshotHealth(baseUrl, fetcher);
   const folder = await prepareScreenshotOutput(outputDir, files);
   const session = await createScreenshotBrowserSession(browserLauncher, browserArgs);
   try {
-    for (const { name, viewport } of targets) {
-      await session.capturePage(name, baseUrl, viewport, delayMs, async (page) => {
-        for (const mode of modes) {
-          const path = screenshotOutputPath(folder, name, mode);
-          await page.screenshot({ path, fullPage: mode === "full-page" });
-          await validateScreenshotFile(files, path);
-        }
-      });
-    }
+    await captureScreenshotTargets(session, folder, baseUrl, targets, modes, delayMs, files);
   } finally {
     await session.close();
   }

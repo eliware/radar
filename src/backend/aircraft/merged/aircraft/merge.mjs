@@ -14,7 +14,3 @@ export function mergeAircraftRecord({ local, remote }, now, localFreshnessMs) {
   combined.remoteOnly = false;
   return combined;
 }
-
-export function compareAircraftDistance(left, right) {
-  return (left.distanceNauticalMiles ?? Infinity) - (right.distanceNauticalMiles ?? Infinity);
-}

@@ -1,7 +1,6 @@
 import { createMergedAircraftState } from "./aircraft/state.mjs";
 import { createMergedAircraftClients } from "./clients.mjs";
-
-const SNAPSHOT_INTERVAL_MS = 1000;
+import { createMergedAircraftSnapshotPublisher } from "./snapshot/publisher.mjs";
 
 export function createMergedAircraftFeed(
   localFeed,
@@ -10,7 +9,6 @@ export function createMergedAircraftFeed(
 ) {
   const clients = createMergedAircraftClients(defaultRangeNm);
   const state = createMergedAircraftState();
-  let snapshotTimer;
   let closed = false;
   function refresh() {
     state.replaceLocal(localFeed.list());
@@ -26,6 +24,11 @@ export function createMergedAircraftFeed(
     const localFurthestDistanceNm = state.localFurthestDistanceNm();
     clients.publish(aircraft, localFurthestDistanceNm);
   }
+  const snapshots = createMergedAircraftSnapshotPublisher(
+    publishSnapshots,
+    setIntervalFn,
+    clearIntervalFn,
+  );
 
   return {
     list() {
@@ -50,18 +53,14 @@ export function createMergedAircraftFeed(
       if (closed) return () => false;
       clients.add(key, send);
       remoteSource.connectClient(key);
-      if (snapshotTimer === undefined)
-        snapshotTimer = setIntervalFn(publishSnapshots, SNAPSHOT_INTERVAL_MS);
+      snapshots.start();
       let active = true;
       return () => {
         if (!active) return false;
         active = false;
         clients.remove(key);
         remoteSource.disconnectClient(key);
-        if (!clients.size && snapshotTimer !== undefined) {
-          clearIntervalFn(snapshotTimer);
-          snapshotTimer = undefined;
-        }
+        if (!clients.size) snapshots.stop();
         return true;
       };
     },
@@ -69,8 +68,7 @@ export function createMergedAircraftFeed(
       if (closed) return;
       closed = true;
       clients.clear();
-      if (snapshotTimer !== undefined) clearIntervalFn(snapshotTimer);
-      snapshotTimer = undefined;
+      snapshots.stop();
       unsubscribeLocal();
       unsubscribeRemote();
       remoteSource.close();

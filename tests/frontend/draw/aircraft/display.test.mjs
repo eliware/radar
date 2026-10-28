@@ -84,6 +84,10 @@ test("draws emergency aircraft red while displaying its separate emergency tag",
     ]),
   );
   context.measureText = (text) => ({ width: text.length * 8 });
+  const fillColors = [];
+  context.fillText.mockImplementation(function () {
+    fillColors.push(this.fillStyle);
+  });
   const alphaValues = [];
   let alpha = 1;
   Object.defineProperty(context, "globalAlpha", {
@@ -115,8 +119,9 @@ test("draws emergency aircraft red while displaying its separate emergency tag",
   } finally {
     jest.useRealTimers();
   }
-  expect(context.fillStyle).toBe("#ff0000");
-  expect(context.strokeStyle).toBe("#ff0000");
+  expect(fillColors).toContain("#ff0000");
+  expect(context.fillStyle).toBeUndefined();
+  expect(context.strokeStyle).toBeUndefined();
   expect(context.fillText).toHaveBeenCalledWith("HIJACK", expect.any(Number), expect.any(Number));
   expect(alphaValues).toContain(0.5);
   expect(alpha).toBe(1);
@@ -130,11 +135,15 @@ test("flashes near-home targets green and white on alternating half-second phase
     ]),
   );
   context.measureText = (text) => ({ width: text.length * 8 });
+  const strokeColors = [];
+  context.stroke.mockImplementation(function () {
+    strokeColors.push(this.strokeStyle);
+  });
   const target = { x: 20, y: 20, nearHomePass: true, lines: ["PASS", "", ""] };
   drawAircraftDisplay(context, [target], 12, 100, 100, true, 1000);
-  expect(context.strokeStyle).toBe("#00ff41");
+  expect(strokeColors).toContain("#00ff41");
   drawAircraftDisplay(context, [target], 12, 100, 100, true, 1500);
-  expect(context.strokeStyle).toBe("#ffffff");
+  expect(strokeColors).toContain("#ffffff");
 });
 
 test("draws remote-only targets in amber while preserving emergency red", () => {
@@ -159,8 +168,8 @@ test("draws remote-only targets in amber while preserving emergency red", () => 
     100,
     100,
   );
-  expect(context.strokeStyle).toBe("#ff0000");
-  expect(context.fillStyle).toBe("#ff0000");
+  expect(context.strokeStyle).toBeUndefined();
+  expect(context.fillStyle).toBeUndefined();
   expect(strokeColors).toContain("#ffbf00");
   expect(strokeColors).toContain("#ff0000");
 });

@@ -25,3 +25,28 @@ test("forwards a valid range to the airport query", async () => {
   );
   expect(database.findBetween).toHaveBeenCalledWith({ latitude: 43, longitude: -70 }, 10, 20);
 });
+
+test("reports unavailable data or home configuration", async () => {
+  function reply() {
+    return {
+      code: jest.fn(function (status) {
+        this.status = status;
+        return this;
+      }),
+      send: jest.fn(function (body) {
+        this.body = body;
+        return this;
+      }),
+    };
+  }
+
+  const unavailable = reply();
+  await route(null)({ query: { maxRangeNm: "20" } }, unavailable);
+  expect(unavailable.status).toBe(503);
+  expect(unavailable.send).toHaveBeenCalledWith({ error: "NASR database is not available." });
+
+  const noHome = reply();
+  await route({ findBetween: jest.fn() }, null)({ query: { maxRangeNm: "20" } }, noHome);
+  expect(noHome.status).toBe(503);
+  expect(noHome.send).toHaveBeenCalledWith({ error: "Home location is not configured." });
+});

@@ -1,3 +1,5 @@
+import { parseAdsbLolResponse } from "./response.mjs";
+
 const API_ROOT = "https://re-api.adsb.lol/";
 const USER_AGENT = "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)";
 
@@ -14,6 +16,5 @@ export async function requestAdsbLolCircle(
     headers,
   });
   if (!response.ok) throw new Error(`ADSB.lol re-api returned HTTP ${response.status}.`);
-  const body = await response.json();
-  return Array.isArray(body?.aircraft) ? body.aircraft : [];
+  return parseAdsbLolResponse(response);
 }

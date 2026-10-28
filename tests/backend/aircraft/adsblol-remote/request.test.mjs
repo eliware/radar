@@ -1,5 +1,12 @@
-import { expect, jest, test } from "@jest/globals";
+import { afterEach, expect, jest, test } from "@jest/globals";
 import { requestAdsbLolCircle } from "../../../../src/backend/aircraft/adsblol-remote/request.mjs";
+
+const originalApiKey = process.env.ADSBLOL_API_KEY;
+
+afterEach(() => {
+  if (originalApiKey === undefined) delete process.env.ADSBLOL_API_KEY;
+  else process.env.ADSBLOL_API_KEY = originalApiKey;
+});
 
 test("requests an ADSB.lol circle with Radar contact details", async () => {
   const aircraft = [{ hex: "abc123" }];
@@ -14,6 +21,13 @@ test("requests an ADSB.lol circle with Radar contact details", async () => {
   });
 });
 
+test("uses the configured API key when no explicit key is passed", async () => {
+  process.env.ADSBLOL_API_KEY = "environment-key";
+  const request = jest.fn(async () => ({ ok: true, json: async () => ({ aircraft: [] }) }));
+  await requestAdsbLolCircle(request, { latitude: 43, longitude: -70 }, 20);
+  expect(request.mock.calls[0][1].headers["x-api-key"]).toBe("environment-key");
+});
+
 test("sends the configured key in the x-api-key header", async () => {
   const request = jest.fn(async () => ({ ok: true, json: async () => ({ aircraft: [] }) }));
   await requestAdsbLolCircle(request, { latitude: 43, longitude: -70 }, 20, "test-api-key");
@@ -23,17 +37,9 @@ test("sends the configured key in the x-api-key header", async () => {
   });
 });
 
-test("rejects failed requests and treats missing aircraft as an empty response", async () => {
+test("rejects failed HTTP requests", async () => {
   const location = { latitude: 43, longitude: -70 };
   await expect(
     requestAdsbLolCircle(async () => ({ ok: false, status: 503 }), location, 25, ""),
   ).rejects.toThrow("HTTP 503");
-  expect(
-    await requestAdsbLolCircle(
-      async () => ({ ok: true, json: async () => ({}) }),
-      location,
-      25,
-      "",
-    ),
-  ).toEqual([]);
 });

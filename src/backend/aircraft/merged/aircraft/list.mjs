@@ -1,4 +1,5 @@
-import { compareAircraftDistance, mergeAircraftRecord } from "./merge.mjs";
+import { mergeAircraftRecord } from "./merge.mjs";
+import { compareAircraftDistance } from "./order.mjs";
 
 const LOCAL_FRESHNESS_MS = 8000;
 

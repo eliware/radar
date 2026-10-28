@@ -1,4 +1,4 @@
-import { filterAircraftSnapshot } from "./snapshot-filter.mjs";
+import { filterAircraftSnapshot } from "./snapshot/filter.mjs";
 
 const MAX_VIEW_RADIUS_NM = 300;
 

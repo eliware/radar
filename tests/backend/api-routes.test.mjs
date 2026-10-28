@@ -67,44 +67,6 @@ test("uses the default home elevation without config", async () => {
   });
 });
 
-test("reports unavailable airport data and missing home configuration", async () => {
-  function register(airportDatabase, location) {
-    const routes = new Map();
-    registerApiRoutes(
-      {
-        get: (path, handler) => routes.set(path, handler),
-        post: (path, handler) => routes.set(path, handler),
-      },
-      { list: () => [] },
-      { airportDatabase, location },
-    );
-    return routes.get("/api/airports");
-  }
-  function reply() {
-    const value = {
-      code: jest.fn(function (status) {
-        this.status = status;
-        return this;
-      }),
-      send: jest.fn(function (body) {
-        this.body = body;
-        return this;
-      }),
-    };
-    return value;
-  }
-
-  const unavailable = reply();
-  await register(null, null)({ query: { maxRangeNm: "20" } }, unavailable);
-  expect(unavailable.status).toBe(503);
-  expect(unavailable.body).toEqual({ error: "NASR database is not available." });
-
-  const noHome = reply();
-  await register({ findBetween: jest.fn() }, null)({ query: { maxRangeNm: "20" } }, noHome);
-  expect(noHome.status).toBe(503);
-  expect(noHome.body).toEqual({ error: "Home location is not configured." });
-});
-
 test("registers the METAR route when its lookup is configured", () => {
   const routes = new Map();
   const metarLookup = { stations: ["KPWM"], get: jest.fn() };

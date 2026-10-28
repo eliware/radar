@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { filterAircraftSnapshot } from "../../../../src/backend/aircraft/merged/snapshot-filter.mjs";
+import { filterAircraftSnapshot } from "../../../../../src/backend/aircraft/merged/snapshot/filter.mjs";
 
 const aircraft = [
   { icao: "LOCAL", distanceNauticalMiles: 4, remoteOnly: false },
