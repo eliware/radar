@@ -1,4 +1,3 @@
-import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
 import { formatAircraftName } from "./name.mjs";
 import { formatAircraftSpeed } from "./speed.mjs";
 
@@ -15,8 +14,7 @@ export function formatAircraftTag(aircraft) {
     altitudeLine,
     typeCode ? `${speed} ${typeCode}` : speed,
   ];
-  const emergency = getAircraftEmergencyLabel(aircraft);
-  return emergency ? [...lines, emergency] : lines;
+  return lines;
 }
 
 function formatAltitude(altitude, rate) {

@@ -78,7 +78,7 @@ test("fades aircraft markers and labels as their receive age increases", () => {
   expect(alpha).toBe(1);
 });
 
-test("draws emergency aircraft red while fading the marker and four-line tag", () => {
+test("draws emergency aircraft red while displaying its separate emergency tag", () => {
   const context = Object.fromEntries(
     ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fillText"].map((name) => [
       name,
@@ -106,7 +106,8 @@ test("draws emergency aircraft red while fading the marker and four-line tag", (
           y: 20,
           receivedAt: now - 60_000,
           squawk: "7500",
-          lines: ["HIJACKER", "123", "200 B738", "HIJACK"],
+          lines: ["HIJACKER", "123", "200 B738"],
+          emergencyTag: "HIJACK",
         },
       ],
       12,

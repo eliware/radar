@@ -13,12 +13,14 @@ export function projectAircraftDisplayItems(aircraft, trails, location, elevatio
     if (!Number.isFinite(marker?.x) || !Number.isFinite(marker?.y)) continue;
     const future = predictAircraftPosition(position, item);
     const futureMarker = future ? project(future) : null;
+    const emergencyTag = getAircraftEmergencyLabel(item);
     display.push({
       ...marker,
       receivedAt: item.receivedAt,
       remoteOnly: item.remoteOnly === true,
       nearHomePass: isAircraftProjectedNearHome(item, location, elevationFeet),
-      emergency: Boolean(getAircraftEmergencyLabel(item)),
+      emergencyTag,
+      emergency: Boolean(emergencyTag),
       futureX: Number.isFinite(futureMarker?.x) ? futureMarker.x : null,
       futureY: Number.isFinite(futureMarker?.y) ? futureMarker.y : null,
       lines: formatAircraftTag(item),

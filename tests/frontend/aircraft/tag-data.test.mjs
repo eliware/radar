@@ -28,7 +28,7 @@ test("formats flight level and speed without units", () => {
   ).toEqual(["-", "-", "-"]);
 });
 
-test("adds emergency status as a fourth radar tag line", () => {
-  expect(formatAircraftTag({ squawk: "7500" }).slice(1)).toEqual(["-", "-", "HIJACK"]);
-  expect(formatAircraftTag({ emergency: 1 }).slice(1)).toEqual(["-", "-", "EMERG"]);
+test("keeps emergency status out of the three aircraft label lines", () => {
+  expect(formatAircraftTag({ callsign: "TEST", squawk: "7500" })).toEqual(["TEST", "-", "-"]);
+  expect(formatAircraftTag({ callsign: "TEST", emergency: 1 })).toEqual(["TEST", "-", "-"]);
 });

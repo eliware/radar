@@ -2,7 +2,7 @@ import { expect, test } from "@jest/globals";
 const { default: config } = await import("../../src/frontend/webpack-config.mjs");
 const { default: rootConfig } = await import("../../webpack.config.mjs");
 
-test("builds the browser bundle and async chunks under dist", () => {
+test("defines the production client and async chunk configuration", () => {
   expect(rootConfig).toEqual(config);
   expect(config).toMatchObject({
     mode: "production",

@@ -5,7 +5,11 @@ export function layoutAircraftTags(context, aircraft, fontSize, viewportWidth, v
   const placed = [];
   for (const item of sorted) {
     const height = lineHeight * item.lines.length + 8;
-    const width = Math.max(...item.lines.map((line) => context.measureText(line).width)) + 14;
+    const lineWidths = item.lines.map((line) => context.measureText(line).width);
+    const emergencyWidth = item.emergencyTag
+      ? context.measureText(item.emergencyTag).width + fontSize
+      : 0;
+    const width = Math.max(...lineWidths) + emergencyWidth + 14;
     const candidates = tagCandidates(item, width, height);
     const rect = candidates.reduce(
       (best, candidate) => {

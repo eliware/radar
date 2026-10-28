@@ -1,6 +1,7 @@
 import { layoutAircraftTags } from "../../layout-aircraft-tags.mjs";
 import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
 import { displayColor } from "./display-color.mjs";
+import { drawAircraftEmergencyTag } from "./emergency-tag.mjs";
 
 export function drawAircraftTags(
   context,
@@ -19,6 +20,7 @@ export function drawAircraftTags(
     context.strokeStyle = color;
     context.globalAlpha = previousAlpha * getAircraftAgeBrightness(tag.item.receivedAt);
     drawTag(context, tag, fontSize);
+    drawAircraftEmergencyTag(context, tag, fontSize);
   }
 }
 
