@@ -1,4 +1,5 @@
-import { isAllowedAppIcon, isAllowedPwaScreenshot } from "./static/asset/policy.mjs";
+import { isAllowedAppIcon } from "./static/asset/policy.mjs";
+import { isAllowedPwaScreenshot } from "./static/asset/pwa-screenshot-policy.mjs";
 import { sendStaticAsset } from "./static/asset/response.mjs";
 
 export function registerStaticRoutes(app, { publicRoot, buildRoot, read }) {

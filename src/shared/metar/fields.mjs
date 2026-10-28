@@ -4,7 +4,8 @@ import { conditionText } from "./fields/conditions.mjs";
 import { fahrenheitText } from "./fields/temperature.mjs";
 import { timeText } from "./fields/time.mjs";
 import { visibilityText } from "./fields/visibility.mjs";
-import { windDirectionText, windSpeedText } from "./fields/wind.mjs";
+import { windDirectionText } from "./fields/wind.mjs";
+import { windSpeedText } from "./fields/wind-speed.mjs";
 
 export function decodedFields(data) {
   return {

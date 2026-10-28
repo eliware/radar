@@ -1,5 +1,5 @@
 import { createCliBootstrap } from "../bootstrap.mjs";
-import { prepareAdsbEnvironment } from "./environment.mjs";
+import { prepareAdsbEnvironment } from "./prepare-environment.mjs";
 import { startAdsbCli } from "./cli.mjs";
 
 export function launchAdsbCli({

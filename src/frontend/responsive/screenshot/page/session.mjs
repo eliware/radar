@@ -1,5 +1,6 @@
 import { prepareScreenshotPage } from "./setup.mjs";
-import { waitForScreenshotPageReadiness, waitForScreenshotReadiness } from "./readiness.mjs";
+import { waitForScreenshotPageReadiness } from "./readiness.mjs";
+import { waitForScreenshotReadiness } from "./wait.mjs";
 
 export function createScreenshotPageSession(browser) {
   async function capturePage(baseUrl, viewport, delayMs, onPageError, capture) {

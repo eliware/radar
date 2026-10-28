@@ -1,4 +1,4 @@
-import { latitudeToWaterTile } from "./latitude.mjs";
+import { latitudeToWaterTile } from "./latitude-to-tile.mjs";
 import { longitudeToWaterTile } from "./longitude.mjs";
 
 export function projectWaterTileRange(minLongitude, maxLongitude, minLatitude, maxLatitude, zoom) {

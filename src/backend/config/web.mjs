@@ -1,4 +1,4 @@
-import { parseRadarViewSettings } from "../../shared/radar-view-settings.mjs";
+import { parseRadarViewSettings } from "../../shared/parse-radar-view-settings.mjs";
 import { parseElevation } from "./elevation.mjs";
 import { parsePort } from "./port.mjs";
 

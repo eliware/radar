@@ -1,6 +1,7 @@
 const APPROACH_LENGTH_NM = 10;
 const FEET_PER_NM = 6076.12;
 import { runwayDestination } from "./runway-destination.mjs";
+import { safeIlsElevation } from "./safe-ils-elevation.mjs";
 
 export function buildIlsCourseGeometry(approach) {
   if (!Number.isFinite(approach.magneticCourse)) return null;
@@ -18,8 +19,4 @@ export function buildIlsCourseGeometry(approach) {
       elevationFeet: elevationFeet + rise,
     },
   };
-}
-
-export function safeIlsElevation(point) {
-  return Number.isFinite(point.elevationFeet) ? point.elevationFeet : 0;
 }

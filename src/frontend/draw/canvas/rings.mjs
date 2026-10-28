@@ -1,9 +1,7 @@
-import {
-  getRadarLabelGapAngle,
-  getRadarRingRanges,
-  getRadarRingSpacing,
-  RADAR_RING_LABEL_ANGLE,
-} from "../../radar/range.mjs";
+import { RADAR_RING_LABEL_ANGLE } from "../../radar/range.mjs";
+import { getRadarLabelGapAngle } from "../../radar/label-gap-angle.mjs";
+import { getRadarRingRanges } from "../../radar/ring/ranges.mjs";
+import { getRadarRingSpacing } from "../../radar/ring/spacing.mjs";
 
 export function drawCanvasRings(context, x, y, radius, range, palette, rotation = 0) {
   const majorStep = getRadarRingSpacing(range);

@@ -1,7 +1,7 @@
 import { drawAircraftDisplay } from "../draw/aircraft/display.mjs";
 import { RADAR_SCOPE_RADIUS_RATIO } from "../radar/range.mjs";
 import { drawRadarScale } from "../draw/radar/scale.mjs";
-import { drawRadarScaleLegend } from "../draw/radar/legend/table.mjs";
+import { drawRadarScaleLegend } from "../draw/radar/legend/draw-scale-legend.mjs";
 import { drawRadarReferences } from "../draw/radar/references.mjs";
 import { projectAircraftDisplayItems } from "../project/aircraft-display-items.mjs";
 import { drawCameraReadout } from "./overlay/readout.mjs";

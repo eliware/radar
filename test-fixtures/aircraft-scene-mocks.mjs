@@ -122,7 +122,9 @@ export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/fr
   }));
   jest.unstable_mockModule(`${sourcePrefix}/radar/range.mjs`, () => ({
     DEFAULT_RADAR_RANGE: 20,
+    MIN_RADAR_RANGE: 1,
     MAX_RADAR_RANGE: 300,
+    RADAR_RANGE_MARGIN: 5,
     RADAR_SCOPE_RADIUS_RATIO: 0.44,
     clampRadarRange: (range) => range,
     selectDefaultRadarRange,

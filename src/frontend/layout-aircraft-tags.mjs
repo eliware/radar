@@ -1,4 +1,5 @@
-import { placementCost, tagCandidates } from "./aircraft/tag/layout.mjs";
+import { tagCandidates } from "./aircraft/tag/layout.mjs";
+import { placementCost } from "./aircraft/tag/placement-cost.mjs";
 
 export function layoutAircraftTags(context, aircraft, fontSize, viewportWidth, viewportHeight) {
   const lineHeight = fontSize * 1.15;

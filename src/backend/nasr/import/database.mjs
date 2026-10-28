@@ -1,5 +1,5 @@
 import { createNasrImportFiles } from "./files.mjs";
-import { selectNasrImportPaths } from "./paths.mjs";
+import { selectNasrImportPaths } from "./select-paths.mjs";
 import { validateNasrSource } from "./source/validation.mjs";
 import { prepareNasrImportInstallation } from "./prepare/install.mjs";
 import { selectNasrDatabase } from "./sqlite.mjs";

@@ -1,6 +1,9 @@
-import * as radarRange from "../range.mjs";
+import { RADAR_RING_LABEL_ANGLE } from "../range.mjs";
+import { getRadarLabelGapAngle } from "../label-gap-angle.mjs";
+import { getRadarRingRanges } from "../ring/ranges.mjs";
+import { getRadarRingSpacing } from "../ring/spacing.mjs";
 import { createRadarLabel } from "../label.mjs";
-import { getRadarRingColor } from "../palette.mjs";
+import { getRadarRingColor } from "../ring/color.mjs";
 
 export function createRadarRings(THREE, scene, documentRef) {
   const rings = new Map();
@@ -11,8 +14,8 @@ export function createRadarRings(THREE, scene, documentRef) {
   for (let range = 15; range <= 300; range += 5) addRing(range);
 
   function updateRange(range) {
-    const visible = new Set(radarRange.getRadarRingRanges(range));
-    const majorStep = radarRange.getRadarRingSpacing(range);
+    const visible = new Set(getRadarRingRanges(range));
+    const majorStep = getRadarRingSpacing(range);
     for (const [distance, ring] of rings) {
       ring.visible = visible.has(distance);
       const major = distance % majorStep === 0;
@@ -23,14 +26,14 @@ export function createRadarRings(THREE, scene, documentRef) {
       const labelVisible = major || (range < 10 && distance === Math.floor(range));
       const labelWidth = 6.4 * (range / 20) * (labels.get(distance)?.userData.textWidthRatio ?? 0);
       const gap = labelVisible
-        ? radarRange.getRadarLabelGapAngle(distance, labelWidth, 0.12 * (range / 20))
+        ? getRadarLabelGapAngle(distance, labelWidth, 0.12 * (range / 20))
         : 0;
       const arc = 2 * Math.PI - gap;
       ring.rotation.x = 0;
       if (ring.userData.tube !== tube || ring.userData.arc !== arc) {
         ring.geometry.dispose?.();
         ring.geometry = new THREE.TorusGeometry(distance, tube, 6, 192, arc);
-        if (labelVisible) ring.geometry.rotateZ(radarRange.RADAR_RING_LABEL_ANGLE + gap / 2);
+        if (labelVisible) ring.geometry.rotateZ(RADAR_RING_LABEL_ANGLE + gap / 2);
         ring.geometry.rotateX(Math.PI / 2);
         ring.userData.tube = tube;
         ring.userData.arc = arc;
@@ -59,7 +62,7 @@ export function createRadarRings(THREE, scene, documentRef) {
   return { updateRange, setConnected };
 
   function addRing(range) {
-    const major = range % radarRange.getRadarRingSpacing(20) === 0;
+    const major = range % getRadarRingSpacing(20) === 0;
     const baseTube = major ? 0.055 : 0.025;
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(range, baseTube, 6, 192),

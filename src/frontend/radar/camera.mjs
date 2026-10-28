@@ -1,9 +1,5 @@
-import {
-  DEFAULT_RADAR_RANGE,
-  MAX_RADAR_RANGE,
-  MIN_RADAR_RANGE,
-  clampRadarRange,
-} from "./range.mjs";
+import { DEFAULT_RADAR_RANGE, MAX_RADAR_RANGE, MIN_RADAR_RANGE } from "./range.mjs";
+import { clampRadarRange } from "./clamp-range.mjs";
 import { cameraDistanceToRange } from "./distance-to-range.mjs";
 import { rangeToCameraDistance } from "./range-to-distance.mjs";
 import { configureMobileRadarControls } from "../mobile-radar-gestures.mjs";

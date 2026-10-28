@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarLabel, removeRadarLabel } from "../../../src/frontend/radar/label.mjs";
+import { createRadarLabel } from "../../../src/frontend/radar/label.mjs";
 
 function makeThree() {
   class Sprite {
@@ -32,15 +32,11 @@ test("creates a canvas sprite label and releases its resources", () => {
   const documentRef = { createElement: jest.fn(() => ({ getContext: () => context })) };
   const THREE = makeThree();
   const label = createRadarLabel(THREE, "N123AB", documentRef);
-  const scene = { remove: jest.fn() };
   expect(context.font).toBe('48px Consolas, "Courier New", monospace');
   expect(label.scale.set).toHaveBeenCalledWith(6.4, 1, 1);
   expect(context.fillText).toHaveBeenCalledWith("N123AB", 4, 40);
-  removeRadarLabel(scene, label);
-  expect(scene.remove).toHaveBeenCalledWith(label);
-  expect(label.material.map.dispose).toHaveBeenCalled();
-  expect(label.material.dispose).toHaveBeenCalled();
-  removeRadarLabel(scene, null);
+  label.userData.setColor("#ffffff");
+  expect(context.fillStyle).toBe("#ffffff");
 });
 
 test("returns no label when browser canvas or Three.js sprite support is absent", () => {

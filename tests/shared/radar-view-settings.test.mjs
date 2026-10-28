@@ -3,8 +3,8 @@ import {
   DEFAULT_RADAR_RANGE_NM,
   DEFAULT_RADAR_ROTATION_DEGREES,
   parseRadarRangeSetting,
-  parseRadarViewSettings,
 } from "../../src/shared/radar-view-settings.mjs";
+import { parseRadarViewSettings } from "../../src/shared/parse-radar-view-settings.mjs";
 
 test("uses default radar view settings when values are absent", () => {
   expect(parseRadarViewSettings({})).toEqual({

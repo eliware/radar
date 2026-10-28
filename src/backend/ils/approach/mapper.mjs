@@ -1,5 +1,5 @@
 import { distanceNauticalMiles } from "../../../shared/distance-nautical-miles.mjs";
-import { ilsSystemKey } from "../marker-groups.mjs";
+import { ilsSystemKey } from "../system-key.mjs";
 
 export function mapIlsApproachRows(rows, location, minRangeNm, maxRangeNm, markersBySystem) {
   return rows.flatMap((row) => {

@@ -1,4 +1,4 @@
-import { selectDefaultRadarRange } from "../../../radar/range.mjs";
+import { selectDefaultRadarRange } from "../../../radar/default-range.mjs";
 import { watchRadarTargets } from "../../../watch-radar-targets.mjs";
 import { createRadarRenderLoop } from "../../../radar/render-loop.mjs";
 

@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { placementCost, tagCandidates } from "../../../../src/frontend/aircraft/tag/layout.mjs";
+import { tagCandidates } from "../../../../src/frontend/aircraft/tag/layout.mjs";
+import { placementCost } from "../../../../src/frontend/aircraft/tag/placement-cost.mjs";
 
 test("generates candidate positions around an aircraft marker", () => {
   expect(tagCandidates({ x: 50, y: 60 }, 20, 10)).toEqual([

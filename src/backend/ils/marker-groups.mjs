@@ -1,4 +1,5 @@
 import { distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
+import { ilsSystemKey } from "./system-key.mjs";
 
 export function createIlsMarkerIndex(rows, location) {
   const groups = new Map();
@@ -10,8 +11,4 @@ export function createIlsMarkerIndex(rows, location) {
     groups.set(key, markers);
   }
   return groups;
-}
-
-export function ilsSystemKey(record) {
-  return `${record.faaId}:${record.runwayEnd}:${record.identifier}:${record.systemType}`;
 }

@@ -1,7 +1,8 @@
 import { attachAirportRunways } from "./runway/attach.mjs";
 import { RUNWAY_QUERY } from "./runway/query.mjs";
 import { AIRPORT_QUERY } from "../sql-query-rules.mjs";
-import { mapReferenceInRange, rowsWithinBounds } from "../reference/range/query.mjs";
+import { mapReferenceInRange } from "../reference/range/query.mjs";
+import { rowsWithinBounds } from "../reference/range/rows.mjs";
 
 export function createAirportReferenceQuery(database) {
   const airportStatement = database.prepare(AIRPORT_QUERY);

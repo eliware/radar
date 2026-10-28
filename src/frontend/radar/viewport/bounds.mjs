@@ -1,21 +1,10 @@
 import { MAX_RADAR_RANGE } from "../range.mjs";
-import { FEET_PER_NM, getFrustumPlaneIntersections } from "./intersections.mjs";
+import { getFrustumPlaneIntersections } from "./intersections.mjs";
 
 export function getRadarViewportBounds(THREE, camera, width, height, groundY = 0) {
   if (!camera || width <= 0 || height <= 0) return emptyBounds();
   const points = getFrustumPlaneIntersections(THREE, camera, groundY);
   return points.length ? boundsFor(points) : emptyBounds();
-}
-
-export function createRadarViewportBounds(THREE, camera, container, elevationFeet) {
-  return () =>
-    getRadarViewportBounds(
-      THREE,
-      camera,
-      container.clientWidth,
-      container.clientHeight,
-      -elevationFeet / FEET_PER_NM,
-    );
 }
 
 function boundsFor(points) {

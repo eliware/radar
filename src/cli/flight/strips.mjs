@@ -1,5 +1,5 @@
 import { createFlightStripLayout } from "./strip/layout-selection.mjs";
-import { wideTableWidth } from "./strip/sizing.mjs";
+import { wideTableWidth } from "./strip/table/width.mjs";
 import { aircraftRowsOf } from "./strip/rows.mjs";
 import { renderFlightStripFrame } from "./strip/render.mjs";
 

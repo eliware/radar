@@ -1,5 +1,5 @@
 import { formatAircraftStripFields } from "./fields.mjs";
-import { formatAircraftStripCallsign } from "../../../shared/aircraft/strip-fields.mjs";
+import { formatAircraftStripCallsign } from "../../../shared/aircraft/strip/fields.mjs";
 
 export function valuesOf(aircraft) {
   const fields = formatAircraftStripFields(aircraft);

@@ -1,4 +1,5 @@
-import { readToggleState, writeToggleState } from "../toggle-state-storage.mjs";
+import { readToggleState } from "../toggle-state-storage.mjs";
+import { writeToggleState } from "../write-toggle-state.mjs";
 
 export function createAircraftVisibility(documentRef, onChange = () => {}) {
   let remoteVisible = readToggleState("remote-aircraft");

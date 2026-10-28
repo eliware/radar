@@ -1,9 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { drawCanvasRings } from "../../../../src/frontend/draw/canvas/rings.mjs";
-import {
-  getRadarLabelGapAngle,
-  RADAR_RING_LABEL_ANGLE,
-} from "../../../../src/frontend/radar/range.mjs";
+import { getRadarLabelGapAngle } from "../../../../src/frontend/radar/label-gap-angle.mjs";
+import { RADAR_RING_LABEL_ANGLE } from "../../../../src/frontend/radar/range.mjs";
 
 test("draws range rings and the north-east axes", () => {
   const context = {

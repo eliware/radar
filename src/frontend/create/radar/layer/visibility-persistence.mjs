@@ -1,4 +1,4 @@
-import { readToggleState, writeToggleState } from "../../../toggle-state-storage.mjs";
+import { readToggleState } from "../../../toggle-state-storage.mjs";
 
 const LAYER_KEYS = [
   "ils",
@@ -16,8 +16,4 @@ const LAYER_KEYS = [
 
 export function readSavedLayerVisibility() {
   return Object.fromEntries(LAYER_KEYS.map((key) => [key, readToggleState(key)]));
-}
-
-export function persistLayerVisibility(key, visible) {
-  writeToggleState(key, visible);
 }

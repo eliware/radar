@@ -1,8 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  normalizeNasrIndexSql,
-  parseNasrIndexDefinition,
-} from "../../../../src/backend/nasr/index/definition.mjs";
+import { parseNasrIndexDefinition } from "../../../../src/backend/nasr/index/definition.mjs";
 
 test("parses index names and normalizes SQL definitions", () => {
   expect(
@@ -11,8 +8,4 @@ test("parses index names and normalizes SQL definitions", () => {
     name: "radar_sample",
     definition: "CREATE INDEX RADAR_SAMPLE ON AIRPORTS (ICAO)",
   });
-  expect(normalizeNasrIndexSql(" create   index radar_sample\n on airports (icao) ")).toBe(
-    "CREATE INDEX RADAR_SAMPLE ON AIRPORTS (ICAO)",
-  );
-  expect(normalizeNasrIndexSql(undefined)).toBeUndefined();
 });

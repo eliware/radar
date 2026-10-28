@@ -1,4 +1,4 @@
-import { clampRadarRange } from "../../../radar/range.mjs";
+import { clampRadarRange } from "../../../radar/clamp-range.mjs";
 
 export function createCanvasRadarGestures(state, draw) {
   return {

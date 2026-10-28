@@ -1,6 +1,7 @@
 import { attachFlightStripsToggle } from "../flight-strips-toggle.mjs";
 import { attachMetarDisplayToggle } from "../metar-display-toggle.mjs";
-import { readToggleState, writeToggleState } from "../../toggle-state-storage.mjs";
+import { readToggleState } from "../../toggle-state-storage.mjs";
+import { writeToggleState } from "../../write-toggle-state.mjs";
 
 export function attachDashboardDisplayToggles(documentRef, fetchData, onMetarEnabled) {
   const dashboard = documentRef.querySelector(".dashboard");

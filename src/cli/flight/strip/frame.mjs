@@ -1,6 +1,7 @@
-import { tableBorder, tableRow } from "./table.mjs";
+import { tableBorder } from "./table.mjs";
+import { tableRow } from "./table/row.mjs";
 import { horizontalRule } from "./rule.mjs";
-import { flightStripTitleRow } from "./title-row.mjs";
+import { flightStripTitleRow } from "./title/row.mjs";
 
 export function flightStripHeader(layout, aircraftCount, width) {
   const widths = layout[0].widths;

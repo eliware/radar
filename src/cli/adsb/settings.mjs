@@ -1,5 +1,5 @@
-import { readAdsbEnvironment } from "./environment.mjs";
-import { resolveAdsbPort } from "./port.mjs";
+import { readAdsbEnvironment } from "./read-environment.mjs";
+import { resolveAdsbPort } from "./resolve-port.mjs";
 
 export function resolveAdsbSettings(parsedArguments, environment = readAdsbEnvironment()) {
   return {

@@ -1,4 +1,4 @@
-import { retainUsefulCallsign } from "./callsign.mjs";
+import { retainUsefulCallsign } from "./retain-useful-callsign.mjs";
 
 export function createAircraftList({ clock = Date.now, staleAfterMs = 120000 } = {}) {
   const aircraftByIcao = new Map();

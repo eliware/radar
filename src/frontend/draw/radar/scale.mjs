@@ -1,3 +1,5 @@
+import { selectScaleDistance } from "./select-scale-distance.mjs";
+
 export function drawRadarScale(context, range, radius, height) {
   context.fillStyle = "#ffffff";
   context.strokeStyle = "#ffffff";
@@ -14,16 +16,4 @@ export function drawRadarScale(context, range, radius, height) {
   context.moveTo(x + length, y - 4);
   context.lineTo(x + length, y + 4);
   context.stroke();
-}
-
-export function selectScaleDistance(range, radius, maxLength) {
-  const maxDistance = Math.min(range, (maxLength * range) / radius);
-  let selected = 1;
-  for (let exponent = 0; exponent <= 3; exponent += 1) {
-    for (const factor of [1, 2, 5]) {
-      const candidate = factor * 10 ** exponent;
-      if (candidate <= maxDistance) selected = candidate;
-    }
-  }
-  return selected;
 }

@@ -9,7 +9,7 @@ const createRadarReferenceStore = jest.fn(() => references);
 jest.unstable_mockModule("../../../../src/frontend/create/aircraft/scene-workflow.mjs", () => ({
   createAircraftSceneWorkflow,
 }));
-jest.unstable_mockModule("../../../../src/frontend/radar/viewport/radius.mjs", () => ({
+jest.unstable_mockModule("../../../../src/frontend/radar/viewport/create/viewport.mjs", () => ({
   createRadarViewport,
 }));
 jest.unstable_mockModule("../../../../src/frontend/radar/reference/store.mjs", () => ({

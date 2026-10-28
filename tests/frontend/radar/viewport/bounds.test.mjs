@@ -1,9 +1,6 @@
 import { expect, test } from "@jest/globals";
 import * as THREE from "three";
-import {
-  createRadarViewportBounds,
-  getRadarViewportBounds,
-} from "../../../../src/frontend/radar/viewport/bounds.mjs";
+import { getRadarViewportBounds } from "../../../../src/frontend/radar/viewport/bounds.mjs";
 
 function cameraAt(polarDegrees, distance = 64) {
   const camera = new THREE.PerspectiveCamera(48, 16 / 9, 0.05, 1000);
@@ -50,16 +47,4 @@ test("returns empty bounds when no frustum edge crosses map layers", () => {
     },
   };
   expect(getRadarViewportBounds(flat, { updateMatrixWorld() {} }, 800, 600).maxRangeNm).toBe(0);
-});
-
-test("creates live bounds from viewport dimensions and home elevation", () => {
-  const camera = cameraAt(0);
-  const container = { clientWidth: 1280, clientHeight: 720 };
-  const bounds = createRadarViewportBounds(THREE, camera, container, 310);
-  expect(bounds()).toMatchObject({
-    minRangeNm: expect.any(Number),
-    maxRangeNm: expect.any(Number),
-  });
-  container.clientWidth = 0;
-  expect(bounds().maxRangeNm).toBe(0);
 });

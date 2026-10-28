@@ -1,8 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  createAircraftEnrichmentState,
-  createAircraftState,
-} from "../../../../src/backend/aircraft/enrichment/aircraft-state.mjs";
+import { createAircraftState } from "../../../../src/backend/aircraft/enrichment/aircraft-state.mjs";
 
 test("normalizes identifiers and merges updates per aircraft", () => {
   const state = createAircraftState();
@@ -30,16 +27,4 @@ test("retains live records and clears aircraft state", () => {
   expect(state.get("DEF456")).toBeUndefined();
   state.clear();
   expect(state.get("ABC123")).toBeUndefined();
-});
-
-test("normalizes aircraft metadata keys while preparing enriched state", () => {
-  const state = createAircraftEnrichmentState();
-  const update = state.update({ icao: " abc123 ", callsign: " BAW183 " });
-  expect(update).toEqual({
-    icao: "ABC123",
-    callsign: "BAW183",
-    aircraft: { icao: " abc123 ", callsign: " BAW183 " },
-    enriched: { icao: " abc123 ", callsign: " BAW183 " },
-  });
-  expect(state.enrich(update.aircraft)).toEqual(update.enriched);
 });

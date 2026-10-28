@@ -9,7 +9,7 @@ import { createRadarLayerVisibility } from "../create/radar/layer/visibility.mjs
 import { createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
 import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
 import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
-import { radarLegendTopInset } from "../draw/radar/legend/entries.mjs";
+import { radarLegendTopInset } from "../draw/radar/legend/top-inset.mjs";
 import { createCanvasRadarSurface } from "./surface.mjs";
 import { createCanvasRadarViewApi } from "./view/api.mjs";
 import { createCanvasRadarViewDraw } from "./view/draw.mjs";

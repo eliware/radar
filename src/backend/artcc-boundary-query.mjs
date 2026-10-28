@@ -1,4 +1,5 @@
-import { groupBoundaries, intersectsRange } from "./artcc-boundary/range.mjs";
+import { groupBoundaries } from "./artcc-boundary/group.mjs";
+import { intersectsRange } from "./artcc-boundary/range.mjs";
 
 export const ARTCC_POINTS = `SELECT LOCATION_ID AS locationId, LOCATION_NAME AS name,
   ALTITUDE AS altitude, TYPE AS type, POINT_SEQ AS sequence,

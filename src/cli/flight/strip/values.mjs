@@ -1,9 +1,7 @@
 import { formatAircraftAge } from "./age.mjs";
 import { formatAircraftPosition } from "./position.mjs";
-import {
-  formatAircraftStripCallsign,
-  formatAircraftStripHeading,
-} from "../../../shared/aircraft/strip-fields.mjs";
+import { formatAircraftStripCallsign } from "../../../shared/aircraft/strip/fields.mjs";
+import { formatAircraftStripHeading } from "../../../shared/aircraft/strip/heading.mjs";
 
 export function aircraftFieldsOf(aircraft, now) {
   const withUnit = (value, suffix) =>

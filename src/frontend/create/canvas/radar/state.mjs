@@ -1,4 +1,4 @@
-import { clampRadarRange } from "../../../radar/range.mjs";
+import { clampRadarRange } from "../../../radar/clamp-range.mjs";
 import { resetCanvasRadarView } from "./reset.mjs";
 
 export function createCanvasRadarState(state, draw, distances, viewChanges) {

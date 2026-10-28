@@ -1,5 +1,5 @@
 import { createAircraftSceneWorkflow } from "../../create/aircraft/scene-workflow.mjs";
-import { createRadarViewport } from "../../radar/viewport/radius.mjs";
+import { createRadarViewport } from "../../radar/viewport/create/viewport.mjs";
 import { createRadarReferenceStore } from "../../radar/reference/store.mjs";
 
 export function createAircraftSceneDashboardBindings(options) {

@@ -1,5 +1,6 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
-import { buildIlsCourseGeometry, safeIlsElevation } from "../ils-course-geometry.mjs";
+import { buildIlsCourseGeometry } from "../ils-course-geometry.mjs";
+import { safeIlsElevation } from "../safe-ils-elevation.mjs";
 
 const ILS_COLOR = "#604080";
 

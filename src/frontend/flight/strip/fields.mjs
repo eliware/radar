@@ -1,8 +1,6 @@
-import { formatAircraftAltitude } from "../../aircraft/tag-data.mjs";
-import {
-  formatAircraftStripHeading,
-  formatAircraftStripSpeed,
-} from "../../../shared/aircraft/strip-fields.mjs";
+import { formatAircraftAltitude } from "../../aircraft/tag/altitude.mjs";
+import { formatAircraftStripHeading } from "../../../shared/aircraft/strip/heading.mjs";
+import { formatAircraftStripSpeed } from "../../../shared/aircraft/strip/speed.mjs";
 
 export function formatAircraftStripFields(aircraft) {
   const heading = formatAircraftStripHeading(aircraft);

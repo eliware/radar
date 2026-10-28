@@ -1,4 +1,4 @@
-import { isAircraftProjectedNearHome } from "../aircraft/near-home/aircraft-path.mjs";
+import { isAircraftProjectedNearHome } from "../aircraft/near-home/is-projected-near-home.mjs";
 
 export function classifyFlightAircraftNearHome(items, location, elevationFeet) {
   return [...items].map((item) => ({

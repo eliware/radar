@@ -1,8 +1,6 @@
 import { expect, test } from "@jest/globals";
-import {
-  isAircraftProjectedNearHome,
-  projectPredictedAircraftPath,
-} from "../../../../src/frontend/aircraft/near-home/aircraft-path.mjs";
+import { projectPredictedAircraftPath } from "../../../../src/frontend/aircraft/near-home/aircraft-path.mjs";
+import { isAircraftProjectedNearHome } from "../../../../src/frontend/aircraft/near-home/is-projected-near-home.mjs";
 
 const home = { latitude: 43, longitude: -70 };
 

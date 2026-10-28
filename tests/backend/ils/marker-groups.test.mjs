@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createIlsMarkerIndex, ilsSystemKey } from "../../../src/backend/ils/marker-groups.mjs";
+import { createIlsMarkerIndex } from "../../../src/backend/ils/marker-groups.mjs";
 
 const marker = (overrides = {}) => ({
   faaId: "PWM",
@@ -18,7 +18,7 @@ test("groups valid marker records by ILS system and adds distance", () => {
     marker({ runwayEnd: "29" }),
   ];
   const index = createIlsMarkerIndex(rows, { latitude: 43, longitude: -70 });
-  expect(index.get(ilsSystemKey(rows[0]))).toEqual([
+  expect(index.get("PWM:11:PWM:LD")).toEqual([
     expect.objectContaining({ componentType: "IM", rangeNm: 0 }),
     expect.objectContaining({ componentType: "OM", rangeNm: 0 }),
   ]);

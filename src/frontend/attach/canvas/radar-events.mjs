@@ -3,7 +3,8 @@ import { attachMobileRadarGestures } from "../mobile/radar-gestures.mjs";
 import { attachCanvasRefresh } from "./refresh.mjs";
 import { watchRadarTargets } from "../../watch-radar-targets.mjs";
 import { createCanvasRadarGestures } from "../../create/canvas/radar/gestures.mjs";
-import { clampRadarRange, selectDefaultRadarRange } from "../../radar/range.mjs";
+import { clampRadarRange } from "../../radar/clamp-range.mjs";
+import { selectDefaultRadarRange } from "../../radar/default-range.mjs";
 import { attachRadarLegendClick } from "../radar-legend-click.mjs";
 
 export function attachCanvasRadarEvents(

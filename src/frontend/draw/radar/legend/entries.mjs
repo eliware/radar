@@ -19,10 +19,6 @@ const ENTRIES = [
   ["line", "F STRIPS", "strips", "flightStripsVisible", "f"],
 ];
 
-export function radarLegendTopInset(windowRef) {
-  return windowRef.matchMedia?.("(hover: none) and (pointer: coarse)").matches ? 48 : 0;
-}
-
 export function radarLegendLayout(width, height, topInset = 0) {
   const columns = width >= 640 ? 2 : 1;
   const rows = Math.ceil(ENTRIES.length / columns);

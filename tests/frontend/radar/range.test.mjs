@@ -1,11 +1,18 @@
 import { expect, test } from "@jest/globals";
 import {
-  clampRadarRange,
-  getRadarLabelGapAngle,
-  getRadarRingRanges,
-  getRadarRingSpacing,
-  selectDefaultRadarRange,
+  DEFAULT_RADAR_RANGE,
+  MAX_RADAR_RANGE,
+  MIN_RADAR_RANGE,
 } from "../../../src/frontend/radar/range.mjs";
+import { clampRadarRange } from "../../../src/frontend/radar/clamp-range.mjs";
+import { selectDefaultRadarRange } from "../../../src/frontend/radar/default-range.mjs";
+import { getRadarLabelGapAngle } from "../../../src/frontend/radar/label-gap-angle.mjs";
+import { getRadarRingRanges } from "../../../src/frontend/radar/ring/ranges.mjs";
+import { getRadarRingSpacing } from "../../../src/frontend/radar/ring/spacing.mjs";
+
+test("defines the supported radar range constants", () => {
+  expect([MIN_RADAR_RANGE, DEFAULT_RADAR_RANGE, MAX_RADAR_RANGE]).toEqual([1, 20, 300]);
+});
 
 test("selects the greater of 20 nautical miles or five miles beyond the furthest target", () => {
   expect(selectDefaultRadarRange([])).toBe(20);

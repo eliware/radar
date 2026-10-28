@@ -1,15 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import {
-  configureMobileRadarControls,
-  hasCoarsePointer,
-} from "../../src/frontend/mobile-radar-gestures.mjs";
-
-test("detects a coarse pointer only when the browser reports one", () => {
-  expect(hasCoarsePointer({ matchMedia: () => ({ matches: true }) })).toBe(true);
-  expect(hasCoarsePointer({ matchMedia: () => ({ matches: false }) })).toBe(false);
-  expect(hasCoarsePointer({ matchMedia: () => undefined })).toBe(false);
-  expect(hasCoarsePointer({})).toBe(false);
-});
+import { configureMobileRadarControls } from "../../src/frontend/mobile-radar-gestures.mjs";
 
 test("locks mobile controls and rotates the scene around home", () => {
   const listeners = new Map();

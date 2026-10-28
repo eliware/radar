@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { createRadarLegendState } from "../../../../../src/frontend/draw/radar/legend/state.mjs";
-import { drawRadarScaleLegend } from "../../../../../src/frontend/draw/radar/legend/table.mjs";
+import { drawRadarScaleLegend } from "../../../../../src/frontend/draw/radar/legend/draw-scale-legend.mjs";
 
 function context() {
   return Object.fromEntries(

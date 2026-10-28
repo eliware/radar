@@ -1,8 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  buildIlsCourseGeometry,
-  safeIlsElevation,
-} from "../../src/frontend/ils-course-geometry.mjs";
+import { buildIlsCourseGeometry } from "../../src/frontend/ils-course-geometry.mjs";
 
 const approach = {
   latitude: 43,
@@ -39,9 +36,4 @@ test("uses east variation, zero variation, and flat-path fallbacks", () => {
   });
   expect(noVariation.bearing).toBe(0);
   expect(buildIlsCourseGeometry({ ...approach, magneticCourse: Number.NaN })).toBeNull();
-});
-
-test("uses zero elevation when the point has no finite elevation", () => {
-  expect(safeIlsElevation({ elevationFeet: 25 })).toBe(25);
-  expect(safeIlsElevation({ elevationFeet: Number.NaN })).toBe(0);
 });

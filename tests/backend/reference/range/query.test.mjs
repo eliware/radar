@@ -1,14 +1,5 @@
-import { expect, jest, test } from "@jest/globals";
-import {
-  mapReferenceInRange,
-  rowsWithinBounds,
-} from "../../../../src/backend/reference/range/query.mjs";
-
-test("queries a bounded range and clamps latitude and longitude", () => {
-  const statement = { all: jest.fn(() => []) };
-  expect(rowsWithinBounds(statement, { latitude: 90, longitude: 180 }, 300)).toEqual([]);
-  expect(statement.all).toHaveBeenCalledWith(85, 90, -180, 180);
-});
+import { expect, test } from "@jest/globals";
+import { mapReferenceInRange } from "../../../../src/backend/reference/range/query.mjs";
 
 test("maps valid references and rejects invalid or out-of-range coordinates", () => {
   const location = { latitude: 0, longitude: 0 };

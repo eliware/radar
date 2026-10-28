@@ -1,11 +1,9 @@
 import { expect, jest, test } from "@jest/globals";
 import { createAircraftTrails } from "../../../../../src/frontend/aircraft/trails.mjs";
 import { createRadarTargets } from "../../../../../src/frontend/radar/targets.mjs";
-import {
-  listCanvasRadarTargets,
-  updateCanvasRadarRemoteTargets,
-  updateCanvasRadarTarget,
-} from "../../../../../src/frontend/create/canvas/radar/targets.mjs";
+import { updateCanvasRadarTarget } from "../../../../../src/frontend/create/canvas/radar/targets.mjs";
+import { updateCanvasRadarRemoteTargets } from "../../../../../src/frontend/create/canvas/radar/remote-targets.mjs";
+import { listCanvasRadarTargets } from "../../../../../src/frontend/create/canvas/radar/list-targets.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 

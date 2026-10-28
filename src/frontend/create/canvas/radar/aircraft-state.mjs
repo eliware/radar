@@ -1,11 +1,9 @@
 import { createRadarTargets } from "../../../radar/targets.mjs";
 import { createAircraftTrails } from "../../../aircraft/trails.mjs";
 import { updateCanvasRadarAutoZoom } from "./auto-zoom.mjs";
-import {
-  listCanvasRadarTargets,
-  updateCanvasRadarRemoteTargets,
-  updateCanvasRadarTarget,
-} from "./targets.mjs";
+import { updateCanvasRadarTarget } from "./targets.mjs";
+import { updateCanvasRadarRemoteTargets } from "./remote-targets.mjs";
+import { listCanvasRadarTargets } from "./list-targets.mjs";
 import { reconcileCanvasRadarSnapshot } from "./snapshots.mjs";
 
 export function createCanvasRadarAircraftState(location, state, draw) {

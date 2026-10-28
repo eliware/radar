@@ -1,8 +1,5 @@
 import { attachMobileRadarGestures } from "./attach/mobile/radar-gestures.mjs";
-
-export function hasCoarsePointer(windowRef) {
-  return Boolean(windowRef.matchMedia?.("(pointer: coarse)")?.matches);
-}
+import { hasCoarsePointer } from "./has-coarse-pointer.mjs";
 
 export function configureMobileRadarControls(controls, element, windowRef, onZoom = () => {}) {
   if (!hasCoarsePointer(windowRef)) return () => {};

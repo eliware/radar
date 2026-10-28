@@ -1,5 +1,6 @@
 import { NASR_INDEXES } from "./definitions.mjs";
-import { normalizeNasrIndexSql, parseNasrIndexDefinition } from "./definition.mjs";
+import { parseNasrIndexDefinition } from "./definition.mjs";
+import { normalizeNasrIndexSql } from "./normalize-definition.mjs";
 
 export function verifyNasrIndexes(database) {
   const stored = new Map(

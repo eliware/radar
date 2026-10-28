@@ -1,5 +1,5 @@
-import { updateMetarDisplay } from "./table.mjs";
-import { updateMetarTicker } from "./ticker.mjs";
+import { updateMetarDisplay } from "./update/display.mjs";
+import { updateMetarTicker } from "./update/ticker.mjs";
 
 export function renderMetarDisplay(panel, ticker, data) {
   updateMetarDisplay(panel, data);

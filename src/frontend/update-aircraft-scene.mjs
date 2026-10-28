@@ -1,5 +1,5 @@
 import { updateAircraftTargetAndTrail } from "./aircraft/target-updates.mjs";
-import { selectDefaultRadarRange } from "./radar/range.mjs";
+import { selectDefaultRadarRange } from "./radar/default-range.mjs";
 
 export function createAircraftSceneUpdater({
   location,
