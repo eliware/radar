@@ -1,35 +1,20 @@
-import { createMergedAircraftState } from "./aircraft/state.mjs";
-import { createMergedAircraftClients } from "./clients.mjs";
-import { createMergedAircraftSnapshotPublisher } from "./snapshot/publisher.mjs";
-import { createMergedAircraftPublisher } from "./publish.mjs";
 import { setMergedClientLocalOnly } from "./client-locality.mjs";
+import { createMergedAircraftRuntime } from "./runtime.mjs";
 
 export function createMergedAircraftFeed(
   localFeed,
   remoteSource,
   { defaultRangeNm = 20, setIntervalFn = setInterval, clearIntervalFn = clearInterval } = {},
 ) {
-  const clients = createMergedAircraftClients(defaultRangeNm);
-  const state = createMergedAircraftState();
-  let closed = false;
-  function refresh() {
-    state.replaceLocal(localFeed.list());
-    state.replaceRemote(remoteSource.list());
-  }
-  refresh();
-  const unsubscribeLocal = localFeed.subscribe((item) => state.setLocal(item));
-  const unsubscribeRemote = remoteSource.subscribe((items) => state.replaceRemote(items));
-
-  const publishSnapshots = () => {
-    refresh();
-    return publish();
-  };
-  const publish = createMergedAircraftPublisher({ state, clients });
-  const snapshots = createMergedAircraftSnapshotPublisher(
-    publishSnapshots,
+  const runtime = createMergedAircraftRuntime(localFeed, remoteSource, {
+    defaultRangeNm,
     setIntervalFn,
     clearIntervalFn,
-  );
+  });
+  const { clients, state, refresh, publishSnapshots, snapshots } = runtime;
+  let closed = false;
+  const unsubscribeLocal = localFeed.subscribe((item) => state.setLocal(item));
+  const unsubscribeRemote = remoteSource.subscribe((items) => state.replaceRemote(items));
 
   return {
     list() {
