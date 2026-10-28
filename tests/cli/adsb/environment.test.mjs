@@ -10,10 +10,10 @@ test("uses the local RTL1090 feed by default", () => {
   });
 });
 
-test("reads feed host and port from the environment", () => {
+test("reads feed host and unparsed port text from the environment", () => {
   expect(readAdsbEnvironment({ ADSB_HOST: "receiver.local", ADSB_PORT: "31003" })).toEqual({
     host: "receiver.local",
-    port: 31003,
+    port: "31003",
     locationLatitude: undefined,
     locationLongitude: undefined,
   });
@@ -26,6 +26,6 @@ test("reads home coordinates from the environment", () => {
   });
 });
 
-test("converts a nonnumeric port for validation by the CLI parser", () => {
-  expect(readAdsbEnvironment({ ADSB_PORT: "invalid" }).port).toBeNaN();
+test("preserves a nonnumeric port for validation by the CLI parser", () => {
+  expect(readAdsbEnvironment({ ADSB_PORT: "invalid" }).port).toBe("invalid");
 });

@@ -7,3 +7,9 @@ export function validateAdsbPort(port) {
     throw new Error("TCP endpoint number must be an integer from 1 through 65535");
   }
 }
+
+export function resolveAdsbPort(commandLinePort, environmentPort) {
+  const port = parseAdsbPort(commandLinePort ?? environmentPort);
+  validateAdsbPort(port);
+  return port;
+}

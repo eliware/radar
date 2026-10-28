@@ -1,6 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderMetarTable } from "../../../src/frontend/metar/table.mjs";
-import { updateMetarDisplay } from "../../../src/frontend/metar/table-update.mjs";
+import { renderMetarTable, updateMetarDisplay } from "../../../src/frontend/metar/table.mjs";
 
 function nodes() {
   return [{ textContent: "", innerHTML: "" }, { textContent: "" }];
@@ -49,9 +48,11 @@ test("renders decoded METAR table rows", () => {
 
 test("shows raw METAR text when the parser cannot decode a report", () => {
   const [panel] = nodes();
-  render(panel, {
-    reports: [{ id: "KPWM", metar: "bad <data>", decoded: null }],
-  });
+  updateMetarDisplay(
+    panel,
+    { reports: [{ id: "KPWM", metar: "bad <data>", decoded: null }] },
+    new Date("2026-10-13T18:00:00Z"),
+  );
   expect(panel.innerHTML).toContain(
     '<td></td><th>KPWM</th><td>—</td><td colspan="9">bad &lt;data&gt;</td>',
   );

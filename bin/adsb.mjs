@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 import { adsbCliDependencies, startAdsbCli } from "../src/cli/adsb/cli.mjs";
 import { loadAdsbEnvironment } from "../src/cli/adsb/environment-loader.mjs";
-import { installCliProcessLifecycle } from "../src/cli/process-lifecycle.mjs";
-import { createTerminalFrameOutput } from "../src/cli/terminal/frame/output.mjs";
+import { createCliBootstrap } from "../src/cli/bootstrap.mjs";
 
 loadAdsbEnvironment();
 
-const terminalOutput = createTerminalFrameOutput(process.stdout, process.env);
+const bootstrap = createCliBootstrap({
+  stdout: process.stdout,
+  processRef: process,
+  environment: process.env,
+});
+const { terminalOutput } = bootstrap;
 
 const cli = startAdsbCli({
   args: process.argv.slice(2),
@@ -18,4 +22,4 @@ const cli = startAdsbCli({
     process.exitCode = code;
   },
 });
-installCliProcessLifecycle({ cli, terminalOutput });
+bootstrap.install(cli);
