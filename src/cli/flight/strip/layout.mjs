@@ -1,11 +1,10 @@
 import { flightStripColumns } from "./columns.mjs";
+import { calculateFlightStripWidths, minimumFlightStripWidths } from "./widths.mjs";
 import {
-  calculateFlightStripWidths,
   flightStripGroupTableWidth,
   flightStripTableWidth,
-  minimumFlightStripWidths,
   wideTableWidth,
-} from "./widths.mjs";
+} from "./table-widths.mjs";
 
 export { flightStripColumns } from "./columns.mjs";
 

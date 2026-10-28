@@ -1,11 +1,3 @@
-const routeRoot = "https://vrs-standing-data.adsb.lol/routes";
-
-export function buildCallsignRouteUrl(callsign) {
-  const path =
-    `${encodeURIComponent(callsign.slice(0, 2))}/` + `${encodeURIComponent(callsign)}.json`;
-  return `${routeRoot}/${path}`;
-}
-
 export function parseRoute(route) {
   if (!route) return null;
   const codes = typeof route.airport_codes === "string" ? route.airport_codes.split("-") : [];

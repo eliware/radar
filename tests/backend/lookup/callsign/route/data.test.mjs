@@ -1,17 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  buildCallsignRouteUrl,
-  parseRoute,
-} from "../../../../../src/backend/lookup/callsign/route/data.mjs";
-
-test("builds encoded ADSB.lol route URLs", () => {
-  expect(buildCallsignRouteUrl("BAW183")).toBe(
-    "https://vrs-standing-data.adsb.lol/routes/BA/BAW183.json",
-  );
-  expect(buildCallsignRouteUrl("A B")).toBe(
-    "https://vrs-standing-data.adsb.lol/routes/A%20/A%20B.json",
-  );
-});
+import { parseRoute } from "../../../../../src/backend/lookup/callsign/route/data.mjs";
 
 test("parses complete routes and prefers airport records", () => {
   expect(

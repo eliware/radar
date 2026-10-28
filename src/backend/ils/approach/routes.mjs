@@ -1,14 +1,12 @@
-import { isValidRangeBand } from "../../reference/range/validation.mjs";
+import { parseRangeQuery } from "../../reference/range/parameters.mjs";
 
 export function registerIlsApproachRoutes(app, database, location) {
   app.get("/api/ils", async (request, reply) => {
     if (!database) return reply.code(503).send({ error: "NASR database is not available." });
     if (!location) return reply.code(503).send({ error: "Home location is not configured." });
-    const minRangeNm = Number(request.query.minRangeNm ?? 0);
-    const maxRangeNm = Number(request.query.maxRangeNm);
-    if (!isValidRangeBand(minRangeNm, maxRangeNm)) {
-      return reply.code(400).send({ error: "Use a valid range from 0 to 300 nautical miles." });
-    }
+    const range = parseRangeQuery(request.query, reply);
+    if (!range.valid) return range.response;
+    const { minRangeNm, maxRangeNm } = range;
     return database.findIlsApproaches(location, minRangeNm, maxRangeNm);
   });
 }

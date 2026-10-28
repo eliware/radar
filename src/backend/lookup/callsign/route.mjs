@@ -1,6 +1,6 @@
 import { hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
 import { parseCallsignRouteResponse } from "./response.mjs";
-import { buildCallsignRouteUrl } from "./route/data.mjs";
+import { buildCallsignRouteUrl } from "./route/url.mjs";
 
 const userAgent = "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)";
 

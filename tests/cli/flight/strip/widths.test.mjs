@@ -1,14 +1,10 @@
 import { expect, test } from "@jest/globals";
 import {
   calculateFlightStripWidths,
-  flightStripTableWidth,
   minimumFlightStripWidths,
-  wideTableWidth,
 } from "../../../../src/cli/flight/strip/widths.mjs";
 
-test("calculates the full table width and minimum column widths", () => {
-  expect(wideTableWidth).toBe(156);
-  expect(flightStripTableWidth([3, 4])).toBe(14);
+test("calculates minimum column widths", () => {
   expect(minimumFlightStripWidths(false)).toHaveLength(11);
   expect(minimumFlightStripWidths(false, [["LONGCALL"]])[0]).toBe(8);
 });

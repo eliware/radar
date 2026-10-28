@@ -1,19 +1,8 @@
 import { flightStripColumns } from "./columns.mjs";
+import { flightStripTableWidth } from "./table-widths.mjs";
 
 const fullWidths = flightStripColumns.map(([, , width]) => width);
 const shortWidths = flightStripColumns.map(([, , , width]) => width);
-
-export function flightStripTableWidth(widths) {
-  return widths.reduce((sum, width) => sum + width, 0) + 3 * widths.length + 1;
-}
-
-export function flightStripGroupTableWidth(groups, widths) {
-  return Math.max(
-    ...groups.map((group) => flightStripTableWidth(group.map((index) => widths[index]))),
-  );
-}
-
-export const wideTableWidth = flightStripTableWidth(fullWidths);
 
 export function minimumFlightStripWidths(full, values = []) {
   return full
@@ -24,7 +13,7 @@ export function minimumFlightStripWidths(full, values = []) {
 }
 
 export function calculateFlightStripWidths(indices, minimums, tableWidth) {
-  const available = tableWidth - (3 * indices.length + 1);
+  const available = tableWidth - flightStripTableWidth(indices.map(() => 0));
   const base = indices.map((index) => minimums[index]);
   const baseWidth = base.reduce((sum, width) => sum + width, 0);
   if (baseWidth > available) {

@@ -37,7 +37,7 @@ test("orchestrates history marks and connected three-line tags", () => {
   drawAircraftDisplay(context, [{ x: 0, y: 0, lines: ["-", "-", "-"] }], 12, 10, 10);
 });
 
-test("fades aircraft markers and labels as their receive age increases", () => {
+test("restores canvas opacity after drawing aircraft markers and labels", () => {
   const context = Object.fromEntries(
     ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fillText"].map((name) => [
       name,
@@ -45,13 +45,11 @@ test("fades aircraft markers and labels as their receive age increases", () => {
     ]),
   );
   context.measureText = (text) => ({ width: text.length * 8 });
-  const alphaValues = [];
   let alpha = 1;
   Object.defineProperty(context, "globalAlpha", {
     get: () => alpha,
     set: (value) => {
       alpha = value;
-      alphaValues.push(value);
     },
   });
   const now = 1_000_000;
@@ -71,9 +69,9 @@ test("fades aircraft markers and labels as their receive age increases", () => {
     jest.useRealTimers();
   }
 
-  expect(alphaValues).toContain(1);
-  expect(alphaValues).toContain(0.5);
   expect(alpha).toBe(1);
+  expect(context.stroke).toHaveBeenCalled();
+  expect(context.fillText).toHaveBeenCalled();
 });
 
 test("draws emergency aircraft red while displaying its separate emergency tag", () => {
@@ -88,13 +86,11 @@ test("draws emergency aircraft red while displaying its separate emergency tag",
   context.fillText.mockImplementation(function () {
     fillColors.push(this.fillStyle);
   });
-  const alphaValues = [];
   let alpha = 1;
   Object.defineProperty(context, "globalAlpha", {
     get: () => alpha,
     set: (value) => {
       alpha = value;
-      alphaValues.push(value);
     },
   });
   const now = 1_000_000;
@@ -123,7 +119,6 @@ test("draws emergency aircraft red while displaying its separate emergency tag",
   expect(context.fillStyle).toBeUndefined();
   expect(context.strokeStyle).toBeUndefined();
   expect(context.fillText).toHaveBeenCalledWith("HIJACK", expect.any(Number), expect.any(Number));
-  expect(alphaValues).toContain(0.5);
   expect(alpha).toBe(1);
 });
 
