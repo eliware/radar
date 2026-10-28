@@ -1,59 +1,12 @@
-import { metarCategoryLabel } from "./category-label.mjs";
-import { formatMetarAgeDisplay } from "./age/display.mjs";
-import { escapeHtml } from "../html/escape.mjs";
 import { updateMetarDisplayElement } from "./table/display.mjs";
+import { formatMetarReportRow, formatMetarTableHeaders } from "./table/formatting.mjs";
 
 export function renderMetarTable(reports, now = new Date()) {
-  return `<table><thead><tr>${headers()}</tr></thead><tbody>${reports
-    .map((report) => reportRow(report, now))
+  return `<table><thead><tr>${formatMetarTableHeaders()}</tr></thead><tbody>${reports
+    .map((report) => formatMetarReportRow(report, now))
     .join("")}</tbody></table>`;
 }
 
 export function updateMetarDisplay(element, data, now = new Date()) {
   return updateMetarDisplayElement(element, data, renderMetarTable, now);
-}
-
-function headers() {
-  return [
-    "<th></th>",
-    "<th>APT</th>",
-    "<th>FLT</th>",
-    '<th class="metar-age-header">AGE</th>',
-    '<th class="metar-wind-header" colspan="2">WIND</th>',
-    '<th class="metar-vis-header">VIS</th>',
-    '<th class="metar-wx-header">WX</th>',
-    '<th class="metar-sky-header">SKY</th>',
-    "<th>TMP</th>",
-    "<th>DEW</th>",
-    "<th>ALT</th>",
-  ].join("");
-}
-
-function reportRow({ id, metar, decoded }, now) {
-  if (!decoded)
-    return `<tr><td></td><th>${escapeHtml(id)}</th><td>—</td><td colspan="9">${escapeHtml(metar)}</td></tr>`;
-  const age = formatMetarAgeDisplay(decoded.observed, now);
-  const values = [
-    decoded.automated ? "A" : "",
-    id,
-    decoded.flightCategory,
-    age.text,
-    decoded.windDirection,
-    decoded.windSpeed,
-    decoded.visibility,
-    decoded.conditions,
-    decoded.clouds,
-    decoded.temperature,
-    decoded.dewPoint,
-    decoded.altimeter,
-  ];
-  return `<tr>${values
-    .map((value, index) => {
-      if (index === 2) return `<td>${metarCategoryLabel(value)}</td>`;
-      if (index === 3) return `<td class="metar-age${age.statusClass}">${escapeHtml(value)}</td>`;
-      if (index === 6) return `<td class="metar-visibility">${escapeHtml(value)}</td>`;
-      if (index === 8) return `<td class="metar-sky">${escapeHtml(value)}</td>`;
-      return `<td${index === 7 ? ' class="metar-weather"' : ""}>${escapeHtml(value)}</td>`;
-    })
-    .join("")}</tr>`;
 }

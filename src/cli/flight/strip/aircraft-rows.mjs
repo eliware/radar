@@ -1,4 +1,4 @@
-import { aircraftDivider } from "./frame.mjs";
+import { aircraftDivider } from "./frame-formatting.mjs";
 import { tableRow } from "./table.mjs";
 
 export function renderAircraftRows(rows, layout, width) {

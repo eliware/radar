@@ -1,4 +1,5 @@
-import { flightStripFooter, flightStripHeader } from "./frame.mjs";
+import { flightStripHeader } from "./frame.mjs";
+import { flightStripFooter } from "./frame-formatting.mjs";
 import { renderAircraftRows } from "./aircraft-rows.mjs";
 import { tableRow } from "./table.mjs";
 
