@@ -1,16 +1,12 @@
 import { decodedFields } from "../../shared/metar/fields.mjs";
 import { parseMetarReport } from "./parser.mjs";
-import { hasUsefulMetarData } from "./useful.mjs";
+import { enrichMetarReport } from "./report-enrichment.mjs";
 
 export function decodeMetarReport(report, parse = undefined) {
   try {
     const data = parseMetarReport(report, parse);
-    const decoded = decodedFields(data);
-    return {
-      ...report,
-      decoded: hasUsefulMetarData(decoded) ? decoded : null,
-    };
+    return enrichMetarReport(report, decodedFields(data));
   } catch {
-    return { ...report, decoded: null };
+    return enrichMetarReport(report, null);
   }
 }

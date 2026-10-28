@@ -1,4 +1,4 @@
-import { requestAdsbLolCircle } from "./request.mjs";
+import { requestAdsbLolCircle } from "./request/circle.mjs";
 import { createAdsbLolPoller } from "./poller.mjs";
 
 export function createAdsbLolRemotePolling({

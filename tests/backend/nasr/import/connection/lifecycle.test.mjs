@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { withNasrDatabase } from "../../../../src/backend/nasr/import/connections.mjs";
+import { withNasrDatabase } from "../../../../../src/backend/nasr/import/connection/lifecycle.mjs";
 
 test("opens source databases with the requested connection options", () => {
   const database = { close: jest.fn() };

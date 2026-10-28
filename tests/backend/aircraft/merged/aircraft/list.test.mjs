@@ -7,7 +7,7 @@ test("projects merged records in distance order and calculates local range", () 
       "ABC123",
       {
         local: { icao: "ABC123", distanceNauticalMiles: 7, callsign: "LOCAL" },
-        remote: { icao: "ABC123", callsign: "REMOTE" },
+        remote: { icao: "ABC123", callsign: "REMOTE", remoteOnly: true },
       },
     ],
     ["DEF456", { remote: { icao: "DEF456", distanceNauticalMiles: 2 } }],
