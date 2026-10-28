@@ -1,5 +1,5 @@
 import { DatabaseSync } from "node:sqlite";
-import { REQUIRED_COLUMNS } from "../src/backend/nasr/indexes.mjs";
+import { REQUIRED_COLUMNS } from "../src/backend/nasr/required-columns.mjs";
 
 export function createNasrTestDatabase(columnsByTable = REQUIRED_COLUMNS) {
   const database = new DatabaseSync(":memory:");

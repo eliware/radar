@@ -3,6 +3,7 @@ import { createAdsbLolPoller } from "./poller.mjs";
 import { createAdsbLolAircraftStore } from "./aircraft-store.mjs";
 import { createAdsbLolClients } from "./clients.mjs";
 import { getAdsbLolPollingPolicy } from "./policy.mjs";
+import { createAdsbLolSubscribers } from "./subscribers.mjs";
 const POLL_INTERVAL_MS = 6000;
 const MAX_RADIUS_NM = 300;
 export function createAdsbLolRemoteSource({
@@ -17,13 +18,13 @@ export function createAdsbLolRemoteSource({
 }) {
   const clients = createAdsbLolClients(defaultRangeNm, MAX_RADIUS_NM);
   const pollingPolicy = () => getAdsbLolPollingPolicy(clients, MAX_RADIUS_NM);
-  const subscribers = new Set();
   const aircraft = createAdsbLolAircraftStore({
     location,
     lookup,
     clock,
     onRouteUpdate: publish,
   });
+  const subscribers = createAdsbLolSubscribers(aircraft.list);
   const poller = createAdsbLolPoller({
     poll,
     hasClients: () => pollingPolicy().hasRemoteClients,
@@ -36,8 +37,7 @@ export function createAdsbLolRemoteSource({
     poller.start();
   }
   function publish() {
-    const current = aircraft.list();
-    subscribers.forEach((subscriber) => subscriber(current));
+    subscribers.publish();
   }
   async function poll(isCurrent) {
     if (!Number.isFinite(location?.latitude) || !Number.isFinite(location?.longitude)) {
@@ -50,10 +50,7 @@ export function createAdsbLolRemoteSource({
   }
   return {
     list: aircraft.list,
-    subscribe(subscriber) {
-      subscribers.add(subscriber);
-      return () => subscribers.delete(subscriber);
-    },
+    subscribe: subscribers.subscribe,
     connectClient(key) {
       clients.connect(key);
       start();

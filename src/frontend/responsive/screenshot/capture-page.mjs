@@ -1,4 +1,4 @@
-import { createScreenshotPageSession } from "./page-session.mjs";
+import { createScreenshotPageSession } from "./page/session.mjs";
 
 export function createScreenshotPageCapture(browser) {
   const errors = [];

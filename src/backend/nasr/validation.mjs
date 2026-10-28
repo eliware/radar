@@ -1,4 +1,4 @@
-import { REQUIRED_COLUMNS } from "./indexes.mjs";
+import { REQUIRED_COLUMNS } from "./required-columns.mjs";
 
 export function validateNasrDatabase(database) {
   const result = database.prepare("PRAGMA integrity_check").get();

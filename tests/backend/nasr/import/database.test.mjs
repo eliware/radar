@@ -1,7 +1,8 @@
 import { DatabaseSync } from "node:sqlite";
 import { expect, jest, test } from "@jest/globals";
 import { importNasrDatabaseLifecycle } from "../../../../src/backend/nasr/import/database.mjs";
-import { NASR_INDEXES, REQUIRED_COLUMNS } from "../../../../src/backend/nasr/indexes.mjs";
+import { NASR_INDEXES } from "../../../../src/backend/nasr/indexes.mjs";
+import { REQUIRED_COLUMNS } from "../../../../src/backend/nasr/required-columns.mjs";
 
 function createDatabase(columnsByTable = REQUIRED_COLUMNS) {
   const database = new DatabaseSync(":memory:");
