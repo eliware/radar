@@ -1,7 +1,7 @@
 import { flightStripHeader } from "./frame.mjs";
 import { flightStripFooter } from "./frame-formatting.mjs";
 import { renderAircraftRows } from "./aircraft-rows.mjs";
-import { tableRow } from "./table.mjs";
+import { renderFlightStripEmptyState } from "./empty-state.mjs";
 
 export function renderFlightStripFrame(rows, layout, aircraftCount, width) {
   const widths = layout[0].widths;
@@ -10,8 +10,7 @@ export function renderFlightStripFrame(rows, layout, aircraftCount, width) {
     ...renderAircraftRows(rows, layout, width),
   ];
   if (!rows.length) {
-    const titleWidth = widths.reduce((sum, width) => sum + width, 3 * widths.length - 3);
-    lines.push(tableRow(["Waiting for aircraft..."], [titleWidth]));
+    lines.push(renderFlightStripEmptyState(widths));
   }
   lines.push(flightStripFooter(layout, width));
   return lines;

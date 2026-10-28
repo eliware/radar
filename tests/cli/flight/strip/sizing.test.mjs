@@ -1,6 +1,7 @@
 import { expect, test } from "@jest/globals";
 import {
   calculateFlightStripWidths,
+  flightStripTitleWidth,
   flightStripGroupTableWidth,
   flightStripTableWidth,
   minimumFlightStripWidths,
@@ -11,6 +12,10 @@ test("calculates individual, grouped, and wide table widths", () => {
   expect(flightStripTableWidth([3, 4])).toBe(14);
   expect(flightStripGroupTableWidth([[0, 1], [2]], [3, 4, 8])).toBe(14);
   expect(wideTableWidth).toBe(156);
+});
+
+test("calculates title width for a one-column empty state row", () => {
+  expect(flightStripTitleWidth([7, 9])).toBe(19);
 });
 
 test("calculates minimum column widths", () => {

@@ -15,6 +15,10 @@ const shortWidths = flightStripColumns.map(([, , , width]) => width);
 
 export const wideTableWidth = flightStripTableWidth(fullWidths);
 
+export function flightStripTitleWidth(widths) {
+  return widths.reduce((sum, width) => sum + width, 3 * widths.length - 3);
+}
+
 export function minimumFlightStripWidths(full, values = []) {
   return full
     ? fullWidths

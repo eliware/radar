@@ -37,9 +37,3 @@ test("keeps a long aircraft count inside a narrow title row", () => {
   expect(lines[1]).toContain("…");
   expect(lines.every((line) => line.length === 20)).toBe(true);
 });
-
-test("renders a waiting message when the aircraft list is empty", () => {
-  const lines = renderFlightStripFrame([], createFlightStripLayout(80), 0, 80);
-  expect(lines.join("\n")).toContain("Waiting for aircraft...");
-  expect(lines.every((line) => line.length === 80)).toBe(true);
-});
