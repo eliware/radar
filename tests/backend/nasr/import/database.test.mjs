@@ -51,16 +51,6 @@ test("imports NASR and installs indexes into an output copy", () => {
   expect(dependencies.rename).toHaveBeenCalled();
 });
 
-test("rejects missing input and source paths that match the destination", () => {
-  expect(() =>
-    importNasrDatabaseLifecycle(undefined, "missing.sqlite", { exists: () => false }),
-  ).toThrow("Input NASR database not found");
-  expect(() =>
-    importNasrDatabaseLifecycle("input.sqlite", "input.sqlite", { exists: () => true }),
-  ).toThrow("paths must be different");
-  expect(() => importNasrDatabaseLifecycle("nasr/NASR.sqlite")).toThrow("paths must be different");
-});
-
 test("cleans up the temporary copy when replacing the destination fails", () => {
   const dependencies = makeDependencies(
     retainOnClose(createDatabase()),

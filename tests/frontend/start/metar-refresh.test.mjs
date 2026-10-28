@@ -22,6 +22,7 @@ test("loads reports at startup and schedules five-minute refreshes", async () =>
   expect(timer.delay).toBe(300000);
   expect(timerHost.setInterval).toHaveBeenCalledTimes(1);
   expect(nodes.panel.innerHTML).toContain("KPWM");
+  expect(nodes.ticker.innerHTML).toContain("KPWM");
   refresh.destroy();
   expect(timerHost.clearInterval).toHaveBeenCalledWith(timer);
 });
@@ -92,6 +93,7 @@ test("shows an empty state when the API returns an error", async () => {
   await Promise.resolve();
   await Promise.resolve();
   expect(nodes.panel.textContent).toBe("No METAR reports available.");
+  expect(nodes.ticker.textContent).toBe("No METAR reports available.");
   refresh.destroy();
 });
 

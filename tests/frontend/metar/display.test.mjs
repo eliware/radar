@@ -19,11 +19,10 @@ const decoded = {
   altimeter: "30.01",
 };
 
-test("renders decoded METAR rows and builds a mobile ticker", () => {
-  const [panel, ticker] = nodes();
+test("renders decoded METAR table rows", () => {
+  const [panel] = nodes();
   updateMetarDisplay(
     panel,
-    ticker,
     {
       reports: [
         { id: "KLEW", metar: "02004KT", decoded },
@@ -48,17 +47,15 @@ test("renders decoded METAR rows and builds a mobile ticker", () => {
 });
 
 test("highlights METAR age only after it exceeds one hour", () => {
-  const [panel, ticker] = nodes();
+  const [panel] = nodes();
   updateMetarDisplay(
     panel,
-    ticker,
     { reports: [{ id: "KBXM", metar: "raw", decoded: { ...decoded, observed: "13 17:00Z" } }] },
     new Date("2026-10-13T18:00:00Z"),
   );
   expect(panel.innerHTML).toContain('<td class="metar-age">1h</td>');
   updateMetarDisplay(
     panel,
-    ticker,
     { reports: [{ id: "KBXM", metar: "raw", decoded: { ...decoded, observed: "13 16:59Z" } }] },
     new Date("2026-10-13T18:00:00Z"),
   );
@@ -67,7 +64,7 @@ test("highlights METAR age only after it exceeds one hour", () => {
 
 test("shows raw METAR text when the parser cannot decode a report", () => {
   const [panel] = nodes();
-  updateMetarDisplay(panel, nodes()[1], {
+  updateMetarDisplay(panel, {
     reports: [{ id: "KPWM", metar: "bad <data>", decoded: null }],
   });
   expect(panel.innerHTML).toContain(
@@ -75,9 +72,9 @@ test("shows raw METAR text when the parser cannot decode a report", () => {
   );
 });
 
-test("renders the remaining category colors and omits unknown ticker labels", () => {
-  const [panel, ticker] = nodes();
-  updateMetarDisplay(panel, ticker, {
+test("renders the remaining category colors", () => {
+  const [panel] = nodes();
+  updateMetarDisplay(panel, {
     reports: ["MVFR", "IFR", "LIFR"].map((flightCategory) => ({
       id: "KXXX",
       metar: "raw",
@@ -86,23 +83,18 @@ test("renders the remaining category colors and omits unknown ticker labels", ()
   });
   for (const category of ["mvfr", "ifr", "lifr"])
     expect(panel.innerHTML).toContain(`flight-category-${category}`);
-  expect(ticker.innerHTML).toContain("flight-category-mvfr");
-  expect(ticker.innerHTML).toContain("flight-category-ifr");
-  expect(ticker.innerHTML).toContain("flight-category-lifr");
 });
 
 test("shows an empty report message and ignores missing display nodes", () => {
-  const [panel, ticker] = nodes();
-  updateMetarDisplay(panel, ticker, { reports: [] });
+  const [panel] = nodes();
+  updateMetarDisplay(panel, { reports: [] });
   expect(panel.textContent).toBe("No METAR reports available.");
-  expect(ticker.textContent).toBe(panel.textContent);
-  expect(() => updateMetarDisplay(null, ticker, {})).not.toThrow();
-  expect(() => updateMetarDisplay(panel, null, {})).not.toThrow();
-  expect(() => updateMetarDisplay(panel, ticker, {})).not.toThrow();
+  expect(() => updateMetarDisplay(null, {})).not.toThrow();
+  expect(() => updateMetarDisplay(panel, {})).not.toThrow();
 });
 test("renders placeholders for missing decoded values", () => {
-  const [panel, ticker] = nodes();
-  updateMetarDisplay(panel, ticker, {
+  const [panel] = nodes();
+  updateMetarDisplay(panel, {
     reports: [{ id: "KBXM", metar: "raw", decoded: { observed: null } }],
   });
   expect(panel.innerHTML).toContain("<td>KBXM</td><td>—</td>");

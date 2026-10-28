@@ -1,12 +1,8 @@
-import { compareAircraftDistance, mergeAircraftRecord } from "./merge.mjs";
+import { createMergedAircraftList } from "./list.mjs";
 
-const LOCAL_FRESHNESS_MS = 8000;
-
-export function createMergedAircraftState({
-  clock = Date.now,
-  localFreshnessMs = LOCAL_FRESHNESS_MS,
-} = {}) {
+export function createMergedAircraftState({ clock = Date.now, localFreshnessMs = 8000 } = {}) {
   const entries = new Map();
+  const aircraftList = createMergedAircraftList(entries, clock, localFreshnessMs);
   function set(source, item) {
     if (typeof item?.icao !== "string" || !item.icao.trim()) return;
     const icao = item.icao.trim().toUpperCase();
@@ -30,19 +26,6 @@ export function createMergedAircraftState({
     setLocal: (item) => set("local", item),
     replaceLocal: (items) => replace("local", items),
     replaceRemote: (items) => replace("remote", items),
-    list() {
-      const now = clock();
-      return [...entries.values()]
-        .map((entry) => mergeAircraftRecord(entry, now, localFreshnessMs))
-        .sort(compareAircraftDistance);
-    },
-    localFurthestDistanceNm() {
-      return Math.max(
-        0,
-        ...[...entries.values()]
-          .map(({ local }) => local?.distanceNauticalMiles)
-          .filter(Number.isFinite),
-      );
-    },
+    ...aircraftList,
   };
 }

@@ -1,5 +1,6 @@
 import { MAX_RADAR_RANGE } from "../../radar/range.mjs";
 import { drawRunwayGuides } from "./guides.mjs";
+import { drawRunwayLine } from "./runway/line.mjs";
 
 export function drawAirportRunways(
   context,
@@ -42,17 +43,10 @@ function drawRunway(
   }));
   const points = ends.map(project);
   if (points.some((point) => !validPoint(point))) return;
-  if (runwaysVisible) drawLine(context, points[0], points[1]);
+  if (runwaysVisible) drawRunwayLine(context, points[0], points[1]);
   if (extensionsVisible || baseLegsVisible)
     for (const end of ends)
       drawRunwayGuides(context, end, project, extensionsVisible, baseLegsVisible);
-}
-
-function drawLine(context, first, second) {
-  context.beginPath();
-  context.moveTo(first.x, first.y);
-  context.lineTo(second.x, second.y);
-  context.stroke();
 }
 
 function validPoint(point) {

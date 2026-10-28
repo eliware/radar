@@ -1,3 +1,5 @@
+import { filterAircraftSnapshot } from "./snapshot-filter.mjs";
+
 const MAX_VIEW_RADIUS_NM = 300;
 
 export function createMergedAircraftClients(defaultRangeNm) {
@@ -29,12 +31,7 @@ export function createMergedAircraftClients(defaultRangeNm) {
     },
     publish(aircraft, localFurthestDistanceNm) {
       for (const client of clients.values()) {
-        const visible = aircraft.filter(
-          (item) =>
-            Number.isFinite(item.distanceNauticalMiles) &&
-            item.distanceNauticalMiles <= client.radiusNm &&
-            (!client.localOnly || !item.remoteOnly),
-        );
+        const visible = filterAircraftSnapshot(aircraft, client.radiusNm, client.localOnly);
         client.send({ event: "aircraft-snapshot", aircraft: visible, localFurthestDistanceNm });
       }
     },

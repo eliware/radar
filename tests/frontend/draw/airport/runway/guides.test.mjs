@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createRunwayGuidePoints } from "../../../../src/frontend/draw/airport/runway-guides.mjs";
+import { createRunwayGuidePoints } from "../../../../../src/frontend/draw/airport/runway/guides.mjs";
 
 test("builds extension and base-leg guide points at their required elevations", () => {
   const end = { latitude: 43, longitude: -70, elevationFeet: 100, alignmentDegrees: 90 };

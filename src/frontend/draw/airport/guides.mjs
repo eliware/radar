@@ -1,4 +1,4 @@
-import { createRunwayGuidePoints } from "./runway-guides.mjs";
+import { createRunwayGuidePoints } from "./runway/guides.mjs";
 
 export function drawRunwayGuides(context, end, project, extensionsVisible, baseLegsVisible) {
   const guide = createRunwayGuidePoints(end);

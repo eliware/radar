@@ -1,4 +1,5 @@
 import { updateMetarDisplay } from "../metar/display.mjs";
+import { renderMetarTicker } from "../metar/ticker.mjs";
 
 export function startMetarRefresh({ fetchData, panel, ticker, timerHost, enabled = true }) {
   const refresh = async () => {
@@ -7,9 +8,9 @@ export function startMetarRefresh({ fetchData, panel, ticker, timerHost, enabled
       const response = await fetchData("/api/metar");
       if (!response.ok) throw new Error("METAR request failed.");
       const data = await response.json();
-      if (enabled) updateMetarDisplay(panel, ticker, data);
+      if (enabled) updateDisplays(panel, ticker, data);
     } catch {
-      if (enabled) updateMetarDisplay(panel, ticker, { reports: [] });
+      if (enabled) updateDisplays(panel, ticker, { reports: [] });
     }
   };
   refresh();
@@ -23,4 +24,12 @@ export function startMetarRefresh({ fetchData, panel, ticker, timerHost, enabled
       if (timer !== null) timerHost?.clearInterval?.(timer);
     },
   };
+}
+
+function updateDisplays(panel, ticker, data) {
+  updateMetarDisplay(panel, data);
+  if (!ticker) return;
+  const reports = Array.isArray(data?.reports) ? data.reports : [];
+  if (reports.length) renderMetarTicker(ticker, reports);
+  else ticker.textContent = "No METAR reports available.";
 }

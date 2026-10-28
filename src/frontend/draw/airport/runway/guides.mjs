@@ -1,4 +1,4 @@
-import { runwayDestination } from "../../runway-destination.mjs";
+import { runwayDestination } from "../../../runway-destination.mjs";
 
 const EXTENSION_NM = 10;
 const EXTENSION_ALTITUDE_FEET = 3000;

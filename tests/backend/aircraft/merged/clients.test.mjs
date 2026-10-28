@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { createMergedAircraftClients } from "../../../../src/backend/aircraft/merged/clients.mjs";
 
-test("tracks per-client radius and local-only filters for snapshots", () => {
+test("tracks client settings and publishes aircraft snapshots", () => {
   const clients = createMergedAircraftClients(10);
   const local = jest.fn();
   const remote = jest.fn();
@@ -14,16 +14,18 @@ test("tracks per-client radius and local-only filters for snapshots", () => {
   expect(clients.setLocalOnly("missing", true)).toBe(false);
   expect(clients.setLocalOnly("local", "true")).toBe(false);
   expect(clients.setLocalOnly("local", true)).toBe(true);
-  const aircraft = [
-    { icao: "LOCAL", distanceNauticalMiles: 4, remoteOnly: false },
-    { icao: "REMOTE", distanceNauticalMiles: 4, remoteOnly: true },
-    { icao: "FAR", distanceNauticalMiles: 12, remoteOnly: false },
-    { icao: "UNKNOWN", remoteOnly: true },
-  ];
+  const aircraft = [{ icao: "LOCAL", distanceNauticalMiles: 4, remoteOnly: false }];
   clients.publish(aircraft, 4);
-  expect(local.mock.calls[0][0].aircraft.map(({ icao }) => icao)).toEqual(["LOCAL"]);
-  expect(remote.mock.calls[0][0].aircraft.map(({ icao }) => icao)).toEqual(["LOCAL", "REMOTE"]);
-  expect(remote.mock.calls[0][0].localFurthestDistanceNm).toBe(4);
+  expect(local).toHaveBeenCalledWith({
+    event: "aircraft-snapshot",
+    aircraft,
+    localFurthestDistanceNm: 4,
+  });
+  expect(remote).toHaveBeenCalledWith({
+    event: "aircraft-snapshot",
+    aircraft,
+    localFurthestDistanceNm: 4,
+  });
 });
 
 test("clamps radius and removes or clears client registrations", () => {

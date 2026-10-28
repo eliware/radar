@@ -1,20 +1,18 @@
 import { formatMetarAge } from "../../shared/metar/age.mjs";
 import { metarCategoryLabel } from "../../shared/metar/category.mjs";
 import { metarAgeStatusClass } from "./age-status.mjs";
-import { escapeMetarHtml, renderMetarTicker } from "./ticker.mjs";
+import { escapeMetarHtml } from "./ticker.mjs";
 
-export function updateMetarDisplay(element, ticker, data, now = new Date()) {
-  if (!element || !ticker) return;
+export function updateMetarDisplay(element, data, now = new Date()) {
+  if (!element) return;
   const reports = Array.isArray(data?.reports) ? data.reports : [];
   if (!reports.length) {
     element.textContent = "No METAR reports available.";
-    ticker.textContent = "No METAR reports available.";
     return;
   }
   element.innerHTML = `<table><thead><tr>${headers()}</tr></thead><tbody>${reports
     .map((report) => reportRow(report, now))
     .join("")}</tbody></table>`;
-  renderMetarTicker(ticker, reports);
 }
 
 function headers() {
