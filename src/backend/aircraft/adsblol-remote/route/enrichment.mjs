@@ -2,10 +2,6 @@ export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} 
   let enabled = true;
   let generation = 0;
 
-  function preserve(mapped, previous) {
-    return previous?.callsign === mapped.callsign ? previous : {};
-  }
-
   function enrich(mapped, aircraft) {
     if (!enabled || !lookup || !mapped.callsign) return;
     const stored = aircraft.get(mapped.icao);
@@ -28,7 +24,6 @@ export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} 
   }
 
   return {
-    preserve,
     enrich,
     setEnabled: (value) => {
       const next = Boolean(value);

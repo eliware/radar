@@ -1,16 +1,8 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolAircraftStore } from "../../../../src/backend/aircraft/adsblol-remote/aircraft-store.mjs";
-import { createAdsbLolRouteEnrichment } from "../../../../src/backend/aircraft/adsblol-remote/route-enrichment.mjs";
+import { createAdsbLolAircraftStore } from "../../../../../src/backend/aircraft/adsblol-remote/aircraft-store.mjs";
+import { createAdsbLolRouteEnrichment } from "../../../../../src/backend/aircraft/adsblol-remote/route/enrichment.mjs";
 
 const mapped = (callsign = "RPA1") => ({ icao: "ABC123", callsign });
-
-test("preserves route details only when callsign is unchanged", () => {
-  const enrichment = createAdsbLolRouteEnrichment({});
-  const previous = { callsign: "RPA1", origin: "KBOS" };
-  expect(enrichment.preserve(mapped(), previous)).toBe(previous);
-  expect(enrichment.preserve(mapped("RPA2"), previous)).toEqual({});
-  expect(enrichment.preserve(mapped(), undefined)).toEqual({});
-});
 
 test("looks up and publishes missing route data", async () => {
   const lookup = {

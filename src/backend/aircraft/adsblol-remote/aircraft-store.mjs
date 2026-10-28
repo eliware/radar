@@ -1,5 +1,6 @@
-import { normalizeRemoteAircraft } from "../remote-aircraft.mjs";
-import { createAdsbLolRouteEnrichment } from "./route-enrichment.mjs";
+import { normalizeRemoteAircraft } from "./normalize.mjs";
+import { createAdsbLolRouteEnrichment } from "./route/enrichment.mjs";
+import { preserveRouteData } from "./route/data.mjs";
 
 const AIRCRAFT_MAX_AGE_MS = 120_000;
 
@@ -24,7 +25,7 @@ export function createAdsbLolAircraftStore({
     const mapped = normalizeRemoteAircraft(record, location, clock());
     if (!mapped) return;
     const previous = aircraft.get(mapped.icao);
-    const stored = { ...routes.preserve(mapped, previous), ...mapped };
+    const stored = { ...preserveRouteData(mapped, previous), ...mapped };
     aircraft.set(mapped.icao, stored);
     routes.enrich(mapped, aircraft);
   }

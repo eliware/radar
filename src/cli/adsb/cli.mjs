@@ -6,7 +6,7 @@ import { renderFlightStrips } from "../flight/strips.mjs";
 import { parseAdsbLocation } from "../../shared/adsb-location.mjs";
 import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
 import { createCliAircraftUpdater } from "../update-cli-aircraft.mjs";
-import packageJson from "../../../package.json" with { type: "json" };
+import { writeAdsbCliHelp, writeAdsbCliVersion } from "./help.mjs";
 
 export const adsbCliDependencies = {
   createAircraftList,
@@ -38,11 +38,11 @@ export function startAdsbCli({
   }
 
   if (options.help) {
-    write("Usage: radar-adsb [--host HOST] [--port PORT] [--debug]");
+    writeAdsbCliHelp(write);
     return { close: () => undefined };
   }
   if (options.version) {
-    write(packageJson.version);
+    writeAdsbCliVersion(write);
     return { close: () => undefined };
   }
 

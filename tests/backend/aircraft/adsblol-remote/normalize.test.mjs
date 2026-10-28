@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { normalizeRemoteAircraft } from "../../../src/backend/aircraft/remote-aircraft.mjs";
+import { normalizeRemoteAircraft } from "../../../../src/backend/aircraft/adsblol-remote/normalize.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 

@@ -1,4 +1,4 @@
-import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
+import { calculateAircraftRange } from "../../../shared/aircraft/range.mjs";
 
 const MAX_OBSERVATION_AGE_MS = 120_000;
 

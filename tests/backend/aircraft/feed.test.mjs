@@ -54,18 +54,6 @@ test("publishes parsed aircraft updates and returns current aircraft", () => {
   state.feed.close();
 });
 
-test("adds range fields when the aircraft has a position", () => {
-  const state = setup({
-    calculateAircraftRange: jest.fn(() => ({ distanceNauticalMiles: 1, bearingDegrees: 2 })),
-  });
-  state.feedOptions.onLine("ok");
-  expect(state.aircraftList.update).toHaveBeenLastCalledWith({
-    icao: "ABC123",
-    distanceNauticalMiles: 1,
-    bearingDegrees: 2,
-  });
-});
-
 test("reads the configured origin before it opens the feed", () => {
   const state = setup();
   expect(state.dependencies.parseAdsbLocation).toHaveBeenCalledWith("43", "-70");

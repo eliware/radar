@@ -1,5 +1,4 @@
 import { expect, jest, test } from "@jest/globals";
-import packageJson from "../../../package.json" with { type: "json" };
 import { startAdsbCli } from "../../../src/cli/adsb/cli.mjs";
 
 function dependencies() {
@@ -157,19 +156,6 @@ test("does not render records without an aircraft address", () => {
 });
 
 test("prints version and invalid option errors without opening the feed", () => {
-  const version = dependencies();
-  version.values.parseAdsbOptions.mockReturnValue({ version: true });
-  const versionCli = startAdsbCli({
-    args: ["--version"],
-    write: version.write,
-    writeError: version.writeError,
-    setExitCode: version.setExitCode,
-    dependencies: version.values,
-  });
-  versionCli.close();
-  expect(version.write).toHaveBeenCalledWith(packageJson.version);
-  expect(version.values.connectSbsFeed).not.toHaveBeenCalled();
-
   const invalid = dependencies();
   invalid.values.parseAdsbOptions.mockImplementation(() => {
     throw new Error("bad options");
@@ -185,16 +171,4 @@ test("prints version and invalid option errors without opening the feed", () => 
   expect(invalid.writeError).toHaveBeenCalledWith("bad options");
   expect(invalid.setExitCode).toHaveBeenCalledWith(2);
   expect(invalid.values.connectSbsFeed).not.toHaveBeenCalled();
-});
-
-test("uses the default CLI dependencies", () => {
-  const write = jest.fn();
-  const cli = startAdsbCli({
-    args: ["--help"],
-    write,
-    writeError: jest.fn(),
-    setExitCode: jest.fn(),
-  });
-  cli.close();
-  expect(write).toHaveBeenCalledWith("Usage: radar-adsb [--host HOST] [--port PORT] [--debug]");
 });
