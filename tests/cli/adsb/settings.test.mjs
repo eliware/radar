@@ -38,3 +38,8 @@ test("preserves home coordinates from the environment", () => {
     locationLongitude: "-70",
   });
 });
+
+test("uses the command-line port even when the environment port is invalid", () => {
+  process.env.ADSB_PORT = "bad";
+  expect(resolveAdsbSettings({ port: "30004" }).port).toBe(30004);
+});

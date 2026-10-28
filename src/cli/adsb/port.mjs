@@ -13,7 +13,3 @@ export function resolveAdsbPort(commandLinePort, environmentPort) {
   validateAdsbPort(port);
   return port;
 }
-
-export function resolveAdsbSettingsPort(parsedArguments, environment) {
-  return resolveAdsbPort(parsedArguments.port, environment.port);
-}

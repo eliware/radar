@@ -1,10 +1,11 @@
 import { flightStripColumns } from "./columns.mjs";
+import { selectFlightStripHeaders } from "./headers.mjs";
 import { calculateFlightStripWidths, minimumFlightStripWidths } from "./sizing.mjs";
 import { flightStripGroupTableWidth, flightStripTableWidth, wideTableWidth } from "./sizing.mjs";
 
 export function createFlightStripLayout(width, values = []) {
   const full = width >= wideTableWidth;
-  const labels = flightStripColumns.map(([longName, shortName]) => (full ? longName : shortName));
+  const labels = selectFlightStripHeaders(full);
   const minimums = minimumFlightStripWidths(full, values);
   const oneLineWidth = full ? wideTableWidth : flightStripTableWidth(minimums);
   let groups = [flightStripColumns.map((_, index) => index)];
