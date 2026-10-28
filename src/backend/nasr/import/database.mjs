@@ -1,11 +1,8 @@
 import { DatabaseSync } from "node:sqlite";
-import { installNasrIndexes } from "../index-installer.mjs";
 import { DEFAULT_OUTPUT } from "../output-path.mjs";
 import { createNasrImportFiles } from "./files.mjs";
 import { validateNasrImportPaths } from "./paths.mjs";
-import { validateNasrImportDatabase } from "./validation.mjs";
-import { validateNasrDatabase } from "../validation.mjs";
-import { withNasrDatabase } from "./connections.mjs";
+import { prepareNasrTemporaryDatabase, validateNasrSource } from "./connection-checks.mjs";
 
 export function importNasrDatabaseLifecycle(
   inputPath,
@@ -14,16 +11,12 @@ export function importNasrDatabaseLifecycle(
 ) {
   const files = createNasrImportFiles({ exists, copy, mkdir, rename, remove });
   const { input, output } = validateNasrImportPaths(inputPath, outputPath, files.exists);
-  withNasrDatabase(Database, input, { readOnly: true }, validateNasrDatabase);
+  validateNasrSource(Database, input);
   files.prepareOutput(output);
   const temporary = files.temporaryPath(output);
   try {
     files.copyInput(input, temporary);
-    const indexes = withNasrDatabase(Database, temporary, undefined, (database) => {
-      const count = installNasrIndexes(database);
-      validateNasrImportDatabase(database);
-      return count;
-    });
+    const indexes = prepareNasrTemporaryDatabase(Database, temporary);
     files.install(temporary, output);
     return { output, indexes };
   } catch (error) {

@@ -3,7 +3,7 @@ import {
   prepareScreenshotOutput,
   screenshotOutputPath,
   validateScreenshotFile,
-} from "../../../../src/frontend/responsive/screenshot/files.mjs";
+} from "../../../../src/frontend/responsive/screenshot/output.mjs";
 
 test("creates an absolute output directory and resolves screenshot names", async () => {
   const files = { mkdir: jest.fn() };

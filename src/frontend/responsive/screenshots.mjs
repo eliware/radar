@@ -2,7 +2,7 @@ import {
   prepareScreenshotOutput,
   screenshotOutputPath,
   validateScreenshotFile,
-} from "./screenshot/files.mjs";
+} from "./screenshot/output.mjs";
 import { createScreenshotBrowserSession } from "./screenshot/browser-session.mjs";
 
 export async function captureResponsiveScreenshots({
