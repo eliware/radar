@@ -1,3 +1,5 @@
+import { validateAdsbPort } from "./port.mjs";
+
 export function parseAdsbArguments(args) {
   const options = {};
   for (let index = 0; index < args.length; index += 1) {
@@ -28,17 +30,7 @@ export function parseAdsbArguments(args) {
       continue;
     }
     options.port = Number(value);
-    validatePort(options.port);
+    validateAdsbPort(options.port);
   }
   return options;
-}
-
-export function validateAdsbPort(port) {
-  validatePort(port);
-}
-
-function validatePort(port) {
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
-    throw new Error("TCP endpoint number must be an integer from 1 through 65535");
-  }
 }

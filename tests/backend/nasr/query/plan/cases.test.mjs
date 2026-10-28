@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { NASR_QUERY_PLAN_CASES } from "../../../../src/backend/nasr/query/plan-cases.mjs";
+import { NASR_QUERY_PLAN_CASES } from "../../../../../src/backend/nasr/query/plan/cases.mjs";
 
 test("registers representative NASR query plan cases with required indexes", () => {
   expect(NASR_QUERY_PLAN_CASES).toHaveLength(9);

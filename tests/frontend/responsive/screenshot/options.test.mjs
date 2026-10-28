@@ -1,8 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  selectScreenshotModes,
-  selectScreenshotViewports,
-} from "../../../../src/frontend/responsive/screenshot/options.mjs";
+import { selectScreenshotViewports } from "../../../../src/frontend/responsive/screenshot/options.mjs";
 
 test("selects defined desktop and phone viewports", () => {
   expect(selectScreenshotViewports()).toHaveLength(6);
@@ -15,8 +12,6 @@ test("selects defined desktop and phone viewports", () => {
   expect(selectScreenshotViewports("iphone-12-landscape")[0].viewport.isLandscape).toBe(true);
 });
 
-test("validates viewport and screenshot mode selections", () => {
-  expect(selectScreenshotModes()).toEqual(["above-fold", "full-page"]);
+test("validates viewport selections", () => {
   expect(() => selectScreenshotViewports("unknown")).toThrow("Unknown viewport selection");
-  expect(() => selectScreenshotModes("unknown")).toThrow("Unknown screenshot mode");
 });
