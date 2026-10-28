@@ -15,7 +15,7 @@ export function createAircraftSceneUpdater({
     if (!position) return;
     const expired = targets.update(aircraft, Math.hypot(position.x, position.z));
     trails.remove(expired);
-    trails.add(aircraft.icao, position);
+    trails.add(aircraft.icao, position, aircraft.lastSeen);
     if (!autoZoom || !isAutoZoom()) return;
     const nextRange = selectDefaultRadarRange(targets.localDistances(), defaultRangeNm);
     if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
@@ -34,5 +34,6 @@ export function createAircraftSceneUpdater({
       if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
     }
   };
+  update.items = () => trails.withReceivedAt(targets.items());
   return update;
 }

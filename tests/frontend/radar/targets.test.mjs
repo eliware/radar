@@ -5,7 +5,7 @@ test("tracks target distances and drops targets after two minutes without update
   let now = 1000;
   const targets = createRadarTargets({ clock: () => now, staleAfterMs: 120_000 });
   expect(targets.update({ icao: "A" }, 12)).toEqual([]);
-  expect(targets.items()).toEqual(new Map([["A", { icao: "A", receivedAt: 1000 }]]));
+  expect(targets.items()).toEqual(new Map([["A", { icao: "A" }]]));
   expect(targets.update({ icao: "B" }, 25)).toEqual([]);
   expect(targets.distances()).toEqual([12, 25]);
   now += 120_001;
@@ -34,11 +34,15 @@ test("retains only identifiers included in the current viewport snapshot", () =>
   expect([...targets.items().keys()]).toEqual(["KEEP"]);
 });
 
-test("uses the source observation time and removes missing remote-only tracks", () => {
+test("keeps target records independent of display timestamps and removes missing remote tracks", () => {
   const targets = createRadarTargets({ clock: () => 10_000, staleAfterMs: 120_000 });
   targets.update({ icao: "REMOTE", remoteOnly: true, lastSeen: 8000 }, 10);
   targets.update({ icao: "LOCAL", remoteOnly: false }, 2);
-  expect(targets.items().get("REMOTE").receivedAt).toBe(8000);
+  expect(targets.items().get("REMOTE")).toEqual({
+    icao: "REMOTE",
+    remoteOnly: true,
+    lastSeen: 8000,
+  });
   expect(targets.distances()).toEqual([10, 2]);
   expect(targets.localDistances()).toEqual([2]);
   expect(targets.removeRemoteOnlyExcept([])).toEqual(["REMOTE"]);

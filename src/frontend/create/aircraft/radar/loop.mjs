@@ -7,6 +7,7 @@ const OVERLAY_REFRESH_MS = 100;
 export function createAircraftRadarLoop({
   targets,
   trails,
+  getTargetItems = () => targets.items(),
   windowRef,
   radarCamera,
   isAutoZoom,
@@ -57,7 +58,7 @@ export function createAircraftRadarLoop({
       if (lastOverlayFrame !== null && now - lastOverlayFrame < OVERLAY_REFRESH_MS) return;
       lastOverlayFrame = now;
       overlay.draw(
-        targets.items(),
+        getTargetItems(),
         trails,
         location,
         elevationFeet,

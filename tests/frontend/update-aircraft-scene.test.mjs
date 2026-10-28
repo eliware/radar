@@ -8,7 +8,11 @@ function makeUpdater({ autoZoom = true, position = { x: 3, y: 0, z: 4 } } = {}) 
     retain: jest.fn(() => ["OUTSIDE"]),
     localDistances: jest.fn(() => [30]),
   };
-  const trails = { add: jest.fn(), remove: jest.fn() };
+  const trails = {
+    add: jest.fn(),
+    remove: jest.fn(),
+    withReceivedAt: jest.fn((items) => items),
+  };
   const radarCamera = { range: jest.fn(() => 20), setRange: jest.fn() };
   const update = createAircraftSceneUpdater({
     location: { latitude: 43, longitude: -70 },
@@ -30,8 +34,16 @@ test("updates target range, trails, and auto-zoom for a valid aircraft", () => {
     expect.any(Number),
   );
   expect(state.trails.remove).toHaveBeenCalledWith(["OLD"]);
-  expect(state.trails.add).toHaveBeenCalledWith("ABC123", expect.any(Object));
+  expect(state.trails.add).toHaveBeenCalledWith("ABC123", expect.any(Object), undefined);
   expect(state.radarCamera.setRange).toHaveBeenCalledWith(35);
+});
+
+test("composes display items from target records and trail timestamps", () => {
+  const state = makeUpdater();
+  const items = new Map([["ABC123", { icao: "ABC123" }]]);
+  state.targets.items = jest.fn(() => items);
+  expect(state.update.items()).toBe(items);
+  expect(state.trails.withReceivedAt).toHaveBeenCalledWith(items);
 });
 
 test("skips invalid aircraft and keeps manual zoom unchanged", () => {
@@ -41,7 +53,7 @@ test("skips invalid aircraft and keeps manual zoom unchanged", () => {
 
   const manual = makeUpdater({ autoZoom: false });
   manual.update({ icao: "DEF456", latitude: 43.1, longitude: -70 });
-  expect(manual.trails.add).toHaveBeenCalledWith("DEF456", expect.any(Object));
+  expect(manual.trails.add).toHaveBeenCalledWith("DEF456", expect.any(Object), undefined);
   expect(manual.targets.localDistances).not.toHaveBeenCalled();
   expect(manual.radarCamera.setRange).not.toHaveBeenCalled();
 });

@@ -44,6 +44,7 @@ export function createCanvasRadarView({
     context,
     canvas,
     targets,
+    getTargetItems: aircraftState.items,
     location,
     elevationFeet,
     state,

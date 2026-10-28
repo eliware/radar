@@ -90,6 +90,24 @@ test("adds calculated range data to the in-memory aircraft record", () => {
   });
 });
 
+test("uses home coordinates from composed ADS-B options", () => {
+  const deps = dependencies();
+  deps.values.parseAdsbOptions.mockReturnValue({
+    host: "127.0.0.1",
+    port: 30003,
+    locationLatitude: "44",
+    locationLongitude: "-71",
+  });
+  startAdsbCli({
+    args: [],
+    write: deps.write,
+    writeError: deps.writeError,
+    setExitCode: deps.setExitCode,
+    dependencies: deps.values,
+  });
+  expect(deps.values.parseAdsbLocation).toHaveBeenCalledWith("44", "-71");
+});
+
 test("does not render records without an aircraft address", () => {
   const deps = dependencies();
   const record = { recordType: "STA", transmissionType: 1, sessionId: "2", aircraftId: "3" };

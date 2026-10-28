@@ -4,15 +4,7 @@ export function createAdsbLolClients(defaultRangeNm, maximumRangeNm) {
     get size() {
       return clients.size;
     },
-    get hasRemoteClients() {
-      return [...clients.values()].some((client) => !client.localOnly);
-    },
-    get radiusNm() {
-      let radius = 0;
-      for (const client of clients.values())
-        if (!client.localOnly) radius = Math.max(radius, client.radiusNm);
-      return Math.min(maximumRangeNm, radius);
-    },
+    settings: () => [...clients.values()].map((client) => ({ ...client })),
     connect(key) {
       clients.set(key, {
         radiusNm: Math.min(maximumRangeNm, Math.max(1, defaultRangeNm)),

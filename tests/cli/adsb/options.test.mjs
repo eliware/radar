@@ -36,10 +36,17 @@ function cliHarness(overrides = {}) {
 afterEach(() => {
   delete process.env.ADSB_HOST;
   delete process.env.ADSB_PORT;
+  delete process.env.ADSB_LAT;
+  delete process.env.ADSB_LON;
 });
 
 test("uses the local RTL1090 feed by default", () => {
-  expect(parseAdsbOptions([])).toEqual({ host: "127.0.0.1", port: 30003 });
+  expect(parseAdsbOptions([])).toEqual({
+    host: "127.0.0.1",
+    port: 30003,
+    locationLatitude: undefined,
+    locationLongitude: undefined,
+  });
 });
 
 test("combines environment defaults with explicit command-line overrides", () => {
@@ -48,7 +55,19 @@ test("combines environment defaults with explicit command-line overrides", () =>
   expect(parseAdsbOptions(["--host", "localhost", "--port", "30004", "--debug"])).toEqual({
     host: "localhost",
     port: 30004,
+    locationLatitude: undefined,
+    locationLongitude: undefined,
     debug: true,
+  });
+});
+
+test("composes home coordinates from environment with parsed CLI options", () => {
+  process.env.ADSB_LAT = "43";
+  process.env.ADSB_LON = "-70";
+  expect(parseAdsbOptions(["--port", "30004"])).toMatchObject({
+    port: 30004,
+    locationLatitude: "43",
+    locationLongitude: "-70",
   });
 });
 

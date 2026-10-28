@@ -13,6 +13,7 @@ test("tracks valid aircraft, sets auto-zoom, and prunes stale targets", () => {
     expect(state.range).toBeGreaterThan(20);
     expect(tracker.targets.items().has("A")).toBe(true);
     expect(tracker.trails.get("A")).toHaveLength(1);
+    expect(tracker.items().get("A").receivedAt).toBe(1_000_000);
     jest.setSystemTime(1_120_001);
     tracker.update({ icao: "B", latitude: 43, longitude: -69.5 });
     expect(tracker.targets.items().has("A")).toBe(false);

@@ -27,3 +27,27 @@ test("keeps only aircraft history from the past 60 seconds", () => {
   now = 90_001;
   expect(trails.get("ABC")).toEqual([]);
 });
+
+test("composes observation timestamps and clears them with aircraft history", () => {
+  const trails = createAircraftTrails(() => 1000);
+  trails.add("ABC", { x: 0, y: 0, z: 0 }, 750);
+  expect(trails.withReceivedAt(new Map([["ABC", { icao: "ABC" }]])).get("ABC").receivedAt).toBe(
+    750,
+  );
+  expect(
+    trails.withReceivedAt(new Map([["REMOTE", { icao: "REMOTE", lastSeen: 500 }]])).get("REMOTE")
+      .receivedAt,
+  ).toBe(500);
+  trails.remove(["ABC"]);
+  expect(trails.withReceivedAt(new Map([["ABC", { icao: "ABC" }]])).get("ABC").receivedAt).toBe(
+    undefined,
+  );
+  trails.add("DEF", { x: 1, y: 0, z: 0 }, Number.NaN);
+  expect(trails.withReceivedAt(new Map([["DEF", { icao: "DEF" }]])).get("DEF").receivedAt).toBe(
+    1000,
+  );
+  trails.clear();
+  expect(trails.withReceivedAt(new Map([["DEF", { icao: "DEF" }]])).get("DEF").receivedAt).toBe(
+    undefined,
+  );
+});

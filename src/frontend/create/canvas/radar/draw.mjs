@@ -4,6 +4,7 @@ export function createCanvasRadarDraw({
   context,
   canvas,
   targets,
+  getTargetItems = () => targets.items(),
   location,
   elevationFeet = 0,
   state,
@@ -22,7 +23,7 @@ export function createCanvasRadarDraw({
     drawCanvasRadar(
       context,
       canvas,
-      targets.items(),
+      getTargetItems(),
       location,
       state.range,
       state.offsetX,

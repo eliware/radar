@@ -55,9 +55,7 @@ export function createRadarTargets({
         .map(({ distance }) => distance);
     },
     items() {
-      return new Map(
-        [...targets].map(([icao, { item, lastSeen }]) => [icao, { ...item, receivedAt: lastSeen }]),
-      );
+      return new Map([...targets].map(([icao, { item }]) => [icao, item]));
     },
   };
 }

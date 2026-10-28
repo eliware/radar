@@ -14,7 +14,7 @@ export function createCanvasRadarAircraftState(location, state, draw) {
       if (!position) return;
       const expired = targets.update(item, Math.hypot(position.x, position.z));
       trails.remove(expired);
-      trails.add(item.icao, position);
+      trails.add(item.icao, position, item.lastSeen);
       if (state.autoZoom)
         state.range = selectDefaultRadarRange(targets.localDistances(), state.defaultRangeNm);
       if (shouldDraw) draw();
@@ -35,6 +35,9 @@ export function createCanvasRadarAircraftState(location, state, draw) {
         if (position) targets.update(item, Math.hypot(position.x, position.z));
       }
       draw();
+    },
+    items() {
+      return trails.withReceivedAt(targets.items());
     },
   };
 }

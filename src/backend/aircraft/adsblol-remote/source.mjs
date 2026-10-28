@@ -2,6 +2,7 @@ import { requestAdsbLolCircle } from "./request.mjs";
 import { createAdsbLolPoller } from "./poller.mjs";
 import { createAdsbLolAircraftStore } from "./aircraft-store.mjs";
 import { createAdsbLolClients } from "./clients.mjs";
+import { getAdsbLolPollingPolicy } from "./policy.mjs";
 const POLL_INTERVAL_MS = 6000;
 const MAX_RADIUS_NM = 300;
 export function createAdsbLolRemoteSource({
@@ -15,6 +16,7 @@ export function createAdsbLolRemoteSource({
   onError = () => {},
 }) {
   const clients = createAdsbLolClients(defaultRangeNm, MAX_RADIUS_NM);
+  const pollingPolicy = () => getAdsbLolPollingPolicy(clients, MAX_RADIUS_NM);
   const subscribers = new Set();
   const aircraft = createAdsbLolAircraftStore({
     location,
@@ -24,7 +26,7 @@ export function createAdsbLolRemoteSource({
   });
   const poller = createAdsbLolPoller({
     poll,
-    hasClients: () => clients.hasRemoteClients,
+    hasClients: () => pollingPolicy().hasRemoteClients,
     setTimeoutFn,
     clearTimeoutFn,
     onError,
@@ -41,7 +43,7 @@ export function createAdsbLolRemoteSource({
     if (!Number.isFinite(location?.latitude) || !Number.isFinite(location?.longitude)) {
       return;
     }
-    const records = await requestAdsbLolCircle(request, location, clients.radiusNm);
+    const records = await requestAdsbLolCircle(request, location, pollingPolicy().radiusNm);
     if (!isCurrent()) return;
     records.forEach((item) => aircraft.update(item));
     publish();
@@ -61,7 +63,7 @@ export function createAdsbLolRemoteSource({
     },
     setClientLocalOnly(key, value) {
       if (!clients.setLocalOnly(key, value)) return;
-      if (clients.hasRemoteClients) start();
+      if (pollingPolicy().hasRemoteClients) start();
       else {
         poller.stop();
         aircraft.clear();
@@ -74,7 +76,7 @@ export function createAdsbLolRemoteSource({
         poller.stop();
         aircraft.clear();
         publish();
-      } else if (!clients.hasRemoteClients) {
+      } else if (!pollingPolicy().hasRemoteClients) {
         poller.stop();
         aircraft.clear();
         publish();

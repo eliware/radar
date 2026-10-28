@@ -4,30 +4,31 @@ import { createAdsbLolClients } from "../../../../src/backend/aircraft/adsblol-r
 test("tracks connected client radii and excludes local-only clients", () => {
   const clients = createAdsbLolClients(20, 300);
   expect(clients.size).toBe(0);
-  expect(clients.hasRemoteClients).toBe(false);
-  expect(clients.radiusNm).toBe(0);
+  expect(clients.settings()).toEqual([]);
   clients.connect("phone");
   clients.connect("desktop");
   clients.setRadius("phone", 42.1);
   clients.setRadius("desktop", 500);
-  expect(clients.hasRemoteClients).toBe(true);
-  expect(clients.radiusNm).toBe(300);
+  expect(clients.settings()).toEqual([
+    { radiusNm: 43, localOnly: false },
+    { radiusNm: 300, localOnly: false },
+  ]);
   clients.setLocalOnly("desktop", true);
-  expect(clients.radiusNm).toBe(43);
+  expect(clients.settings()[1].localOnly).toBe(true);
   clients.disconnect("desktop");
   clients.disconnect("phone");
-  expect(clients.hasRemoteClients).toBe(false);
+  expect(clients.settings()).toEqual([]);
 });
 
 test("validates updates and resets connected client state", () => {
   const clients = createAdsbLolClients(0, 300);
   clients.connect("browser");
-  expect(clients.radiusNm).toBe(1);
+  expect(clients.settings()[0].radiusNm).toBe(1);
   clients.setRadius("browser", Number.NaN);
   expect(clients.setLocalOnly("missing", true)).toBe(false);
   expect(clients.setLocalOnly("browser", "true")).toBe(false);
   expect(clients.setLocalOnly("browser", true)).toBe(true);
-  expect(clients.radiusNm).toBe(0);
+  expect(clients.settings()[0].localOnly).toBe(true);
   clients.clear();
   expect(clients.size).toBe(0);
 });
