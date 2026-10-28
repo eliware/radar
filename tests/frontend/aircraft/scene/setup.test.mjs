@@ -7,21 +7,16 @@ const { createAircraftSceneSetup } =
 
 beforeEach(() => jest.clearAllMocks());
 
-test("constructs scene services and returns the resources for view composition", () => {
-  const setup = createAircraftSceneSetup({
+test("uses default range and rotation settings when no overrides are provided", () => {
+  createAircraftSceneSetup({
     container: { replaceChildren: jest.fn() },
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
     windowRef: {},
   });
-  expect(mocks.factories.createRadarStage).toHaveBeenCalledTimes(1);
-  expect(setup).toEqual(
-    expect.objectContaining({
-      connection: expect.any(Object),
-      workflow: expect.any(Object),
-      layers: expect.any(Object),
-      references: expect.any(Object),
-      destroy: expect.any(Function),
-    }),
+  expect(mocks.factories.createRadarCamera).toHaveBeenCalledWith(
+    expect.objectContaining({ defaultRangeNm: 20 }),
   );
+  expect(mocks.radarCamera.setRange).toHaveBeenCalledWith(20);
+  expect(mocks.radarCamera.setRotation).toHaveBeenCalledWith(0);
 });

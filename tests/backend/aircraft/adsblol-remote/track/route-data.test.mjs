@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { preserveRouteData } from "../../../../../src/backend/aircraft/adsblol-remote/route/data.mjs";
+import { preserveRouteData } from "../../../../../src/backend/aircraft/adsblol-remote/track/route-data.mjs";
 
 const mapped = (callsign = "RPA1") => ({ icao: "ABC123", callsign });
 

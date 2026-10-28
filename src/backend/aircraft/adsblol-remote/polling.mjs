@@ -1,4 +1,4 @@
-import { requestAdsbLolCircle } from "./request/circle.mjs";
+import { requestAndApplyAdsbLolCircle } from "./polling/request.mjs";
 import { createAdsbLolPoller } from "./poller.mjs";
 
 export function createAdsbLolRemotePolling({
@@ -15,10 +15,14 @@ export function createAdsbLolRemotePolling({
 }) {
   async function poll(isCurrent) {
     if (!Number.isFinite(location?.latitude) || !Number.isFinite(location?.longitude)) return;
-    const records = await requestAdsbLolCircle(request, location, pollingPolicy().radiusNm);
-    if (!isCurrent()) return;
-    records.forEach((item) => aircraft.update(item));
-    publish();
+    await requestAndApplyAdsbLolCircle({
+      request,
+      location,
+      radiusNm: pollingPolicy().radiusNm,
+      isCurrent,
+      aircraft,
+      publish,
+    });
   }
 
   return createAdsbLolPoller({

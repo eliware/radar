@@ -3,6 +3,7 @@ import { registerAircraftSceneMocks } from "../../../test-fixtures/aircraft-scen
 
 const mocks = registerAircraftSceneMocks(jest);
 const { createAircraftScene } = await import("../../../src/frontend/aircraft/scene.mjs");
+const { createAircraftSceneSetup } = await import("../../../src/frontend/aircraft/scene/setup.mjs");
 const container = { replaceChildren: jest.fn() };
 const windowRef = {};
 const location = { latitude: 43, longitude: -70 };
@@ -49,6 +50,20 @@ test("wires scene services, reports connection changes, and publishes references
   expect(mocks.updateRings).toHaveBeenCalledWith(40);
   cameraOptions.onManualZoom();
   expect(loop.isAutoZoom()).toBe(false);
+});
+
+test("constructs scene services for the composed public view", () => {
+  const setup = createAircraftSceneSetup({ container, location, elevationFeet: 300, windowRef });
+  expect(mocks.factories.createRadarStage).toHaveBeenCalledTimes(1);
+  expect(setup).toEqual(
+    expect.objectContaining({
+      connection: expect.any(Object),
+      workflow: expect.any(Object),
+      layers: expect.any(Object),
+      references: expect.any(Object),
+      destroy: expect.any(Function),
+    }),
+  );
 });
 
 test("uses the browser window when no window reference is passed", () => {

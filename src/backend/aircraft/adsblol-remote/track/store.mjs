@@ -1,5 +1,5 @@
 import { normalizeRemoteAircraft } from "../normalize.mjs";
-import { preserveRouteData } from "../route/data.mjs";
+import { preserveRouteData } from "./route-data.mjs";
 import { createAdsbLolTrackRecords } from "./records.mjs";
 
 export function createAdsbLolTrackStore({ location, clock = Date.now }) {

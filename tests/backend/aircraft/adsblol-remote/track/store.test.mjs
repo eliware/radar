@@ -12,3 +12,9 @@ test("expires remote tracks using the injected clock", () => {
   now += 120_001;
   expect(store.list()).toEqual([]);
 });
+
+test("rejects invalid remote records without creating tracks", () => {
+  const store = createAdsbLolTrackStore({ location: { latitude: 43, longitude: -70 } });
+  expect(store.update({ hex: "", lat: 43, lon: -70 })).toBeNull();
+  expect(store.list()).toEqual([]);
+});
