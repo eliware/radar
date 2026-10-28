@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAirwayVisibility } from "../../../src/frontend/create/airway-visibility.mjs";
+import { createAirwayVisibility } from "../../../../../src/frontend/create/radar/layer/airways.mjs";
 
 test("stores Q, J, and V airway state and reports changes", () => {
   const onChange = jest.fn();

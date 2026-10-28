@@ -1,8 +1,8 @@
 import { createIlsVisibility } from "../../ils-visibility.mjs";
 import { createProcedureVisibility } from "../../procedure-visibility.mjs";
-import { createAirwayVisibility } from "../../airway-visibility.mjs";
-import { createRunwayVisibility } from "../../runway-visibility.mjs";
-import { createReferenceVisibility } from "../../reference-visibility.mjs";
+import { createAirwayVisibility } from "./airways.mjs";
+import { createRunwayVisibility } from "./runways.mjs";
+import { createReferenceVisibility } from "./references.mjs";
 import { createAircraftVisibility } from "../../aircraft-visibility.mjs";
 import { createLayerVisibilityStorage } from "./storage.mjs";
 import { attachRadarLayerShortcuts } from "./shortcuts.mjs";

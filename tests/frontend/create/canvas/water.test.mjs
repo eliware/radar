@@ -22,8 +22,10 @@ test("loads the visible map area once and redraws when tile data arrives", async
   water.update();
   expect(fetchRef).toHaveBeenCalledTimes(1);
   expect(redraw).toHaveBeenCalled();
+  const redrawsBeforeToggle = redraw.mock.calls.length;
   events.get("keydown")({ key: "w", preventDefault: jest.fn() });
   expect(data.visible).toBe(false);
+  expect(redraw).toHaveBeenCalledTimes(redrawsBeforeToggle + 1);
   canvas.clientWidth = 0;
   state.offsetX = 5;
   water.update();

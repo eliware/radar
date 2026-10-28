@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createReferenceVisibility } from "../../../src/frontend/create/reference-visibility.mjs";
+import { createReferenceVisibility } from "../../../../../src/frontend/create/radar/layer/references.mjs";
 
 test("stores airport and navaid visibility and reports changes", () => {
   const onChange = jest.fn();
