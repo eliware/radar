@@ -1,4 +1,4 @@
-import { isAircraftProjectedNearHome } from "../aircraft/near-home/pass.mjs";
+import { classifyFlightAircraftNearHome } from "./near-home.mjs";
 
 const AIRCRAFT_EXPIRY_MS = 120000;
 
@@ -24,10 +24,7 @@ export function createFlightStripAircraftStore(clock = Date.now) {
       for (const [icao, item] of aircraft)
         if (Number.isFinite(item.lastSeen) && now - item.lastSeen > AIRCRAFT_EXPIRY_MS)
           aircraft.delete(icao);
-      return [...aircraft.values()].map((item) => ({
-        ...item,
-        nearHomePass: isAircraftProjectedNearHome(item, location, elevationFeet),
-      }));
+      return classifyFlightAircraftNearHome(aircraft.values(), location, elevationFeet);
     },
   };
 }
