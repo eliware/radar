@@ -5,8 +5,7 @@ import { createAdsbLolSubscribers } from "./subscribers.mjs";
 import { createAdsbLolClientLifecycle } from "./client-lifecycle.mjs";
 import { createAdsbLolRemotePolling } from "./polling.mjs";
 import { createAdsbLolRemoteSourceApi } from "./source/api.mjs";
-const POLL_INTERVAL_MS = 6000;
-const MAX_RADIUS_NM = 300;
+import { MAX_RADIUS_NM, POLL_INTERVAL_MS } from "./settings.mjs";
 export function createAdsbLolRemoteSource({
   location,
   defaultRangeNm = 20,

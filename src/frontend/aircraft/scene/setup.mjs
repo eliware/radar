@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import { getAircraftSceneRendererDependencies } from "./renderer-dependencies.mjs";
 import { createRadarControls } from "../../create/radar/controls.mjs";
 import { createRadarStage } from "../../create/radar/stage.mjs";
 import { createRadarCamera } from "../../radar/camera.mjs";
@@ -25,28 +25,36 @@ export function createAircraftSceneSetup({
   elevationFeet,
   defaultRangeNm = DEFAULT_RADAR_RANGE,
   defaultRotationDegrees = 0,
-  windowRef = window,
+  windowRef,
 }) {
-  const { scene, camera, renderer } = createRadarStage(THREE, container, windowRef);
+  const rendererDependencies = getAircraftSceneRendererDependencies(windowRef);
+  const { THREE } = rendererDependencies;
+  const browserWindow = rendererDependencies.windowRef;
+  const { scene, camera, renderer } = createRadarStage(THREE, container, browserWindow);
   const updateRings = createRadarSceneOverlays(THREE, scene);
   const airspace = createAirspaceVolumes(THREE, scene, location, elevationFeet);
   const setRadarConnected = createRadarHome(THREE, scene, updateRings);
   const controls = createRadarControls(camera, renderer.domElement, elevationFeet);
-  const water = createSceneWater(THREE, scene, location, elevationFeet, controls, windowRef);
+  const water = createSceneWater(THREE, scene, location, elevationFeet, controls, browserWindow);
   const connection = createRadarConnectionState(setRadarConnected);
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
   const references = createRadarReferenceStore();
-  const documentRef = windowRef.document ?? globalThis.document;
+  const documentRef = browserWindow.document ?? globalThis.document;
   const layers = createRadarLayerVisibility(documentRef, undefined, airspace.setVisible);
-  const overlay = createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef });
+  const overlay = createAircraftDisplayOverlay({
+    THREE,
+    container,
+    windowRef: browserWindow,
+    documentRef,
+  });
   const radar = createAircraftRadarCamera({
     createCamera: createRadarCamera,
     cameraOptions: {
       camera,
       controls,
       element: renderer.domElement,
-      windowRef,
+      windowRef: browserWindow,
       onRangeChange: (range) => (updateRings(range), water.load(range)),
       defaultRangeNm,
     },
@@ -58,7 +66,7 @@ export function createAircraftSceneSetup({
   const workflow = createAircraftSceneWorkflow({
     targets,
     trails,
-    windowRef,
+    windowRef: browserWindow,
     radarCamera,
     renderer,
     scene,
