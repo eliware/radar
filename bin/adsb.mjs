@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { adsbCliDependencies, startAdsbCli } from "../src/cli/adsb/cli.mjs";
+import { loadAdsbEnvironment } from "../src/cli/adsb/environment-loader.mjs";
 import { installCliProcessLifecycle } from "../src/cli/process-lifecycle.mjs";
 import { createTerminalFrameOutput } from "../src/cli/terminal/frame/output.mjs";
-import { config } from "dotenv";
 
-config({ quiet: true });
+loadAdsbEnvironment();
 
 const terminalOutput = createTerminalFrameOutput(process.stdout, process.env);
 

@@ -1,4 +1,5 @@
 import { prepareScreenshotPage } from "./setup.mjs";
+import { waitForScreenshotReadiness } from "./readiness.mjs";
 
 export function createScreenshotPageSession(browser) {
   async function capturePage(baseUrl, viewport, delayMs, onPageError, capture) {
@@ -6,7 +7,7 @@ export function createScreenshotPageSession(browser) {
     page.on("pageerror", onPageError);
     try {
       await prepareScreenshotPage(page, baseUrl, viewport);
-      await new Promise((done) => setTimeout(done, delayMs));
+      await waitForScreenshotReadiness(delayMs);
       return await capture(page);
     } finally {
       await page.close();

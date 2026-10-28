@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { renderMetarTicker } from "../../../src/frontend/metar/ticker.mjs";
+import { renderMetarTicker, updateMetarTicker } from "../../../src/frontend/metar/ticker.mjs";
 
 test("renders and restarts the ticker animation with escaped report data", () => {
   const reflow = jest.fn();
@@ -31,4 +31,15 @@ test("skips animation reset if there is no rendered ticker line", () => {
   const ticker = { innerHTML: "" };
   renderMetarTicker(ticker, []);
   expect(ticker.innerHTML).toBe("<span></span>");
+});
+
+test("selects refresh reports or displays the empty state", () => {
+  const ticker = { innerHTML: "", textContent: "" };
+  updateMetarTicker(ticker, { reports: [{ id: "KPWM", metar: "04006KT" }] });
+  expect(ticker.innerHTML).toContain("KPWM");
+  updateMetarTicker(ticker, { reports: [] });
+  expect(ticker.textContent).toBe("No METAR reports available.");
+  updateMetarTicker(ticker, {});
+  expect(ticker.textContent).toBe("No METAR reports available.");
+  expect(() => updateMetarTicker(null, { reports: [] })).not.toThrow();
 });

@@ -2,7 +2,7 @@ import { expect, test } from "@jest/globals";
 import {
   isAllowedAppIcon,
   isAllowedPwaScreenshot,
-} from "../../../src/backend/static/asset-policy.mjs";
+} from "../../../../src/backend/static/asset/policy.mjs";
 
 test("allows only named application icons", () => {
   expect(isAllowedAppIcon("radar-180.png")).toBe(true);
