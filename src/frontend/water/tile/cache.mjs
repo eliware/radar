@@ -1,4 +1,4 @@
-import { decodeWaterTile } from "../../decode-water-tile.mjs";
+import { decodeWaterTile } from "./decoder.mjs";
 import { createWaterTileRequest } from "./request.mjs";
 import { createWaterTileStore } from "./store.mjs";
 

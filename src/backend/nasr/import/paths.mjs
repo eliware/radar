@@ -1,7 +1,6 @@
 import { resolve } from "node:path";
-import { DEFAULT_OUTPUT } from "../output-path.mjs";
 
-export function validateNasrImportPaths(inputPath, outputPath = DEFAULT_OUTPUT, exists) {
+export function validateNasrImportPaths(inputPath, outputPath, exists) {
   const input = resolve(inputPath || "");
   const output = resolve(outputPath);
   if (!inputPath || !exists(input)) throw new Error(`Input NASR database not found: ${input}`);

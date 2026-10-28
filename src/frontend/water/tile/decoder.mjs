@@ -1,6 +1,6 @@
 import { VectorTile } from "@mapbox/vector-tile";
 import { PbfReader } from "pbf";
-import { decodeWaterLayer } from "./water/tile/layer.mjs";
+import { decodeWaterLayer } from "./layer.mjs";
 
 export function decodeWaterTile(buffer, tile) {
   const vectorTile = new VectorTile(new PbfReader(buffer));

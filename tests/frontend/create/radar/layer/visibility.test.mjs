@@ -47,7 +47,7 @@ test("creates visible layers and destroys all keyboard listeners", () => {
   expect(layers.aircraft.isLocalOnly()).toBe(true);
   expect(stored.get("radar.visibility.ils")).toBe("true");
   layers.destroy();
-  expect(removed).toHaveLength(6);
+  expect(removed).toHaveLength(4);
   if (originalStorage) Object.defineProperty(globalThis, "localStorage", originalStorage);
   else delete globalThis.localStorage;
 });

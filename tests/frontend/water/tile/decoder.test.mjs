@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { decodeWaterTile } from "../../src/frontend/decode-water-tile.mjs";
+import { decodeWaterTile } from "../../../../src/frontend/water/tile/decoder.mjs";
 
 test("returns no paths when the vector tile has no water layer or features", () => {
   expect(

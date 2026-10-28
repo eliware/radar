@@ -1,47 +1,22 @@
 import { expect, jest, test } from "@jest/globals";
 import { createReferenceVisibility } from "../../../src/frontend/create/reference-visibility.mjs";
 
-test("toggles airport and VOR visibility with A and N", () => {
-  let listener;
+test("stores airport and navaid visibility and reports changes", () => {
   const onChange = jest.fn();
-  const visibility = createReferenceVisibility(
-    { addEventListener: (_type, fn) => (listener = fn) },
-    onChange,
-  );
-  const send = (key) => listener({ key, target: {}, preventDefault: jest.fn() });
+  const visibility = createReferenceVisibility(onChange);
   expect(visibility.isAirportsVisible()).toBe(true);
   expect(visibility.isNavaidsVisible()).toBe(true);
-  send("a");
-  send("n");
-  visibility.setAirportsVisible(true);
-  visibility.setNavaidsVisible(true);
   visibility.setAirportsVisible(false);
+  visibility.setNavaidsVisible(false);
   visibility.setVisible("unknown", true);
   expect(visibility.isAirportsVisible()).toBe(false);
-  expect(visibility.isNavaidsVisible()).toBe(true);
-  expect(onChange).toHaveBeenLastCalledWith({ airportsVisible: false, navaidsVisible: true });
+  expect(visibility.isNavaidsVisible()).toBe(false);
+  expect(onChange).toHaveBeenLastCalledWith({ airportsVisible: false, navaidsVisible: false });
+  expect(onChange).toHaveBeenCalledTimes(2);
 });
 
-test("ignores other, modified, and editable key events", () => {
-  let listener;
-  const visibility = createReferenceVisibility({
-    addEventListener: (_type, fn) => (listener = fn),
-  });
-  for (const event of [
-    { key: "x" },
-    { key: "a", altKey: true },
-    { key: "n", ctrlKey: true },
-    { key: "a", target: { tagName: "INPUT" } },
-    { key: "n", target: { isContentEditable: true } },
-  ])
-    listener(event);
-  expect(visibility.isAirportsVisible()).toBe(true);
-  expect(visibility.isNavaidsVisible()).toBe(true);
-  visibility.destroy();
-});
-
-test("supports missing document methods", () => {
-  const visibility = createReferenceVisibility(null);
+test("uses the default change callback", () => {
+  const visibility = createReferenceVisibility();
   visibility.setAirportsVisible(false);
-  expect(() => visibility.destroy()).not.toThrow();
+  expect(visibility.isAirportsVisible()).toBe(false);
 });

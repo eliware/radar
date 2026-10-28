@@ -3,10 +3,7 @@ import { readScreenshotSelectionConfiguration } from "../../../../../src/fronten
 
 test("selects primary viewport when the option is present", () => {
   expect(
-    readScreenshotSelectionConfiguration(
-      { primary: true },
-      { RADAR_SCREENSHOT_VIEWPORTS: "mobile" },
-    ),
+    readScreenshotSelectionConfiguration(["--primary"], { RADAR_SCREENSHOT_VIEWPORTS: "mobile" }),
   ).toEqual({
     viewportSelection: "desktop-primary",
     modeSelection: "above-fold,full-page",
@@ -15,13 +12,10 @@ test("selects primary viewport when the option is present", () => {
 
 test("reads viewport and mode selections from the environment", () => {
   expect(
-    readScreenshotSelectionConfiguration(
-      {},
-      {
-        RADAR_SCREENSHOT_VIEWPORTS: "mobile",
-        RADAR_SCREENSHOT_MODES: "full-page",
-      },
-    ),
+    readScreenshotSelectionConfiguration([], {
+      RADAR_SCREENSHOT_VIEWPORTS: "mobile",
+      RADAR_SCREENSHOT_MODES: "full-page",
+    }),
   ).toEqual({ viewportSelection: "mobile", modeSelection: "full-page" });
 });
 

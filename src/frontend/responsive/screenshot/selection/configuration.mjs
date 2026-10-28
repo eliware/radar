@@ -1,7 +1,5 @@
-export function readScreenshotSelectionConfiguration(
-  { primary = false } = {},
-  environment = process.env,
-) {
+export function readScreenshotSelectionConfiguration(args = [], environment = process.env) {
+  const primary = args.includes("--primary");
   return {
     viewportSelection: primary
       ? "desktop-primary"
