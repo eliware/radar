@@ -1,6 +1,7 @@
 import { distanceNauticalMiles } from "../shared/distance-nautical-miles.mjs";
-import { groupRunwayEnds } from "./airport/runway-groups.mjs";
-import { AIRPORT_QUERY, NAVAID_QUERY, RUNWAY_QUERY } from "./sql-query-rules.mjs";
+import { groupRunwayEnds } from "./airport/runway/groups.mjs";
+import { RUNWAY_QUERY } from "./airport/runway/query.mjs";
+import { AIRPORT_QUERY, NAVAID_QUERY } from "./sql-query-rules.mjs";
 
 export function createAirportReferenceQueries(database) {
   const airportStatement = database.prepare(AIRPORT_QUERY);

@@ -2,7 +2,8 @@ import { ARTCC_POINTS } from "../../artcc-boundary-query.mjs";
 import { AIRWAY_QUERY } from "../../airway/query-rules.mjs";
 import { ILS_APPROACH_QUERY, ILS_MARKER_QUERY } from "../../ils/approach/query.mjs";
 import { SID_QUERY, STAR_QUERY } from "../../procedure/query-rules.mjs";
-import { AIRPORT_QUERY, NAVAID_QUERY, RUNWAY_QUERY } from "../../sql-query-rules.mjs";
+import { RUNWAY_QUERY } from "../../airport/runway/query.mjs";
+import { AIRPORT_QUERY, NAVAID_QUERY } from "../../sql-query-rules.mjs";
 
 export const NASR_QUERY_PLAN_CASES = [
   [

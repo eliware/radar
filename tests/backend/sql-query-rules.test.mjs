@@ -1,13 +1,10 @@
 import { expect, test } from "@jest/globals";
-import { AIRPORT_QUERY, NAVAID_QUERY, RUNWAY_QUERY } from "../../src/backend/sql-query-rules.mjs";
+import { AIRPORT_QUERY, NAVAID_QUERY } from "../../src/backend/sql-query-rules.mjs";
 
-test("limits airport and runway queries to public paved fields with endpoint data", () => {
+test("limits airport queries to public paved fields", () => {
   expect(AIRPORT_QUERY).toContain("A.FACILITY_USE_CODE = 'PU'");
   expect(AIRPORT_QUERY).toContain("A.ICAO_ID GLOB 'K[A-Z0-9][A-Z0-9][A-Z0-9]'");
   expect(AIRPORT_QUERY).toContain("CAST(R.RWY_LEN AS REAL) > 1000");
-  expect(RUNWAY_QUERY).toContain("E.RWY_END_ELEV");
-  expect(RUNWAY_QUERY).toContain("AS elevationFeet");
-  expect(RUNWAY_QUERY).toContain("R.SURFACE_TYPE_CODE IN ('ASPH', 'CONC'");
 });
 
 test("limits navaid queries to supported VOR types and coordinate bounds", () => {

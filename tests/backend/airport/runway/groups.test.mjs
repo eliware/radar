@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { groupRunwayEnds } from "../../../src/backend/airport/runway-groups.mjs";
+import { groupRunwayEnds } from "../../../../src/backend/airport/runway/groups.mjs";
 
 const end = (airportId, runwayId, overrides = {}) => ({
   airportId,

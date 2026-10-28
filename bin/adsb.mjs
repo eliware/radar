@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { adsbCliDependencies, startAdsbCli } from "../src/cli/adsb/cli.mjs";
-import { startTableRefresh } from "../src/cli/table-refresh.mjs";
+import { installCliProcessLifecycle } from "../src/cli/process-lifecycle.mjs";
 import { createTerminalFrameOutput } from "../src/cli/terminal-frame-output.mjs";
 import { config } from "dotenv";
 
@@ -18,18 +18,4 @@ const cli = startAdsbCli({
     process.exitCode = code;
   },
 });
-const stopTableRefresh = cli.table
-  ? startTableRefresh(() => cli.refresh(), setInterval, clearInterval)
-  : () => undefined;
-
-const onResize = () => cli.refresh?.();
-if (process.stdout.isTTY) process.stdout.on("resize", onResize);
-const close = () => {
-  stopTableRefresh();
-  process.stdout.off("resize", onResize);
-  cli.close();
-  terminalOutput.restore();
-};
-process.once("exit", terminalOutput.restore);
-process.once("SIGINT", close);
-process.once("SIGTERM", close);
+installCliProcessLifecycle({ cli, terminalOutput });
