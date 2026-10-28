@@ -4,10 +4,10 @@ import { createAirwayVisibility } from "../../airway-visibility.mjs";
 import { createRunwayVisibility } from "../../runway-visibility.mjs";
 import { createReferenceVisibility } from "../../reference-visibility.mjs";
 import { createAircraftVisibility } from "../../aircraft-visibility.mjs";
-import { createLayerVisibilityPersistence } from "./persistence.mjs";
+import { createLayerVisibilityStorage } from "./storage.mjs";
 
 export function createRadarLayerVisibility(documentRef, onChange, onReferenceChange) {
-  const persistence = createLayerVisibilityPersistence(onChange, onReferenceChange);
+  const persistence = createLayerVisibilityStorage(onChange, onReferenceChange);
   const aircraft = createAircraftVisibility(documentRef);
   const ils = createIlsVisibility(documentRef, persistence.ils);
   const procedures = createProcedureVisibility(documentRef, persistence.procedures);

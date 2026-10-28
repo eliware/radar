@@ -1,7 +1,7 @@
 import { persistLayerVisibility, readSavedLayerVisibility } from "./visibility-persistence.mjs";
 import { restoreLayerVisibility } from "./restore.mjs";
 
-export function createLayerVisibilityPersistence(onChange, onReferenceChange) {
+export function createLayerVisibilityStorage(onChange, onReferenceChange) {
   let restoring = true;
   function changed(key, value, callback = onChange) {
     if (restoring) return;

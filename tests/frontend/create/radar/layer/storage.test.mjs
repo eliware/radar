@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createLayerVisibilityPersistence } from "../../../../../src/frontend/create/radar/layer/persistence.mjs";
+import { createLayerVisibilityStorage } from "../../../../../src/frontend/create/radar/layer/storage.mjs";
 
 function controllers() {
   return {
@@ -38,7 +38,7 @@ test("restores controller values then persists each layer change", () => {
     values.set("radar.visibility.ils", "false");
     const changed = jest.fn();
     const referencesChanged = jest.fn();
-    const persistence = createLayerVisibilityPersistence(changed, referencesChanged);
+    const persistence = createLayerVisibilityStorage(changed, referencesChanged);
     const controls = controllers();
     persistence.ils(true);
     persistence.restore(controls);
@@ -65,7 +65,7 @@ test("restores controller values then persists each layer change", () => {
 test("falls back to the general callback for reference changes", () => {
   withStorage(() => {
     const changed = jest.fn();
-    const persistence = createLayerVisibilityPersistence(changed);
+    const persistence = createLayerVisibilityStorage(changed);
     persistence.restore(controllers());
     const value = { airportsVisible: false, navaidsVisible: false };
     persistence.references(value);
