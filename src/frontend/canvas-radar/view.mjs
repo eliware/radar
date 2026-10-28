@@ -9,9 +9,9 @@ import { createRadarLayerVisibility } from "../create/radar/layer/visibility.mjs
 import { createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
 import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
 import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
-import { getRadarCanvasViewport } from "./viewport.mjs";
 import { radarLegendTopInset } from "../draw/radar/legend/entries.mjs";
 import { createCanvasRadarSurface } from "./surface.mjs";
+import { createCanvasRadarViewApi } from "./view/api.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -85,29 +85,17 @@ export function createCanvasRadarView({
     () => targets.localDistances(),
     viewChanges,
   );
-  return {
-    mode: "2D",
-    setConnected(connected) {
-      state.connected = connected;
-      draw();
-    },
-    update: aircraftState.update,
-    updateSnapshot: aircraftState.updateSnapshot,
-    updateRemote: aircraftState.updateRemote,
-    isLocalOnly: layers.aircraft.isLocalOnly,
-    ...references.updates(() => {}, draw),
-    setIlsVisible: layers.ils.setVisible,
-    ...viewState,
-    getViewportBounds: () => getRadarCanvasViewport(canvas, state),
-    visibleRadiusNm() {
-      return this.getViewportBounds().visibleRadiusNm;
-    },
-    destroy() {
-      detachEvents();
-      layers.destroy();
-      waterLayer.destroy();
-      viewChanges.clear();
-      surface.destroy();
-    },
-  };
+  return createCanvasRadarViewApi({
+    state,
+    aircraftState,
+    layers,
+    references,
+    viewState,
+    canvas,
+    draw,
+    detachEvents,
+    waterLayer,
+    viewChanges,
+    surface,
+  });
 }

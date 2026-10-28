@@ -86,6 +86,7 @@ test("starts the secure live view and handles feed messages", async () => {
     createScene,
   });
   expect(result).toEqual(expect.objectContaining({ scene, socket }));
+  expect(socket.url).toBe("wss://localhost:3000/ws");
   expect(fetchData).not.toHaveBeenCalledWith("/api/aircraft");
   document.sendKey({ key: "f", preventDefault: jest.fn() });
   document.sendKey({ key: "m", preventDefault: jest.fn() });

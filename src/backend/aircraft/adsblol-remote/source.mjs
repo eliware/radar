@@ -4,6 +4,7 @@ import { getAdsbLolPollingPolicy } from "./policy.mjs";
 import { createAdsbLolSubscribers } from "./subscribers.mjs";
 import { createAdsbLolClientLifecycle } from "./client-lifecycle.mjs";
 import { createAdsbLolRemotePolling } from "./polling.mjs";
+import { createAdsbLolRemoteSourceApi } from "./source/api.mjs";
 const POLL_INTERVAL_MS = 6000;
 const MAX_RADIUS_NM = 300;
 export function createAdsbLolRemoteSource({
@@ -18,13 +19,16 @@ export function createAdsbLolRemoteSource({
 }) {
   const clients = createAdsbLolClients(defaultRangeNm, MAX_RADIUS_NM);
   const pollingPolicy = () => getAdsbLolPollingPolicy(clients, MAX_RADIUS_NM);
+  let publish;
   const aircraft = createAdsbLolAircraftStore({
     location,
     lookup,
     clock,
-    onRouteUpdate: publish,
+    onRouteUpdate: () => publish(),
   });
   const subscribers = createAdsbLolSubscribers(aircraft.list);
+  const sourceApi = createAdsbLolRemoteSourceApi({ aircraft, subscribers });
+  publish = sourceApi.publish;
   const poller = createAdsbLolRemotePolling({
     location,
     request,
@@ -44,22 +48,5 @@ export function createAdsbLolRemoteSource({
     aircraft,
     publish,
   });
-  function publish() {
-    subscribers.publish();
-  }
-  return {
-    list: aircraft.list,
-    subscribe: subscribers.subscribe,
-    connectClient: clientLifecycle.connect,
-    setClientRadius: clientLifecycle.setRadius,
-    setClientLocalOnly: clientLifecycle.setLocalOnly,
-    disconnectClient: clientLifecycle.disconnect,
-    setRouteLookupsEnabled(value) {
-      aircraft.setRouteLookupsEnabled(value);
-    },
-    close() {
-      clientLifecycle.close();
-      subscribers.clear();
-    },
-  };
+  return sourceApi.createPublicApi(clientLifecycle);
 }

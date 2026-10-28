@@ -159,6 +159,28 @@ test("uses constructor defaults and safely handles request errors", async () => 
   active.close();
 });
 
+test("publishes a successful route lookup update", async () => {
+  const subscriber = jest.fn();
+  const state = setup({
+    lookup: { getCallsignRoute: jest.fn(async () => ({ origin: "PWM", destination: "BOS" })) },
+    request: jest.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        aircraft: [
+          { hex: "abc123", lat: 43.9, lon: -70.3, seen: 0.4, seen_pos: 0.8, flight: "EJA123" },
+        ],
+      }),
+    })),
+  });
+  state.source.subscribe(subscriber);
+  state.source.connectClient("browser");
+  await tick(state);
+  await Promise.resolve();
+  expect(subscriber).toHaveBeenCalledTimes(2);
+  expect(state.source.list()).toMatchObject([{ origin: "PWM", destination: "BOS" }]);
+  state.source.close();
+});
+
 test("forwards route lookup settings to the aircraft store", () => {
   const state = setup();
   state.source.setRouteLookupsEnabled(false);
