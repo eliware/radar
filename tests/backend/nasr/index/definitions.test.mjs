@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { NASR_INDEXES } from "../../../src/backend/nasr/indexes.mjs";
+import { NASR_INDEXES } from "../../../../src/backend/nasr/index/definitions.mjs";
 
 test("defines unique indexes for each NASR query path", () => {
   const names = NASR_INDEXES.map((statement) => statement.match(/INDEX IF NOT EXISTS (\w+)/)[1]);

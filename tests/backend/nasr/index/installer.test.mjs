@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { installNasrIndexes } from "../../../../src/backend/nasr/index/installer.mjs";
-import { NASR_INDEXES } from "../../../../src/backend/nasr/indexes.mjs";
+import { NASR_INDEXES } from "../../../../src/backend/nasr/index/definitions.mjs";
 
 test("installs declared indexes in a transaction and analyzes the database", () => {
   const database = { exec: jest.fn() };

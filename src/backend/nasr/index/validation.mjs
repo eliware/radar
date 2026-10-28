@@ -1,4 +1,4 @@
-import { NASR_INDEXES } from "../indexes.mjs";
+import { NASR_INDEXES } from "./definitions.mjs";
 
 export function verifyNasrIndexes(database) {
   const stored = new Map(

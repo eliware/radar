@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { NASR_QUERY_PLAN_CASES } from "../../../../../src/backend/nasr/query/plan/cases.mjs";
 import { verifyNasrQueryPlan } from "../../../../../src/backend/nasr/query/plan/check.mjs";
-import { NASR_INDEXES } from "../../../../../src/backend/nasr/indexes.mjs";
+import { NASR_INDEXES } from "../../../../../src/backend/nasr/index/definitions.mjs";
 
 test("checks one representative plan for all required indexes", () => {
   const queryPlanCase = NASR_QUERY_PLAN_CASES[0];

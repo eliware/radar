@@ -1,4 +1,4 @@
-import { projectAircraftPosition } from "./aircraft/space-position.mjs";
+import { updateAircraftTargetAndTrail } from "./aircraft/target-updates.mjs";
 import { selectDefaultRadarRange } from "./radar/range.mjs";
 
 export function createAircraftSceneUpdater({
@@ -11,11 +11,14 @@ export function createAircraftSceneUpdater({
   defaultRangeNm,
 }) {
   function update(aircraft, autoZoom = true) {
-    const position = projectAircraftPosition(aircraft, location, elevationFeet);
-    if (!position) return;
-    const expired = targets.update(aircraft, Math.hypot(position.x, position.z));
-    trails.remove(expired);
-    trails.add(aircraft.icao, position, aircraft.lastSeen);
+    const update = updateAircraftTargetAndTrail({
+      aircraft,
+      location,
+      elevationFeet,
+      targets,
+      trails,
+    });
+    if (!update) return;
     if (!autoZoom || !isAutoZoom()) return;
     const nextRange = selectDefaultRadarRange(targets.localDistances(), defaultRangeNm);
     if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
