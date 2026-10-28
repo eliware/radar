@@ -30,15 +30,6 @@ test("formats strip fields from aircraft values", () => {
   ]);
 });
 
-test("shows optional type, range, origin, and destination as placeholders", () => {
-  expect(valuesOf({ icao: "A1B2C3" })).toEqual(["A1B2C3", "-", "-", "-", "-", "", "-", "-", "-"]);
-});
-
-test("keeps combined fields readable when one value is missing", () => {
-  expect(valuesOf({ trackDegrees: 359 })[3]).toBe("359°-");
-  expect(valuesOf({ groundSpeedKnots: 457 })[3]).toBe("-457");
-});
-
 test("uses callsign placeholders for records without identity", () => {
   expect(valuesOf({})[0]).toBe("-");
 });

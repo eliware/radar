@@ -3,6 +3,7 @@ import { predictAircraftPosition } from "../predict-aircraft-position.mjs";
 import { formatAircraftTag } from "../aircraft/tag-data.mjs";
 import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
 import { isAircraftDisplayNearHome } from "./aircraft-display/near-home.mjs";
+import { projectAircraftHistory } from "./aircraft-display/history.mjs";
 
 export function projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project) {
   const display = [];
@@ -24,12 +25,8 @@ export function projectAircraftDisplayItems(aircraft, trails, location, elevatio
       futureX: Number.isFinite(futureMarker?.x) ? futureMarker.x : null,
       futureY: Number.isFinite(futureMarker?.y) ? futureMarker.y : null,
       lines: formatAircraftTag(item),
-      history: (trails.get(item.icao) ?? []).map(project).filter(isVisible),
+      history: projectAircraftHistory(trails, item.icao, project),
     });
   }
   return display;
-}
-
-function isVisible(point) {
-  return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }

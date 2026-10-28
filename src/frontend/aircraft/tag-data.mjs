@@ -2,11 +2,7 @@ import { formatAircraftName } from "./name.mjs";
 import { formatAircraftSpeed } from "./speed.mjs";
 
 export function formatAircraftTag(aircraft) {
-  const altitude = Number.isFinite(aircraft.altitudeFeet)
-    ? Math.round(aircraft.altitudeFeet / 100)
-    : null;
-  const rate = aircraft.verticalRateFeetPerMinute;
-  const altitudeLine = altitude === null ? "-" : formatAltitude(altitude, rate);
+  const altitudeLine = formatAircraftAltitude(aircraft);
   const speed = formatAircraftSpeed(aircraft);
   const typeCode = aircraft.aircraftTypeCode?.trim();
   const lines = [
@@ -15,6 +11,13 @@ export function formatAircraftTag(aircraft) {
     typeCode ? `${speed} ${typeCode}` : speed,
   ];
   return lines;
+}
+
+export function formatAircraftAltitude(aircraft) {
+  const altitude = Number.isFinite(aircraft.altitudeFeet)
+    ? Math.round(aircraft.altitudeFeet / 100)
+    : null;
+  return altitude === null ? "-" : formatAltitude(altitude, aircraft.verticalRateFeetPerMinute);
 }
 
 function formatAltitude(altitude, rate) {
