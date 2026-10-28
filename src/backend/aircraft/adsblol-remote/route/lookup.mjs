@@ -1,16 +1,16 @@
+import { createAdsbLolRouteLookupControl } from "./lookup-control.mjs";
+
 export function createAdsbLolRouteLookup(lookup) {
-  let enabled = true;
-  let generation = 0;
+  const control = createAdsbLolRouteLookupControl();
 
   function request(mapped, aircraft, onResult) {
-    if (!enabled || !lookup || !mapped.callsign) return;
-    const requestGeneration = generation;
+    if (!control.isEnabled() || !lookup || !mapped.callsign) return;
+    const requestGeneration = control.generation();
     lookup
       .getCallsignRoute(mapped.callsign)
       .then((result) => {
         if (
-          requestGeneration === generation &&
-          enabled &&
+          control.isCurrent(requestGeneration) &&
           result &&
           aircraft.get(mapped.icao)?.callsign === mapped.callsign
         ) {
@@ -22,10 +22,6 @@ export function createAdsbLolRouteLookup(lookup) {
 
   return {
     request,
-    setEnabled(value) {
-      const next = Boolean(value);
-      if (next !== enabled) generation += 1;
-      enabled = next;
-    },
+    setEnabled: control.setEnabled,
   };
 }

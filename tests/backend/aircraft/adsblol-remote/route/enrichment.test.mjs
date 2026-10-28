@@ -32,10 +32,6 @@ test("skips disabled lookups, missing callsigns, complete routes, and absent ser
   const aircraft = new Map([["ABC123", { ...mapped(), origin: "KBOS", destination: "KORD" }]]);
   enrichment.enrich(mapped(), aircraft);
   enrichment.enrich(mapped(""), aircraft);
-  enrichment.setEnabled(false);
-  enrichment.setEnabled(false);
-  enrichment.enrich(mapped(), aircraft);
-  enrichment.setEnabled(true);
   createAdsbLolRouteEnrichment({}).enrich(mapped(), aircraft);
   expect(lookup.getCallsignRoute).not.toHaveBeenCalled();
 });

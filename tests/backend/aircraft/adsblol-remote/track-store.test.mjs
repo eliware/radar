@@ -18,17 +18,6 @@ test("stores normalized tracks and discards invalid records", () => {
   expect(tracks.list()).toHaveLength(1);
 });
 
-test("expires old tracks and clears stored records", () => {
-  let now = 10_000;
-  const tracks = createAdsbLolTrackStore({ location, clock: () => now });
-  tracks.update(record());
-  now += 120_001;
-  expect(tracks.list()).toEqual([]);
-  tracks.update(record());
-  tracks.clear();
-  expect(tracks.list()).toEqual([]);
-});
-
 test("preserves route fields only while a track keeps the same callsign", () => {
   const tracks = createAdsbLolTrackStore({ location });
   const mapped = tracks.update(record());

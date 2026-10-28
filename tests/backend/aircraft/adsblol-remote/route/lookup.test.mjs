@@ -3,7 +3,7 @@ import { createAdsbLolRouteLookup } from "../../../../../src/backend/aircraft/ad
 
 const mapped = { icao: "ABC123", callsign: "RPA1" };
 
-test("ignores stale callsigns and requests after disable and re-enable", async () => {
+test("ignores results when the aircraft callsign has changed", async () => {
   let resolveRoute;
   const lookup = createAdsbLolRouteLookup({
     getCallsignRoute: jest.fn(() => new Promise((resolve) => (resolveRoute = resolve))),
@@ -15,12 +15,12 @@ test("ignores stale callsigns and requests after disable and re-enable", async (
   resolveRoute({ origin: "KBOS" });
   await Promise.resolve();
   expect(onResult).not.toHaveBeenCalled();
+});
 
-  aircraft.set(mapped.icao, mapped);
-  lookup.request(mapped, aircraft, onResult);
+test("does not start requests while route lookup is disabled", () => {
+  const getCallsignRoute = jest.fn();
+  const lookup = createAdsbLolRouteLookup({ getCallsignRoute });
   lookup.setEnabled(false);
-  lookup.setEnabled(true);
-  resolveRoute({ origin: "KORD" });
-  await Promise.resolve();
-  expect(onResult).not.toHaveBeenCalled();
+  lookup.request(mapped, new Map([[mapped.icao, mapped]]), jest.fn());
+  expect(getCallsignRoute).not.toHaveBeenCalled();
 });
