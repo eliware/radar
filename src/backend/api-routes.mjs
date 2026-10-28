@@ -7,6 +7,7 @@ import { registerAirwayRoutes } from "./airway/routes.mjs";
 import { registerMetarRoutes } from "./metar/routes.mjs";
 import { registerWebSocketRoutes } from "./websocket-routes.mjs";
 import { registerRouteLookupControl } from "./routes/route-lookups.mjs";
+import { registerCoreRoutes } from "./core-routes.mjs";
 
 export function registerApiRoutes(
   app,
@@ -20,19 +21,12 @@ export function registerApiRoutes(
     metarLookup = null,
   } = {},
 ) {
-  app.get("/health", async () => ({ status: "ok" }));
-  app.get("/ready", async (_request, reply) => {
-    if (feed.isReady()) return { status: "ready" };
-    reply.code(503);
-    return { status: "not_ready" };
-  });
-  app.get("/api/config", async () => ({
+  registerCoreRoutes(app, feed, {
     location,
     elevationFeet,
     defaultRangeNm,
     defaultRotationDegrees,
-  }));
-  app.get("/api/aircraft", async () => feed.list());
+  });
   registerAirportRoutes(app, airportDatabase, location);
   registerNavaidRoutes(app, airportDatabase, location);
   registerAirspaceBoundaryRoutes(app, airportDatabase, location);

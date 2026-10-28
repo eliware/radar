@@ -1,5 +1,5 @@
 import { createCanvasRadarView } from "../../canvas-radar/view.mjs";
-import { reportRadarViewMode } from "./mode-report.mjs";
+import { notifyRadarViewMode } from "./mode-notifier.mjs";
 import { loadAircraftScene } from "./scene-loader.mjs";
 
 export async function createRadarView({
@@ -20,7 +20,7 @@ export async function createRadarView({
       defaultRotationDegrees,
       windowRef,
     });
-    reportRadarViewMode(onMode, "3D");
+    notifyRadarViewMode(onMode, "3D");
     return view;
   } catch (error) {
     if (!/WebGL context|WebGL2|WebGL unavailable/i.test(error.message)) throw error;
@@ -32,7 +32,7 @@ export async function createRadarView({
       defaultRotationDegrees,
       windowRef,
     });
-    reportRadarViewMode(onMode, "2D");
+    notifyRadarViewMode(onMode, "2D");
     return view;
   }
 }

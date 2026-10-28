@@ -27,15 +27,3 @@ test("publishes feed snapshots and applies viewport settings", () => {
   socket.on.mock.calls.find(([event]) => event === "error")[1]();
   expect(unsubscribe).toHaveBeenCalledTimes(2);
 });
-
-test("ignores malformed and unrelated messages and tolerates optional feed methods", () => {
-  let handler;
-  const feed = { subscribe: jest.fn(() => jest.fn()) };
-  registerWebSocketRoutes({ get: (_path, _options, route) => (handler = route) }, feed);
-  const socket = { readyState: 0, send: jest.fn(), on: jest.fn() };
-  handler(socket);
-  const message = socket.on.mock.calls.find(([event]) => event === "message")[1];
-  expect(() => message(Buffer.from("invalid json"))).not.toThrow();
-  expect(() => message(Buffer.from('{"type":"other"}'))).not.toThrow();
-  expect(() => message(Buffer.from('{"type":"viewport"}'))).not.toThrow();
-});

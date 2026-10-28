@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
-import { prepareNasrTemporaryDatabase } from "../../../../src/backend/nasr/import/prepare-database.mjs";
-import { NASR_INDEXES } from "../../../../src/backend/nasr/index/definitions.mjs";
-import { createNasrTestDatabase } from "../../../../test-fixtures/nasr-database.mjs";
+import { prepareNasrTemporaryDatabase } from "../../../../../src/backend/nasr/import/prepare/database.mjs";
+import { NASR_INDEXES } from "../../../../../src/backend/nasr/index/definitions.mjs";
+import { createNasrTestDatabase } from "../../../../../test-fixtures/nasr-database.mjs";
 
 function retainOnClose(database) {
   return {

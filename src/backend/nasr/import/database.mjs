@@ -1,8 +1,7 @@
 import { createNasrImportFiles } from "./files.mjs";
-import { installNasrCopy } from "./install-copy.mjs";
 import { validateNasrImportPaths } from "./paths.mjs";
 import { validateNasrSource } from "./connection-checks.mjs";
-import { prepareNasrTemporaryDatabase } from "./prepare-database.mjs";
+import { prepareNasrImportInstallation } from "./prepare/install.mjs";
 import { selectNasrImportOutput } from "./output.mjs";
 import { selectNasrDatabase } from "./sqlite.mjs";
 
@@ -16,8 +15,6 @@ export function importNasrDatabaseLifecycle(
   const outputSelection = selectNasrImportOutput(outputPath);
   const { input, output } = validateNasrImportPaths(inputPath, outputSelection, files.exists);
   validateNasrSource(DatabaseConstructor, input);
-  const indexes = installNasrCopy(files, input, output, (temporary) =>
-    prepareNasrTemporaryDatabase(DatabaseConstructor, temporary),
-  );
+  const indexes = prepareNasrImportInstallation(files, DatabaseConstructor, input, output);
   return { output, indexes };
 }
