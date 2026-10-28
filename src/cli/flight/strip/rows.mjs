@@ -5,6 +5,10 @@ import {
   formatAircraftStripHeading,
 } from "../../../shared/aircraft/strip-fields.mjs";
 
+export function aircraftRowsOf(aircraft, now = Date.now) {
+  return aircraft.map((item) => aircraftValuesOf(item, now()));
+}
+
 export function aircraftValuesOf(aircraft, now) {
   const withUnit = (value, suffix) =>
     value === null || value === undefined ? "-" : `${value}${suffix}`;

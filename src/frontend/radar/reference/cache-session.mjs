@@ -1,6 +1,6 @@
 import { clipPolylineToViewport } from "./clip-polyline.mjs";
 import { intersectsViewport } from "./intersection.mjs";
-import { createRadarReferenceViewApplier } from "./view-applier.mjs";
+import { createRadarReferenceViewApplier } from "./view/applier.mjs";
 
 const LAYERS = [
   ["airports", "updateAirports", 35, (item) => item.faaId],

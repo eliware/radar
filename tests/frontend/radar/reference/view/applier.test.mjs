@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { createRadarReferenceViewApplier } from "../../../../src/frontend/radar/reference/view-applier.mjs";
+import { createRadarReferenceViewApplier } from "../../../../../src/frontend/radar/reference/view/applier.mjs";
 
 afterEach(() => jest.useRealTimers());
 
