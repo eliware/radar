@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { renderMetarTable } from "../../../src/frontend/metar/table.mjs";
+import { updateMetarDisplay } from "../../../src/frontend/metar/table-update.mjs";
 
 function nodes() {
   return [{ textContent: "", innerHTML: "" }, { textContent: "" }];
@@ -75,4 +76,16 @@ test("renders placeholders for missing decoded values", () => {
     reports: [{ id: "KBXM", metar: "raw", decoded: { observed: null } }],
   });
   expect(panel.innerHTML).toContain("<td>KBXM</td><td>—</td>");
+});
+
+test("updates the display with reports or an unavailable message", () => {
+  const panel = { textContent: "", innerHTML: "" };
+  updateMetarDisplay(panel, { reports: [{ id: "KPWM", metar: "raw", decoded: null }] });
+  expect(panel.innerHTML).toContain("<table>");
+  expect(panel.innerHTML).toContain("KPWM");
+  updateMetarDisplay(panel, { reports: [] });
+  expect(panel.textContent).toBe("No METAR reports available.");
+  updateMetarDisplay(panel, {});
+  expect(panel.textContent).toBe("No METAR reports available.");
+  expect(() => updateMetarDisplay(null, {})).not.toThrow();
 });
