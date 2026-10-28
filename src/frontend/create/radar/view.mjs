@@ -1,4 +1,5 @@
 import { createCanvasRadarView } from "../../canvas-radar/view.mjs";
+import { loadAircraftScene } from "./scene-loader.mjs";
 
 export async function createRadarView({
   container,
@@ -10,8 +11,7 @@ export async function createRadarView({
   onMode,
 }) {
   try {
-    const { createAircraftScene } = await import("../../aircraft/scene.mjs");
-    const view = createAircraftScene({
+    const view = await loadAircraftScene({
       container,
       location,
       elevationFeet,

@@ -1,5 +1,5 @@
-import { updateMetarDisplay } from "../metar/display.mjs";
-import { updateMetarTicker } from "../metar/ticker.mjs";
+import { updateMetarDisplay } from "../metar/table-update.mjs";
+import { updateMetarTicker } from "../metar/ticker-update.mjs";
 
 function updateDisplay(panel, ticker, data) {
   updateMetarDisplay(panel, data);

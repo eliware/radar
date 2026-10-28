@@ -1,6 +1,7 @@
 import { createMergedAircraftState } from "./aircraft/state.mjs";
 import { createMergedAircraftClients } from "./clients.mjs";
 import { createMergedAircraftSnapshotPublisher } from "./snapshot/publisher.mjs";
+import { createMergedAircraftPublisher } from "./publish.mjs";
 
 export function createMergedAircraftFeed(
   localFeed,
@@ -18,12 +19,11 @@ export function createMergedAircraftFeed(
   const unsubscribeLocal = localFeed.subscribe((item) => state.setLocal(item));
   const unsubscribeRemote = remoteSource.subscribe((items) => state.replaceRemote(items));
 
-  function publishSnapshots() {
+  const publishSnapshots = () => {
     refresh();
-    const aircraft = state.list();
-    const localFurthestDistanceNm = state.localFurthestDistanceNm();
-    clients.publish(aircraft, localFurthestDistanceNm);
-  }
+    return publish();
+  };
+  const publish = createMergedAircraftPublisher({ state, clients });
   const snapshots = createMergedAircraftSnapshotPublisher(
     publishSnapshots,
     setIntervalFn,

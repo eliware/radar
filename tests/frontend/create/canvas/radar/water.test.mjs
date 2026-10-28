@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { createCanvasRadarWater } from "../../../../../src/frontend/create/canvas/radar/water.mjs";
 
-test("owns Canvas water state and control cleanup", () => {
+test("redraws when the W key changes water visibility and cleans up its control", () => {
   const listeners = new Map();
   const documentRef = {
     addEventListener: jest.fn((name, callback) => listeners.set(name, callback)),

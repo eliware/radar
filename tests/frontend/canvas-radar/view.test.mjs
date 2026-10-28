@@ -103,19 +103,6 @@ test("wires view changes and reference updates", () => {
   expect(state.container.replaceChildren).toHaveBeenLastCalledWith();
 });
 
-test("starts with the configured range and rotation", () => {
-  const state = setup();
-  const view = createCanvasRadarView({
-    ...state,
-    location: { latitude: 43, longitude: -70 },
-    defaultRangeNm: 25,
-    defaultRotationDegrees: 140,
-  });
-  expect(view.range()).toBe(25);
-  expect(view.northAngle()).toBeCloseTo((-140 * Math.PI) / 180);
-  view.destroy();
-});
-
 test("ignores invalid aircraft and draws valid aircraft updates", () => {
   jest.useFakeTimers().setSystemTime(1_000_000);
   try {

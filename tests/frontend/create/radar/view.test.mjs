@@ -5,6 +5,9 @@ const createCanvasRadarView = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/aircraft/scene.mjs", () => ({
   createAircraftScene,
 }));
+jest.unstable_mockModule("../../../../src/frontend/create/radar/scene-loader.mjs", () => ({
+  loadAircraftScene: (...args) => createAircraftScene(...args),
+}));
 jest.unstable_mockModule("../../../../src/frontend/canvas-radar/view.mjs", () => ({
   createCanvasRadarView,
 }));

@@ -5,8 +5,7 @@ import { connectSbsFeed } from "../../shared/tcp-feed.mjs";
 import { renderFlightStrips } from "../flight/strips.mjs";
 import { parseAdsbLocation } from "../../shared/adsb-location.mjs";
 import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
-import { writeAdsbCliVersion } from "./help.mjs";
-import { writeAdsbCliUsage } from "./usage.mjs";
+import { handleAdsbInformationalOptions } from "./informational-options.mjs";
 import { createAdsbCliOutput } from "./output.mjs";
 import { connectAdsbCliFeed } from "./feed.mjs";
 
@@ -39,14 +38,7 @@ export function startAdsbCli({
     return { close: () => undefined };
   }
 
-  if (options.help) {
-    writeAdsbCliUsage(write);
-    return { close: () => undefined };
-  }
-  if (options.version) {
-    writeAdsbCliVersion(write);
-    return { close: () => undefined };
-  }
+  if (handleAdsbInformationalOptions(options, write)) return { close: () => undefined };
 
   let location;
   try {
