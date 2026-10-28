@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { NASR_INDEXES } from "../../../src/backend/nasr/indexes.mjs";
-import { verifyNasrQueryPlans } from "../../../src/backend/nasr/query-plans.mjs";
+import { NASR_INDEXES } from "../../../../src/backend/nasr/indexes.mjs";
+import { verifyNasrQueryPlans } from "../../../../src/backend/nasr/query/plans.mjs";
 
 test("checks representative plans use their Radar indexes", () => {
   const database = {

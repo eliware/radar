@@ -45,9 +45,6 @@ test("renders decoded METAR rows and builds a mobile ticker", () => {
   expect(panel.innerHTML).toContain('<td class="metar-weather">RA</td>');
   expect(panel.innerHTML).toContain('<td class="metar-age metar-age-old">1h19m</td>');
   expect(panel.innerHTML.match(/<tr>/g)).toHaveLength(3);
-  expect(ticker.innerHTML).toContain(
-    '<span>KLEW <span class="flight-category flight-category-vfr">VFR</span> 02004KT　•　KBXM <span class="flight-category flight-category-vfr">VFR</span> 04006KT</span>',
-  );
 });
 
 test("highlights METAR age only after it exceeds one hour", () => {

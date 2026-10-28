@@ -1,10 +1,10 @@
-import { ARTCC_POINTS } from "../artcc-boundary-query.mjs";
-import { AIRWAY_QUERY } from "../airway/query-rules.mjs";
-import { ILS_APPROACH_QUERY, ILS_MARKER_QUERY } from "../ils/approach/query.mjs";
-import { SID_QUERY, STAR_QUERY } from "../procedure/query-rules.mjs";
-import { AIRPORT_QUERY, NAVAID_QUERY, RUNWAY_QUERY } from "../sql-query-rules.mjs";
+import { ARTCC_POINTS } from "../../artcc-boundary-query.mjs";
+import { AIRWAY_QUERY } from "../../airway/query-rules.mjs";
+import { ILS_APPROACH_QUERY, ILS_MARKER_QUERY } from "../../ils/approach/query.mjs";
+import { SID_QUERY, STAR_QUERY } from "../../procedure/query-rules.mjs";
+import { AIRPORT_QUERY, NAVAID_QUERY, RUNWAY_QUERY } from "../../sql-query-rules.mjs";
 
-const CHECKS = [
+export const NASR_QUERY_PLAN_CASES = [
   [
     "airports",
     AIRPORT_QUERY,
@@ -40,16 +40,3 @@ const CHECKS = [
   ["ILS markers", ILS_MARKER_QUERY, [43, 44, -71, -70], ["radar_ils_marker_location"]],
   ["ARTCC boundaries", ARTCC_POINTS, [], ["radar_artcc_order"]],
 ];
-
-export function verifyNasrQueryPlans(database) {
-  for (const [name, query, parameters, indexes] of CHECKS) {
-    const plan = database
-      .prepare(`EXPLAIN QUERY PLAN ${query}`)
-      .all(...parameters)
-      .map((row) => row.detail)
-      .join("\n");
-    for (const index of indexes) {
-      if (!plan.includes(index)) throw new Error(`NASR ${name} query plan does not use ${index}.`);
-    }
-  }
-}

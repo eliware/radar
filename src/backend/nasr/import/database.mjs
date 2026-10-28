@@ -3,7 +3,7 @@ import { DatabaseSync } from "node:sqlite";
 import { installNasrIndexes } from "../index-installer.mjs";
 import { DEFAULT_OUTPUT } from "../output-path.mjs";
 import { createNasrImportFiles } from "./files.mjs";
-import { verifyNasrQueryPlans } from "../query-plans.mjs";
+import { verifyNasrQueryPlans } from "../query/plans.mjs";
 import { validateNasrDatabase, verifyNasrIndexes } from "../validation.mjs";
 
 export function importNasrDatabaseLifecycle(
