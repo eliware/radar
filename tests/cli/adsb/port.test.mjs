@@ -1,5 +1,10 @@
 import { expect, test } from "@jest/globals";
-import { validateAdsbPort } from "../../../src/cli/adsb/port.mjs";
+import { parseAdsbPort, validateAdsbPort } from "../../../src/cli/adsb/port.mjs";
+
+test("converts command-line port text to a number", () => {
+  expect(parseAdsbPort("30004")).toBe(30004);
+  expect(parseAdsbPort("invalid")).toBeNaN();
+});
 
 test.each([1, 30004, 65535])("accepts TCP port %i", (port) => {
   expect(() => validateAdsbPort(port)).not.toThrow();

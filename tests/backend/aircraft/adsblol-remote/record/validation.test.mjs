@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateRemoteAircraftRecord } from "../../../../src/backend/aircraft/adsblol-remote/record-validation.mjs";
+import { validateRemoteAircraftRecord } from "../../../../../src/backend/aircraft/adsblol-remote/record/validation.mjs";
 
 const valid = { hex: "abc123", lat: 43, lon: -70, seen: 2 };
 

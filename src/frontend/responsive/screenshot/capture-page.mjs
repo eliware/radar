@@ -1,7 +1,8 @@
 import { createScreenshotPageSession } from "./page/session.mjs";
+import { createScreenshotPageErrors } from "./page-errors.mjs";
 
 export function createScreenshotPageCapture(browser) {
-  const errors = [];
+  const errors = createScreenshotPageErrors();
   const pageSession = createScreenshotPageSession(browser);
 
   function capturePage(name, baseUrl, viewport, delayMs, capture) {
@@ -9,15 +10,13 @@ export function createScreenshotPageCapture(browser) {
       baseUrl,
       viewport,
       delayMs,
-      (error) => errors.push(`${name}: ${error.message}`),
+      (error) => errors.record(name, error),
       capture,
     );
   }
 
   return {
     capturePage,
-    assertNoPageErrors() {
-      if (errors.length) throw new Error(`Browser errors:\n${errors.join("\n")}`);
-    },
+    assertNoPageErrors: errors.assertNone,
   };
 }

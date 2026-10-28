@@ -27,7 +27,7 @@ export function parseAdsbArguments(args) {
       options.host = value;
       continue;
     }
-    options.port = Number(value);
+    options.port = value;
   }
   return options;
 }

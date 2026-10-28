@@ -122,3 +122,41 @@ test("does not render records without an aircraft address", () => {
   deps.values.connectSbsFeed.mock.calls[0][0].onLine("STA,1,2,3");
   expect(deps.write).not.toHaveBeenCalled();
 });
+
+test("reports invalid options before opening the feed", () => {
+  const deps = dependencies();
+  deps.values.parseAdsbOptions.mockImplementation(() => {
+    throw new Error("bad options");
+  });
+  const cli = startAdsbCli({
+    args: [],
+    write: jest.fn(),
+    writeError: deps.writeError,
+    setExitCode: deps.setExitCode,
+    dependencies: deps.values,
+  });
+  cli.close();
+  expect(deps.writeError).toHaveBeenCalledWith("bad options");
+  expect(deps.setExitCode).toHaveBeenCalledWith(2);
+  expect(deps.values.connectSbsFeed).not.toHaveBeenCalled();
+});
+
+test("reports invalid home coordinates before opening the feed", () => {
+  const deps = dependencies();
+  deps.values.parseAdsbLocation.mockImplementation(() => {
+    throw new Error("bad ADSB_LAT/ADSB_LON");
+  });
+  const cli = startAdsbCli({
+    args: [],
+    write: jest.fn(),
+    writeError: deps.writeError,
+    setExitCode: deps.setExitCode,
+    locationLatitude: "bad",
+    locationLongitude: "-70",
+    dependencies: deps.values,
+  });
+  cli.close();
+  expect(deps.writeError).toHaveBeenCalledWith("bad ADSB_LAT/ADSB_LON");
+  expect(deps.setExitCode).toHaveBeenCalledWith(2);
+  expect(deps.values.connectSbsFeed).not.toHaveBeenCalled();
+});

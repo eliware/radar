@@ -4,7 +4,7 @@ import { parseAdsbArguments } from "../../../src/cli/adsb/arguments.mjs";
 test("parses host, port, help, version, and debug options", () => {
   expect(
     parseAdsbArguments(["--host", "localhost", "--port", "30004", "--help", "--version"]),
-  ).toEqual({ host: "localhost", port: 30004, help: true, version: true });
+  ).toEqual({ host: "localhost", port: "30004", help: true, version: true });
   expect(parseAdsbArguments(["--debug"])).toEqual({ debug: true });
   expect(parseAdsbArguments([])).toEqual({});
 });
