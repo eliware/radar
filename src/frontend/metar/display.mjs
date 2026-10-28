@@ -1,4 +1,4 @@
-import { formatMetarAge } from "../../shared/metar/age.mjs";
+import { formatMetarAge } from "../../shared/metar/age-format.mjs";
 import { metarCategoryLabel } from "../../shared/metar/category.mjs";
 import { metarAgeStatusClass } from "./age-status.mjs";
 import { escapeMetarHtml } from "./ticker.mjs";

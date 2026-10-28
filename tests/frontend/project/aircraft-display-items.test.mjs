@@ -60,3 +60,39 @@ test("drops aircraft, history, and vectors outside the camera depth", () => {
   );
   expect(result).toEqual([]);
 });
+
+test("keeps visible aircraft when its predicted position and history are behind the camera", () => {
+  const aircraft = new Map([
+    [
+      "A1",
+      {
+        icao: "A1",
+        latitude: 43.1,
+        longitude: -70,
+        altitudeFeet: 10000,
+        trackDegrees: 90,
+        groundSpeedKnots: 120,
+      },
+    ],
+    ["A2", { icao: "A2", latitude: 43.2, longitude: -70, altitudeFeet: 10000 }],
+  ]);
+  let calls = 0;
+  const project = () => {
+    calls += 1;
+    if (calls === 1) return { x: 10, y: 20 };
+    if (calls === 2) return { x: Number.NaN, y: Number.POSITIVE_INFINITY };
+    if (calls === 3) return null;
+    return { x: 30, y: 40 };
+  };
+  const result = projectAircraftDisplayItems(
+    aircraft,
+    new Map([["A1", [{ x: 1, y: 2, z: 3 }]]]),
+    { latitude: 43, longitude: -70 },
+    0,
+    project,
+  );
+
+  expect(result).toHaveLength(2);
+  expect(result[0]).toMatchObject({ x: 10, y: 20, futureX: null, futureY: null, history: [] });
+  expect(result[1]).toMatchObject({ x: 30, y: 40, futureX: null, futureY: null, history: [] });
+});
