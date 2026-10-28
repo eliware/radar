@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawHomeMarker } from "../../../../src/frontend/draw/canvas/home-marker.mjs";
+import { drawHomeMarker } from "../../../../src/frontend/draw/canvas/home.mjs";
 
 test("draws the home marker at the radar center", () => {
   const context = { beginPath: jest.fn(), arc: jest.fn(), fill: jest.fn() };

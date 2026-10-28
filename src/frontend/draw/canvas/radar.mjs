@@ -5,7 +5,7 @@ import { drawRadarScaleLegend } from "../radar/legend/table.mjs";
 import { drawCanvasRadarReferences } from "./radar-references.mjs";
 import { drawCanvasRadarWater } from "../water/canvas.mjs";
 import { createCanvasRadarScope } from "./scope.mjs";
-import { drawHomeMarker } from "./home-marker.mjs";
+import { drawHomeMarker } from "./home.mjs";
 export function drawCanvasRadar(
   ctx,
   canvas,

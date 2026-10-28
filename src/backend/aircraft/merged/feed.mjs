@@ -2,6 +2,7 @@ import { createMergedAircraftState } from "./aircraft/state.mjs";
 import { createMergedAircraftClients } from "./clients.mjs";
 import { createMergedAircraftSnapshotPublisher } from "./snapshot/publisher.mjs";
 import { createMergedAircraftPublisher } from "./publish.mjs";
+import { setMergedClientLocalOnly } from "./client-locality.mjs";
 
 export function createMergedAircraftFeed(
   localFeed,
@@ -45,9 +46,7 @@ export function createMergedAircraftFeed(
       if (radius !== undefined) remoteSource.setClientRadius(key, radius);
     },
     setClientLocalOnly(key, value) {
-      if (!clients.setLocalOnly(key, value)) return;
-      remoteSource.setClientLocalOnly?.(key, value);
-      publishSnapshots();
+      return setMergedClientLocalOnly(clients, remoteSource, key, value, publishSnapshots);
     },
     subscribe(send, key = Symbol("feed-client")) {
       if (closed) return () => false;
