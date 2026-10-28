@@ -141,3 +141,17 @@ test("pauses route lookups and ignores results started before they were disabled
   state.coordinator.update({ ...item, altitudeFeet: 11000 }, state.publish);
   expect(state.lookup.getCallsignRoute).toHaveBeenCalledTimes(2);
 });
+
+test("closes state and ignores lookup results after shutdown", async () => {
+  const state = createState();
+  let complete;
+  state.lookup.getAircraftType.mockImplementation(
+    () => new Promise((resolve) => (complete = resolve)),
+  );
+  state.coordinator.update({ icao: "ABC123" }, state.publish);
+  state.coordinator.close();
+  state.coordinator.update({ icao: "DEF456" }, state.publish);
+  complete({ aircraftTypeCode: "B738" });
+  await Promise.resolve();
+  expect(state.changes).toEqual([{ icao: "ABC123" }]);
+});

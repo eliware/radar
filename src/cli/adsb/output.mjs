@@ -1,21 +1,23 @@
-import { writeAdsbUpdate } from "./write-update.mjs";
+import { createAdsbUpdateWriter } from "./write-update.mjs";
 
-export function createAdsbCliOutput({ debug, write, renderTable }) {
+export function createAdsbCliOutput({
+  debug,
+  write,
+  renderTable,
+  createUpdateWriter = createAdsbUpdateWriter,
+}) {
   let hasAircraft = false;
+  const outputWriter = createUpdateWriter({ debug, write, renderTable });
   function refresh() {
-    if (!hasAircraft || debug) return;
-    writeAdsbUpdate({ debug: false, write, renderTable });
+    if (!hasAircraft) return;
+    outputWriter.refresh();
   }
   return {
-    table: !debug,
+    table: outputWriter.table,
     refresh,
     update(aircraft) {
-      if (debug) {
-        writeAdsbUpdate({ aircraft, debug: true, write, renderTable });
-        return;
-      }
       hasAircraft = true;
-      refresh();
+      outputWriter.update(aircraft);
     },
   };
 }

@@ -1,26 +1,19 @@
 import { expect, jest, test } from "@jest/globals";
 import { createAdsbCliOutput } from "../../../src/cli/adsb/output.mjs";
 
-test("selects JSON output in debug mode and keeps refresh inactive", () => {
-  const write = jest.fn();
-  const renderTable = jest.fn(() => "table");
-  const output = createAdsbCliOutput({ debug: true, write, renderTable });
-  expect(output.table).toBe(false);
+test("refreshes output only after aircraft arrive", () => {
+  const updateWriter = { table: true, update: jest.fn(), refresh: jest.fn() };
+  const createUpdateWriter = jest.fn(() => updateWriter);
+  const output = createAdsbCliOutput({
+    debug: false,
+    write: jest.fn(),
+    renderTable: jest.fn(),
+    createUpdateWriter,
+  });
   output.refresh();
-  output.update({ icao: "ABC123" });
-  expect(write).toHaveBeenCalledWith('{"icao":"ABC123"}');
-  expect(renderTable).not.toHaveBeenCalled();
-});
-
-test("selects table output and refreshes only after aircraft arrive", () => {
-  const write = jest.fn();
-  const renderTable = jest.fn(() => "table");
-  const output = createAdsbCliOutput({ debug: false, write, renderTable });
-  expect(output.table).toBe(true);
-  output.refresh();
-  expect(write).not.toHaveBeenCalled();
+  expect(updateWriter.refresh).not.toHaveBeenCalled();
   output.update({ icao: "ABC123" });
   output.refresh();
-  expect(renderTable).toHaveBeenCalledTimes(2);
-  expect(write).toHaveBeenCalledTimes(2);
+  expect(updateWriter.update).toHaveBeenCalledWith({ icao: "ABC123" });
+  expect(updateWriter.refresh).toHaveBeenCalledTimes(1);
 });
