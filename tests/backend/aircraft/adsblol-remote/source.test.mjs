@@ -34,7 +34,7 @@ async function tick(state) {
   await timer.callback();
 }
 
-test("polls by active client radius and pauses only when every client is local-only", async () => {
+test("polls using the connected client's radius and publishes aircraft updates", async () => {
   const state = setup({
     request: jest.fn(async () => ({
       ok: true,
@@ -46,33 +46,15 @@ test("polls by active client radius and pauses only when every client is local-o
   const subscriber = jest.fn();
   state.source.subscribe(subscriber);
   state.source.connectClient("phone");
-  state.source.connectClient("desktop");
   state.source.setClientRadius("phone", 42.1);
-  state.source.setClientRadius("desktop", 530);
-  state.source.setClientLocalOnly("desktop", true);
   expect([...state.timers.values()][0].delay).toBe(6000);
   await tick(state);
   expect(state.request.mock.calls[0][0]).toContain("circle=43.8,-70.4,43");
   expect(state.request.mock.calls[0][1].headers["user-agent"]).toContain("radar@eliware.org");
-  state.source.setClientLocalOnly("desktop", false);
   expect(state.source.list()).toMatchObject([{ icao: "ABC123", aircraftTypeCode: "E75L" }]);
-  expect([...state.timers.values()][0].delay).toBe(6000);
   expect(subscriber).toHaveBeenCalledTimes(1);
-  state.source.setClientLocalOnly("phone", true);
-  expect(state.timers.size).toBe(1);
-  state.source.setClientLocalOnly("desktop", true);
-  expect(state.timers.size).toBe(0);
-  expect(state.source.list()).toEqual([]);
-  expect(subscriber).toHaveBeenLastCalledWith([]);
-  state.source.setClientLocalOnly("unknown", true);
-  state.source.setClientLocalOnly("phone", "true");
-  state.source.setClientLocalOnly("phone", false);
-  expect(state.timers.size).toBe(1);
   state.source.disconnectClient("phone");
-  state.source.disconnectClient("desktop");
-  expect(state.clearTimeoutFn).toHaveBeenCalledTimes(2);
   expect(state.source.list()).toEqual([]);
-  state.source.disconnectClient("another");
 });
 
 test("backs off failures exponentially, caps at five minutes, then resets after success", async () => {

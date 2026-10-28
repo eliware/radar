@@ -3,7 +3,7 @@ import { loadDashboardReferences } from "./dashboard/references.mjs";
 import { connectDashboardFeed } from "./dashboard/feed.mjs";
 import { createFlightStripView } from "./flight/strips.mjs";
 import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
-import { destroyDashboardResources } from "./destroy/dashboard-resources.mjs";
+import { cleanupDashboardSetup } from "./dashboard/cleanup.mjs";
 import { createViewportReporter } from "./report-viewport.mjs";
 import { readJson } from "./read-json.mjs";
 import { createDashboardDisplay } from "./dashboard/display.mjs";
@@ -56,10 +56,10 @@ export async function startDashboard({
     });
     resources.feed = feed;
     resources.detachViewport = scene.onViewChange?.(() => sendViewport(feed.socket));
-    const destroy = attachDashboardPagehide(windowRef, () => destroyDashboardResources(resources));
+    const destroy = attachDashboardPagehide(windowRef, () => cleanupDashboardSetup(resources));
     return { scene, socket: feed.socket, feed, flightStrips, destroy };
   } catch {
-    destroyDashboardResources(resources);
+    cleanupDashboardSetup(resources);
     return null;
   }
 }

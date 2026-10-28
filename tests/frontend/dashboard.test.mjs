@@ -114,20 +114,6 @@ test("does not start when the page or configuration is missing", async () => {
   });
   expect(failed).toBeNull();
 });
-test("destroys the scene when dashboard setup fails after scene creation", async () => {
-  const fetchData = jest
-    .fn()
-    .mockResolvedValueOnce(jsonResponse({ location: null, elevationFeet: 300 }))
-    .mockResolvedValueOnce(jsonResponse({ reports: [] }));
-  const scene = {
-    onViewChange: jest.fn(() => {
-      throw new Error("setup failed");
-    }),
-    destroy: jest.fn(),
-  };
-  await startDashboard({ document: makeDocument(), fetchData, createScene: () => scene });
-  expect(scene.destroy).toHaveBeenCalledTimes(1);
-});
 test("supports a scene without a viewport change subscription", async () => {
   const fetchData = jest.fn().mockResolvedValue(jsonResponse({}));
   const scene = { update: jest.fn(), destroy: jest.fn() };

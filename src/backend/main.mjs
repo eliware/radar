@@ -1,6 +1,7 @@
 import { parseRadarViewSettings } from "../shared/radar-view-settings.mjs";
 import { parseElevation } from "./config/elevation.mjs";
 import { parsePort } from "./config/port.mjs";
+import { registerApplicationShutdown } from "./lifecycle/shutdown.mjs";
 
 export async function startWebApplication(dependencies) {
   dependencies.loadEnvironment({ quiet: true });
@@ -41,16 +42,12 @@ export async function startWebApplication(dependencies) {
     airportDatabase,
     metarLookup,
   });
-  let shutdownPromise;
-  const shutdown = () => {
-    if (shutdownPromise) return shutdownPromise;
-    mergedFeed.close();
-    enrichedFeed.close();
-    feed.close();
-    shutdownPromise = app.close().then(() => log.info("Web application stopped"));
-    return shutdownPromise;
-  };
-  dependencies.registerSignals({ log, shutdownHook: shutdown });
+  const shutdown = registerApplicationShutdown({
+    app,
+    resources: [mergedFeed, enrichedFeed, feed],
+    log,
+    registerSignals: dependencies.registerSignals,
+  });
   await app.listen({ host: "0.0.0.0", port });
   log.info(`Web application listening at TCP endpoint ${port}`);
   return { app, feed: mergedFeed, shutdown };

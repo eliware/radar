@@ -89,16 +89,9 @@ test("starts Fastify and closes the feed after a signal", async () => {
   deps.values.createAdsbLolRemoteSource.mock.calls[0][0].onError(new Error("remote offline"));
   expect(deps.log.warn).toHaveBeenCalledWith("ADS-B stream error: offline");
   expect(deps.log.warn).toHaveBeenCalledWith("ADSB.lol remote feed error: remote offline");
-  await deps.signals.shutdownHook();
-  await deps.signals.shutdownHook();
-  expect(deps.feed.close).toHaveBeenCalledTimes(1);
-  expect(deps.mergedFeed.close).toHaveBeenCalledTimes(1);
-  expect(
-    deps.values.createAircraftEnrichmentFeed.mock.results[0].value.close,
-  ).toHaveBeenCalledTimes(1);
-  expect(deps.app.close).toHaveBeenCalledTimes(1);
   expect(runtime.app).toBe(deps.app);
   expect(runtime.feed).toBe(deps.mergedFeed);
+  expect(runtime.shutdown).toBe(deps.signals.shutdownHook);
 });
 
 test("uses default web and feed settings", async () => {

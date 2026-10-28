@@ -1,18 +1,7 @@
-import { clampWaterLatitude, projectWaterTileRange } from "./projection.mjs";
+import { calculateWaterTileBounds } from "./bounds.mjs";
 
 export function selectWaterTiles(center, rangeNm, tileZoom) {
-  const radius = Math.max(1, rangeNm) * 1.6;
-  const minLat = clampWaterLatitude(center.latitude - radius / 60);
-  const maxLat = clampWaterLatitude(center.latitude + radius / 60);
-  const longitudeRadius =
-    radius / (60 * Math.max(0.05, Math.cos((center.latitude * Math.PI) / 180)));
-  const { minX, maxX, minY, maxY } = projectWaterTileRange(
-    center.longitude - longitudeRadius,
-    center.longitude + longitudeRadius,
-    minLat,
-    maxLat,
-    tileZoom,
-  );
+  const { minX, maxX, minY, maxY } = calculateWaterTileBounds(center, rangeNm, tileZoom);
   const size = 2 ** tileZoom;
   const tiles = [];
   for (let y = minY; y <= maxY; y += 1) {

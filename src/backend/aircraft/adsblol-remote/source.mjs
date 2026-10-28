@@ -4,6 +4,7 @@ import { createAdsbLolAircraftStore } from "./aircraft-store.mjs";
 import { createAdsbLolClients } from "./clients.mjs";
 import { getAdsbLolPollingPolicy } from "./policy.mjs";
 import { createAdsbLolSubscribers } from "./subscribers.mjs";
+import { createAdsbLolClientLifecycle } from "./client-lifecycle.mjs";
 const POLL_INTERVAL_MS = 6000;
 const MAX_RADIUS_NM = 300;
 export function createAdsbLolRemoteSource({
@@ -33,9 +34,13 @@ export function createAdsbLolRemoteSource({
     onError,
     intervalMs: POLL_INTERVAL_MS,
   });
-  function start() {
-    poller.start();
-  }
+  const clientLifecycle = createAdsbLolClientLifecycle({
+    clients,
+    pollingPolicy,
+    poller,
+    aircraft,
+    publish,
+  });
   function publish() {
     subscribers.publish();
   }
@@ -51,41 +56,15 @@ export function createAdsbLolRemoteSource({
   return {
     list: aircraft.list,
     subscribe: subscribers.subscribe,
-    connectClient(key) {
-      clients.connect(key);
-      start();
-    },
-    setClientRadius(key, value) {
-      clients.setRadius(key, value);
-    },
-    setClientLocalOnly(key, value) {
-      if (!clients.setLocalOnly(key, value)) return;
-      if (pollingPolicy().hasRemoteClients) start();
-      else {
-        poller.stop();
-        aircraft.clear();
-        publish();
-      }
-    },
-    disconnectClient(key) {
-      clients.disconnect(key);
-      if (!clients.size) {
-        poller.stop();
-        aircraft.clear();
-        publish();
-      } else if (!pollingPolicy().hasRemoteClients) {
-        poller.stop();
-        aircraft.clear();
-        publish();
-      }
-    },
+    connectClient: clientLifecycle.connect,
+    setClientRadius: clientLifecycle.setRadius,
+    setClientLocalOnly: clientLifecycle.setLocalOnly,
+    disconnectClient: clientLifecycle.disconnect,
     setRouteLookupsEnabled(value) {
       aircraft.setRouteLookupsEnabled(value);
     },
     close() {
-      poller.close();
-      clients.clear();
-      aircraft.clear();
+      clientLifecycle.close();
       subscribers.clear();
     },
   };
