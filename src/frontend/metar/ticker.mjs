@@ -1,4 +1,4 @@
-import { metarCategoryLabel } from "../../shared/metar/category.mjs";
+import { metarCategoryLabel } from "./category-label.mjs";
 import { escapeMetarHtml } from "./escape.mjs";
 
 export { escapeMetarHtml } from "./escape.mjs";

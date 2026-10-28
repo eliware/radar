@@ -1,4 +1,4 @@
-import { metarCategoryLabel } from "../../shared/metar/category.mjs";
+import { metarCategoryLabel } from "./category-label.mjs";
 import { formatMetarAgeDisplay } from "./age/display.mjs";
 import { escapeMetarHtml } from "./escape.mjs";
 import { updateMetarDisplayElement } from "./table/display.mjs";
