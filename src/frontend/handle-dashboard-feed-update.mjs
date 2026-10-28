@@ -1,13 +1,8 @@
+import { parseDashboardFeedMessage } from "./dashboard/feed-message.mjs";
+
 export function handleDashboardFeedUpdate(scene, flightStrips, data) {
-  let aircraft;
-  try {
-    aircraft = JSON.parse(data);
-  } catch {
-    return;
-  }
-  if (aircraft?.event === "aircraft-snapshot") {
-    scene.updateSnapshot?.(aircraft.aircraft, aircraft.localFurthestDistanceNm);
-    flightStrips.updateSnapshot?.(aircraft.aircraft);
-    return;
-  }
+  const snapshot = parseDashboardFeedMessage(data);
+  if (!snapshot) return;
+  scene.updateSnapshot?.(snapshot.aircraft, snapshot.localFurthestDistanceNm);
+  flightStrips.updateSnapshot?.(snapshot.aircraft);
 }

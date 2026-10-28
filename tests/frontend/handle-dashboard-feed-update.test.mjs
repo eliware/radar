@@ -18,17 +18,10 @@ test("replaces scene and strip aircraft from a snapshot", () => {
   expect(strips.updateSnapshot).toHaveBeenCalledWith(aircraft);
 });
 
-test("ignores invalid JSON feed messages", () => {
-  const scene = { update: jest.fn() };
-  const strips = { update: jest.fn() };
-  handleDashboardFeedUpdate(scene, strips, "not-json");
-  expect(scene.update).not.toHaveBeenCalled();
-  expect(strips.update).not.toHaveBeenCalled();
-});
-
-test("ignores obsolete non-snapshot feed messages", () => {
+test("does not dispatch when the feed parser rejects a message", () => {
   const scene = { updateSnapshot: jest.fn() };
   const strips = { updateSnapshot: jest.fn() };
-  handleDashboardFeedUpdate(scene, strips, JSON.stringify({ icao: "ABC123" }));
+  handleDashboardFeedUpdate(scene, strips, "{}");
   expect(scene.updateSnapshot).not.toHaveBeenCalled();
+  expect(strips.updateSnapshot).not.toHaveBeenCalled();
 });

@@ -1,5 +1,6 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
 import { airportAirspaceBands } from "../airport-airspace/bands.mjs";
+import { airportAirspaceEdges } from "../airport-airspace/edges.mjs";
 
 const RING_COLOR = "#777777";
 
@@ -11,11 +12,9 @@ export function drawAirspaceRings(context, airports, project) {
     if (airport.rangeNm > MAX_RADAR_RANGE) continue;
     const bands = airportAirspaceBands(airport);
     if (!bands.length) continue;
-    const radii = new Set(
-      bands
-        .flatMap((band) => [band.innerRadiusNm, band.outerRadiusNm])
-        .filter((radius) => radius > 0),
-    );
+    const groundFeet = Number.isFinite(airport.elevationFeet) ? airport.elevationFeet : 0;
+    const { rings } = airportAirspaceEdges(bands, groundFeet);
+    const radii = new Set(rings.map(({ radius }) => radius));
     for (const radius of radii) drawRing(context, airport, radius, project);
   }
 }

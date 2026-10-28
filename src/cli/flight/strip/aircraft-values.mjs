@@ -1,7 +1,5 @@
-function positionOf(aircraft) {
-  if (!Number.isFinite(aircraft.latitude) || !Number.isFinite(aircraft.longitude)) return null;
-  return `${aircraft.latitude.toFixed(4)}, ${aircraft.longitude.toFixed(4)}`;
-}
+import { formatAircraftAge } from "./age.mjs";
+import { formatAircraftPosition } from "./position.mjs";
 
 export function aircraftValuesOf(aircraft, now) {
   const withUnit = (value, suffix) =>
@@ -17,9 +15,9 @@ export function aircraftValuesOf(aircraft, now) {
     withUnit(heading, "°"),
     withUnit(aircraft.verticalRateFeetPerMinute, " fpm"),
     aircraft.squawk ?? "-",
-    positionOf(aircraft) ?? "-",
+    formatAircraftPosition(aircraft) ?? "-",
     withUnit(aircraft.distanceNauticalMiles, " nm"),
     withUnit(bearing, "°"),
-    `${Math.max(0, Math.floor((now - aircraft.lastSeen) / 1000))}s`,
+    formatAircraftAge(aircraft, now),
   ];
 }

@@ -1,4 +1,5 @@
 import { expect, test } from "@jest/globals";
+import { airportAirspaceBands } from "../../../src/frontend/airport-airspace/bands.mjs";
 import { airportAirspaceEdges } from "../../../src/frontend/airport-airspace/edges.mjs";
 
 test("draws only exposed shelf rings and walls for overlapping bands", () => {
@@ -18,6 +19,12 @@ test("draws only exposed shelf rings and walls for overlapping bands", () => {
       { radius: 20, floor: 500, ceiling: 1000 },
     ],
   });
+});
+
+test("exposes the same plan-view airport radii for Canvas and 3D renderers", () => {
+  const airport = { elevationFeet: 100, classC: "Y" };
+  const { rings } = airportAirspaceEdges(airportAirspaceBands(airport), airport.elevationFeet);
+  expect(new Set(rings.map(({ radius }) => radius))).toEqual(new Set([5, 10]));
 });
 
 test("joins disjoint exposed ring ranges and skips zero-radius edges", () => {
