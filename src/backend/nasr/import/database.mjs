@@ -1,4 +1,5 @@
 import { createNasrImportFiles } from "./files.mjs";
+import { createNasrImportTemporaryFile } from "./temporary-file.mjs";
 import { validateNasrImportPaths } from "./paths.mjs";
 import { validateNasrSource } from "./connection-checks.mjs";
 import { prepareNasrImportInstallation } from "./prepare/install.mjs";
@@ -11,9 +12,10 @@ export function importNasrDatabaseLifecycle(
   { Database, exists, copy, mkdir, rename, remove } = {},
 ) {
   const DatabaseConstructor = selectNasrDatabase(Database);
-  const files = createNasrImportFiles({ exists, copy, mkdir, rename, remove });
+  const filesystem = createNasrImportFiles({ exists, copy, mkdir, rename, remove });
+  const files = createNasrImportTemporaryFile(filesystem);
   const outputSelection = selectNasrImportOutput(outputPath);
-  const { input, output } = validateNasrImportPaths(inputPath, outputSelection, files.exists);
+  const { input, output } = validateNasrImportPaths(inputPath, outputSelection, filesystem.exists);
   validateNasrSource(DatabaseConstructor, input);
   const indexes = prepareNasrImportInstallation(files, DatabaseConstructor, input, output);
   return { output, indexes };

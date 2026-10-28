@@ -2,6 +2,7 @@ import { expect, test } from "@jest/globals";
 import {
   DEFAULT_RADAR_RANGE_NM,
   DEFAULT_RADAR_ROTATION_DEGREES,
+  parseRadarRangeSetting,
   parseRadarViewSettings,
 } from "../../src/shared/radar-view-settings.mjs";
 
@@ -19,6 +20,7 @@ test("uses default radar view settings when values are absent", () => {
 });
 
 test("parses configured range boundaries and rotation", () => {
+  expect(parseRadarRangeSetting(25.5)).toBe(25.5);
   expect(parseRadarViewSettings({ RADAR_DEFAULT_RANGE_NM: "1" }).defaultRangeNm).toBe(1);
   expect(parseRadarViewSettings({ RADAR_DEFAULT_RANGE_NM: "300" }).defaultRangeNm).toBe(300);
   expect(parseRadarViewSettings({ RADAR_DEFAULT_RANGE_NM: "25.5" }).defaultRangeNm).toBe(25.5);

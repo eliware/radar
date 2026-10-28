@@ -1,6 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { createNasrImportFiles } from "../../../../src/backend/nasr/import/files.mjs";
 import { installNasrCopy } from "../../../../src/backend/nasr/import/install-copy.mjs";
+import { createNasrImportTemporaryFile } from "../../../../src/backend/nasr/import/temporary-file.mjs";
 
 function createFiles() {
   const operations = {
@@ -10,7 +11,10 @@ function createFiles() {
     rename: jest.fn(),
     remove: jest.fn(),
   };
-  return { operations, files: createNasrImportFiles(operations) };
+  return {
+    operations,
+    files: createNasrImportTemporaryFile(createNasrImportFiles(operations)),
+  };
 }
 
 test("prepares a temporary copy before installing it atomically", () => {

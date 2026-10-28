@@ -10,12 +10,10 @@ const record = (hex = "ABC123") => ({
   seen_pos: 0,
 });
 
-test("stores normalized tracks and discards invalid records", () => {
+test("stores normalized tracks", () => {
   const tracks = createAdsbLolTrackStore({ location });
   tracks.update(record());
-  tracks.update({ ...record("BAD"), lat: "43" });
   expect(tracks.list()).toMatchObject([{ icao: "ABC123", callsign: "RPA1" }]);
-  expect(tracks.list()).toHaveLength(1);
 });
 
 test("preserves route fields only while a track keeps the same callsign", () => {

@@ -1,16 +1,15 @@
 import { expect, jest, test } from "@jest/globals";
-import { cameraReadoutRows } from "../../../../../src/frontend/aircraft/overlay/readout/values.mjs";
-import { drawCameraReadoutRows } from "../../../../../src/frontend/aircraft/overlay/readout/draw.mjs";
+import { drawCameraReadout } from "../../../../../src/frontend/aircraft/overlay/readout.mjs";
 
-test("draws camera position and altitude using the radar monospace font", () => {
+test("draws formatted camera rows using the radar monospace font", () => {
   const context = { save: jest.fn(), restore: jest.fn(), fillText: jest.fn() };
-  const rows = cameraReadoutRows(
+  drawCameraReadout(
+    context,
     { position: { x: 1, y: 2, z: -1 } },
     { latitude: 43, longitude: -70 },
     300,
     400,
   );
-  drawCameraReadoutRows(context, rows);
   expect(context.font).toBe('12px Consolas, "Courier New", monospace');
   expect(context.fillStyle).toBe("#00a832");
   expect(context.fillText).toHaveBeenNthCalledWith(1, "  43.0167°", 352, 30);

@@ -3,11 +3,11 @@ import { createNasrImportFiles } from "../../../../src/backend/nasr/import/files
 
 test("provides default filesystem operations", () => {
   const files = createNasrImportFiles();
-  expect(files.exists).toEqual(expect.any(Function));
-  expect(files.temporaryPath("NASR.sqlite")).toMatch(/NASR\.sqlite\.tmp-\d+$/);
+  for (const operation of ["exists", "copy", "mkdir", "rename", "remove"])
+    expect(files[operation]).toEqual(expect.any(Function));
 });
 
-test("wraps output preparation, copy, replacement, and temporary cleanup", () => {
+test("provides injected filesystem operations", () => {
   const operations = {
     exists: jest.fn(() => true),
     copy: jest.fn(),
@@ -16,14 +16,5 @@ test("wraps output preparation, copy, replacement, and temporary cleanup", () =>
     remove: jest.fn(),
   };
   const files = createNasrImportFiles(operations);
-  files.prepareOutput("/tmp/nasr/NASR.sqlite");
-  const temporary = files.temporaryPath("/tmp/nasr/NASR.sqlite");
-  files.copyInput("source.sqlite", temporary);
-  files.install(temporary, "/tmp/nasr/NASR.sqlite");
-  files.cleanup(temporary);
-  expect(files.exists("source.sqlite")).toBe(true);
-  expect(operations.mkdir).toHaveBeenCalledWith("/tmp/nasr", { recursive: true });
-  expect(operations.copy).toHaveBeenCalledWith("source.sqlite", temporary);
-  expect(operations.rename).toHaveBeenCalledWith(temporary, "/tmp/nasr/NASR.sqlite");
-  expect(operations.remove).toHaveBeenCalledWith(temporary, { force: true });
+  expect(files).toEqual(operations);
 });

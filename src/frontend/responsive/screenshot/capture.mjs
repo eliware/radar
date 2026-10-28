@@ -1,4 +1,5 @@
-import { screenshotOutputPath, validateScreenshotFile } from "./output.mjs";
+import { screenshotOutputPath } from "./path.mjs";
+import { validateScreenshotFile } from "./file-validation.mjs";
 
 export async function captureScreenshotTargets(
   session,

@@ -1,5 +1,5 @@
 import { checkScreenshotHealth } from "./health.mjs";
-import { prepareScreenshotOutput } from "./output.mjs";
+import { prepareScreenshotOutput } from "./directory.mjs";
 
 export async function setupScreenshotCapture({ baseUrl, outputDir, fetcher, files }) {
   await checkScreenshotHealth(baseUrl, fetcher);
