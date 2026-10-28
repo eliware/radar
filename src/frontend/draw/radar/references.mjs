@@ -4,6 +4,8 @@ import { drawArtccBoundaries } from "../artcc-boundaries.mjs";
 import { drawIlsApproaches } from "../ils-approaches.mjs";
 import { drawProcedures } from "../procedures.mjs";
 import { drawAirways } from "../airways.mjs";
+import { normalizeProcedureVisibility } from "./procedure-visibility.mjs";
+import { radarReferenceData } from "./reference-data.mjs";
 
 export function drawRadarReferences(
   context,
@@ -16,11 +18,15 @@ export function drawRadarReferences(
   referenceVisibility = { airportsVisible: true, navaidsVisible: true },
   airspaceRingsVisible = true,
 ) {
-  const airports = references.airports ?? new Map();
-  const procedures =
-    typeof procedureVisibility === "boolean"
-      ? { sidVisible: procedureVisibility, starVisible: procedureVisibility }
-      : procedureVisibility;
+  const {
+    airports,
+    navaids,
+    boundaries,
+    ilsApproaches,
+    procedures: referenceProcedures,
+    airways,
+  } = radarReferenceData(references);
+  const procedures = normalizeProcedureVisibility(procedureVisibility);
   drawAirportLayer(
     context,
     airports,
@@ -29,10 +35,9 @@ export function drawRadarReferences(
     referenceVisibility,
     airspaceRingsVisible,
   );
-  if (referenceVisibility.navaidsVisible)
-    drawNavaidMarkers(context, references.navaids ?? new Map(), project);
-  drawArtccBoundaries(context, references.boundaries ?? new Map(), project);
-  drawIlsApproaches(context, references.ilsApproaches ?? new Map(), project, ilsVisible);
-  drawProcedures(context, references.procedures ?? new Map(), project, procedures);
-  drawAirways(context, references.airways ?? new Map(), project, airwayVisibility);
+  if (referenceVisibility.navaidsVisible) drawNavaidMarkers(context, navaids, project);
+  drawArtccBoundaries(context, boundaries, project);
+  drawIlsApproaches(context, ilsApproaches, project, ilsVisible);
+  drawProcedures(context, referenceProcedures, project, procedures);
+  drawAirways(context, airways, project, airwayVisibility);
 }
