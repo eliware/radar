@@ -1,33 +1,24 @@
 import { MAX_RADAR_RANGE } from "../range.mjs";
-import { createRadarReferenceCache } from "./cache.mjs";
+import { createRadarReferenceCacheSession } from "./cache-session.mjs";
 import { createRadarReferenceRequestScheduler } from "./request-scheduler.mjs";
-import { createRadarReferenceViewApplier } from "./view-applier.mjs";
 
 const PATHS = ["airports", "navaids", "airspace-boundaries", "ils", "procedures", "airways"];
 const RANGE_STEP_NM = 25;
 
 export function createRadarReferenceLoader(fetchData, scene, location) {
-  const cache = createRadarReferenceCache();
-  let latestBounds = null;
+  const session = createRadarReferenceCacheSession(scene, location);
   let lastKey = "";
-  const applier = createRadarReferenceViewApplier(cache, scene, location);
   const scheduler = createRadarReferenceRequestScheduler(
     (minimum, maximum) => fetchLayers(fetchData, minimum, maximum),
-    (collections) => (cache.add(collections), applyLatest()),
+    (collections) => session.add(collections),
   );
-
-  function applyLatest() {
-    applier.schedule(latestBounds);
-  }
 
   return {
     load(view) {
       const bounds = view && typeof view === "object" ? view : null;
       if (!bounds) {
         lastKey = "";
-        latestBounds = null;
-        applier.cancel();
-        return cache.clear(scene);
+        return session.clear();
       }
       const minimum = bounds.minRangeNm ?? 0;
       const maximum = Math.min(MAX_RADAR_RANGE, bounds.maxRangeNm ?? 0);
@@ -36,12 +27,11 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
         .join(":");
       if (key === lastKey) return;
       lastKey = key;
-      latestBounds = bounds;
+      session.setBounds(bounds);
       if (maximum <= minimum) {
-        applier.cancel();
-        return cache.clear(scene);
+        return session.clear();
       }
-      if (scheduler.loadedThrough) applyLatest();
+      if (scheduler.loadedThrough) session.applyLatest();
       const target = Math.min(MAX_RADAR_RANGE, Math.ceil(maximum / RANGE_STEP_NM) * RANGE_STEP_NM);
       if (target <= scheduler.loadedThrough) return;
       scheduler.request(target);

@@ -11,6 +11,7 @@ import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
 import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
 import { getRadarCanvasViewport } from "./viewport.mjs";
 import { radarLegendTopInset } from "../draw/radar/legend/entries.mjs";
+import { createCanvasRadarSurface } from "./surface.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -20,17 +21,13 @@ export function createCanvasRadarView({
   windowRef = window,
   documentRef = document,
 }) {
-  const canvas = documentRef.createElement("canvas");
-  const context = canvas.getContext("2d");
-  if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
+  const surface = createCanvasRadarSurface(container, documentRef);
+  const { canvas, context } = surface;
   const defaultRotationRadians = (-defaultRotationDegrees * Math.PI) / 180 || 0;
   const references = createRadarReferenceStore();
   const legendTopInset = radarLegendTopInset(windowRef);
   const state = createCanvasRadarViewState(defaultRangeNm, defaultRotationRadians);
   const viewChanges = createViewChangeListeners();
-  canvas.setAttribute("aria-label", "Top-down 2D radar view");
-  canvas.style.touchAction = "none";
-  container.replaceChildren(canvas);
   let draw;
   const aircraftState = createCanvasRadarAircraftState(location, state, () => draw());
   const { targets, trails } = aircraftState;
@@ -109,7 +106,7 @@ export function createCanvasRadarView({
       layers.destroy();
       waterLayer.destroy();
       viewChanges.clear();
-      container.replaceChildren();
+      surface.destroy();
     },
   };
 }

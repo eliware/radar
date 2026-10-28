@@ -1,7 +1,7 @@
 import { createFlightStripLayout, wideTableWidth } from "./strip/layout.mjs";
 import { tableRow } from "./strip/table.mjs";
 import { aircraftDivider, flightStripFooter, flightStripHeader } from "./strip/frame.mjs";
-import { aircraftValuesOf } from "./strip/aircraft-values.mjs";
+import { aircraftValuesOf } from "./strip/values.mjs";
 
 function renderAircraft(rows, layout, lines, width) {
   for (const [index, values] of rows.entries()) {

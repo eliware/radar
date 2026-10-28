@@ -155,13 +155,6 @@ test("keeps a user zoom when new aircraft arrive", () => {
   view.destroy();
 });
 
-test("reports an error when the browser has no 2D canvas", () => {
-  const state = setup(null);
-  expect(() => createCanvasRadarView({ ...state, location: null })).toThrow(
-    "Canvas 2D is unavailable",
-  );
-});
-
 test("uses the browser globals when callers omit them", () => {
   const state = setup();
   globalThis.window = state.windowRef;

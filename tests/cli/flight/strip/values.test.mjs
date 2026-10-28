@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { aircraftValuesOf } from "../../../../src/cli/flight/strip/aircraft-values.mjs";
+import { aircraftValuesOf } from "../../../../src/cli/flight/strip/values.mjs";
 
 test("formats aircraft fields for flight strip columns", () => {
   expect(

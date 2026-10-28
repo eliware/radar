@@ -1,13 +1,22 @@
-import { expect, jest, test } from "@jest/globals";
-import { createRadarReferenceCache } from "../../../../src/frontend/radar/reference/cache.mjs";
+import { afterEach, expect, jest, test } from "@jest/globals";
+import { createRadarReferenceCacheSession } from "../../../../src/frontend/radar/reference/cache-session.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 const collections = (airways = []) => [[], [], [], [], [], airways];
 
-test("merges range batches and applies only visible clipped geometry once", () => {
-  const cache = createRadarReferenceCache();
+async function flush() {
+  await jest.advanceTimersByTimeAsync(80);
+  await Promise.resolve();
+}
+
+afterEach(() => jest.useRealTimers());
+
+test("merges range batches and applies only visible clipped geometry once", async () => {
+  jest.useFakeTimers();
   const scene = { updateAll: jest.fn() };
-  cache.add([
+  const session = createRadarReferenceCacheSession(scene, location);
+  session.setBounds({ minX: -10, maxX: 10, minZ: -10, maxZ: 10 });
+  session.add([
     [
       { faaId: "IN", latitude: 43, longitude: -70 },
       { faaId: "OUT", latitude: 44, longitude: -70 },
@@ -42,7 +51,7 @@ test("merges range batches and applies only visible clipped geometry once", () =
       },
     ],
   ]);
-  cache.add(
+  session.add(
     collections([
       {
         id: "two",
@@ -53,7 +62,7 @@ test("merges range batches and applies only visible clipped geometry once", () =
       },
     ]),
   );
-  cache.apply(scene, { minX: -10, maxX: 10, minZ: -10, maxZ: 10 }, location);
+  await flush();
   expect(scene.updateAll).toHaveBeenCalledTimes(1);
   expect(scene.updateAll.mock.calls[0][0][5]).toEqual([
     {
@@ -69,21 +78,22 @@ test("merges range batches and applies only visible clipped geometry once", () =
   ]);
 });
 
-test("falls back to individual scene updates", () => {
-  const cache = createRadarReferenceCache();
+test("falls back to individual scene updates", async () => {
+  jest.useFakeTimers();
   const scene = Object.fromEntries(
     ["Airports", "Navaids", "Boundaries", "Ils", "Procedures", "Airways"].map((name) => [
       `update${name}`,
       jest.fn(),
     ]),
   );
-  cache.add(collections([{ id: "Q1", points: [{ x: 0, z: 0 }] }]));
-  cache.apply(scene, null, location);
+  const session = createRadarReferenceCacheSession(scene, location);
+  session.add(collections([{ id: "Q1", points: [{ x: 0, z: 0 }] }]));
+  await flush();
   expect(scene.updateAirways).toHaveBeenCalledWith([{ id: "Q1", points: [{ x: 0, z: 0 }] }]);
 });
 
 test("clears all scene reference layers together when batched updates are available", () => {
   const scene = { updateAll: jest.fn() };
-  createRadarReferenceCache().clear(scene);
+  createRadarReferenceCacheSession(scene, location).clear();
   expect(scene.updateAll).toHaveBeenCalledWith([[], [], [], [], [], []]);
 });
