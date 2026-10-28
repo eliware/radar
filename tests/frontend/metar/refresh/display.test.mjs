@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { updateMetarRefreshDisplay } from "../../../src/frontend/metar/refresh-display.mjs";
+import { updateMetarRefreshDisplay } from "../../../../src/frontend/metar/refresh/display.mjs";
 
 test("updates the decoded report table and ticker", () => {
   const panel = { innerHTML: "", textContent: "" };

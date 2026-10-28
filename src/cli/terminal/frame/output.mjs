@@ -1,4 +1,4 @@
-import { createTerminalScreenSession } from "./screen-session.mjs";
+import { createTerminalScreenSession } from "../screen-session.mjs";
 
 const FRAME_PREFIX = "\u001b[2J\u001b[H";
 

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createTerminalFrameOutput } from "../../../src/cli/terminal/frame-output.mjs";
+import { createTerminalFrameOutput } from "../../../../src/cli/terminal/frame/output.mjs";
 
 const prefix = "\u001b[2J\u001b[H";
 

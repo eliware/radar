@@ -1,6 +1,8 @@
 import { renderTerminalFrame } from "./frame.mjs";
+import { createTerminalFrameWriter } from "./frame/writer.mjs";
 
 export function createTerminalScreenSession(stdout, environment) {
+  const writer = createTerminalFrameWriter(stdout);
   let alternateScreenActive = false;
   return {
     render(frame) {
@@ -11,11 +13,11 @@ export function createTerminalScreenSession(stdout, environment) {
         alternateScreenActive,
       });
       alternateScreenActive = rendered.alternateScreenActive;
-      stdout.write(rendered.output);
+      writer.write(rendered.output);
     },
     restore() {
       if (!alternateScreenActive) return;
-      stdout.write("\u001b[?25h\u001b[?1049l");
+      writer.restore();
       alternateScreenActive = false;
     },
   };
