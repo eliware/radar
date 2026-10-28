@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { formatAircraftStripFields } from "../../../../src/frontend/flight/strip/fields.mjs";
 
-test("formats callsign, altitude, heading, speed, bearing, and route fields", () => {
+test("formats altitude, heading, speed, bearing, and route fields", () => {
   expect(
     formatAircraftStripFields({
       icao: "ABC123",
@@ -18,7 +18,6 @@ test("formats callsign, altitude, heading, speed, bearing, and route fields", ()
       destination: "KBOS",
     }),
   ).toEqual({
-    callsign: "RADAR1",
     altitude: "125-06",
     aircraftType: "B738",
     headingAndSpeed: "009°200",
@@ -31,7 +30,6 @@ test("formats callsign, altitude, heading, speed, bearing, and route fields", ()
 
 test("formats placeholders and combined heading-speed fields", () => {
   expect(formatAircraftStripFields({ icao: "A1B2C3" })).toMatchObject({
-    callsign: "A1B2C3",
     altitude: "-",
     aircraftType: "-",
     headingAndSpeed: "-",

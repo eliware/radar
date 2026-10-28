@@ -3,7 +3,7 @@ import { installNasrIndexes } from "../../../../src/backend/nasr/index/installer
 import { validateNasrImportDatabase } from "../../../../src/backend/nasr/import/validation.mjs";
 import { createNasrTestDatabase } from "../../../../test-fixtures/nasr-database.mjs";
 
-test("validates schema, installed indexes, and query plans", () => {
+test("validates schema and installed indexes", () => {
   const database = createNasrTestDatabase();
   installNasrIndexes(database);
   expect(() => validateNasrImportDatabase(database)).not.toThrow();

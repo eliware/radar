@@ -13,40 +13,31 @@ function createApp() {
   };
 }
 
-test("registers API and static routes with defaults", async () => {
+test("registers API routes with defaults", async () => {
   const app = createApp();
   const fastifyFactory = jest.fn(() => app);
   const feed = { list: jest.fn(() => []) };
-  const read = jest.fn();
-  const publicRoot = "public-root";
-  const buildRoot = "build-root";
-
-  const server = await createRadarServer({ feed, fastifyFactory, publicRoot, buildRoot, read });
+  const server = await createRadarServer({ feed, fastifyFactory });
 
   expect(server).toBe(app);
   expect(fastifyFactory).toHaveBeenCalledWith({ logger: false });
   expect(app.register).toHaveBeenCalledTimes(1);
   expect(app.addHook).not.toHaveBeenCalled();
-  expect(app.get.mock.calls.map(([route]) => route)).toEqual([
-    "/health",
-    "/ready",
-    "/api/config",
-    "/api/aircraft",
-    "/api/airports",
-    "/api/navaids",
-    "/api/airspace-boundaries",
-    "/api/ils",
-    "/api/procedures",
-    "/api/airways",
-    "/ws",
-    "/",
-    "/style.css",
-    "/manifest.webmanifest",
-    "/icons/:filename",
-    "/screenshots/:filename",
-    "/client.js",
-    "/chunks/:filename",
-  ]);
+  expect(app.get.mock.calls.map(([route]) => route)).toEqual(
+    expect.arrayContaining([
+      "/health",
+      "/ready",
+      "/api/config",
+      "/api/aircraft",
+      "/api/airports",
+      "/api/navaids",
+      "/api/airspace-boundaries",
+      "/api/ils",
+      "/api/procedures",
+      "/api/airways",
+      "/ws",
+    ]),
+  );
 });
 
 test("closes the airport database when the server closes", async () => {

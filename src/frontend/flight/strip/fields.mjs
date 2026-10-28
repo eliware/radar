@@ -1,6 +1,5 @@
 import { formatAircraftAltitude } from "../../aircraft/tag-data.mjs";
 import {
-  formatAircraftStripCallsign,
   formatAircraftStripHeading,
   formatAircraftStripSpeed,
 } from "../../../shared/aircraft/strip-fields.mjs";
@@ -13,7 +12,6 @@ export function formatAircraftStripFields(aircraft) {
       ? `${String(Math.round(aircraft.bearingDegrees) % 360).padStart(3, "0")}°${Math.round(aircraft.distanceNauticalMiles)}`
       : "-";
   return {
-    callsign: formatAircraftStripCallsign(aircraft),
     altitude: formatAircraftAltitude(aircraft),
     aircraftType: aircraft.aircraftTypeCode || "-",
     headingAndSpeed: heading === "-" && speed === "-" ? "-" : `${heading}${speed}`,

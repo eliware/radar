@@ -33,3 +33,11 @@ test("uses configured viewports unless the primary option is present", () => {
   });
   expect(selection.targets.map(({ name }) => name)).toEqual(["iphone-12-portrait"]);
 });
+
+test("uses the primary viewport option with configured screenshot modes", () => {
+  const selection = selectScreenshotOptions(["--primary"], {
+    RADAR_SCREENSHOT_MODES: "full-page",
+  });
+  expect(selection.modes).toEqual(["full-page"]);
+  expect(selection.targets.map(({ name }) => name)).toEqual(["desktop-primary"]);
+});
