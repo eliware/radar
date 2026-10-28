@@ -1,7 +1,7 @@
 import { attachDashboardCompassControls } from "./attach/dashboard/compass-controls.mjs";
 import { loadDashboardReferences } from "./dashboard/references.mjs";
 import { connectDashboardFeed } from "./dashboard/feed.mjs";
-import { attachDashboardPagehide } from "./attach/dashboard/pagehide.mjs";
+import { attachDashboardLifecycle } from "./attach/dashboard/lifecycle.mjs";
 import { cleanupDashboardSetup } from "./dashboard/cleanup.mjs";
 import { createViewportReporter } from "./report-viewport.mjs";
 import { readJson } from "./read-json.mjs";
@@ -52,7 +52,7 @@ export async function startDashboard({
     });
     resources.feed = feed;
     resources.detachViewport = scene.onViewChange?.(() => sendViewport(feed.socket));
-    const destroy = attachDashboardPagehide(windowRef, () => cleanupDashboardSetup(resources));
+    const destroy = attachDashboardLifecycle(windowRef, resources);
     return { scene, socket: feed.socket, feed, flightStrips, destroy };
   } catch {
     cleanupDashboardSetup(resources);

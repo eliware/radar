@@ -15,7 +15,6 @@ const { createRadarView } = await import("../../../../src/frontend/create/radar/
 
 test("uses Three.js when WebGL starts", async () => {
   const view = { mode: "3D" };
-  const onMode = jest.fn();
   createAircraftScene.mockReturnValueOnce(view);
   expect(
     await createRadarView({
@@ -23,10 +22,8 @@ test("uses Three.js when WebGL starts", async () => {
       location: null,
       elevationFeet: 300,
       windowRef: {},
-      onMode,
     }),
   ).toBe(view);
-  expect(onMode).toHaveBeenCalledWith("3D");
   expect(createCanvasRadarView).not.toHaveBeenCalled();
 });
 
@@ -55,7 +52,6 @@ test("uses Canvas when WebGL context creation fails", async () => {
     location: null,
     elevationFeet: 300,
     windowRef: {},
-    onMode: jest.fn(),
   };
   createAircraftScene.mockImplementationOnce(() => {
     throw new Error("THREE.WebGLRenderer: Error creating WebGL context.");
@@ -70,7 +66,6 @@ test("uses Canvas when WebGL context creation fails", async () => {
     defaultRotationDegrees: undefined,
     windowRef: args.windowRef,
   });
-  expect(args.onMode).toHaveBeenCalledWith("2D");
 });
 
 test("does not hide unrelated scene errors", async () => {
