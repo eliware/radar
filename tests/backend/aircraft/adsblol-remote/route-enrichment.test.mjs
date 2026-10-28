@@ -1,4 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
+import { createAdsbLolAircraftStore } from "../../../../src/backend/aircraft/adsblol-remote/aircraft-store.mjs";
 import { createAdsbLolRouteEnrichment } from "../../../../src/backend/aircraft/adsblol-remote/route-enrichment.mjs";
 
 const mapped = (callsign = "RPA1") => ({ icao: "ABC123", callsign });
@@ -32,6 +33,16 @@ test("uses the default callback after a successful route lookup", async () => {
   enrichment.enrich(mapped(), aircraft);
   await Promise.resolve();
   expect(aircraft.get("ABC123")).toMatchObject({ origin: "KBOS" });
+});
+
+test("stores route lookups with the default update callback", async () => {
+  const store = createAdsbLolAircraftStore({
+    location: { latitude: 43.8, longitude: -70.4 },
+    lookup: { getCallsignRoute: async () => ({ origin: "KBOS" }) },
+  });
+  store.update({ hex: "ABC123", flight: "RPA1", lat: 43.9, lon: -70.3, seen_pos: 0 });
+  await Promise.resolve();
+  expect(store.list()).toMatchObject([{ origin: "KBOS" }]);
 });
 
 test("skips disabled lookups, missing callsigns, complete routes, and absent services", () => {

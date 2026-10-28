@@ -4,7 +4,7 @@ import {
   selectScreenshotViewports,
 } from "../../../../src/frontend/responsive/screenshot/options.mjs";
 
-test("selects documented desktop and phone viewports", () => {
+test("selects defined desktop and phone viewports", () => {
   expect(selectScreenshotViewports()).toHaveLength(6);
   expect(selectScreenshotViewports("desktop-primary")[0].viewport).toEqual({
     width: 1280,

@@ -28,13 +28,3 @@ test("expires old tracks and clears records", () => {
   store.clear();
   expect(store.list()).toEqual([]);
 });
-
-test("accepts route lookups with the default update callback", async () => {
-  const store = createAdsbLolAircraftStore({
-    location,
-    lookup: { getCallsignRoute: async () => ({ origin: "KBOS" }) },
-  });
-  store.update(record());
-  await Promise.resolve();
-  expect(store.list()).toMatchObject([{ origin: "KBOS" }]);
-});
