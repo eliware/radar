@@ -1,20 +1,21 @@
 import { expect, jest, test } from "@jest/globals";
 
 const createAircraftScene = jest.fn();
-const createCanvasRadarView = jest.fn();
+const createRadarFallback = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/aircraft/scene.mjs", () => ({
   createAircraftScene,
 }));
 jest.unstable_mockModule("../../../../src/frontend/create/radar/scene-loader.mjs", () => ({
   loadAircraftScene: (...args) => createAircraftScene(...args),
 }));
-jest.unstable_mockModule("../../../../src/frontend/canvas-radar/view.mjs", () => ({
-  createCanvasRadarView,
+jest.unstable_mockModule("../../../../src/frontend/create/radar/fallback.mjs", () => ({
+  createRadarFallback,
 }));
 const { createRadarView } = await import("../../../../src/frontend/create/radar/view.mjs");
 
 test("uses Three.js when WebGL starts", async () => {
   const view = { mode: "3D" };
+  const onMode = jest.fn();
   createAircraftScene.mockReturnValueOnce(view);
   expect(
     await createRadarView({
@@ -22,9 +23,10 @@ test("uses Three.js when WebGL starts", async () => {
       location: null,
       elevationFeet: 300,
       windowRef: {},
+      onMode,
     }),
   ).toBe(view);
-  expect(createCanvasRadarView).not.toHaveBeenCalled();
+  expect(onMode).toHaveBeenCalledWith("3D");
 });
 
 test("does not require a view mode callback", async () => {
@@ -45,34 +47,14 @@ test("uses the browser window when callers omit it", async () => {
   delete globalThis.window;
 });
 
-test("uses Canvas when WebGL context creation fails", async () => {
-  const view = { mode: "2D" };
-  const args = {
-    container: {},
-    location: null,
-    elevationFeet: 300,
-    windowRef: {},
-  };
-  createAircraftScene.mockImplementationOnce(() => {
-    throw new Error("THREE.WebGLRenderer: Error creating WebGL context.");
-  });
-  createCanvasRadarView.mockReturnValueOnce(view);
-  expect(await createRadarView(args)).toBe(view);
-  expect(createCanvasRadarView).toHaveBeenCalledWith({
-    container: args.container,
-    location: null,
-    elevationFeet: 300,
-    defaultRangeNm: undefined,
-    defaultRotationDegrees: undefined,
-    windowRef: args.windowRef,
-  });
-});
-
-test("does not hide unrelated scene errors", async () => {
-  createAircraftScene.mockImplementationOnce(() => {
-    throw new Error("broken scene setup");
-  });
-  await expect(
-    createRadarView({ container: {}, location: null, elevationFeet: 300, windowRef: {} }),
-  ).rejects.toThrow("broken scene setup");
+test("selects the fallback view when scene loading fails", async () => {
+  const error = new Error("WebGL context unavailable");
+  const options = { container: {}, location: null, elevationFeet: 300, windowRef: {} };
+  const fallback = { mode: "2D" };
+  const onMode = jest.fn();
+  createAircraftScene.mockRejectedValueOnce(error);
+  createRadarFallback.mockReturnValueOnce(fallback);
+  expect(await createRadarView({ ...options, onMode })).toBe(fallback);
+  expect(createRadarFallback).toHaveBeenCalledWith(error, options);
+  expect(onMode).toHaveBeenCalledWith("2D");
 });

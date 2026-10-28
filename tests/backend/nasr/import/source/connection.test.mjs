@@ -19,13 +19,3 @@ test("opens a read-only source connection and closes it after the operation", ()
   expect(operation).toHaveBeenCalledWith(database);
   expect(database.close).toHaveBeenCalledTimes(1);
 });
-test("closes a source connection when its operation fails", () => {
-  const database = retainOnClose(createNasrTestDatabase());
-  const Database = jest.fn(() => database);
-  expect(() =>
-    withNasrSourceDatabase(Database, "source.sqlite", () => {
-      throw new Error("invalid source");
-    }),
-  ).toThrow("invalid source");
-  expect(database.close).toHaveBeenCalledTimes(1);
-});

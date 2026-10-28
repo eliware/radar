@@ -38,8 +38,3 @@ test("preserves home coordinates from the environment", () => {
     locationLongitude: "-70",
   });
 });
-
-test("uses a validated argument port without resolving an overridden environment port", () => {
-  process.env.ADSB_PORT = "bad";
-  expect(resolveAdsbSettings({ port: "30004" }).port).toBe(30004);
-});

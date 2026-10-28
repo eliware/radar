@@ -1,4 +1,4 @@
-import { createCanvasRadarView } from "../../canvas-radar/view.mjs";
+import { createRadarFallback } from "./fallback.mjs";
 import { notifyRadarViewMode } from "./mode-notifier.mjs";
 import { loadAircraftScene } from "./scene-loader.mjs";
 
@@ -23,8 +23,7 @@ export async function createRadarView({
     notifyRadarViewMode(onMode, "3D");
     return view;
   } catch (error) {
-    if (!/WebGL context|WebGL2|WebGL unavailable/i.test(error.message)) throw error;
-    const view = createCanvasRadarView({
+    const view = createRadarFallback(error, {
       container,
       location,
       elevationFeet,
