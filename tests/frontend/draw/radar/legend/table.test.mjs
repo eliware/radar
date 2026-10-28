@@ -1,5 +1,8 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawRadarLegendTable } from "../../../../../src/frontend/draw/radar/legend/table.mjs";
+import {
+  drawRadarLegendTable,
+  drawRadarScaleLegend,
+} from "../../../../../src/frontend/draw/radar/legend/table.mjs";
 
 function createContext() {
   return {
@@ -38,6 +41,9 @@ test("draws every aligned legend symbol in two columns", () => {
   });
   expect(context.fillText).toHaveBeenCalledTimes(18);
   expect(context.fillText).toHaveBeenCalledWith("AIRCRAFT", 26, 24);
+  expect(context.fillText).toHaveBeenCalledWith("60s VECTOR", 26, 40);
+  expect(context.fillText).toHaveBeenCalledWith("HISTORY", 26, 56);
+  expect(context.fillText).toHaveBeenCalledWith("HOME", 26, 72);
   expect(context.fillText).toHaveBeenCalledWith("A AIRPORT", 26, 88);
   expect(context.fillText).toHaveBeenCalledWith("N VOR", 26, 104);
   expect(context.fillText).toHaveBeenCalledWith("I ILS", 138, 24);
@@ -49,6 +55,23 @@ test("draws every aligned legend symbol in two columns", () => {
   expect(context.fillText).toHaveBeenCalledWith("F STRIPS", 138, 152);
   expect(context.stroke).toHaveBeenCalled();
   expect(context.arc).toHaveBeenCalled();
+});
+
+test("adapts scale-legend visibility options for wide and narrow layouts", () => {
+  const wide = createContext();
+  drawRadarScaleLegend(wide, 1080, 1080);
+  expect(wide.fillText).toHaveBeenCalledWith("M METAR", 138, 136);
+  expect(wide.fillText).toHaveBeenCalledWith("F STRIPS", 138, 152);
+
+  const narrow = createContext();
+  const colors = new Map();
+  narrow.fillText.mockImplementation(function (label) {
+    colors.set(label, this.strokeStyle);
+  });
+  drawRadarScaleLegend(narrow, 320, 320, true, false, false, false);
+  expect(narrow.fillText).toHaveBeenCalledWith("I ILS", 26, 150);
+  expect(narrow.fillText).toHaveBeenCalledWith("W WATER", 26, 234);
+  expect(colors.get("I ILS")).toBe("#444444");
 });
 
 test("draws a single column and dims disabled or disconnected entries", () => {

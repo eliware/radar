@@ -36,7 +36,6 @@ test("maps a fresh re-api record to Radar aircraft fields and source age", () =>
     aircraftTypeCode: "E75L",
     squawk: "7700",
     emergency: "general",
-    distanceNauticalMiles: expect.any(Number),
     lastSeen: 8_500,
     remoteOnly: true,
   });

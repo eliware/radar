@@ -33,6 +33,43 @@ export function drawRadarLegendTable(context, width, height, connected, visibili
   });
 }
 
+export function drawRadarScaleLegend(
+  context,
+  width,
+  height,
+  connected = true,
+  ilsVisible = true,
+  procedureVisibility = { sidVisible: true, starVisible: true },
+  waterVisible = true,
+  airwayVisibility = { Q: true, J: true, V: true },
+  runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true },
+  referenceVisibility = { airportsVisible: true, navaidsVisible: true },
+  legendTopInset = 0,
+) {
+  const procedures =
+    typeof procedureVisibility === "boolean"
+      ? { sidVisible: procedureVisibility, starVisible: procedureVisibility }
+      : procedureVisibility;
+  drawRadarLegendTable(
+    context,
+    width,
+    height,
+    connected,
+    {
+      ilsVisible,
+      ...procedures,
+      airwayQVisible: airwayVisibility.Q,
+      airwayJVisible: airwayVisibility.J,
+      airwayVVisible: airwayVisibility.V,
+      ...runwayVisibility,
+      airportVisible: referenceVisibility.airportsVisible,
+      navaidsVisible: referenceVisibility.navaidsVisible,
+      waterVisible,
+    },
+    legendTopInset,
+  );
+}
+
 function drawIcon(context, icon, x, y) {
   context.beginPath();
   if (icon === "diamond") {

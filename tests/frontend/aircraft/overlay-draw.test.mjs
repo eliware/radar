@@ -40,4 +40,5 @@ test("reuses the camera projector when drawing repeatedly with the same camera",
 
   expect(context.clearRect).toHaveBeenCalledTimes(2);
   expect(context.fillText).toHaveBeenCalledWith(expect.stringContaining("°"), 752, 30);
+  expect(context.fillText.mock.calls.some(([label]) => /\d+ NM/.test(label))).toBe(true);
 });

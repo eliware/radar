@@ -27,6 +27,7 @@ test("orchestrates a radar draw with default layer options", () => {
   drawCanvasRadar(context, canvas, new Map(), null, 3, 0, 0, { devicePixelRatio: 1 });
   expect(context.arc).toHaveBeenCalled();
   expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
+  expect(context.fillText.mock.calls.some(([label]) => /\d+ NM/.test(label))).toBe(true);
 });
 
 test("draws north-up rings, aircraft, and nearby references while disconnected", () => {

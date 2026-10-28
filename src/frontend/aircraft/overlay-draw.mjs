@@ -1,6 +1,7 @@
 import { drawAircraftDisplay } from "../draw/aircraft/display.mjs";
 import { RADAR_SCOPE_RADIUS_RATIO } from "../radar/range.mjs";
-import { drawRadarScaleLegend } from "../draw/radar/scale-legend.mjs";
+import { drawRadarScale } from "../draw/radar/scale.mjs";
+import { drawRadarScaleLegend } from "../draw/radar/legend/table.mjs";
 import { drawRadarReferences } from "../draw/radar/references.mjs";
 import { projectAircraftDisplayItems } from "../project/aircraft-display-items.mjs";
 import { projectRadarReference } from "../project/radar-reference.mjs";
@@ -58,8 +59,6 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
       context,
       width,
       height,
-      range,
-      Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO,
       connected,
       ilsVisible,
       procedureVisibility,
@@ -68,6 +67,7 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
       runwayVisibility,
       referenceVisibility,
     );
+    drawRadarScale(context, range, Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO, height);
     drawCameraReadout(context, camera, location, elevationFeet, width);
 
     function project(position) {

@@ -1,6 +1,7 @@
 import { projectAircraftDisplayItems } from "../../project/aircraft-display-items.mjs";
 import { drawAircraftDisplay } from "../aircraft/display.mjs";
-import { drawRadarScaleLegend } from "../radar/scale-legend.mjs";
+import { drawRadarScale } from "../radar/scale.mjs";
+import { drawRadarScaleLegend } from "../radar/legend/table.mjs";
 import { drawCanvasRadarReferences } from "./radar-references.mjs";
 import { drawCanvasRadarWater } from "../water/canvas.mjs";
 import { createCanvasRadarScope } from "./scope.mjs";
@@ -79,8 +80,6 @@ export function drawCanvasRadar(
     ctx,
     width,
     height,
-    range,
-    radius,
     connected,
     ilsVisible,
     procedureVisibility,
@@ -90,4 +89,5 @@ export function drawCanvasRadar(
     referenceVisibility,
     legendTopInset,
   );
+  drawRadarScale(ctx, range, radius, height);
 }

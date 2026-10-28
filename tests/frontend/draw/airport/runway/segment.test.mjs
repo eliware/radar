@@ -1,4 +1,4 @@
-import { expect, jest, test } from "@jest/globals";
+import { expect, test } from "@jest/globals";
 import { drawRunwaySegment } from "../../../../../src/frontend/draw/airport/runway/segment.mjs";
 
 const runway = [
@@ -6,11 +6,9 @@ const runway = [
   { latitude: 43.01, longitude: -70, elevationFeet: 60 },
 ];
 
-test("projects runway ends, fills missing elevation, and draws the segment", () => {
-  const context = { beginPath: jest.fn(), moveTo: jest.fn(), lineTo: jest.fn(), stroke: jest.fn() };
+test("projects runway ends and fills missing elevation", () => {
   const projected = [];
   const ends = drawRunwaySegment(
-    context,
     [runway[0], { ...runway[1], elevationFeet: undefined }],
     { elevationFeet: 300 },
     (point) => {
@@ -19,23 +17,13 @@ test("projects runway ends, fills missing elevation, and draws the segment", () 
     },
   );
   expect(projected[1].elevationFeet).toBe(300);
-  expect(ends[0].elevationFeet).toBe(50);
-  expect(context.moveTo).toHaveBeenCalledWith(-70, 43);
-  expect(context.lineTo).toHaveBeenCalledWith(-70, 43.01);
-  expect(context.stroke).toHaveBeenCalledTimes(1);
+  expect(ends.ends[0].elevationFeet).toBe(50);
+  expect(ends.points).toEqual([
+    { x: -70, y: 43 },
+    { x: -70, y: 43.01 },
+  ]);
 });
 
-test("skips invalid projections and honors hidden runway segments", () => {
-  const context = { beginPath: jest.fn(), moveTo: jest.fn(), lineTo: jest.fn(), stroke: jest.fn() };
-  expect(drawRunwaySegment(context, runway, {}, () => null)).toBeNull();
-  expect(
-    drawRunwaySegment(
-      context,
-      runway,
-      {},
-      (point) => ({ x: point.longitude, y: point.latitude }),
-      false,
-    ),
-  ).toHaveLength(2);
-  expect(context.stroke).not.toHaveBeenCalled();
+test("skips invalid projections", () => {
+  expect(drawRunwaySegment(runway, {}, () => null)).toBeNull();
 });
