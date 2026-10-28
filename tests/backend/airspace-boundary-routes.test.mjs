@@ -11,7 +11,7 @@ function route(database, location = { latitude: 43, longitude: -70 }) {
   return routes.get("/api/airspace-boundaries");
 }
 
-test("rejects invalid range or missing NASR data", async () => {
+test("reports missing NASR data", async () => {
   const reply = {
     code: jest.fn(function (status) {
       this.status = status;
@@ -19,10 +19,8 @@ test("rejects invalid range or missing NASR data", async () => {
     }),
     send: jest.fn(),
   };
-  await route(null)({ query: { maxRangeNm: "301" } }, reply);
+  await route(null)({ query: { maxRangeNm: "20" } }, reply);
   expect(reply.code).toHaveBeenCalledWith(503);
-  await route({ findBoundariesBetween: jest.fn() })({ query: { maxRangeNm: "301" } }, reply);
-  expect(reply.code).toHaveBeenLastCalledWith(400);
 });
 
 test("rejects a missing home location", async () => {

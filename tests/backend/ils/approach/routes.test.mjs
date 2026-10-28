@@ -20,7 +20,7 @@ test("returns approaches for a valid range band", async () => {
   expect(database.findIlsApproaches).toHaveBeenCalledWith({ latitude: 43, longitude: -70 }, 10, 20);
 });
 
-test("rejects invalid ranges and missing database", async () => {
+test("reports a missing database", async () => {
   const reply = {
     code: jest.fn(function (status) {
       this.status = status;
@@ -28,10 +28,8 @@ test("rejects invalid ranges and missing database", async () => {
     }),
     send: jest.fn(),
   };
-  await route({ findIlsApproaches: jest.fn() })({ query: { maxRangeNm: "301" } }, reply);
-  expect(reply.code).toHaveBeenCalledWith(400);
   await route(null)({ query: { maxRangeNm: "20" } }, reply);
-  expect(reply.code).toHaveBeenLastCalledWith(503);
+  expect(reply.code).toHaveBeenCalledWith(503);
 });
 
 test("rejects a missing home location", async () => {

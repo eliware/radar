@@ -1,4 +1,4 @@
-import { NASR_INDEXES } from "./indexes.mjs";
+import { NASR_INDEXES } from "../indexes.mjs";
 
 export function installNasrIndexes(database) {
   database.exec("BEGIN");

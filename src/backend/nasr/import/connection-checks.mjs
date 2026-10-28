@@ -1,4 +1,4 @@
-import { installNasrIndexes } from "../index-installer.mjs";
+import { installNasrIndexes } from "../index/installer.mjs";
 import { validateNasrDatabase } from "../validation.mjs";
 import { validateNasrImportDatabase } from "./validation.mjs";
 import { withNasrDatabase } from "./connections.mjs";

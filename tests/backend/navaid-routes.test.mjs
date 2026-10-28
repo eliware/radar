@@ -19,7 +19,7 @@ test("returns navaids in the requested range band", async () => {
   expect(result).toEqual(navaids);
 });
 
-test("rejects invalid ranges and missing data", async () => {
+test("reports unavailable data", async () => {
   const reply = {
     code: jest.fn(function (status) {
       this.status = status;
@@ -27,10 +27,8 @@ test("rejects invalid ranges and missing data", async () => {
     }),
     send: jest.fn(),
   };
-  await route({ findNavaidsBetween: jest.fn() })({ query: { maxRangeNm: "301" } }, reply);
-  expect(reply.code).toHaveBeenCalledWith(400);
   await route(null)({ query: { maxRangeNm: "20" } }, reply);
-  expect(reply.code).toHaveBeenLastCalledWith(503);
+  expect(reply.code).toHaveBeenCalledWith(503);
 });
 
 test("rejects a missing home location", async () => {

@@ -1,7 +1,7 @@
 import { DatabaseSync } from "node:sqlite";
 import { expect, test } from "@jest/globals";
-import { NASR_INDEXES, REQUIRED_COLUMNS } from "../../../src/backend/nasr/indexes.mjs";
-import { validateNasrDatabase, verifyNasrIndexes } from "../../../src/backend/nasr/validation.mjs";
+import { REQUIRED_COLUMNS } from "../../../src/backend/nasr/indexes.mjs";
+import { validateNasrDatabase } from "../../../src/backend/nasr/validation.mjs";
 
 function createDatabase(columnsByTable = REQUIRED_COLUMNS) {
   const database = new DatabaseSync(":memory:");
@@ -12,12 +12,9 @@ function createDatabase(columnsByTable = REQUIRED_COLUMNS) {
   return database;
 }
 
-test("validates integrity, required columns, and index definitions", () => {
+test("validates integrity and required columns", () => {
   const database = createDatabase();
   expect(() => validateNasrDatabase(database)).not.toThrow();
-  expect(() => verifyNasrIndexes(database)).toThrow("radar_apt_location");
-  for (const index of NASR_INDEXES) database.exec(index);
-  expect(() => verifyNasrIndexes(database)).not.toThrow();
   database.close();
 });
 

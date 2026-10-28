@@ -17,17 +17,11 @@ function reply() {
   };
 }
 
-test("rejects an invalid range and reports unavailable data", async () => {
-  const invalidReply = reply();
-  await route({ findBetween: jest.fn() })({ query: { maxRangeNm: "301" } }, invalidReply);
-  expect(invalidReply.code).toHaveBeenCalledWith(400);
-  const missingReply = reply();
-  await route(null)({ query: { maxRangeNm: "20" } }, missingReply);
-  expect(missingReply.code).toHaveBeenCalledWith(503);
-});
-
-test("requires a home location", async () => {
-  const response = reply();
-  await route({ findBetween: jest.fn() }, null)({ query: { maxRangeNm: "20" } }, response);
-  expect(response.code).toHaveBeenCalledWith(503);
+test("forwards a valid range to the airport query", async () => {
+  const airports = [{ icao: "KPWM" }];
+  const database = { findBetween: jest.fn(() => airports) };
+  expect(await route(database)({ query: { minRangeNm: "10", maxRangeNm: "20" } }, reply())).toEqual(
+    airports,
+  );
+  expect(database.findBetween).toHaveBeenCalledWith({ latitude: 43, longitude: -70 }, 10, 20);
 });

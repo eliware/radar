@@ -1,4 +1,4 @@
-import { createAdsbLolRouteEnrichment } from "./route/enrichment.mjs";
+import { createAdsbLolRouteStore } from "./route/store.mjs";
 import { createAdsbLolTrackStore } from "./track-store.mjs";
 
 export function createAdsbLolAircraftStore({
@@ -8,16 +8,11 @@ export function createAdsbLolAircraftStore({
   onRouteUpdate = () => {},
 }) {
   const tracks = createAdsbLolTrackStore({ location, clock });
-  const routes = createAdsbLolRouteEnrichment({ lookup, onRouteUpdate });
-
-  function update(record) {
-    const mapped = tracks.update(record);
-    if (mapped) routes.enrich(mapped, tracks);
-  }
+  const routes = createAdsbLolRouteStore({ tracks, lookup, onRouteUpdate });
 
   return {
     list: tracks.list,
-    update,
+    update: routes.update,
     clear: tracks.clear,
     setRouteLookupsEnabled: routes.setEnabled,
   };

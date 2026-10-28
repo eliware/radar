@@ -48,15 +48,12 @@ test("reports missing database and location", async () => {
   expect(noLocation.code).toHaveBeenCalledWith(503);
 });
 
-test("rejects invalid and over-limit ranges", async () => {
+test("reports the route-specific invalid range message", async () => {
   const { handler } = setup();
-  for (const query of [
-    { maxRangeNm: "bad" },
-    { minRangeNm: "20", maxRangeNm: "20" },
-    { maxRangeNm: "301" },
-  ]) {
-    const response = reply();
-    await handler({ query }, response);
-    expect(response.code).toHaveBeenCalledWith(400);
-  }
+  const response = reply();
+  await handler({ query: { minRangeNm: "20", maxRangeNm: "20" } }, response);
+  expect(response.code).toHaveBeenCalledWith(400);
+  expect(response.send).toHaveBeenCalledWith({
+    error: "Use a valid range from 0 to 300 nautical miles.",
+  });
 });

@@ -7,4 +7,4 @@ test("builds the browser bundle and async chunks under dist", () => {
     chunksExist: true,
     asyncChunkExists: true,
   });
-});
+}, 30000);

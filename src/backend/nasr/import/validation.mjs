@@ -1,5 +1,6 @@
 import { verifyNasrQueryPlans } from "../query/plans.mjs";
-import { validateNasrDatabase, verifyNasrIndexes } from "../validation.mjs";
+import { verifyNasrIndexes } from "../index/validation.mjs";
+import { validateNasrDatabase } from "../validation.mjs";
 
 export function validateNasrImportDatabase(database) {
   validateNasrDatabase(database);

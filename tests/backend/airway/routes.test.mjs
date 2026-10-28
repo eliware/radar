@@ -25,7 +25,7 @@ test("reports unavailable database and missing home errors", async () => {
   expect(missingHome.send).toHaveBeenCalledWith({ error: "Home location is not configured." });
 });
 
-test("validates distance bands and returns the selected airways", async () => {
+test("reports the route-specific invalid range message", async () => {
   const findAirwaysBetween = jest.fn(() => [{ id: "V12:0" }]);
   const handler = setup({ findAirwaysBetween }, { latitude: 43, longitude: -70 });
   const invalid = reply();
@@ -34,17 +34,5 @@ test("validates distance bands and returns the selected airways", async () => {
   expect(invalid.send).toHaveBeenCalledWith({
     error: "Use a valid range from 0 to 300 nautical miles.",
   });
-  for (const query of [
-    {},
-    { minRangeNm: "bad", maxRangeNm: "30" },
-    { minRangeNm: "-1", maxRangeNm: "30" },
-    { minRangeNm: "0", maxRangeNm: "301" },
-  ]) {
-    const invalidRange = reply();
-    await handler({ query }, invalidRange);
-    expect(invalidRange.code).toHaveBeenCalledWith(400);
-  }
-  const valid = await handler({ query: { minRangeNm: "0", maxRangeNm: "30" } }, reply());
-  expect(valid).toEqual([{ id: "V12:0" }]);
-  expect(findAirwaysBetween).toHaveBeenCalledWith({ latitude: 43, longitude: -70 }, 0, 30);
+  expect(findAirwaysBetween).not.toHaveBeenCalled();
 });

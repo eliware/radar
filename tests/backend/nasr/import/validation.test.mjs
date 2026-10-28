@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { installNasrIndexes } from "../../../../src/backend/nasr/index-installer.mjs";
+import { installNasrIndexes } from "../../../../src/backend/nasr/index/installer.mjs";
 import { validateNasrImportDatabase } from "../../../../src/backend/nasr/import/validation.mjs";
 import { createNasrTestDatabase } from "../../../../test-fixtures/nasr-database.mjs";
 
