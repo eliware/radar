@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { adsbCliDependencies, startAdsbCli } from "../src/cli/adsb/cli.mjs";
-import { loadAdsbEnvironment } from "../src/cli/adsb/environment-loader.mjs";
+import { loadAdsbEnvironment } from "../src/cli/adsb/environment.mjs";
 import { createCliBootstrap } from "../src/cli/bootstrap.mjs";
 
 loadAdsbEnvironment();

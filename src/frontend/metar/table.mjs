@@ -1,6 +1,6 @@
 import { metarCategoryLabel } from "./category-label.mjs";
 import { formatMetarAgeDisplay } from "./age/display.mjs";
-import { escapeMetarHtml } from "./escape.mjs";
+import { escapeHtml } from "../html/escape.mjs";
 import { updateMetarDisplayElement } from "./table/display.mjs";
 
 export function renderMetarTable(reports, now = new Date()) {
@@ -31,7 +31,7 @@ function headers() {
 
 function reportRow({ id, metar, decoded }, now) {
   if (!decoded)
-    return `<tr><td></td><th>${escapeMetarHtml(id)}</th><td>—</td><td colspan="9">${escapeMetarHtml(metar)}</td></tr>`;
+    return `<tr><td></td><th>${escapeHtml(id)}</th><td>—</td><td colspan="9">${escapeHtml(metar)}</td></tr>`;
   const age = formatMetarAgeDisplay(decoded.observed, now);
   const values = [
     decoded.automated ? "A" : "",
@@ -50,11 +50,10 @@ function reportRow({ id, metar, decoded }, now) {
   return `<tr>${values
     .map((value, index) => {
       if (index === 2) return `<td>${metarCategoryLabel(value)}</td>`;
-      if (index === 3)
-        return `<td class="metar-age${age.statusClass}">${escapeMetarHtml(value)}</td>`;
-      if (index === 6) return `<td class="metar-visibility">${escapeMetarHtml(value)}</td>`;
-      if (index === 8) return `<td class="metar-sky">${escapeMetarHtml(value)}</td>`;
-      return `<td${index === 7 ? ' class="metar-weather"' : ""}>${escapeMetarHtml(value)}</td>`;
+      if (index === 3) return `<td class="metar-age${age.statusClass}">${escapeHtml(value)}</td>`;
+      if (index === 6) return `<td class="metar-visibility">${escapeHtml(value)}</td>`;
+      if (index === 8) return `<td class="metar-sky">${escapeHtml(value)}</td>`;
+      return `<td${index === 7 ? ' class="metar-weather"' : ""}>${escapeHtml(value)}</td>`;
     })
     .join("")}</tr>`;
 }

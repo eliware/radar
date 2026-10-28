@@ -1,5 +1,5 @@
 import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
-import { escapeMetarHtml } from "../../metar/escape.mjs";
+import { escapeHtml } from "../../html/escape.mjs";
 
 const MIN_FLIGHT_STRIP_OPACITY = 0.25;
 
@@ -8,8 +8,8 @@ function rowMarkup(values, weights, labels) {
   const cells = values
     .map((value, index) => {
       if (!value && !labels[index]) return '<span aria-hidden="true"></span>';
-      const title = ` title="${escapeMetarHtml(`${labels[index]}: ${value}`)}"`;
-      return `<span${title}>${escapeMetarHtml(String(value))}</span>`;
+      const title = ` title="${escapeHtml(`${labels[index]}: ${value}`)}"`;
+      return `<span${title}>${escapeHtml(String(value))}</span>`;
     })
     .join("");
   return `<div class="flight-strip-row" style="grid-template-columns:${columns}">${cells}</div>`;
@@ -35,7 +35,7 @@ export function renderFlightStripMarkup(data, now = Date.now()) {
           (Math.floor(now / 500) % 2 ? "flash-white" : "flash-green"),
       ].filter(Boolean);
       const classNames = classes.length ? ` ${classes.join(" ")}` : "";
-      return `<div class="flight-strip-aircraft${classNames}" data-icao="${escapeMetarHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
+      return `<div class="flight-strip-aircraft${classNames}" data-icao="${escapeHtml(item.icao)}" style="opacity:${opacity}">${body}</div>`;
     })
     .join("");
   return `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list rows-${data.rowCount}">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;

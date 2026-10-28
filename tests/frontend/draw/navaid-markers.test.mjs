@@ -48,3 +48,19 @@ test("skips distant and invalid navaid positions", () => {
   expect(context.arc).not.toHaveBeenCalled();
   expect(context.restore).toHaveBeenCalledTimes(1);
 });
+
+test("uses smaller navaid labels on narrow canvases", () => {
+  const context = {
+    canvas: { clientWidth: 500 },
+    save: jest.fn(),
+    restore: jest.fn(),
+    beginPath: jest.fn(),
+    arc: jest.fn(),
+    stroke: jest.fn(),
+    moveTo: jest.fn(),
+    lineTo: jest.fn(),
+    fillText: jest.fn(),
+  };
+  drawNavaidMarkers(context, new Map(), () => null);
+  expect(context.font).toBe('9px Consolas, "Courier New", monospace');
+});

@@ -1,4 +1,5 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
+import { selectCanvasLabelSize } from "./label-size.mjs";
 const NAVAID_COLOR = "#4da3ff";
 
 export function drawNavaidMarkers(context, navaids, project) {
@@ -6,7 +7,7 @@ export function drawNavaidMarkers(context, navaids, project) {
   context.strokeStyle = NAVAID_COLOR;
   context.fillStyle = NAVAID_COLOR;
   context.lineWidth = 1;
-  context.font = '12px Consolas, "Courier New", monospace';
+  context.font = `${selectCanvasLabelSize(context, 12)}px Consolas, "Courier New", monospace`;
   context.textAlign = "left";
   for (const navaid of navaids.values()) {
     if (navaid.rangeNm > MAX_RADAR_RANGE) continue;

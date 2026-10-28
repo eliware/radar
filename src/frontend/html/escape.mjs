@@ -1,4 +1,4 @@
-export function escapeMetarHtml(value) {
+export function escapeHtml(value) {
   return String(value ?? "—").replace(/[&<>"']/g, (character) => {
     switch (character) {
       case "&":

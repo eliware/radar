@@ -10,7 +10,7 @@ Open `http://localhost:3000` on the server computer. Find its Wi-Fi address with
 
 Set runtime options in `.env` or the process environment. See [Configuration](configuration.md) for defaults, accepted values, and validation rules. The web API has no authentication, so limit access to a trusted network.
 
-Set `ADSB_LAT` and `ADSB_LON` as decimal coordinates. Set `ADSB_ALT` in feet above mean sea level. Default elevation is 300 feet. Set `RADAR_DEFAULT_RANGE_NM` from 1 through 300 to change the default range. Set `RADAR_DEFAULT_ROTATION` from 0 through 359 to change the default heading. Defaults are 20 nautical miles and north-up.
+Runtime options and home-location requirements for reference-data routes are documented in [Configuration](configuration.md).
 
 ## HTTP routes
 

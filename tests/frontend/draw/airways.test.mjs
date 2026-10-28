@@ -82,3 +82,15 @@ test("draws a segment whose endpoints share a coordinate", () => {
   drawAirways(ctx, routes, (item) => ({ x: item.x, y: item.z }), { Q: true, J: true, V: true });
   expect(ctx.stroke).toHaveBeenCalled();
 });
+
+test("uses smaller airway labels on narrow canvases", () => {
+  const ctx = context();
+  ctx.canvas = { clientWidth: 500 };
+  drawAirways(
+    ctx,
+    new Map([["Q", { name: "Q1", type: "Q", points: [point("A", 1, 0)] }]]),
+    (item) => ({ x: item.x, y: item.z }),
+    { Q: true, J: true, V: true },
+  );
+  expect(ctx.font).toBe('9px Consolas, "Courier New", monospace');
+});

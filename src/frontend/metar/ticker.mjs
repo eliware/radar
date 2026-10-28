@@ -1,7 +1,7 @@
 import { metarCategoryLabel } from "./category-label.mjs";
-import { escapeMetarHtml } from "./escape.mjs";
+import { escapeHtml } from "../html/escape.mjs";
 
-export { escapeMetarHtml } from "./escape.mjs";
+export { escapeHtml as escapeMetarHtml } from "../html/escape.mjs";
 
 export function renderMetarTicker(ticker, reports) {
   ticker.innerHTML = `<span>${reports.map(tickerLine).join("　•　")}</span>`;
@@ -20,5 +20,5 @@ export function updateMetarTicker(ticker, data) {
 }
 
 function tickerLine({ id, metar, decoded }) {
-  return `${escapeMetarHtml(id)} ${metarCategoryLabel(decoded?.flightCategory)} ${escapeMetarHtml(metar)}`.trim();
+  return `${escapeHtml(id)} ${metarCategoryLabel(decoded?.flightCategory)} ${escapeHtml(metar)}`.trim();
 }

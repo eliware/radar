@@ -1,9 +1,10 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
+import { selectCanvasLabelSize } from "./label-size.mjs";
 const COLORS = { Q: "#31534d", J: "#54394b", V: "#4f4d32" };
 
 export function drawAirways(context, airways, project, visibility) {
   context.save();
-  context.font = '10px Consolas, "Courier New", monospace';
+  context.font = `${selectCanvasLabelSize(context, 10)}px Consolas, "Courier New", monospace`;
   context.textAlign = "center";
   for (const airway of airways.values()) {
     const color = COLORS[airway.type];

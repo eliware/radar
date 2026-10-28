@@ -1,5 +1,15 @@
-import { expect, test } from "@jest/globals";
-import { readAdsbEnvironment } from "../../../src/cli/adsb/environment.mjs";
+import { expect, jest, test } from "@jest/globals";
+import { loadAdsbEnvironment, readAdsbEnvironment } from "../../../src/cli/adsb/environment.mjs";
+
+test("loads dotenv configuration quietly", () => {
+  const load = jest.fn();
+  loadAdsbEnvironment(load);
+  expect(load).toHaveBeenCalledWith({ quiet: true });
+});
+
+test("loads dotenv configuration with its default loader", () => {
+  expect(() => loadAdsbEnvironment()).not.toThrow();
+});
 
 test("uses the local RTL1090 feed by default", () => {
   expect(readAdsbEnvironment({})).toEqual({
@@ -8,6 +18,10 @@ test("uses the local RTL1090 feed by default", () => {
     locationLatitude: undefined,
     locationLongitude: undefined,
   });
+});
+
+test("reads the process environment by default", () => {
+  expect(readAdsbEnvironment()).toEqual(readAdsbEnvironment(process.env));
 });
 
 test("reads feed host and unparsed port text from the environment", () => {
