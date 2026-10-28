@@ -1,5 +1,5 @@
 import { createNasrImportFiles } from "./files.mjs";
-import { createNasrImportTemporaryFile } from "./temporary-file.mjs";
+import { createNasrImportTemporaryFile } from "./temporary/file.mjs";
 import { validateNasrImportPaths } from "./paths.mjs";
 import { validateNasrSource } from "./connection-checks.mjs";
 import { prepareNasrImportInstallation } from "./prepare/install.mjs";

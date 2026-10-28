@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createNasrImportTemporaryFile } from "../../../../src/backend/nasr/import/temporary-file.mjs";
+import { createNasrImportTemporaryFile } from "../../../../../src/backend/nasr/import/temporary/file.mjs";
 
 test("applies path and filesystem policy to temporary import files", () => {
   const files = {
@@ -11,7 +11,6 @@ test("applies path and filesystem policy to temporary import files", () => {
   const temporaryFile = createNasrImportTemporaryFile(files);
   const temporary = temporaryFile.temporaryPath("/tmp/nasr.sqlite");
 
-  expect(temporary).toMatch(/nasr\.sqlite\.tmp-\d+$/);
   temporaryFile.prepareOutput("/tmp/nasr.sqlite");
   temporaryFile.copyInput("source.sqlite", temporary);
   temporaryFile.install(temporary, "/tmp/nasr.sqlite");

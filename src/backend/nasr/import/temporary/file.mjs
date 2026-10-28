@@ -1,13 +1,12 @@
 import { dirname } from "node:path";
+import { createNasrTemporaryPath } from "./path.mjs";
 
 export function createNasrImportTemporaryFile(files) {
   return {
     prepareOutput(output) {
       files.mkdir(dirname(output), { recursive: true });
     },
-    temporaryPath(output) {
-      return `${output}.tmp-${process.pid}`;
-    },
+    temporaryPath: createNasrTemporaryPath,
     copyInput(input, temporary) {
       files.copy(input, temporary);
     },

@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { createNasrImportFiles } from "../../../../src/backend/nasr/import/files.mjs";
 import { installNasrCopy } from "../../../../src/backend/nasr/import/install-copy.mjs";
-import { createNasrImportTemporaryFile } from "../../../../src/backend/nasr/import/temporary-file.mjs";
+import { createNasrImportTemporaryFile } from "../../../../src/backend/nasr/import/temporary/file.mjs";
 
 function createFiles() {
   const operations = {
