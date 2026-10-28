@@ -1,12 +1,24 @@
 import { resolve } from "node:path";
 import { expect, jest, test } from "@jest/globals";
-import { validateNasrImportPaths } from "../../../../src/backend/nasr/import/paths.mjs";
+import {
+  selectNasrImportPaths,
+  validateNasrImportPaths,
+} from "../../../../src/backend/nasr/import/paths.mjs";
 
 test("resolves existing input and output paths", () => {
   const exists = jest.fn(() => true);
   expect(validateNasrImportPaths("source.sqlite", "target.sqlite", exists)).toEqual({
     input: resolve("source.sqlite"),
     output: resolve("target.sqlite"),
+  });
+  expect(exists).toHaveBeenCalledWith(resolve("source.sqlite"));
+});
+
+test("selects and validates import paths as one path operation", () => {
+  const exists = jest.fn(() => true);
+  expect(selectNasrImportPaths("source.sqlite", "output.sqlite", exists)).toEqual({
+    input: resolve("source.sqlite"),
+    output: resolve("output.sqlite"),
   });
   expect(exists).toHaveBeenCalledWith(resolve("source.sqlite"));
 });

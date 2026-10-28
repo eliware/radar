@@ -1,5 +1,4 @@
-import { clipPolylineToViewport } from "./clip-polyline.mjs";
-import { intersectsViewport } from "./intersection.mjs";
+import { selectVisibleReferenceItems } from "./intersection.mjs";
 import { createRadarReferenceViewApplier } from "./view/applier.mjs";
 
 const LAYERS = [
@@ -52,7 +51,7 @@ export function createRadarReferenceCacheSession(scene, location) {
 function applyCache(scene, cache, bounds, location) {
   const collections = LAYERS.map(([, , padding], index) => {
     const items = [...cache[index].values()];
-    return bounds ? visibleItems(items, bounds, location, padding) : items;
+    return bounds ? selectVisibleReferenceItems(items, bounds, location, padding) : items;
   });
   applyCollections(scene, collections);
 }
@@ -60,11 +59,4 @@ function applyCache(scene, cache, bounds, location) {
 function applyCollections(scene, collections) {
   if (scene.updateAll) scene.updateAll(collections);
   else LAYERS.forEach(([, update], index) => scene[update](collections[index]));
-}
-
-function visibleItems(items, bounds, location, padding) {
-  return items.flatMap((item) => {
-    if (item.points?.length > 1) return clipPolylineToViewport(item, bounds, location);
-    return intersectsViewport(item, bounds, location, padding) ? [item] : [];
-  });
 }

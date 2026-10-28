@@ -97,3 +97,15 @@ test("clears all scene reference layers together when batched updates are availa
   createRadarReferenceCacheSession(scene, location).clear();
   expect(scene.updateAll).toHaveBeenCalledWith([[], [], [], [], [], []]);
 });
+
+test("reapplies cached items against the latest viewport bounds", async () => {
+  jest.useFakeTimers();
+  const scene = { updateAll: jest.fn() };
+  const session = createRadarReferenceCacheSession(scene, location);
+  session.setBounds({ minX: -10, maxX: 10, minZ: -10, maxZ: 10 });
+  session.add(collections([{ id: "Q1", points: [{ x: 0, z: 0 }] }]));
+  session.applyLatest();
+  await flush();
+  expect(scene.updateAll).toHaveBeenCalledTimes(1);
+  expect(scene.updateAll.mock.calls[0][0][5]).toEqual([{ id: "Q1", points: [{ x: 0, z: 0 }] }]);
+});

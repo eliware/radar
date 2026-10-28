@@ -1,5 +1,6 @@
 import { createFlightStripAircraftStore } from "./aircraft-store.mjs";
 import { renderFlightStrips } from "../render-flight-strips.mjs";
+import { scheduleFlightStripRefresh } from "./strip/scheduling.mjs";
 
 export function createFlightStripView(container, windowRef, clock = Date.now) {
   const aircraft = createFlightStripAircraftStore(clock);
@@ -14,8 +15,7 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
       now,
     );
   };
-  windowRef?.addEventListener?.("resize", render);
-  const timer = windowRef?.setInterval?.(render, 500);
+  const stopScheduling = scheduleFlightStripRefresh(windowRef, render);
   render();
   return {
     setHome(homeLocation, homeElevationFeet) {
@@ -36,8 +36,7 @@ export function createFlightStripView(container, windowRef, clock = Date.now) {
       render();
     },
     destroy() {
-      windowRef?.removeEventListener?.("resize", render);
-      if (timer !== undefined) windowRef?.clearInterval?.(timer);
+      stopScheduling();
     },
   };
 }
