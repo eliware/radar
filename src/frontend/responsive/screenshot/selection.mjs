@@ -1,6 +1,6 @@
 import { selectScreenshotViewports } from "./options.mjs";
 import { selectScreenshotModes } from "./modes.mjs";
-import { parseScreenshotArguments } from "./selection/arguments.mjs";
+import { parseScreenshotArguments } from "./arguments.mjs";
 import { readScreenshotSelectionOptions } from "./selection/options.mjs";
 
 export function selectScreenshotOptions(args = [], environment = process.env) {
