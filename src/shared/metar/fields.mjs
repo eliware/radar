@@ -1,4 +1,4 @@
-import { metarFlightCategory } from "./category.mjs";
+import { metarFlightCategory } from "./fields/category.mjs";
 
 export function decodedFields(data) {
   return {

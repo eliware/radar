@@ -85,3 +85,9 @@ test("formats optional cloud and temperature values", () => {
     altimeter: "—",
   });
 });
+
+test("formats weather conditions with omitted intensity and descriptor", () => {
+  expect(
+    decodedFields({ weatherConditions: [{ phenomenons: ["RA"] }], clouds: [] }).conditions,
+  ).toBe("RA");
+});

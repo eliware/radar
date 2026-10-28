@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { drawAircraftDisplay } from "../../../../src/frontend/draw/aircraft/display.mjs";
 
-test("draws history marks, hollow prediction diamonds, and connected three-line tags", () => {
+test("orchestrates history marks and connected three-line tags", () => {
   const context = Object.fromEntries(
     ["beginPath", "moveTo", "lineTo", "stroke", "closePath", "fill", "fillText"].map((name) => [
       name,
@@ -30,8 +30,6 @@ test("draws history marks, hollow prediction diamonds, and connected three-line 
   );
   expect(context.fillText).toHaveBeenCalledWith(String.fromCharCode(92), 40, 45);
   expect(context.fillText).toHaveBeenCalledWith("123C", expect.any(Number), expect.any(Number));
-  expect(context.lineTo).toHaveBeenCalledWith(80, 30);
-  expect(context.closePath).toHaveBeenCalled();
   expect(context.fill).not.toHaveBeenCalled();
   const leaderStart = context.moveTo.mock.calls.at(-1);
   expect(Math.hypot(leaderStart[0] - 50, leaderStart[1] - 50)).toBeCloseTo(9);

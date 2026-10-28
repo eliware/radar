@@ -34,6 +34,7 @@ test("projects aircraft labels, one-minute vectors, and history points", () => {
   expect(result[0]).toMatchObject({
     receivedAt: 123,
     remoteOnly: true,
+    nearHomePass: false,
     lines: ["RADAR1", "100C", "120"],
   });
   expect(result[0].futureX).toBe(0);
