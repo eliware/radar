@@ -17,9 +17,11 @@ test("owns Canvas water state and control cleanup", () => {
     () => draw,
   );
   expect(water.data).toMatchObject({ paths: [], visible: true });
+  expect(water.data.isVisible()).toBe(true);
   expect(draw).not.toHaveBeenCalled();
   listeners.get("keydown")({ key: "w", preventDefault: jest.fn() });
   expect(water.data.visible).toBe(false);
+  expect(water.data.isVisible()).toBe(false);
   expect(draw).toHaveBeenCalledTimes(1);
   water.destroy();
   expect(documentRef.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));

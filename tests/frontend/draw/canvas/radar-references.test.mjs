@@ -39,4 +39,6 @@ test("renders reference layers with shared visibility and without a scope clip",
     options.runwayVisibility,
     options.referenceVisibility,
   );
+  drawRadarReferences.mock.calls[0][2]({ latitude: 43, longitude: -70 });
+  expect(options.project).toHaveBeenCalledWith(expect.objectContaining({ x: expect.any(Number) }));
 });
