@@ -18,7 +18,10 @@ test("uses default radar view settings when values are absent", () => {
   });
 });
 
-test("parses configured range and rotation", () => {
+test("parses configured range boundaries and rotation", () => {
+  expect(parseRadarViewSettings({ RADAR_DEFAULT_RANGE_NM: "1" }).defaultRangeNm).toBe(1);
+  expect(parseRadarViewSettings({ RADAR_DEFAULT_RANGE_NM: "300" }).defaultRangeNm).toBe(300);
+  expect(parseRadarViewSettings({ RADAR_DEFAULT_RANGE_NM: "25.5" }).defaultRangeNm).toBe(25.5);
   expect(
     parseRadarViewSettings({ RADAR_DEFAULT_RANGE_NM: "25", RADAR_DEFAULT_ROTATION: "140" }),
   ).toEqual({ defaultRangeNm: 25, defaultRotationDegrees: 140 });

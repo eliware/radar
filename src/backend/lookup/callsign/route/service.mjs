@@ -1,5 +1,5 @@
-import { createLookupCache } from "../../lookup-cache.mjs";
-import { createCallsignRouteLookup } from "./route.mjs";
+import { createLookupCache } from "../../../lookup-cache.mjs";
+import { createCallsignRouteLookup } from "../route.mjs";
 
 export function createCallsignRouteService({
   request,

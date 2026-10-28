@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCallsignRouteService } from "../../../../src/backend/lookup/callsign/route-service.mjs";
+import { createCallsignRouteService } from "../../../../../src/backend/lookup/callsign/route/service.mjs";
 
 const response = (origin) => ({
   ok: true,

@@ -1,5 +1,5 @@
 import { createAircraftTypeService } from "./lookup/aircraft/type-service.mjs";
-import { createCallsignRouteService } from "./lookup/callsign/route-service.mjs";
+import { createCallsignRouteService } from "./lookup/callsign/route/service.mjs";
 
 export function createAdsbLolLookup({
   request = globalThis.fetch,
