@@ -1,4 +1,5 @@
 import { NASR_INDEXES } from "./definitions.mjs";
+import { normalizeNasrIndexSql, parseNasrIndexDefinition } from "./definition.mjs";
 
 export function verifyNasrIndexes(database) {
   const stored = new Map(
@@ -8,14 +9,8 @@ export function verifyNasrIndexes(database) {
       .map((row) => [row.name, row.sql]),
   );
   for (const statement of NASR_INDEXES) {
-    const [, name] = statement.match(/INDEX IF NOT EXISTS (\w+)/);
-    const expected = statement
-      .replace(" IF NOT EXISTS", "")
-      .replace(/\s+/g, " ")
-      .trim()
-      .toUpperCase();
-    const actual = stored.get(name)?.replace(/\s+/g, " ").trim().toUpperCase();
-    if (actual !== expected)
+    const { name, definition } = parseNasrIndexDefinition(statement);
+    if (normalizeNasrIndexSql(stored.get(name)) !== definition)
       throw new Error(`NASR index ${name} is missing or has an incorrect definition.`);
   }
 }

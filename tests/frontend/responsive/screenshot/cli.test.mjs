@@ -3,7 +3,7 @@ import { runScreenshotCli } from "../../../../src/frontend/responsive/screenshot
 
 test("invokes the selected capture workflow and returns its result", async () => {
   const capture = jest.fn().mockResolvedValue({ count: 2 });
-  const result = await runScreenshotCli({ args: [], environment: {}, capture });
+  const result = await runScreenshotCli({ args: [], environment: {}, dependencies: { capture } });
   expect(result).toEqual({ count: 2 });
   expect(capture).toHaveBeenCalledTimes(1);
 });

@@ -1,9 +1,13 @@
-import { resolveWebConfiguration } from "./configuration.mjs";
+import { resolveWebNetworkConfiguration } from "./config/web.mjs";
+import { resolveWebServiceConfiguration } from "./config/services.mjs";
 import { registerApplicationShutdown } from "./lifecycle/shutdown.mjs";
 
 export async function startWebApplication(dependencies) {
   dependencies.loadEnvironment({ quiet: true });
-  const configuration = resolveWebConfiguration(process.env, dependencies);
+  const configuration = {
+    ...resolveWebNetworkConfiguration(process.env, dependencies.parseAdsbLocation),
+    ...resolveWebServiceConfiguration(process.env, dependencies.parseMetarStations),
+  };
   const { port, feedPort, location, elevationFeet, radarViewSettings } = configuration;
   const airportDatabase = dependencies.createAirportDatabase(configuration.airportDatabasePath);
   const metarLookup = dependencies.createMetarLookup(configuration.metarStations);

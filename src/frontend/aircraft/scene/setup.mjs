@@ -9,15 +9,13 @@ import { createAircraftTrails } from "../trails.mjs";
 import { createAircraftDisplayOverlay } from "../display-overlay.mjs";
 import { createRadarHome } from "../../create/radar/home.mjs";
 import { createAirspaceVolumes } from "../../create/airspace-volumes.mjs";
-import { createRadarReferenceStore } from "../../radar/reference/store.mjs";
 import { createRadarLayerVisibility } from "../../create/radar/layer/visibility.mjs";
 import { createSceneWater } from "../../create/scene-water.mjs";
 import { createAircraftRadarCamera } from "../../create/aircraft/radar/camera.mjs";
 import { createRadarConnectionState } from "../../create/radar/connection-state.mjs";
-import { createAircraftSceneWorkflow } from "../../create/aircraft/scene-workflow.mjs";
 import { createOrbitRadarState } from "../../create/orbit-radar-state.mjs";
 import { destroyAircraftSceneResources } from "../../destroy/aircraft-scene-resources.mjs";
-import { createRadarViewport } from "../../radar/viewport/radius.mjs";
+import { createAircraftSceneDashboardBindings } from "./dashboard-bindings.mjs";
 
 export function createAircraftSceneSetup({
   container,
@@ -39,7 +37,6 @@ export function createAircraftSceneSetup({
   const connection = createRadarConnectionState(setRadarConnected);
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
-  const references = createRadarReferenceStore();
   const documentRef = browserWindow.document ?? globalThis.document;
   const layers = createRadarLayerVisibility(documentRef, undefined, airspace.setVisible);
   const overlay = createAircraftDisplayOverlay({
@@ -63,32 +60,34 @@ export function createAircraftSceneSetup({
     defaultRotationDegrees,
   });
   const { radarCamera, reset, isAutoZoom } = radar;
-  const workflow = createAircraftSceneWorkflow({
+  const dashboard = createAircraftSceneDashboardBindings({
+    THREE,
+    camera,
+    controls,
+    container,
+    elevationFeet,
     targets,
     trails,
     windowRef: browserWindow,
     radarCamera,
     renderer,
     scene,
-    camera,
-    container,
     overlay,
     location,
-    elevationFeet,
     defaultRangeNm,
     isConnected: connection.isConnected,
     isAutoZoom,
     layers,
     water,
-    references,
   });
+  const { references, workflow, viewport } = dashboard;
   return {
     connection,
     workflow,
     layers,
     references,
     updateAirspace: (items) => airspace.update(items),
-    viewport: createRadarViewport(THREE, camera, controls, container, elevationFeet),
+    viewport,
     orbit: createOrbitRadarState(controls, radarCamera),
     radar: { reset },
     destroy: () =>

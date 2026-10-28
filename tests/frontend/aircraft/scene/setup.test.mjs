@@ -7,8 +7,8 @@ const { createAircraftSceneSetup } =
 
 beforeEach(() => jest.clearAllMocks());
 
-test("uses default range and rotation settings when no overrides are provided", () => {
-  createAircraftSceneSetup({
+test("binds default view settings and scene lifecycle", () => {
+  const setup = createAircraftSceneSetup({
     container: { replaceChildren: jest.fn() },
     location: { latitude: 43, longitude: -70 },
     elevationFeet: 300,
@@ -19,4 +19,10 @@ test("uses default range and rotation settings when no overrides are provided", 
   );
   expect(mocks.radarCamera.setRange).toHaveBeenCalledWith(20);
   expect(mocks.radarCamera.setRotation).toHaveBeenCalledWith(0);
+  mocks.factories.createRadarCamera.mock.calls[0][0].onRangeChange(30);
+  expect(mocks.updateRings).toHaveBeenCalledWith(30);
+  setup.updateAirspace([]);
+  expect(mocks.airspace.update).toHaveBeenCalledWith([]);
+  setup.destroy();
+  expect(mocks.stopRadarLoops).toHaveBeenCalledTimes(1);
 });

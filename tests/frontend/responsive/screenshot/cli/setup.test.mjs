@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createScreenshotCliSetup } from "../../../../src/frontend/responsive/screenshot/cli-setup.mjs";
+import { createScreenshotCliSetup } from "../../../../../src/frontend/responsive/screenshot/cli/setup.mjs";
 
 test("assembles default capture dependencies and screenshot settings", () => {
   const { capture, captureOptions } = createScreenshotCliSetup({ args: [], environment: {} });
@@ -10,12 +10,6 @@ test("assembles default capture dependencies and screenshot settings", () => {
       outputDir: "artifacts/screenshots",
       targets: expect.any(Array),
       modes: ["above-fold", "full-page"],
-      browserLauncher: expect.objectContaining({ launch: expect.any(Function) }),
-      browserArgs: expect.any(Array),
-      fetcher: expect.any(Function),
-      files: expect.objectContaining({ mkdir: expect.any(Function), stat: expect.any(Function) }),
-      delayMs: 500,
-      report: console.log,
     }),
   );
 });
@@ -47,13 +41,7 @@ test("composes injected dependencies with selected screenshot arguments", () => 
       RADAR_SCREENSHOT_DIR: "shots",
       RADAR_SCREENSHOT_MODES: "full-page",
     },
-    browserLauncher,
-    browserArgs,
-    fetcher,
-    files,
-    delayMs: 0,
-    report,
-    capture,
+    dependencies: { browserLauncher, browserArgs, fetcher, files, delayMs: 0, report, capture },
   });
   expect(selected.capture).toBe(capture);
   expect(selected.captureOptions).toEqual({

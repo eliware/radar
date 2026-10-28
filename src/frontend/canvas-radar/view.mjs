@@ -12,6 +12,7 @@ import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mj
 import { radarLegendTopInset } from "../draw/radar/legend/entries.mjs";
 import { createCanvasRadarSurface } from "./surface.mjs";
 import { createCanvasRadarViewApi } from "./view/api.mjs";
+import { createCanvasRadarViewDraw } from "./view/draw.mjs";
 export function createCanvasRadarView({
   container,
   location,
@@ -59,11 +60,7 @@ export function createCanvasRadarView({
     water: waterLayer.data,
     legendTopInset,
   });
-  draw = () => {
-    drawRadar();
-    waterLayer.update();
-    viewChanges.emit(state.range);
-  };
+  draw = createCanvasRadarViewDraw({ drawRadar, waterLayer, state, viewChanges });
   const layers = createRadarLayerVisibility(documentRef, () => {
     syncCanvasRadarVisibility(state, layers);
     draw();
