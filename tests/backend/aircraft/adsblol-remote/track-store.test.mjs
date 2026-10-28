@@ -16,6 +16,12 @@ test("stores normalized tracks", () => {
   expect(tracks.list()).toMatchObject([{ icao: "ABC123", callsign: "RPA1" }]);
 });
 
+test("does not store invalid remote records", () => {
+  const tracks = createAdsbLolTrackStore({ location });
+  expect(tracks.update({ hex: "", lat: 43, lon: -70 })).toBeNull();
+  expect(tracks.list()).toEqual([]);
+});
+
 test("preserves route fields only while a track keeps the same callsign", () => {
   const tracks = createAdsbLolTrackStore({ location });
   const mapped = tracks.update(record());
