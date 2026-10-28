@@ -5,10 +5,10 @@ import { connectSbsFeed } from "../../shared/tcp-feed.mjs";
 import { renderFlightStrips } from "../flight/strips.mjs";
 import { parseAdsbLocation } from "../../shared/adsb-location.mjs";
 import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
-import { createCliAircraftUpdater } from "../update-cli-aircraft.mjs";
 import { writeAdsbCliVersion } from "./help.mjs";
 import { writeAdsbCliUsage } from "./usage.mjs";
 import { createAdsbCliOutput } from "./output.mjs";
+import { connectAdsbCliFeed } from "./feed.mjs";
 
 export const adsbCliDependencies = {
   createAircraftList,
@@ -61,12 +61,6 @@ export function startAdsbCli({
   }
 
   const aircraftList = dependencies.createAircraftList();
-  const updateAircraft = createCliAircraftUpdater({
-    parseSbsMessage: dependencies.parseSbsMessage,
-    aircraftList,
-    location,
-    calculateRange: dependencies.calculateAircraftRange,
-  });
   const output = createAdsbCliOutput({
     debug: options.debug,
     write,
@@ -75,17 +69,15 @@ export function startAdsbCli({
         width: getTerminalWidth(),
       }),
   });
-  const feed = dependencies.connectSbsFeed({
-    host: options.host,
-    port: options.port,
-    onLine(line) {
-      const aircraft = updateAircraft(line);
-      if (!aircraft) return;
-      output.update(aircraft);
-    },
-    onError(error) {
-      writeError(`ADS-B stream error: ${error.message}. Retrying in 2 seconds.`);
-    },
+  const feed = connectAdsbCliFeed({
+    connectSbsFeed: dependencies.connectSbsFeed,
+    options,
+    parseSbsMessage: dependencies.parseSbsMessage,
+    aircraftList,
+    location,
+    calculateAircraftRange: dependencies.calculateAircraftRange,
+    output,
+    writeError,
   });
   return { close: () => feed.close(), refresh: output.refresh, table: output.table };
 }

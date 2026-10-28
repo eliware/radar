@@ -39,3 +39,22 @@ test("skips disabled lookups, missing callsigns, complete routes, and absent ser
   createAdsbLolRouteEnrichment({}).enrich(mapped(), aircraft);
   expect(lookup.getCallsignRoute).not.toHaveBeenCalled();
 });
+
+test("leaves aircraft unchanged when route lookup returns no result or fails", async () => {
+  const onRouteUpdate = jest.fn();
+  const aircraft = new Map([["ABC123", mapped()]]);
+  const noResult = createAdsbLolRouteEnrichment({
+    lookup: { getCallsignRoute: async () => null },
+    onRouteUpdate,
+  });
+  noResult.enrich(mapped(), aircraft);
+  const failure = createAdsbLolRouteEnrichment({
+    lookup: { getCallsignRoute: async () => Promise.reject(new Error("offline")) },
+    onRouteUpdate,
+  });
+  failure.enrich(mapped(), aircraft);
+  await Promise.resolve();
+  await Promise.resolve();
+  expect(aircraft.get("ABC123")).toEqual(mapped());
+  expect(onRouteUpdate).not.toHaveBeenCalled();
+});

@@ -1,4 +1,4 @@
-import { createWebSocketRetry } from "./retry.mjs";
+import { createWebSocketReconnection } from "./reconnection.mjs";
 import { createSocketConnection } from "./socket-connection.mjs";
 
 export function connectWebSocketFeed({
@@ -12,43 +12,31 @@ export function connectWebSocketFeed({
 }) {
   let socket;
   let stopped = false;
-  let retryPending = false;
-  const retry = createWebSocketRetry({
+  const reconnection = createWebSocketReconnection({
     setTimer,
     clearTimer,
-    onRetry: () => {
-      retryPending = false;
-      connect();
-    },
+    onReconnect: connect,
+    onState,
   });
 
   function connect() {
-    retryPending = false;
     socket = createSocketConnection(WebSocketClass, url);
     if (!socket) {
-      scheduleRetry();
+      reconnection.schedule(undefined, socket, stopped);
       return;
     }
     const current = socket;
     current.onopen = async () => {
-      if (stopped || retryPending || current !== socket) return;
-      retry.reset();
+      if (!reconnection.canHandle(current, socket, stopped)) return;
+      reconnection.reset();
       onState(true);
       await onOpen(current);
     };
     current.onmessage = (event) => {
-      if (!stopped && !retryPending && current === socket) onMessage(event.data);
+      if (reconnection.canHandle(current, socket, stopped)) onMessage(event.data);
     };
-    current.onerror = () => scheduleRetry(current);
-    current.onclose = () => scheduleRetry(current);
-  }
-
-  function scheduleRetry(source) {
-    if (stopped || (source && source !== socket) || retryPending) return;
-    retryPending = true;
-    onState(false);
-    if (source) source.onopen = source.onmessage = source.onerror = source.onclose = null;
-    retry.schedule();
+    current.onerror = () => reconnection.schedule(current, socket, stopped);
+    current.onclose = () => reconnection.schedule(current, socket, stopped);
   }
 
   connect();
@@ -59,7 +47,7 @@ export function connectWebSocketFeed({
     close() {
       if (stopped) return;
       stopped = true;
-      retry.cancel();
+      reconnection.cancel();
       const active = socket;
       if (active) {
         active.onopen = active.onmessage = active.onerror = active.onclose = null;

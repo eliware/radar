@@ -3,7 +3,8 @@ import { DEFAULT_OUTPUT } from "../output-path.mjs";
 import { createNasrImportFiles } from "./files.mjs";
 import { installNasrCopy } from "./install-copy.mjs";
 import { validateNasrImportPaths } from "./paths.mjs";
-import { prepareNasrTemporaryDatabase, validateNasrSource } from "./connection-checks.mjs";
+import { validateNasrSource } from "./connection-checks.mjs";
+import { prepareNasrTemporaryDatabase } from "./prepare-database.mjs";
 
 export function importNasrDatabaseLifecycle(
   inputPath,
