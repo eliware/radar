@@ -22,7 +22,7 @@ function titleLines(widths, aircraftCount, splitAfter) {
   return [`╔${"═".repeat(titleWidth)}╤${"═".repeat(countWidth)}╗`, `║${title}│${countCell}║`];
 }
 
-export function flightStripTitle(widths, aircraftCount, tableWidth) {
+export function flightStripTitleRow(widths, aircraftCount, tableWidth) {
   const countWidth = ` ${aircraftCount} AIRCRAFT `.length;
   const splitAfter = titleSplitAfter(widths, tableWidth, countWidth);
   return { lines: titleLines(widths, aircraftCount, splitAfter), splitAfter };

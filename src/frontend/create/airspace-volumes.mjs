@@ -1,9 +1,9 @@
 import { projectAircraftPosition } from "../aircraft/space-position.mjs";
 import { airportAirspaceBands } from "../airport-airspace/bands.mjs";
 import { airportAirspaceEdges } from "../airport-airspace/edges.mjs";
+import { createAirspaceVertices } from "./airspace/geometry.mjs";
 
 const AIRSPACE_COLOR = 0x777777;
-const FEET_PER_NM = 6076.12;
 
 export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet) {
   const shapes = new Map();
@@ -36,11 +36,7 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
         opacity: 0.5,
       });
       const edges = airportAirspaceEdges(bands, airportElevationFeet);
-      const vertices = [];
-      for (const ring of edges.rings)
-        addCircle(vertices, position, ring.radius, ring.altitude, homeElevationFeet);
-      for (const wall of edges.walls)
-        addVertical(vertices, position, wall.radius, wall.floor, wall.ceiling, homeElevationFeet);
+      const vertices = createAirspaceVertices(edges, position, homeElevationFeet);
       const geometry = new THREE.BufferGeometry();
       geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
       const lines = new THREE.LineSegments(geometry, material);
@@ -65,29 +61,4 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
     material?.dispose();
   }
   return { update, setVisible, dispose };
-}
-
-function addCircle(vertices, center, radius, altitude, homeElevationFeet) {
-  const height = (altitude - homeElevationFeet) / FEET_PER_NM;
-  for (let step = 0; step < 64; step++) {
-    const first = (step * Math.PI * 2) / 64;
-    const second = ((step + 1) * Math.PI * 2) / 64;
-    vertices.push(
-      ...point(center, radius, first, height),
-      ...point(center, radius, second, height),
-    );
-  }
-}
-
-function addVertical(vertices, center, radius, floor, ceiling, homeElevationFeet) {
-  const bottom = (floor - homeElevationFeet) / FEET_PER_NM;
-  const top = (ceiling - homeElevationFeet) / FEET_PER_NM;
-  for (let step = 0; step < 8; step++) {
-    const angle = (step * Math.PI * 2) / 8;
-    vertices.push(...point(center, radius, angle, bottom), ...point(center, radius, angle, top));
-  }
-}
-
-function point(center, radius, angle, height) {
-  return [center.x + Math.cos(angle) * radius, height, center.z + Math.sin(angle) * radius];
 }

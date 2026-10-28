@@ -1,10 +1,10 @@
 import { tableBorder, tableRow } from "./table.mjs";
 import { horizontalRule } from "./rule.mjs";
-import { flightStripTitle } from "./title.mjs";
+import { flightStripTitleRow } from "./title-row.mjs";
 
 export function flightStripHeader(layout, aircraftCount, width) {
   const widths = layout[0].widths;
-  const { lines, splitAfter } = flightStripTitle(widths, aircraftCount, width);
+  const { lines, splitAfter } = flightStripTitleRow(widths, aircraftCount, width);
   lines.push(tableBorder(widths, "╠", "╤", "╣", "═", splitAfter));
   for (const [index, group] of layout.entries()) {
     if (index > 0) lines.push(horizontalRule(width, "╟", "╢", "─"));
