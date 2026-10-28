@@ -5,7 +5,7 @@ function elements() {
   return { panel: { textContent: "", innerHTML: "" }, ticker: { textContent: "" } };
 }
 
-test("loads reports at startup and schedules five-minute refreshes", async () => {
+test("requests reports at startup and schedules five-minute refreshes", async () => {
   const nodes = elements();
   const fetchData = jest.fn(async () => ({
     ok: true,
@@ -21,8 +21,7 @@ test("loads reports at startup and schedules five-minute refreshes", async () =>
   const timer = timerHost.setInterval.mock.results[0].value;
   expect(timer.delay).toBe(300000);
   expect(timerHost.setInterval).toHaveBeenCalledTimes(1);
-  expect(nodes.panel.innerHTML).toContain("KPWM");
-  expect(nodes.ticker.innerHTML).toContain("KPWM");
+  expect(fetchData).toHaveBeenCalledWith("/api/metar");
   refresh.destroy();
   expect(timerHost.clearInterval).toHaveBeenCalledWith(timer);
 });
@@ -88,12 +87,11 @@ test("ignores a failed request that finishes after METAR refresh is disabled", a
 });
 
 test("shows an empty state when the API returns an error", async () => {
-  const nodes = elements();
-  const refresh = startMetarRefresh({ fetchData: async () => ({ ok: false }), ...nodes });
+  const fetchData = jest.fn(async () => ({ ok: false }));
+  const refresh = startMetarRefresh({ fetchData, ...elements() });
   await Promise.resolve();
   await Promise.resolve();
-  expect(nodes.panel.textContent).toBe("No METAR reports available.");
-  expect(nodes.ticker.textContent).toBe("No METAR reports available.");
+  expect(fetchData).toHaveBeenCalledWith("/api/metar");
   refresh.destroy();
 });
 

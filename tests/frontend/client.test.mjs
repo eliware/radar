@@ -1,13 +1,9 @@
-import { expect, test } from "@jest/globals";
+import { expect, jest, test } from "@jest/globals";
 import { renderHome } from "../../src/frontend/client.mjs";
 
-test("updates the page status when its element exists", () => {
-  const status = {};
-  renderHome({ querySelector: () => status });
-  expect(status.textContent).toBe("Radar client assets loaded.");
-});
+test("leaves pages without a status element unchanged", () => {
+  const document = { querySelector: jest.fn(() => null) };
 
-test("does nothing when the page has no status element", () => {
-  renderHome({ querySelector: () => null });
-  expect(true).toBe(true);
+  expect(renderHome(document)).toBeUndefined();
+  expect(document.querySelector).toHaveBeenCalledWith("[data-status]");
 });

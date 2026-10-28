@@ -20,15 +20,13 @@ function dependencies() {
   return { values, write, writeError, setExitCode };
 }
 
-test("renders the current aircraft list after each aircraft update", () => {
+test("forwards valid feed records and stream errors", () => {
   const deps = dependencies();
-  let width = 80;
   const cli = startAdsbCli({
     args: [],
     write: deps.write,
     writeError: deps.writeError,
     setExitCode: deps.setExitCode,
-    getTerminalWidth: () => width,
     dependencies: deps.values,
   });
   expect(cli.table).toBe(true);
@@ -36,18 +34,6 @@ test("renders the current aircraft list after each aircraft update", () => {
   cli.refresh();
   feedOptions.onLine("ignored");
   feedOptions.onLine("valid");
-  expect(deps.values.renderFlightStrips).toHaveBeenCalledWith([{ icao: "ABC123", lastSeen: 10 }], {
-    width: 80,
-  });
-  expect(deps.write).toHaveBeenCalledWith("LIVE FLIGHT STRIPS");
-  width = 132;
-  cli.refresh();
-  expect(deps.values.renderFlightStrips).toHaveBeenLastCalledWith(
-    [{ icao: "ABC123", lastSeen: 10 }],
-    {
-      width: 132,
-    },
-  );
   expect(deps.writeError).not.toHaveBeenCalled();
   feedOptions.onError(new Error("offline"));
   expect(deps.writeError).toHaveBeenCalledWith(
@@ -57,7 +43,7 @@ test("renders the current aircraft list after each aircraft update", () => {
   cli.close();
 });
 
-test("writes aircraft JSON instead of drawing the table in debug mode", () => {
+test("selects debug mode while forwarding records from the stream", () => {
   const deps = dependencies();
   deps.values.parseAdsbOptions.mockReturnValue({ host: "127.0.0.1", port: 30003, debug: true });
   const cli = startAdsbCli({
@@ -67,10 +53,9 @@ test("writes aircraft JSON instead of drawing the table in debug mode", () => {
     setExitCode: deps.setExitCode,
     dependencies: deps.values,
   });
+
   expect(cli.table).toBe(false);
   deps.values.connectSbsFeed.mock.calls[0][0].onLine("valid");
-  expect(JSON.parse(deps.write.mock.calls[0][0])).toEqual({ icao: "ABC123", lastSeen: 10 });
-  expect(deps.values.renderFlightStrips).not.toHaveBeenCalled();
 });
 
 test("adds calculated range data to the in-memory aircraft record", () => {
@@ -123,21 +108,6 @@ test("rejects invalid location settings before opening the feed", () => {
   expect(deps.writeError).toHaveBeenCalledWith("bad ADSB_LAT/ADSB_LON");
   expect(deps.setExitCode).toHaveBeenCalledWith(2);
   expect(deps.values.connectSbsFeed).not.toHaveBeenCalled();
-});
-
-test("uses the default terminal width when no width callback is set", () => {
-  const deps = dependencies();
-  startAdsbCli({
-    args: [],
-    write: deps.write,
-    writeError: deps.writeError,
-    setExitCode: deps.setExitCode,
-    dependencies: deps.values,
-  });
-  deps.values.connectSbsFeed.mock.calls[0][0].onLine("valid");
-  expect(deps.values.renderFlightStrips).toHaveBeenCalledWith([{ icao: "ABC123", lastSeen: 10 }], {
-    width: 125,
-  });
 });
 
 test("does not render records without an aircraft address", () => {

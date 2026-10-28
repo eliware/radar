@@ -7,6 +7,7 @@ import { parseAdsbLocation } from "../../shared/adsb-location.mjs";
 import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
 import { createCliAircraftUpdater } from "../update-cli-aircraft.mjs";
 import { writeAdsbCliHelp, writeAdsbCliVersion } from "./help.mjs";
+import { writeAdsbUpdate } from "./update-output.mjs";
 
 export const adsbCliDependencies = {
   createAircraftList,
@@ -65,11 +66,14 @@ export function startAdsbCli({
   let hasAircraft = false;
   const refresh = () => {
     if (!hasAircraft) return;
-    write(
-      dependencies.renderFlightStrips(aircraftList.list(), {
-        width: getTerminalWidth(),
-      }),
-    );
+    writeAdsbUpdate({
+      debug: false,
+      write,
+      renderTable: () =>
+        dependencies.renderFlightStrips(aircraftList.list(), {
+          width: getTerminalWidth(),
+        }),
+    });
   };
   const feed = dependencies.connectSbsFeed({
     host: options.host,
@@ -78,7 +82,7 @@ export function startAdsbCli({
       const aircraft = updateAircraft(line);
       if (!aircraft) return;
       if (options.debug) {
-        write(JSON.stringify(aircraft));
+        writeAdsbUpdate({ aircraft, debug: true, write });
         return;
       }
       hasAircraft = true;
