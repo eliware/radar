@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbCliOutput } from "../../../src/cli/adsb/update-output.mjs";
+import { createAdsbCliOutput } from "../../../src/cli/adsb/output.mjs";
 
 test("selects JSON output in debug mode and keeps refresh inactive", () => {
   const write = jest.fn();

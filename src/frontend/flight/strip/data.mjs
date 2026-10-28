@@ -1,6 +1,7 @@
 import { buildFlightStripLayout } from "./layout.mjs";
 import { getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
 import { valuesOf } from "./values.mjs";
+import { orderFlightStripAircraft } from "./order.mjs";
 
 const fieldLabels = [
   "CALLSIGN",
@@ -14,10 +15,7 @@ const fieldLabels = [
   "DESTINATION",
 ];
 export function buildFlightStripData(aircraft, width) {
-  const sorted = [...aircraft].sort(
-    (left, right) =>
-      (left.distanceNauticalMiles ?? Infinity) - (right.distanceNauticalMiles ?? Infinity),
-  );
+  const sorted = orderFlightStripAircraft(aircraft);
   const values = sorted.map(valuesOf);
   const layout = buildFlightStripLayout(values, width, fieldLabels);
   return {

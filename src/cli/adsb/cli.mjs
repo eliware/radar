@@ -8,7 +8,7 @@ import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
 import { createCliAircraftUpdater } from "../update-cli-aircraft.mjs";
 import { writeAdsbCliVersion } from "./help.mjs";
 import { writeAdsbCliUsage } from "./usage.mjs";
-import { createAdsbCliOutput } from "./update-output.mjs";
+import { createAdsbCliOutput } from "./output.mjs";
 
 export const adsbCliDependencies = {
   createAircraftList,
