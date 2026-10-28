@@ -29,6 +29,7 @@ test("returns complete paths that enter the requested distance band", () => {
   const result = query({ latitude: 43, longitude: -70 }, 0, 20);
   expect(result).toHaveLength(1);
   expect(result[0].points.map((point) => point.fix)).toEqual(["ENTRY", "EXIT"]);
+  expect(result[0].points[1].label).toBe(true);
   expect(result[0].points[1].rangeNm).toBeGreaterThan(20);
   expect(query({ latitude: 43, longitude: -70 }, 20, 30)).toEqual([]);
   expect(sid.all).toHaveBeenCalledTimes(1);

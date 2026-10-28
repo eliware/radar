@@ -21,3 +21,18 @@ test("keeps unmatched STAR bodies and unrelated paths without main-fix labels", 
 test("accepts an empty path list", () => {
   expect(labelProcedurePaths([])).toBeUndefined();
 });
+
+test("labels SID endpoints, STAR transition entries, and common body fixes", () => {
+  const sid = path("SID", "BODY", "SID1", ["ENTRY", "EXIT"]);
+  const bodyA = path("STAR", "BODY", "STAR2", ["ENTRY", "COMMON", "END-A"]);
+  const bodyB = path("STAR", "BODY", "STAR2", ["ENTRY", "COMMON", "END-B"]);
+  const bodyC = path("STAR", "BODY", "STAR2", ["ENTRY", "OTHER", "END-C"]);
+  const transition = path("STAR", "TRANSITION", "STAR2", ["TRANSITION", "ENTRY"]);
+  labelProcedurePaths([sid, bodyA, bodyB, bodyC, transition]);
+
+  expect(sid.points.map(({ label }) => label)).toEqual([false, true]);
+  expect(bodyA.points.map(({ label }) => label)).toEqual([false, true, true]);
+  expect(bodyB.points.map(({ label }) => label)).toEqual([false, true, true]);
+  expect(bodyC.points.map(({ label }) => label)).toEqual([false, false, true]);
+  expect(transition.points.map(({ label }) => label)).toEqual([true, false]);
+});

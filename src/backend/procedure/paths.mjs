@@ -1,5 +1,3 @@
-import { labelProcedurePaths } from "../label-procedure-paths.mjs";
-
 export function createProcedurePaths(rows) {
   const paths = new Map();
   for (const row of rows) {
@@ -9,7 +7,6 @@ export function createProcedurePaths(rows) {
     paths.set(id, path);
   }
   const result = [...paths.values()];
-  labelProcedurePaths(result);
   return result.filter((path) => path.points.length > 1);
 }
 

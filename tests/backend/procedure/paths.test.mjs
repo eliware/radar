@@ -21,7 +21,7 @@ function row(type, routeName, sequence, fix, options = {}) {
   };
 }
 
-test("groups SID routes and labels only each last fix", () => {
+test("groups SID routes by route name and keeps path construction unlabelled", () => {
   const paths = createProcedurePaths([
     row("SID", "A-LBSTA", 10, "A"),
     row("SID", "A-LBSTA", 20, "LBSTA"),
@@ -29,12 +29,11 @@ test("groups SID routes and labels only each last fix", () => {
     row("SID", "B-LBSTA", 20, "LBSTA"),
   ]);
   expect(paths).toHaveLength(2);
-  expect(
-    paths.map((path) => path.points.filter((point) => point.label).map((point) => point.fix)),
-  ).toEqual([["LBSTA"], ["LBSTA"]]);
+  expect(paths.map((path) => path.routeName)).toEqual(["A-LBSTA", "B-LBSTA"]);
+  expect(paths.every((path) => path.points.every((point) => !point.label))).toBe(true);
 });
 
-test("labels STAR transition entries, common main fixes, and route endpoints", () => {
+test("groups STAR bodies and transitions into separate paths", () => {
   const rows = [
     row("STAR", "BODY-A", 10, "EURRO"),
     row("STAR", "BODY-A", 20, "OOSHN"),
@@ -52,9 +51,12 @@ test("labels STAR transition entries, common main fixes, and route endpoints", (
     }),
   ];
   const paths = createProcedurePaths(rows);
-  expect(
-    paths.map((path) => path.points.filter((point) => point.label).map((point) => point.fix)),
-  ).toEqual([["OOSHN", "AYBEE"], ["OOSHN", "JOBEE"], ["AJJAY"]]);
+  expect(paths.map(({ portionType, routeName }) => [portionType, routeName])).toEqual([
+    ["BODY", "BODY-A"],
+    ["BODY", "BODY-B"],
+    ["TRANSITION", "AJJAY TRANSITION"],
+  ]);
+  expect(paths.every((path) => path.points.every((point) => !point.label))).toBe(true);
 });
 
 test("drops routes that contain fewer than two fixes", () => {

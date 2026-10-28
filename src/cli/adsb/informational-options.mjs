@@ -1,4 +1,4 @@
-import { writeAdsbCliVersion } from "./help.mjs";
+import { writeAdsbCliVersion } from "./version.mjs";
 import { writeAdsbCliUsage } from "./usage.mjs";
 
 export function handleAdsbInformationalOptions(options, write) {
