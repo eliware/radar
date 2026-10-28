@@ -1,34 +1,20 @@
+import { createAdsbLolRouteLookup } from "./lookup.mjs";
+
 export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} }) {
-  let enabled = true;
-  let generation = 0;
+  const routeLookup = createAdsbLolRouteLookup(lookup);
 
   function enrich(mapped, aircraft) {
-    if (!enabled || !lookup || !mapped.callsign) return;
     const stored = aircraft.get(mapped.icao);
     if (stored?.origin && stored?.destination) return;
-    const requestGeneration = generation;
-    lookup
-      .getCallsignRoute(mapped.callsign)
-      .then((result) => {
-        if (
-          requestGeneration === generation &&
-          enabled &&
-          result &&
-          aircraft.get(mapped.icao)?.callsign === mapped.callsign
-        ) {
-          aircraft.set(mapped.icao, { ...aircraft.get(mapped.icao), ...result });
-          onRouteUpdate();
-        }
-      })
-      .catch(() => {});
+    routeLookup.request(mapped, aircraft, (result) => {
+      const current = aircraft.get(mapped.icao);
+      aircraft.set(mapped.icao, { ...current, ...result });
+      onRouteUpdate();
+    });
   }
 
   return {
     enrich,
-    setEnabled: (value) => {
-      const next = Boolean(value);
-      if (next !== enabled) generation += 1;
-      enabled = next;
-    },
+    setEnabled: routeLookup.setEnabled,
   };
 }

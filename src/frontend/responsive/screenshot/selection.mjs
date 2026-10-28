@@ -1,10 +1,8 @@
 import { selectScreenshotModes, selectScreenshotViewports } from "./options.mjs";
+import { readScreenshotSelectionInput } from "./selection-input.mjs";
 
 export function selectScreenshotOptions(args = [], environment = process.env) {
-  const viewportSelection = args.includes("--primary")
-    ? "desktop-primary"
-    : (environment.RADAR_SCREENSHOT_VIEWPORTS ?? "all");
-  const modeSelection = environment.RADAR_SCREENSHOT_MODES ?? "above-fold,full-page";
+  const { viewportSelection, modeSelection } = readScreenshotSelectionInput(args, environment);
   return {
     targets: selectScreenshotViewports(viewportSelection),
     modes: selectScreenshotModes(modeSelection),
