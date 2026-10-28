@@ -1,5 +1,5 @@
-import { createAircraftTypeService } from "./lookup/aircraft/type-service.mjs";
-import { createCallsignRouteService } from "./lookup/callsign/route/service.mjs";
+import { createAdsbLolTypeService } from "./lookup/adsblol/type-service.mjs";
+import { createAdsbLolRouteService } from "./lookup/adsblol/route-service.mjs";
 
 export function createAdsbLolLookup({
   request = globalThis.fetch,
@@ -11,7 +11,7 @@ export function createAdsbLolLookup({
   maxCacheEntries = 256,
 } = {}) {
   return {
-    getAircraftType: createAircraftTypeService({
+    getAircraftType: createAdsbLolTypeService({
       request,
       clock,
       successTtlMs,
@@ -19,7 +19,7 @@ export function createAdsbLolLookup({
       failureTtlMs,
       maxCacheEntries,
     }),
-    getCallsignRoute: createCallsignRouteService({
+    getCallsignRoute: createAdsbLolRouteService({
       request,
       clock,
       routeTtlMs,
