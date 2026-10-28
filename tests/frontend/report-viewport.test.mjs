@@ -16,26 +16,16 @@ test("reports a clamped viewport radius only when it changes", () => {
   );
 });
 
-test("reports local-only changes immediately and detaches the key listener", () => {
-  const listeners = new Set();
-  const documentRef = {
-    addEventListener: (_type, listener) => listeners.add(listener),
-    removeEventListener: (_type, listener) => listeners.delete(listener),
-  };
+test("reports local-only state on a forced update", () => {
   let localOnly = false;
-  const send = createViewportReporter(
-    { range: () => 20, isLocalOnly: () => localOnly },
-    documentRef,
-  );
+  const send = createViewportReporter({ range: () => 20, isLocalOnly: () => localOnly });
   const socket = { readyState: 1, send: jest.fn() };
   send(socket, true);
   localOnly = true;
-  listeners.forEach((listener) => listener({ key: "l" }));
+  send(socket, true);
   expect(socket.send).toHaveBeenLastCalledWith(
     '{"type":"viewport","radiusNm":20,"localOnly":true}',
   );
-  send.destroy();
-  expect(listeners.size).toBe(0);
 });
 
 test("ignores unrelated, modified, and editable local-only shortcuts", () => {

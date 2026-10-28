@@ -8,8 +8,10 @@ test("reports view changes through the live feed and detaches its reporter", () 
     addEventListener: (_type, listener) => listeners.add(listener),
     removeEventListener: (_type, listener) => listeners.delete(listener),
   };
+  let localOnly = false;
   const scene = {
     visibleRadiusNm: () => 54,
+    isLocalOnly: () => localOnly,
     onViewChange: (listener) => {
       viewListeners.add(listener);
       return () => viewListeners.delete(listener);
@@ -21,6 +23,11 @@ test("reports view changes through the live feed and detaches its reporter", () 
 
   viewListeners.forEach((listener) => listener());
   expect(socket.send).toHaveBeenCalledWith('{"type":"viewport","radiusNm":54,"localOnly":false}');
+  localOnly = true;
+  listeners.forEach((listener) => listener({ key: "l" }));
+  expect(socket.send).toHaveBeenLastCalledWith(
+    '{"type":"viewport","radiusNm":54,"localOnly":true}',
+  );
   detachView();
   viewport.destroy();
   expect(viewListeners.size).toBe(0);
