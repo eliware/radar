@@ -1,30 +1,24 @@
-import { expect, test } from "@jest/globals";
+import { expect, jest, test } from "@jest/globals";
 import { createAdsbLolAircraftStore } from "../../../../src/backend/aircraft/adsblol-remote/aircraft-store.mjs";
 
 const location = { latitude: 43.8, longitude: -70.4 };
-const record = (hex = "ABC123") => ({
-  hex,
+const record = {
+  hex: "ABC123",
   flight: "RPA1",
   lat: 43.9,
   lon: -70.3,
   seen_pos: 0,
-});
+};
 
-test("stores normalized remote aircraft and discards invalid records", () => {
-  const store = createAdsbLolAircraftStore({ location });
-  store.update(record());
-  store.update({ ...record("BAD"), lat: "43" });
-  expect(store.list()).toMatchObject([{ icao: "ABC123", callsign: "RPA1" }]);
-  expect(store.list()).toHaveLength(1);
-});
-
-test("expires old tracks and clears records", () => {
-  let now = 10_000;
-  const store = createAdsbLolAircraftStore({ location, clock: () => now });
-  store.update(record());
-  now += 120_001;
-  expect(store.list()).toEqual([]);
-  store.update(record());
-  store.clear();
-  expect(store.list()).toEqual([]);
+test("coordinates route enrichment through the normalized track store", async () => {
+  const onRouteUpdate = jest.fn();
+  const store = createAdsbLolAircraftStore({
+    location,
+    lookup: { getCallsignRoute: jest.fn(async () => ({ origin: "KBOS" })) },
+    onRouteUpdate,
+  });
+  store.update(record);
+  await Promise.resolve();
+  expect(store.list()).toMatchObject([{ icao: "ABC123", callsign: "RPA1", origin: "KBOS" }]);
+  expect(onRouteUpdate).toHaveBeenCalledTimes(1);
 });

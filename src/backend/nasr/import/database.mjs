@@ -5,6 +5,7 @@ import { createNasrImportFiles } from "./files.mjs";
 import { validateNasrImportPaths } from "./paths.mjs";
 import { validateNasrImportDatabase } from "./validation.mjs";
 import { validateNasrDatabase } from "../validation.mjs";
+import { withNasrDatabase } from "./connections.mjs";
 
 export function importNasrDatabaseLifecycle(
   inputPath,
@@ -13,24 +14,16 @@ export function importNasrDatabaseLifecycle(
 ) {
   const files = createNasrImportFiles({ exists, copy, mkdir, rename, remove });
   const { input, output } = validateNasrImportPaths(inputPath, outputPath, files.exists);
-  const source = new Database(input, { readOnly: true });
-  try {
-    validateNasrDatabase(source);
-  } finally {
-    source.close();
-  }
+  withNasrDatabase(Database, input, { readOnly: true }, validateNasrDatabase);
   files.prepareOutput(output);
   const temporary = files.temporaryPath(output);
   try {
     files.copyInput(input, temporary);
-    const database = new Database(temporary);
-    let indexes;
-    try {
-      indexes = installNasrIndexes(database);
+    const indexes = withNasrDatabase(Database, temporary, undefined, (database) => {
+      const count = installNasrIndexes(database);
       validateNasrImportDatabase(database);
-    } finally {
-      database.close();
-    }
+      return count;
+    });
     files.install(temporary, output);
     return { output, indexes };
   } catch (error) {

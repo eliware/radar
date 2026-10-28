@@ -1,8 +1,5 @@
-import { normalizeRemoteAircraft } from "./normalize.mjs";
 import { createAdsbLolRouteEnrichment } from "./route/enrichment.mjs";
-import { preserveRouteData } from "./route/data.mjs";
-
-const AIRCRAFT_MAX_AGE_MS = 120_000;
+import { createAdsbLolTrackStore } from "./track-store.mjs";
 
 export function createAdsbLolAircraftStore({
   location,
@@ -10,30 +7,18 @@ export function createAdsbLolAircraftStore({
   clock = Date.now,
   onRouteUpdate = () => {},
 }) {
-  const aircraft = new Map();
+  const tracks = createAdsbLolTrackStore({ location, clock });
   const routes = createAdsbLolRouteEnrichment({ lookup, onRouteUpdate });
 
-  function list() {
-    const now = clock();
-    for (const [icao, item] of aircraft) {
-      if (now - item.lastSeen > AIRCRAFT_MAX_AGE_MS) aircraft.delete(icao);
-    }
-    return [...aircraft.values()];
-  }
-
   function update(record) {
-    const mapped = normalizeRemoteAircraft(record, location, clock());
-    if (!mapped) return;
-    const previous = aircraft.get(mapped.icao);
-    const stored = { ...preserveRouteData(mapped, previous), ...mapped };
-    aircraft.set(mapped.icao, stored);
-    routes.enrich(mapped, aircraft);
+    const mapped = tracks.update(record);
+    if (mapped) routes.enrich(mapped, tracks);
   }
 
   return {
-    list,
+    list: tracks.list,
     update,
-    clear: () => aircraft.clear(),
+    clear: tracks.clear,
     setRouteLookupsEnabled: routes.setEnabled,
   };
 }

@@ -1,3 +1,5 @@
+import { createWebSocketRetry } from "./websocket/retry.mjs";
+
 export function connectWebSocketFeed({
   WebSocketClass,
   url,
@@ -8,13 +10,18 @@ export function connectWebSocketFeed({
   clearTimer = clearTimeout,
 }) {
   let socket;
-  let retryTimer;
-  let retryDelay = 1000;
   let stopped = false;
   let retryPending = false;
+  const retry = createWebSocketRetry({
+    setTimer,
+    clearTimer,
+    onRetry: () => {
+      retryPending = false;
+      connect();
+    },
+  });
 
   function connect() {
-    if (stopped) return;
     retryPending = false;
     try {
       socket = new WebSocketClass(url);
@@ -25,7 +32,7 @@ export function connectWebSocketFeed({
     const current = socket;
     current.onopen = async () => {
       if (stopped || retryPending || current !== socket) return;
-      retryDelay = 1000;
+      retry.reset();
       onState(true);
       await onOpen(current);
     };
@@ -41,12 +48,7 @@ export function connectWebSocketFeed({
     retryPending = true;
     onState(false);
     if (source) source.onopen = source.onmessage = source.onerror = source.onclose = null;
-    const delay = retryDelay;
-    retryDelay = Math.min(retryDelay * 2, 30000);
-    retryTimer = setTimer(() => {
-      retryTimer = undefined;
-      connect();
-    }, delay);
+    retry.schedule();
   }
 
   connect();
@@ -57,7 +59,7 @@ export function connectWebSocketFeed({
     close() {
       if (stopped) return;
       stopped = true;
-      if (retryTimer !== undefined) clearTimer(retryTimer);
+      retry.cancel();
       const active = socket;
       if (active) {
         active.onopen = active.onmessage = active.onerror = active.onclose = null;

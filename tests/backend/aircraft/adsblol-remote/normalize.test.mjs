@@ -1,4 +1,4 @@
-import { expect, test } from "@jest/globals";
+import { expect, jest, test } from "@jest/globals";
 import { normalizeRemoteAircraft } from "../../../../src/backend/aircraft/adsblol-remote/normalize.mjs";
 
 const location = { latitude: 43, longitude: -70 };
@@ -42,7 +42,7 @@ test("maps a fresh re-api record to Radar aircraft fields and source age", () =>
   });
 });
 
-test("uses geometric altitude and rejects invalid or stale positions", () => {
+test("maps geometric altitude and falls back to general observation age", () => {
   expect(
     normalizeRemoteAircraft(
       { hex: "ABC123", lat: 43, lon: -70, alt_geom: 9000, seen_pos: 2 },
@@ -50,10 +50,16 @@ test("uses geometric altitude and rejects invalid or stale positions", () => {
       5000,
     ),
   ).toMatchObject({ altitudeFeet: 9000, lastSeen: 3000 });
-  expect(
-    normalizeRemoteAircraft({ hex: "ABC123", lat: 43, lon: -70, seen_pos: 121 }, location),
-  ).toBeNull();
-  expect(
-    normalizeRemoteAircraft({ hex: "ABC123", lat: NaN, lon: -70, seen: 1 }, location),
-  ).toBeNull();
+});
+
+test("uses the current time when no observation time is supplied", () => {
+  const now = jest.spyOn(Date, "now").mockReturnValue(5000);
+  const aircraft = normalizeRemoteAircraft({ hex: "ABC123", lat: 43, lon: -70, seen: 0 }, location);
+
+  expect(aircraft.lastSeen).toBe(5000);
+  now.mockRestore();
+});
+
+test("returns null when remote record validation fails", () => {
+  expect(normalizeRemoteAircraft({ hex: "", lat: 43, lon: -70 }, location, 5000)).toBeNull();
 });

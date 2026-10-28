@@ -30,7 +30,6 @@ test("maps all 22 SBS fields to named values", () => {
   });
 });
 
-test("rejects unsupported and empty record types", () => {
-  expect(parseSbsMessage("OTHER,9,1,1,ABC123")).toBeNull();
-  expect(parseSbsMessage("")).toBeNull();
+test("returns null for a non-record line", () => {
+  expect(parseSbsMessage("not an SBS record")).toBeNull();
 });

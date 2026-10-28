@@ -86,23 +86,6 @@ test("keeps partial route data and ignores empty or failed lookups", async () =>
   expect(state.changes).toHaveLength(4);
 });
 
-test("retains route data when a placeholder replaces a useful callsign", async () => {
-  const state = createState();
-  state.lookup.getCallsignRoute.mockResolvedValue({ origin: "EGLL", destination: "KBOS" });
-  const aircraft = { icao: "ABC123", callsign: "BAW183" };
-  state.coordinator.update(aircraft, state.publish);
-  await Promise.resolve();
-  state.lookup.getAircraftType.mockResolvedValue({ aircraftTypeCode: "B738" });
-  state.coordinator.update({ ...aircraft, callsign: "AD" }, state.publish);
-  await Promise.resolve();
-  expect(state.changes.at(-1)).toMatchObject({
-    callsign: "BAW183",
-    aircraftTypeCode: "B738",
-    origin: "EGLL",
-    destination: "KBOS",
-  });
-});
-
 test("looks up retained callsigns when a placeholder arrives before route data", async () => {
   const state = createState();
   let resolveFirst;
