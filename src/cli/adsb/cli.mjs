@@ -6,7 +6,8 @@ import { renderFlightStrips } from "../flight/strips.mjs";
 import { parseAdsbLocation } from "../../shared/adsb-location.mjs";
 import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
 import { createCliAircraftUpdater } from "../update-cli-aircraft.mjs";
-import { writeAdsbCliHelp, writeAdsbCliVersion } from "./help.mjs";
+import { writeAdsbCliVersion } from "./help.mjs";
+import { writeAdsbCliUsage } from "./usage.mjs";
 import { writeAdsbUpdate } from "./update-output.mjs";
 
 export const adsbCliDependencies = {
@@ -39,7 +40,7 @@ export function startAdsbCli({
   }
 
   if (options.help) {
-    writeAdsbCliHelp(write);
+    writeAdsbCliUsage(write);
     return { close: () => undefined };
   }
   if (options.version) {

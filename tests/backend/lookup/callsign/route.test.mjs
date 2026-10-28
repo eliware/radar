@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCallsignRouteLookup } from "../../../src/backend/lookup/callsign-route.mjs";
+import { createCallsignRouteLookup } from "../../../../src/backend/lookup/callsign/route.mjs";
 
 const response = (body, status = 200) => ({
   ok: status >= 200 && status < 300,

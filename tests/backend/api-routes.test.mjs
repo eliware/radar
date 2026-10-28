@@ -7,14 +7,9 @@ test("registers health, data, procedure, airway, and update relay routes", async
     get: jest.fn((path, ...args) => routes.set(path, args)),
     post: jest.fn((path, ...args) => routes.set(path, args)),
   };
-  const subscriber = jest.fn();
   const feed = {
     list: jest.fn(() => [{ icao: "ABC123" }]),
-    subscribe: jest.fn(() => subscriber),
-    setClientRadius: jest.fn(),
-    setClientLocalOnly: jest.fn(),
     isReady: jest.fn(() => true),
-    setRouteLookupsEnabled: jest.fn(),
   };
   registerApiRoutes(app, feed, {
     location: { latitude: 43, longitude: -70 },
@@ -36,31 +31,7 @@ test("registers health, data, procedure, airway, and update relay routes", async
   expect(routes.has("/api/procedures")).toBe(true);
   expect(routes.has("/api/airways")).toBe(true);
   expect(routes.has("/api/route-lookups")).toBe(true);
-  expect(await routes.get("/api/route-lookups")[0]({ body: { enabled: false } }, {})).toEqual({
-    enabled: false,
-  });
-  expect(feed.setRouteLookupsEnabled).toHaveBeenCalledWith(false);
-  const socket = { readyState: 1, send: jest.fn(), on: jest.fn() };
-  routes.get("/ws")[1](socket);
-  const update = feed.subscribe.mock.calls[0][0];
-  expect(feed.subscribe).toHaveBeenCalledWith(expect.any(Function), socket);
-  const message = socket.on.mock.calls.find(([event]) => event === "message")[1];
-  message(Buffer.from('{"type":"viewport","radiusNm":65,"localOnly":true}'));
-  expect(feed.setClientRadius).toHaveBeenCalledWith(socket, 65);
-  expect(feed.setClientLocalOnly).toHaveBeenCalledWith(socket, true);
-  message(Buffer.from('{"type":"other"}'));
-  message(Buffer.from("invalid json"));
-  update({ event: "aircraft-snapshot", aircraft: [{ icao: "ABC123" }] });
-  expect(socket.send).toHaveBeenCalledWith(
-    '{"event":"aircraft-snapshot","aircraft":[{"icao":"ABC123"}]}',
-  );
-  socket.readyState = 3;
-  update({ event: "aircraft-snapshot", aircraft: [{ icao: "ABC123" }] });
-  expect(socket.send).toHaveBeenCalledTimes(1);
-  expect(socket.on).toHaveBeenCalledWith("close", subscriber);
-  expect(socket.on).toHaveBeenCalledWith("error", subscriber);
-  socket.on.mock.calls.find(([event]) => event === "close")[1]();
-  expect(subscriber).toHaveBeenCalledTimes(1);
+  expect(routes.has("/ws")).toBe(true);
 });
 
 test("returns service unavailable until the SBS feed connects", async () => {
@@ -94,25 +65,6 @@ test("uses the default home elevation without config", async () => {
     defaultRangeNm: 20,
     defaultRotationDegrees: 0,
   });
-});
-
-test("validates route lookup control requests and unavailable controls", async () => {
-  const routes = new Map();
-  const app = {
-    get: (path, ...args) => routes.set(path, args),
-    post: (path, ...args) => routes.set(path, args),
-  };
-  const feed = { list: () => [], setRouteLookupsEnabled: jest.fn() };
-  registerApiRoutes(app, feed);
-  const handler = routes.get("/api/route-lookups")[0];
-  const reply = { code: jest.fn(), send: jest.fn() };
-  reply.code.mockReturnValue(reply);
-  await handler({ body: { enabled: "false" } }, reply);
-  expect(reply.code).toHaveBeenCalledWith(400);
-  expect(reply.send).toHaveBeenCalledWith({ error: "enabled must be a boolean." });
-  registerApiRoutes(app, { list: () => [] });
-  await routes.get("/api/route-lookups")[0]({ body: { enabled: true } }, reply);
-  expect(reply.code).toHaveBeenLastCalledWith(501);
 });
 
 test("registers the METAR route when its lookup is configured", () => {

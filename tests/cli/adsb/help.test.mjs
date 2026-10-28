@@ -1,13 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import packageJson from "../../../package.json" with { type: "json" };
-import { writeAdsbCliHelp, writeAdsbCliVersion } from "../../../src/cli/adsb/help.mjs";
+import { writeAdsbCliVersion } from "../../../src/cli/adsb/help.mjs";
 import { startAdsbCli } from "../../../src/cli/adsb/cli.mjs";
-
-test("prints CLI usage help", () => {
-  const write = jest.fn();
-  writeAdsbCliHelp(write);
-  expect(write).toHaveBeenCalledWith("Usage: radar-adsb [--host HOST] [--port PORT] [--debug]");
-});
 
 test("prints the package version", () => {
   const write = jest.fn();

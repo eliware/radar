@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { createMergedAircraftFeed } from "../../../../src/backend/aircraft/merged/feed.mjs";
+import { registerApiRoutes } from "../../../../src/backend/api-routes.mjs";
 
 function setup() {
   let localItems = [{ icao: "ABC123", distanceNauticalMiles: 4, altitudeFeet: 12000 }];
@@ -145,9 +146,36 @@ test("uses built-in timers when no options object is provided", () => {
   feed.close();
 });
 
-test("forwards route lookup controls, clamps radii, and ignores unknown clients", () => {
+test("forwards API route lookup controls, clamps radii, and ignores unknown clients", async () => {
   const state = setup();
-  state.feed.setRouteLookupsEnabled(false);
+  const routes = new Map();
+  const app = {
+    get: (path, ...args) => routes.set(path, args),
+    post: (path, ...args) => routes.set(path, args),
+  };
+  registerApiRoutes(app, state.feed);
+  const handler = routes.get("/api/route-lookups")[0];
+  expect(await handler({ body: { enabled: false } }, {})).toEqual({ enabled: false });
+  const invalidReply = {
+    code: jest.fn(function (status) {
+      this.status = status;
+      return this;
+    }),
+    send: jest.fn(),
+  };
+  await handler({ body: { enabled: "false" } }, invalidReply);
+  expect(invalidReply.code).toHaveBeenCalledWith(400);
+  expect(invalidReply.send).toHaveBeenCalledWith({ error: "enabled must be a boolean." });
+  const unavailableRoutes = new Map();
+  registerApiRoutes(
+    {
+      get: (path, ...args) => unavailableRoutes.set(path, args),
+      post: (path, ...args) => unavailableRoutes.set(path, args),
+    },
+    { list: () => [] },
+  );
+  await unavailableRoutes.get("/api/route-lookups")[0]({ body: { enabled: true } }, invalidReply);
+  expect(invalidReply.code).toHaveBeenLastCalledWith(501);
   state.feed.setClientRadius("missing", 40);
   const unsubscribe = state.feed.subscribe(jest.fn(), "client");
   state.feed.setClientRadius("client", 400);

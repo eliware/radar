@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftTypeLookup } from "../../../src/backend/lookup/aircraft-type.mjs";
+import { createAircraftTypeLookup } from "../../../../src/backend/lookup/aircraft/type.mjs";
 
 const response = (body, status = 200) => ({
   ok: status >= 200 && status < 300,

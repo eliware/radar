@@ -8,7 +8,7 @@ const requestOptions = {
   },
 };
 
-test("assembles aircraft and callsign lookups over a shared cache", async () => {
+test("assembles aircraft type and callsign route services", async () => {
   const request = jest
     .fn()
     .mockResolvedValueOnce(response({ ac: [{ hex: "ABC123", t: "B738" }] }))

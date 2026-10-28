@@ -1,6 +1,5 @@
-import { createLookupCache } from "./lookup-cache.mjs";
-import { createAircraftTypeLookup } from "./lookup/aircraft-type.mjs";
-import { createCallsignRouteLookup } from "./lookup/callsign-route.mjs";
+import { createAircraftTypeService } from "./lookup/aircraft/type-service.mjs";
+import { createCallsignRouteService } from "./lookup/callsign/route-service.mjs";
 
 export function createAdsbLolLookup({
   request = globalThis.fetch,
@@ -11,12 +10,22 @@ export function createAdsbLolLookup({
   failureTtlMs = 30 * 1000,
   maxCacheEntries = 256,
 } = {}) {
-  const cache = createLookupCache({ clock, maxEntries: maxCacheEntries });
-  const options = { successTtlMs, missingTtlMs, failureTtlMs };
-  const lookup = (key, load, ttl = successTtlMs) =>
-    cache.lookup(key, load, { ...options, successTtlMs: ttl });
   return {
-    getAircraftType: createAircraftTypeLookup(request, lookup),
-    getCallsignRoute: createCallsignRouteLookup(request, lookup, routeTtlMs),
+    getAircraftType: createAircraftTypeService({
+      request,
+      clock,
+      successTtlMs,
+      missingTtlMs,
+      failureTtlMs,
+      maxCacheEntries,
+    }),
+    getCallsignRoute: createCallsignRouteService({
+      request,
+      clock,
+      routeTtlMs,
+      missingTtlMs,
+      failureTtlMs,
+      maxCacheEntries,
+    }),
   };
 }

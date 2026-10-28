@@ -1,4 +1,4 @@
-import { hasUsefulCallsign } from "../../shared/aircraft/callsign.mjs";
+import { hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
 
 const routeRoot = "https://vrs-standing-data.adsb.lol/routes";
 const userAgent = "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)";
