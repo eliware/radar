@@ -17,17 +17,6 @@ function reply() {
   };
 }
 
-test("returns airport records for a requested range band", async () => {
-  const airports = [{ faaId: "PWM", icao: "KPWM" }];
-  const database = { findBetween: jest.fn(() => airports) };
-  const response = await route(database)(
-    { query: { minRangeNm: "20", maxRangeNm: "30" } },
-    reply(),
-  );
-  expect(database.findBetween).toHaveBeenCalledWith({ latitude: 43, longitude: -70 }, 20, 30);
-  expect(response).toEqual(airports);
-});
-
 test("rejects an invalid range and reports unavailable data", async () => {
   const invalidReply = reply();
   await route({ findBetween: jest.fn() })({ query: { maxRangeNm: "301" } }, invalidReply);

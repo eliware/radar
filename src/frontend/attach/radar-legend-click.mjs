@@ -1,4 +1,4 @@
-import { findRadarLegendToggle } from "../draw/radar/legend/entries.mjs";
+import { findRadarLegendToggle } from "../draw/radar/legend/hit-test.mjs";
 
 export function attachRadarLegendClick(element, documentRef, windowRef, redraw, topInset = 0) {
   if (

@@ -129,3 +129,41 @@ test("registers the METAR route when its lookup is configured", () => {
   expect(routes.has("/api/metar")).toBe(true);
   expect(metarLookup.get).not.toHaveBeenCalled();
 });
+
+test("forwards range bands to airport and airspace queries through registered API routes", async () => {
+  const routes = new Map();
+  const airports = [{ icao: "KPWM" }];
+  const boundaries = [{ locationId: "ZBW" }];
+  const airportDatabase = {
+    findBetween: jest.fn(() => airports),
+    findBoundariesBetween: jest.fn(() => boundaries),
+  };
+  registerApiRoutes(
+    {
+      get: (path, handler) => routes.set(path, handler),
+      post: (path, handler) => routes.set(path, handler),
+    },
+    { list: () => [] },
+    { location: { latitude: 43, longitude: -70 }, airportDatabase },
+  );
+
+  expect(
+    await routes.get("/api/airports")({ query: { minRangeNm: "20", maxRangeNm: "30" } }, {}),
+  ).toEqual(airports);
+  expect(
+    await routes.get("/api/airspace-boundaries")(
+      { query: { minRangeNm: "20", maxRangeNm: "30" } },
+      {},
+    ),
+  ).toEqual(boundaries);
+  expect(airportDatabase.findBetween).toHaveBeenCalledWith(
+    { latitude: 43, longitude: -70 },
+    20,
+    30,
+  );
+  expect(airportDatabase.findBoundariesBetween).toHaveBeenCalledWith(
+    { latitude: 43, longitude: -70 },
+    20,
+    30,
+  );
+});

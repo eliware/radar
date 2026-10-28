@@ -11,18 +11,6 @@ function route(database, location = { latitude: 43, longitude: -70 }) {
   return routes.get("/api/airspace-boundaries");
 }
 
-test("returns ARTCC boundaries for the requested range band", async () => {
-  const boundaries = [{ locationId: "ZBW" }];
-  const database = { findBoundariesBetween: jest.fn(() => boundaries) };
-  const result = await route(database)({ query: { minRangeNm: "20", maxRangeNm: "30" } }, {});
-  expect(database.findBoundariesBetween).toHaveBeenCalledWith(
-    { latitude: 43, longitude: -70 },
-    20,
-    30,
-  );
-  expect(result).toEqual(boundaries);
-});
-
 test("rejects invalid range or missing NASR data", async () => {
   const reply = {
     code: jest.fn(function (status) {
