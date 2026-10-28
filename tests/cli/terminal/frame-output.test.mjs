@@ -22,13 +22,3 @@ test("restores TTY output after writing a rendered frame", () => {
   output.restore();
   expect(stdout.write).toHaveBeenCalledTimes(2);
 });
-
-test("reads terminal width from the best available source", () => {
-  expect(createTerminalFrameOutput({ getWindowSize: () => [90], columns: 80 }, {}).getWidth()).toBe(
-    90,
-  );
-  expect(createTerminalFrameOutput({ getWindowSize: () => [], columns: 80 }, {}).getWidth()).toBe(
-    80,
-  );
-  expect(createTerminalFrameOutput({}, {}).getWidth()).toBe(125);
-});

@@ -24,8 +24,5 @@ export function createTerminalFrameOutput(stdout, environment) {
       stdout.write("\u001b[?25h\u001b[?1049l");
       alternateScreenActive = false;
     },
-    getWidth() {
-      return stdout.getWindowSize?.()[0] || stdout.columns || 125;
-    },
   };
 }

@@ -1,8 +1,9 @@
 import { parseSbsFields } from "./sbs/fields.mjs";
-import { parseSbsRecord } from "./sbs/record.mjs";
+import { isSupportedSbsRecordType } from "./sbs/record/type.mjs";
+import { splitSbsRecordFields } from "./sbs/record/fields.mjs";
 
 export function parseSbsMessage(line) {
-  const values = parseSbsRecord(line);
-  if (!values) return null;
+  const values = splitSbsRecordFields(line);
+  if (!isSupportedSbsRecordType(values[0])) return null;
   return parseSbsFields(values);
 }

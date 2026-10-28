@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { readScreenshotSelectionInput } from "../../../../src/frontend/responsive/screenshot/selection-input.mjs";
+import { readScreenshotSelectionInput } from "../../../../src/frontend/responsive/screenshot/selection-settings.mjs";
 
 test("selects primary viewport when the option is present", () => {
   expect(
