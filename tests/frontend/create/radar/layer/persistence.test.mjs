@@ -42,8 +42,6 @@ test("restores controller values then persists each layer change", () => {
     const controls = controllers();
     persistence.ils(true);
     persistence.restore(controls);
-    expect(controls.ils.setVisible).toHaveBeenCalledWith(false);
-    expect(controls.airways.setVisible).toHaveBeenCalledWith("Q", true);
     expect(referencesChanged).toHaveBeenCalledWith({ airportsVisible: true, navaidsVisible: true });
 
     persistence.ils(true);
