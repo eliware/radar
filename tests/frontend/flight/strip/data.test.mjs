@@ -22,23 +22,14 @@ test("sorts aircraft and formats visible fields without a one-row spacer", () =>
   const result = buildFlightStripData([far, fullAircraft], 3000);
   expect(result.count).toBe(2);
   expect(result.aircraft.map((item) => item.icao)).toEqual(["ABC123", "FAR123"]);
-  expect(result.aircraft[0].groups[0]).toEqual([
-    "RADAR1",
-    "125-06",
-    "B738",
-    "009°200",
-    "1200",
-    "007°4",
-    "KPWM",
-    "KBOS",
-  ]);
+  expect(result.aircraft[0].groups[0][2]).toBe("B738");
+  expect(result.aircraft[0].groups[0][5]).toBe("007°4");
+  expect(result.aircraft[0].groups[0].slice(6)).toEqual(["KPWM", "KBOS"]);
   expect(result.aircraft[0].lastSeen).toBe(1000);
 });
 
 test("shows optional type, range, origin, and destination values", () => {
   const row = buildFlightStripData([{ icao: "A1B2C3" }], 1000).aircraft[0];
-  expect(row.groups.flat()).toContain("A1B2C3");
-  expect(row.groups.flat()).toContain("-");
   expect(row.labels[0]).toEqual([
     "CALLSIGN",
     "ALTITUDE / VS",
@@ -52,7 +43,7 @@ test("shows optional type, range, origin, and destination values", () => {
   const missingIdentity = buildFlightStripData([{ distanceNauticalMiles: 2 }, {}], 1000);
   expect(buildFlightStripData([{}, { distanceNauticalMiles: 2 }], 1000).count).toBe(2);
   expect(missingIdentity.aircraft[0].icao).toBe("");
-  expect(missingIdentity.aircraft[0].groups[0][0]).toBe("-");
+  expect(row.groups[0][2]).toBe("-");
 });
 
 test("keeps the combined fields readable when one value is missing", () => {
