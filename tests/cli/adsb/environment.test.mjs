@@ -1,10 +1,30 @@
 import { expect, jest, test } from "@jest/globals";
-import { loadAdsbEnvironment, readAdsbEnvironment } from "../../../src/cli/adsb/environment.mjs";
+import {
+  loadAdsbEnvironment,
+  prepareAdsbEnvironment,
+  readAdsbEnvironment,
+} from "../../../src/cli/adsb/environment.mjs";
 
 test("loads dotenv configuration quietly", () => {
   const load = jest.fn();
   loadAdsbEnvironment(load);
   expect(load).toHaveBeenCalledWith({ quiet: true });
+});
+
+test("loads dotenv before resolving the ADS-B environment", () => {
+  const loadEnvironment = jest.fn();
+  const environment = { ADSB_HOST: "receiver.local", ADSB_PORT: "31003" };
+  expect(prepareAdsbEnvironment({ loadEnvironment, environment })).toEqual({
+    host: "receiver.local",
+    port: "31003",
+    locationLatitude: undefined,
+    locationLongitude: undefined,
+  });
+  expect(loadEnvironment).toHaveBeenCalledTimes(1);
+});
+
+test("prepares the process environment with default loaders", () => {
+  expect(prepareAdsbEnvironment()).toEqual(readAdsbEnvironment(process.env));
 });
 
 test("loads dotenv configuration with its default loader", () => {

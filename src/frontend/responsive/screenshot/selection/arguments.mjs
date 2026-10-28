@@ -1,5 +1,11 @@
 export function parseScreenshotArguments(args = []) {
-  return args
-    .filter((argument) => argument.startsWith("--"))
-    .map((argument) => ({ name: argument.slice(2) }));
+  let primary = false;
+  for (const argument of args) {
+    if (argument === "--primary") {
+      primary = true;
+      continue;
+    }
+    throw new Error(`Unknown screenshot argument: ${argument}`);
+  }
+  return { primary };
 }

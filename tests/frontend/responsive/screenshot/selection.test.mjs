@@ -41,3 +41,9 @@ test("uses the primary viewport option with configured screenshot modes", () => 
   expect(selection.modes).toEqual(["full-page"]);
   expect(selection.targets.map(({ name }) => name)).toEqual(["desktop-primary"]);
 });
+
+test("rejects unsupported screenshot arguments", () => {
+  expect(() => selectScreenshotOptions(["unexpected"])).toThrow(
+    "Unknown screenshot argument: unexpected",
+  );
+});

@@ -7,7 +7,12 @@ test("loads the environment, starts the CLI, and installs process lifecycle", ()
     write: jest.fn(),
   };
   const cli = { close: jest.fn() };
-  const loadEnvironment = jest.fn();
+  const prepareEnvironment = jest.fn(() => ({
+    host: "receiver.local",
+    port: 30003,
+    locationLatitude: undefined,
+    locationLongitude: undefined,
+  }));
   const createBootstrap = jest.fn(() => ({ terminalOutput, install: jest.fn() }));
   const startCli = jest.fn(() => cli);
   const stdout = {};
@@ -19,12 +24,12 @@ test("loads the environment, starts the CLI, and installs process lifecycle", ()
     stdout,
     processRef,
     environment,
-    loadEnvironment,
+    prepareEnvironment,
     createBootstrap,
     startCli,
   });
   expect(launched).toEqual({ cli, close: undefined });
-  expect(loadEnvironment).toHaveBeenCalledTimes(1);
+  expect(prepareEnvironment).toHaveBeenCalledWith({ environment });
   expect(createBootstrap).toHaveBeenCalledWith({ stdout, processRef, environment });
   expect(startCli).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -32,6 +37,7 @@ test("loads the environment, starts the CLI, and installs process lifecycle", ()
       getTerminalWidth: terminalOutput.getWidth,
       write: terminalOutput.write,
       writeError: console.error,
+      environmentSettings: expect.objectContaining({ host: "receiver.local" }),
       setExitCode: expect.any(Function),
     }),
   );

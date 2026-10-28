@@ -27,11 +27,12 @@ export function startAdsbCli({
   getTerminalWidth = () => 125,
   locationLatitude,
   locationLongitude,
+  environmentSettings,
   dependencies = adsbCliDependencies,
 }) {
   let options;
   try {
-    options = dependencies.parseAdsbOptions(args);
+    options = dependencies.parseAdsbOptions(args, environmentSettings);
   } catch (error) {
     writeError(error.message);
     setExitCode(2);

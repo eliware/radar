@@ -1,17 +1,7 @@
-import { DatabaseSync } from "node:sqlite";
 import { expect, jest, test } from "@jest/globals";
 import { importNasrDatabaseLifecycle } from "../../../../src/backend/nasr/import/database.mjs";
 import { NASR_INDEXES } from "../../../../src/backend/nasr/index/definitions.mjs";
-import { REQUIRED_COLUMNS } from "../../../../src/backend/nasr/required-columns.mjs";
-
-function createDatabase(columnsByTable = REQUIRED_COLUMNS) {
-  const database = new DatabaseSync(":memory:");
-  for (const [table, names] of Object.entries(columnsByTable)) {
-    const columns = [...new Set(names.split(" "))].map((name) => `"${name}" TEXT`).join(", ");
-    database.exec(`CREATE TABLE "${table}" (${columns})`);
-  }
-  return database;
-}
+import { createNasrTestDatabase } from "../../../../test-fixtures/nasr-database.mjs";
 
 function retainOnClose(database) {
   return {
@@ -34,8 +24,8 @@ function makeDependencies(source, output, options = {}) {
 }
 
 test("imports NASR and installs indexes into an output copy", () => {
-  const source = retainOnClose(createDatabase());
-  const imported = retainOnClose(createDatabase());
+  const source = retainOnClose(createNasrTestDatabase());
+  const imported = retainOnClose(createNasrTestDatabase());
   const dependencies = makeDependencies(source, imported);
   expect(importNasrDatabaseLifecycle("input.sqlite", "output/NASR.sqlite", dependencies)).toEqual({
     output: expect.stringMatching(/output[\\/]NASR\.sqlite$/),
@@ -54,8 +44,8 @@ test("imports NASR and installs indexes into an output copy", () => {
 
 test("cleans up the temporary copy when replacing the destination fails", () => {
   const dependencies = makeDependencies(
-    retainOnClose(createDatabase()),
-    retainOnClose(createDatabase()),
+    retainOnClose(createNasrTestDatabase()),
+    retainOnClose(createNasrTestDatabase()),
     {
       rename: jest.fn(() => {
         throw new Error("rename failed");

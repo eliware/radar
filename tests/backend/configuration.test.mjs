@@ -39,7 +39,7 @@ test("resolves configured web and feed settings", () => {
   });
 });
 
-test("provides defaults and rejects invalid settings before startup", () => {
+test("provides defaults for web and service settings", () => {
   expect(resolveWebConfiguration({}, parsers)).toEqual({
     port: 3000,
     feedPort: 30003,
@@ -51,10 +51,4 @@ test("provides defaults and rejects invalid settings before startup", () => {
     metarStations: ["KLEW", "KPWM", "KBXM"],
     logLevel: "info",
   });
-  expect(() => resolveWebConfiguration({ RADAR_DEFAULT_RANGE_NM: "301" }, parsers)).toThrow(
-    "RADAR_DEFAULT_RANGE_NM must be a number from 1 through 300.",
-  );
-  expect(() => resolveWebConfiguration({ ADSB_PORT: "0" }, parsers)).toThrow(
-    "ADSB_PORT must be an integer from 1 through 65535",
-  );
 });

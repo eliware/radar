@@ -1,5 +1,5 @@
 import { createCliBootstrap } from "../bootstrap.mjs";
-import { loadAdsbEnvironment } from "./environment.mjs";
+import { prepareAdsbEnvironment } from "./environment.mjs";
 import { startAdsbCli } from "./cli.mjs";
 
 export function launchAdsbCli({
@@ -7,11 +7,11 @@ export function launchAdsbCli({
   stdout = process.stdout,
   processRef = process,
   environment = process.env,
-  loadEnvironment = loadAdsbEnvironment,
+  prepareEnvironment = prepareAdsbEnvironment,
   createBootstrap = createCliBootstrap,
   startCli = startAdsbCli,
 } = {}) {
-  loadEnvironment();
+  const adsbEnvironment = prepareEnvironment({ environment });
   const bootstrap = createBootstrap({ stdout, processRef, environment });
   const { terminalOutput } = bootstrap;
   const cli = startCli({
@@ -19,6 +19,7 @@ export function launchAdsbCli({
     getTerminalWidth: terminalOutput.getWidth,
     write: terminalOutput.write,
     writeError: console.error,
+    environmentSettings: adsbEnvironment,
     setExitCode: (code) => {
       processRef.exitCode = code;
     },

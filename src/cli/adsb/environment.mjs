@@ -12,3 +12,11 @@ export function readAdsbEnvironment(environment = process.env) {
     locationLongitude: environment.ADSB_LON,
   };
 }
+
+export function prepareAdsbEnvironment({
+  loadEnvironment = loadAdsbEnvironment,
+  environment = process.env,
+} = {}) {
+  loadEnvironment();
+  return readAdsbEnvironment(environment);
+}
