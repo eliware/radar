@@ -25,8 +25,6 @@ test("wires scene services, reports connection changes, and publishes references
   expect(mocks.factories.createRadarCamera).toHaveBeenCalledWith(
     expect.objectContaining({ camera: mocks.camera, controls: mocks.controls }),
   );
-  expect(mocks.radarCamera.setRange).toHaveBeenCalledWith(20);
-  expect(mocks.radarCamera.setRotation).toHaveBeenCalledWith(0);
   expect(loop).toEqual(
     expect.objectContaining({ targets: mocks.targets, renderer: mocks.renderer }),
   );
@@ -85,31 +83,6 @@ test("wires aircraft updates to the scene update workflow", () => {
   expect(options.isAutoZoom()).toBe(true);
   view.update(aircraft);
   expect(mocks.updateAircraft).toHaveBeenCalledWith(aircraft);
-});
-
-test("restores auto-zoom when the view resets", () => {
-  const view = createView();
-  const loop = mocks.factories.createAircraftRadarLoop.mock.calls.at(-1)[0];
-  mocks.factories.createRadarCamera.mock.calls.at(-1)[0].onManualZoom();
-  expect(loop.isAutoZoom()).toBe(false);
-  mocks.targets.localDistances.mockReturnValue([40]);
-  view.reset();
-  expect(mocks.radarCamera.setRange).toHaveBeenLastCalledWith(45);
-  expect(mocks.radarCamera.setRotation).toHaveBeenLastCalledWith(0);
-  expect(loop.isAutoZoom()).toBe(true);
-});
-
-test("starts and resets with configured radar defaults", () => {
-  createAircraftScene({
-    container,
-    location,
-    elevationFeet: 300,
-    defaultRangeNm: 25,
-    defaultRotationDegrees: 140,
-    windowRef,
-  });
-  expect(mocks.radarCamera.setRange).toHaveBeenCalledWith(25);
-  expect(mocks.radarCamera.setRotation).toHaveBeenCalledWith((140 * Math.PI) / 180);
 });
 
 test("releases scene resources", () => {

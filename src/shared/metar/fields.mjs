@@ -1,13 +1,10 @@
 import { metarFlightCategory } from "./fields/category.mjs";
-import {
-  cloudText,
-  conditionText,
-  fahrenheitText,
-  timeText,
-  visibilityText,
-  windDirectionText,
-  windSpeedText,
-} from "./fields/format.mjs";
+import { cloudText } from "./fields/clouds.mjs";
+import { conditionText } from "./fields/conditions.mjs";
+import { fahrenheitText } from "./fields/temperature.mjs";
+import { timeText } from "./fields/time.mjs";
+import { visibilityText } from "./fields/visibility.mjs";
+import { windDirectionText, windSpeedText } from "./fields/wind.mjs";
 
 export function decodedFields(data) {
   return {

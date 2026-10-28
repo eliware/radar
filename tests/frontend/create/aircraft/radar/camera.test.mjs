@@ -28,5 +28,6 @@ test("configures camera defaults and tracks auto zoom state", () => {
   state.reset();
   expect(state.isAutoZoom()).toBe(true);
   expect(camera.setRange).toHaveBeenLastCalledWith(25);
+  expect(camera.setRotation).toHaveBeenLastCalledWith((140 * Math.PI) / 180);
   expect(targets.localDistances).toHaveBeenCalled();
 });
