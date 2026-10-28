@@ -1,13 +1,12 @@
-export function createWaterViewLoader({ loadMetadata, selectTiles, cache }) {
+export function createWaterViewLoader({ loadView, cache }) {
   let generation = 0;
   let requestedKeys = new Set();
   return {
     async load(center, rangeNm, onChange) {
       const current = ++generation;
       try {
-        const tileJson = await loadMetadata();
+        const { tileJson, tiles } = await loadView(center, rangeNm);
         if (current !== generation) return;
-        const tiles = selectTiles(center, rangeNm);
         requestedKeys = new Set(tiles.map((tile) => tile.key));
         cache.retain(requestedKeys);
         const results = await Promise.all(

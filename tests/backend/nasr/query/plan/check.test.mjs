@@ -1,6 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { NASR_QUERY_PLAN_CASES } from "../../../../../src/backend/nasr/query/plan/cases.mjs";
 import { verifyNasrQueryPlan } from "../../../../../src/backend/nasr/query/plan/check.mjs";
+import { NASR_INDEXES } from "../../../../../src/backend/nasr/indexes.mjs";
 
 test("checks one representative plan for all required indexes", () => {
   const queryPlanCase = NASR_QUERY_PLAN_CASES[0];
@@ -23,4 +24,15 @@ test("reports the first required index missing from a plan", () => {
   expect(() => verifyNasrQueryPlan(database, queryPlanCase)).toThrow(
     "NASR sample query plan does not use radar_required.",
   );
+});
+
+test("accepts a representative plan containing every installed index", () => {
+  const plan = NASR_INDEXES.map((sql) => {
+    const [, name] = sql.match(/INDEX IF NOT EXISTS (\w+)/);
+    return `USING INDEX ${name}`;
+  }).join(" ");
+  const database = {
+    prepare: () => ({ all: () => [{ detail: plan }] }),
+  };
+  expect(() => verifyNasrQueryPlan(database, NASR_QUERY_PLAN_CASES[0])).not.toThrow();
 });

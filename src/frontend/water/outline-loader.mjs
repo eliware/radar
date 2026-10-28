@@ -1,15 +1,12 @@
-import { selectWaterTiles, selectWaterZoom } from "./tile/coordinates.mjs";
 import { createWaterTileCache } from "./tile/cache.mjs";
-import { createWaterTileMetadataLoader } from "./tile/metadata.mjs";
 import { createWaterViewLoader } from "./view-loader.mjs";
+import { createWaterViewSource } from "./load-view.mjs";
 
 export function createWaterOutlineLoader(fetchRef = fetch) {
   const cache = createWaterTileCache(fetchRef);
-  const metadata = createWaterTileMetadataLoader(fetchRef);
+  const source = createWaterViewSource(fetchRef);
   return createWaterViewLoader({
-    loadMetadata: () => metadata.load(),
-    selectTiles: (center, rangeNm) =>
-      selectWaterTiles(center, rangeNm, selectWaterZoom(center.latitude, rangeNm)),
+    loadView: (center, rangeNm) => source.load(center, rangeNm),
     cache,
   });
 }
