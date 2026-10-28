@@ -1,5 +1,5 @@
 import { MAX_RADAR_RANGE } from "../range.mjs";
-import { cameraDistanceToRange } from "../camera-range.mjs";
+import { cameraDistanceToRange } from "../distance-to-range.mjs";
 import { createRadarViewportBounds } from "./bounds.mjs";
 
 export function createRadarViewport(THREE, camera, controls, container, elevationFeet) {
