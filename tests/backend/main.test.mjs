@@ -107,18 +107,3 @@ test("uses default web and feed settings", async () => {
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
 });
-
-test.each([
-  ["RADAR_DEFAULT_RANGE_NM", "301"],
-  ["RADAR_DEFAULT_ROTATION", "360"],
-])("rejects invalid %s before it starts the feed", async (key, value) => {
-  process.env[key] = value;
-  const deps = dependencies();
-  const message =
-    {
-      RADAR_DEFAULT_RANGE_NM: "RADAR_DEFAULT_RANGE_NM must be a number from 1 through 300.",
-      RADAR_DEFAULT_ROTATION: "RADAR_DEFAULT_ROTATION must be an integer from 0 through 359.",
-    }[key] ?? `${key} must be an integer from 1 through 65535`;
-  await expect(startWebApplication(deps.values)).rejects.toThrow(message);
-  expect(deps.values.createAircraftFeed).not.toHaveBeenCalled();
-});

@@ -1,6 +1,6 @@
-import { createScreenshotCliOptions } from "./cli-options.mjs";
+import { createScreenshotCliSetup } from "./cli-setup.mjs";
 
 export async function runScreenshotCli(options) {
-  const { capture, captureOptions } = createScreenshotCliOptions(options);
+  const { capture, captureOptions } = createScreenshotCliSetup(options);
   return capture(captureOptions);
 }

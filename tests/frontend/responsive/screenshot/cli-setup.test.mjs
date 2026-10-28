@@ -1,8 +1,8 @@
 import { expect, jest, test } from "@jest/globals";
-import { createScreenshotCliOptions } from "../../../../src/frontend/responsive/screenshot/cli-options.mjs";
+import { createScreenshotCliSetup } from "../../../../src/frontend/responsive/screenshot/cli-setup.mjs";
 
-test("selects default capture dependencies and screenshot settings", () => {
-  const { capture, captureOptions } = createScreenshotCliOptions({ args: [], environment: {} });
+test("assembles default capture dependencies and screenshot settings", () => {
+  const { capture, captureOptions } = createScreenshotCliSetup({ args: [], environment: {} });
   expect(capture).toEqual(expect.any(Function));
   expect(captureOptions).toEqual(
     expect.objectContaining({
@@ -24,7 +24,7 @@ test("uses process defaults when no CLI options are provided", () => {
   const previousArguments = process.argv;
   process.argv = [process.argv[0], process.argv[1]];
   try {
-    const { capture, captureOptions } = createScreenshotCliOptions();
+    const { capture, captureOptions } = createScreenshotCliSetup();
     expect(capture).toEqual(expect.any(Function));
     expect(captureOptions.baseUrl).toEqual(expect.any(String));
     expect(captureOptions.outputDir).toEqual(expect.any(String));
@@ -33,14 +33,14 @@ test("uses process defaults when no CLI options are provided", () => {
   }
 });
 
-test("selects injected dependencies and configured arguments", () => {
+test("composes injected dependencies with selected screenshot arguments", () => {
   const browserLauncher = { launch: jest.fn() };
   const browserArgs = ["--test"];
   const fetcher = jest.fn();
   const files = { mkdir: jest.fn(), stat: jest.fn() };
   const report = jest.fn();
   const capture = jest.fn();
-  const selected = createScreenshotCliOptions({
+  const selected = createScreenshotCliSetup({
     args: ["--primary"],
     environment: {
       RADAR_SCREENSHOT_URL: "https://radar.example",

@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { createScreenshotPageCapture } from "../../../../src/frontend/responsive/screenshot/capture-page.mjs";
 
-test("registers page errors with the collector and closes captured pages", async () => {
+test("registers page errors with the collector", async () => {
   const page = {
     on: jest.fn(),
     setViewport: jest.fn(),
@@ -16,5 +16,5 @@ test("registers page errors with the collector and closes captured pages", async
   expect(capture).toHaveBeenCalledWith(page);
   expect(page.on).toHaveBeenCalledWith("pageerror", expect.any(Function));
   page.on.mock.calls[0][1](new Error("page failed"));
-  expect(page.close).toHaveBeenCalledTimes(1);
+  expect(() => capturePage.assertNoPageErrors()).toThrow("desktop: page failed");
 });

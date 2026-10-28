@@ -4,7 +4,7 @@ import { captureResponsiveScreenshots } from "../screenshots.mjs";
 import { selectScreenshotBrowserArgs } from "./browser/launch-options.mjs";
 import { createScreenshotLaunchOptions } from "./launcher.mjs";
 
-export function createScreenshotCliOptions({
+export function createScreenshotCliSetup({
   args = process.argv.slice(2),
   environment = process.env,
   browserLauncher = puppeteer,
