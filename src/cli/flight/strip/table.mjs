@@ -1,8 +1,4 @@
-export function fitCell(value, width, suffix = "", align = "left") {
-  const text = value === null || value === undefined ? "-" : `${value}${suffix}`;
-  if (text.length > width) return `${text.slice(0, width - 1)}…`;
-  return align === "right" ? text.padStart(width) : text.padEnd(width);
-}
+import { fitCell } from "./cell.mjs";
 
 export function tableBorder(widths, left, joint, right, line, specialJointIndex = 0) {
   const segments = widths.map((width) => line.repeat(width + 2));

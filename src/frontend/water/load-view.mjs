@@ -1,4 +1,5 @@
-import { selectWaterTiles, selectWaterZoom } from "./tile/coordinates.mjs";
+import { selectWaterTiles } from "./tile/coordinates.mjs";
+import { selectWaterZoom } from "./tile/zoom.mjs";
 import { createWaterTileMetadataLoader } from "./tile/metadata.mjs";
 
 export function createWaterViewSource(fetchRef) {

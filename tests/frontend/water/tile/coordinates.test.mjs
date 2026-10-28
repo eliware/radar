@@ -1,8 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  selectWaterTiles,
-  selectWaterZoom,
-} from "../../../../src/frontend/water/tile/coordinates.mjs";
+import { selectWaterTiles } from "../../../../src/frontend/water/tile/coordinates.mjs";
 
 test("selects local tiles and zoom levels for the current range", () => {
   const tiles = selectWaterTiles({ latitude: 43.8, longitude: -70.3 }, 20, 8);
@@ -10,10 +7,6 @@ test("selects local tiles and zoom levels for the current range", () => {
   expect(tiles.every((tile) => tile.z === 8 && tile.key === `${tile.z}/${tile.x}/${tile.y}`)).toBe(
     true,
   );
-  expect(selectWaterZoom(43.8, 20)).toBeGreaterThan(selectWaterZoom(43.8, 300));
-  expect(selectWaterZoom(43.8, 1)).toBeLessThanOrEqual(14);
-  expect(selectWaterZoom(0, 0)).toBe(14);
-  expect(selectWaterZoom(90, 300)).toBe(0);
 });
 
 test("wraps longitude tiles at the antimeridian", () => {

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { cameraReadoutRows } from "../../../../src/frontend/aircraft/overlay/readout-values.mjs";
+import { cameraReadoutRows } from "../../../../../src/frontend/aircraft/overlay/readout/values.mjs";
 
 test("formats coordinate and altitude rows for the current camera position", () => {
   expect(
