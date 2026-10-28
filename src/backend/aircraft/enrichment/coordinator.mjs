@@ -1,16 +1,13 @@
-import { hasUsefulCallsign, retainUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
+import { retainUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
 import { createAircraftMetadataStore } from "../metadata-store.mjs";
-
-export function normalizeAircraftMetadataKey(value) {
-  return typeof value === "string" ? value.trim().toUpperCase() : "";
-}
+import { normalizeAircraftMetadataKey } from "./metadata-key.mjs";
+import { createAircraftRouteLookup } from "./route-lookup.mjs";
+import { createAircraftTypeLookup } from "./type-lookup.mjs";
 
 export function createAircraftEnrichmentCoordinator(lookup) {
   const metadata = createAircraftMetadataStore();
   const lastAircraft = new Map();
   let closed = false;
-  let routeLookupsEnabled = true;
-  let routeLookupVersion = 0;
 
   function enrich(aircraft) {
     return metadata.enrich(
@@ -26,6 +23,9 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     publish(enrich(aircraft));
   }
 
+  const typeLookup = createAircraftTypeLookup(lookup, metadata, publishIfChanged);
+  const routeLookup = createAircraftRouteLookup(lookup, metadata, publishIfChanged);
+
   function update(aircraft, publish) {
     if (closed || !aircraft?.icao) return;
     const icao = normalizeAircraftMetadataKey(aircraft.icao);
@@ -40,35 +40,14 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     const enriched = enrich(latest);
     lastAircraft.set(icao, latest);
     publish(enrich(latest));
-    if (!enriched.aircraftTypeCode)
-      lookup
-        .getAircraftType(icao)
-        .then((result) => publishIfChanged(icao, metadata.updateType(icao, result), publish))
-        .catch(() => undefined);
-    if (
-      !routeLookupsEnabled ||
-      !hasUsefulCallsign(callsign) ||
-      (enriched.origin && enriched.destination)
-    )
-      return;
-    const version = routeLookupVersion;
-    lookup
-      .getCallsignRoute(callsign)
-      .then((result) => {
-        if (version === routeLookupVersion && routeLookupsEnabled)
-          publishIfChanged(icao, metadata.updateRoute(callsign, result), publish);
-      })
-      .catch(() => undefined);
+    typeLookup.request(icao, enriched, publish);
+    routeLookup.request(icao, callsign, enriched, publish);
   }
 
   return {
     update,
     enrich,
-    setRouteLookupsEnabled(value) {
-      const enabled = Boolean(value);
-      if (enabled !== routeLookupsEnabled) routeLookupVersion += 1;
-      routeLookupsEnabled = enabled;
-    },
+    setRouteLookupsEnabled: routeLookup.setEnabled,
     retain(aircraft) {
       const live = new Set(aircraft.map((item) => normalizeAircraftMetadataKey(item.icao)));
       for (const icao of lastAircraft.keys()) if (!live.has(icao)) lastAircraft.delete(icao);

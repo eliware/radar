@@ -1,13 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import {
-  createAircraftEnrichmentCoordinator,
-  normalizeAircraftMetadataKey,
-} from "../../../../src/backend/aircraft/enrichment/coordinator.mjs";
-
-test("normalizes metadata keys", () => {
-  expect(normalizeAircraftMetadataKey("  abC123 ")).toBe("ABC123");
-  expect(normalizeAircraftMetadataKey(null)).toBe("");
-});
+import { createAircraftEnrichmentCoordinator } from "../../../../src/backend/aircraft/enrichment/coordinator.mjs";
 
 function setup() {
   return {

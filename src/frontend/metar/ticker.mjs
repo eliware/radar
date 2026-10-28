@@ -1,4 +1,7 @@
 import { metarCategoryLabel } from "../../shared/metar/category.mjs";
+import { escapeMetarHtml } from "./escape.mjs";
+
+export { escapeMetarHtml } from "./escape.mjs";
 
 export function renderMetarTicker(ticker, reports) {
   ticker.innerHTML = `<span>${reports.map(tickerLine).join("　•　")}</span>`;
@@ -7,14 +10,6 @@ export function renderMetarTicker(ticker, reports) {
   line.style.animation = "none";
   void line.offsetWidth;
   line.style.animation = "";
-}
-
-export function escapeMetarHtml(value) {
-  return String(value ?? "—").replace(
-    /[&<>"']/g,
-    (character) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character],
-  );
 }
 
 function tickerLine({ id, metar, decoded }) {
