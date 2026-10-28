@@ -48,3 +48,13 @@ test("keeps local strips green and applies the local pass flash", () => {
   expect(container.innerHTML).toContain("near-home-pass flash-green");
   expect(container.innerHTML).not.toContain("remote-only");
 });
+
+test("does nothing without a container and restores list scrolling after rendering", () => {
+  expect(() => renderFlightStrips(null, [], 3000)).not.toThrow();
+  const list = { scrollTop: 42 };
+  const container = {
+    querySelector: () => list,
+  };
+  renderFlightStrips(container, [], 3000, 1000);
+  expect(list.scrollTop).toBe(42);
+});

@@ -30,3 +30,23 @@ test("loads viewport references and subscribes to view changes", async () => {
 test("skips references when the scene lacks reference methods", () => {
   expect(loadDashboardReferences(jest.fn(), {}, {})).toEqual(expect.any(Function));
 });
+
+test("uses a no-op detach callback when the scene subscription has none", () => {
+  const scene = Object.fromEntries(
+    [
+      "updateAirports",
+      "updateNavaids",
+      "updateBoundaries",
+      "updateIls",
+      "updateProcedures",
+      "updateAirways",
+    ].map((method) => [method, jest.fn()]),
+  );
+  Object.assign(scene, {
+    getViewportBounds: jest.fn(() => null),
+    onViewChange: jest.fn(),
+  });
+  const detach = loadDashboardReferences(jest.fn(), scene, {});
+  expect(detach).toEqual(expect.any(Function));
+  detach();
+});

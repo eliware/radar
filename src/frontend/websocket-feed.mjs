@@ -1,4 +1,5 @@
 import { createWebSocketRetry } from "./websocket/retry.mjs";
+import { createSocketConnection } from "./websocket/socket-connection.mjs";
 
 export function connectWebSocketFeed({
   WebSocketClass,
@@ -23,9 +24,8 @@ export function connectWebSocketFeed({
 
   function connect() {
     retryPending = false;
-    try {
-      socket = new WebSocketClass(url);
-    } catch {
+    socket = createSocketConnection(WebSocketClass, url);
+    if (!socket) {
       scheduleRetry();
       return;
     }

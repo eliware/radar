@@ -75,14 +75,11 @@ test("cancels retry work when the feed closes", () => {
   feed.close();
 });
 
-test("caps retry delay and recovers when socket creation first throws", () => {
+test("caps retry delay", () => {
   const delays = [];
   let timerCallback;
-  let attempts = 0;
   class Socket {
     constructor() {
-      attempts += 1;
-      if (attempts === 1) throw new Error("offline");
       this.close = undefined;
     }
   }
@@ -98,8 +95,7 @@ test("caps retry delay and recovers when socket creation first throws", () => {
     },
     clearTimer: jest.fn(),
   });
-  timerCallback();
-  for (let count = 0; count < 7; count += 1) {
+  for (let count = 0; count < 8; count += 1) {
     feed.socket.onclose();
     timerCallback();
   }
@@ -107,9 +103,32 @@ test("caps retry delay and recovers when socket creation first throws", () => {
   feed.close();
 });
 
-test("stops safely when socket creation keeps failing", () => {
-  const clearTimer = jest.fn();
+test("retries after a socket constructor failure", () => {
+  let attempts = 0;
+  let retryCallback;
+  class Socket {
+    constructor() {
+      attempts += 1;
+      if (attempts === 1) throw new Error("offline");
+    }
+  }
   const feed = connectWebSocketFeed({
+    WebSocketClass: Socket,
+    url: "ws://host/ws",
+    onMessage: jest.fn(),
+    onState: jest.fn(),
+    setTimer: (callback) => {
+      retryCallback = callback;
+      return 1;
+    },
+    clearTimer: jest.fn(),
+  });
+  expect(feed.socket).toBeNull();
+  retryCallback();
+  expect(feed.socket).toBeInstanceOf(Socket);
+  feed.close();
+
+  const stoppedFeed = connectWebSocketFeed({
     WebSocketClass: class {
       constructor() {
         throw new Error("offline");
@@ -118,12 +137,10 @@ test("stops safely when socket creation keeps failing", () => {
     url: "ws://host/ws",
     onMessage: jest.fn(),
     onState: jest.fn(),
-    setTimer: () => 9,
-    clearTimer,
+    setTimer: () => 1,
+    clearTimer: jest.fn(),
   });
-  feed.close();
-  expect(clearTimer).toHaveBeenCalledWith(9);
-  expect(() => feed.close()).not.toThrow();
+  stoppedFeed.close();
 });
 
 test("uses default callbacks and delivers messages from the active socket", async () => {

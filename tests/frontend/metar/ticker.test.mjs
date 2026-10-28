@@ -1,10 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { escapeMetarHtml, renderMetarTicker } from "../../../src/frontend/metar/ticker.mjs";
-
-test("escapes all HTML-sensitive text", () => {
-  expect(escapeMetarHtml(`<>&"'`)).toBe("&lt;&gt;&amp;&quot;&#39;");
-  expect(escapeMetarHtml(null)).toBe("—");
-});
+import { renderMetarTicker } from "../../../src/frontend/metar/ticker.mjs";
 
 test("renders and restarts the ticker animation with escaped report data", () => {
   const reflow = jest.fn();

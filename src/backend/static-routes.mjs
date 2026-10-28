@@ -1,12 +1,6 @@
 import { readFile } from "node:fs/promises";
+import { isAllowedAppIcon, isAllowedPwaScreenshot } from "./static/asset-policy.mjs";
 
-const appIcons = new Set([
-  "radar-180.png",
-  "radar-192.png",
-  "radar-512.png",
-  "radar-maskable-512.png",
-]);
-const pwaScreenshots = new Set(["radar-desktop.png", "radar-mobile.png"]);
 const charsetSeparator = String.fromCharCode(59);
 
 export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFile }) {
@@ -23,12 +17,12 @@ export function registerStaticRoutes(app, { publicRoot, buildRoot, read = readFi
   );
   app.get("/icons/:filename", async (request, reply) => {
     const { filename } = request.params;
-    if (!appIcons.has(filename)) return reply.code(404).send("Not found");
+    if (!isAllowedAppIcon(filename)) return reply.code(404).send("Not found");
     return sendAsset(reply, `${publicRoot}/icons/${filename}`, "image/png", read);
   });
   app.get("/screenshots/:filename", async (request, reply) => {
     const { filename } = request.params;
-    if (!pwaScreenshots.has(filename)) return reply.code(404).send("Not found");
+    if (!isAllowedPwaScreenshot(filename)) return reply.code(404).send("Not found");
     return sendAsset(reply, `${publicRoot}/screenshots/${filename}`, "image/png", read);
   });
   app.get("/client.js", async (_request, reply) =>

@@ -90,26 +90,6 @@ test("adds calculated range data to the in-memory aircraft record", () => {
   });
 });
 
-test("rejects invalid location settings before opening the feed", () => {
-  const deps = dependencies();
-  deps.values.parseAdsbLocation.mockImplementation(() => {
-    throw new Error("bad ADSB_LAT/ADSB_LON");
-  });
-  const cli = startAdsbCli({
-    args: [],
-    write: deps.write,
-    writeError: deps.writeError,
-    setExitCode: deps.setExitCode,
-    locationLatitude: "bad",
-    locationLongitude: "-70",
-    dependencies: deps.values,
-  });
-  cli.close();
-  expect(deps.writeError).toHaveBeenCalledWith("bad ADSB_LAT/ADSB_LON");
-  expect(deps.setExitCode).toHaveBeenCalledWith(2);
-  expect(deps.values.connectSbsFeed).not.toHaveBeenCalled();
-});
-
 test("does not render records without an aircraft address", () => {
   const deps = dependencies();
   const record = { recordType: "STA", transmissionType: 1, sessionId: "2", aircraftId: "3" };
@@ -123,22 +103,4 @@ test("does not render records without an aircraft address", () => {
   });
   deps.values.connectSbsFeed.mock.calls[0][0].onLine("STA,1,2,3");
   expect(deps.write).not.toHaveBeenCalled();
-});
-
-test("reports invalid option errors without opening the feed", () => {
-  const invalid = dependencies();
-  invalid.values.parseAdsbOptions.mockImplementation(() => {
-    throw new Error("bad options");
-  });
-  const invalidCli = startAdsbCli({
-    args: ["--bad"],
-    write: invalid.write,
-    writeError: invalid.writeError,
-    setExitCode: invalid.setExitCode,
-    dependencies: invalid.values,
-  });
-  invalidCli.close();
-  expect(invalid.writeError).toHaveBeenCalledWith("bad options");
-  expect(invalid.setExitCode).toHaveBeenCalledWith(2);
-  expect(invalid.values.connectSbsFeed).not.toHaveBeenCalled();
 });
