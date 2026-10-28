@@ -1,17 +1,9 @@
 import { attachRadarLegendClick } from "../attach/radar-legend-click.mjs";
+import { createAircraftOverlayCanvas } from "./overlay/canvas.mjs";
 import { createOverlayDrawer } from "./overlay-draw.mjs";
 
 export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
-  const canvas = documentRef.createElement("canvas");
-  const context = canvas.getContext("2d");
-  if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
-  Object.assign(canvas.style, {
-    position: "absolute",
-    inset: "0",
-    zIndex: "1",
-    pointerEvents: "none",
-  });
-  container.appendChild(canvas);
+  const { canvas, context } = createAircraftOverlayCanvas(container, documentRef);
   const detachLegendClick = attachRadarLegendClick(container, documentRef, windowRef);
 
   const draw = createOverlayDrawer({ THREE, container, windowRef, canvas, context });

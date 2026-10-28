@@ -6,5 +6,6 @@ test("queries current Q, J, and V airway segments with fix and navaid coordinate
   expect(AIRWAY_QUERY).toContain("IN ('Q', 'J', 'V')");
   expect(AIRWAY_QUERY).toContain("LEFT JOIN FIX_BASE F");
   expect(AIRWAY_QUERY).toContain("LEFT JOIN NAV_BASE N");
+  expect(AIRWAY_QUERY).toContain("COALESCE(F.LAT_DECIMAL, N.LAT_DECIMAL)");
   expect(AIRWAY_QUERY).toContain("S.TO_POINT AS nextFix");
 });

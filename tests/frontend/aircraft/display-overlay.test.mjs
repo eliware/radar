@@ -25,8 +25,21 @@ test("draws projected aircraft and history over the scene, then removes its canv
     fillText: jest.fn(),
   };
   const canvas = { style: {}, getContext: () => context, remove: jest.fn() };
-  const container = { clientWidth: 200, clientHeight: 100, appendChild: jest.fn() };
-  const windowRef = { devicePixelRatio: 3 };
+  const container = {
+    clientWidth: 200,
+    clientHeight: 100,
+    appendChild: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+  };
+  class KeyboardEvent {}
+  const windowRef = { devicePixelRatio: 3, KeyboardEvent };
+  const documentRef = {
+    createElement: () => canvas,
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  };
   class Vector3 {
     constructor(x, y, z) {
       Object.assign(this, { x, y, z });
@@ -43,8 +56,11 @@ test("draws projected aircraft and history over the scene, then removes its canv
     THREE: { Vector3 },
     container,
     windowRef,
-    documentRef: { createElement: () => canvas },
+    documentRef,
   });
+  expect(overlay.canvas).toBe(canvas);
+  expect(container.addEventListener).toHaveBeenCalledWith("click", expect.any(Function));
+  expect(documentRef.addEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
   const ilsApproaches = new Map([
     [
       "PWM:11",
@@ -105,7 +121,6 @@ test("draws projected aircraft and history over the scene, then removes its canv
     ilsApproaches,
   );
   expect(canvas.width).toBe(400);
-  expect(container.appendChild).toHaveBeenCalledWith(canvas);
   expect(context.setTransform).toHaveBeenCalledWith(2, 0, 0, 2, 0, 0);
   expect(context.fillText).toHaveBeenCalled();
   expect(context.setLineDash).toHaveBeenCalledWith([4, 4]);
@@ -127,15 +142,6 @@ test("draws projected aircraft and history over the scene, then removes its canv
   expect(canvas.width).toBe(1);
   overlay.destroy();
   expect(canvas.remove).toHaveBeenCalled();
-});
-
-test("rejects a canvas without a 2D context", () => {
-  expect(() =>
-    createAircraftDisplayOverlay({
-      THREE: {},
-      container: {},
-      windowRef: {},
-      documentRef: { createElement: () => ({ style: {}, getContext: () => null }) },
-    }),
-  ).toThrow("Canvas 2D is unavailable");
+  expect(container.removeEventListener).toHaveBeenCalledWith("click", expect.any(Function));
+  expect(documentRef.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
 });
