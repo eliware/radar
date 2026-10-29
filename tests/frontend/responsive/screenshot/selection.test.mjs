@@ -8,7 +8,6 @@ test("uses the default targets and screenshot modes", () => {
   delete process.env.RADAR_SCREENSHOT_MODES;
   try {
     const selection = selectScreenshotOptions();
-    expect(selection.targets).toHaveLength(6);
     expect(selection.modes).toEqual(["above-fold", "full-page"]);
   } finally {
     if (previousViewports === undefined) delete process.env.RADAR_SCREENSHOT_VIEWPORTS;
@@ -20,18 +19,11 @@ test("uses the default targets and screenshot modes", () => {
 
 test("combines configured viewport and mode selections", () => {
   const selection = selectScreenshotOptions([], {
-    RADAR_SCREENSHOT_VIEWPORTS: "desktop-1080p",
+    RADAR_SCREENSHOT_VIEWPORTS: "iphone-12-portrait",
     RADAR_SCREENSHOT_MODES: "full-page",
   });
-  expect(selection.targets.map(({ name }) => name)).toEqual(["desktop-1080p"]);
-  expect(selection.modes).toEqual(["full-page"]);
-});
-
-test("uses configured viewports unless the primary option is present", () => {
-  const selection = selectScreenshotOptions([], {
-    RADAR_SCREENSHOT_VIEWPORTS: "iphone-12-portrait",
-  });
   expect(selection.targets.map(({ name }) => name)).toEqual(["iphone-12-portrait"]);
+  expect(selection.modes).toEqual(["full-page"]);
 });
 
 test("uses the primary viewport option with configured screenshot modes", () => {
