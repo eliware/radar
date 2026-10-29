@@ -1,4 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
+import { resolve } from "node:path";
 import { captureScreenshotTargets } from "../../../../src/frontend/responsive/screenshot/capture.mjs";
 
 test("captures and validates each requested mode for each viewport", async () => {
@@ -23,10 +24,10 @@ test("captures and validates each requested mode for each viewport", async () =>
   );
   expect(session.capturePage).toHaveBeenCalledTimes(2);
   expect(paths).toEqual([
-    "/captures/desktop-above-fold.png",
-    "/captures/desktop-full-page.png",
-    "/captures/mobile-above-fold.png",
-    "/captures/mobile-full-page.png",
+    resolve("/captures", "desktop-above-fold.png"),
+    resolve("/captures", "desktop-full-page.png"),
+    resolve("/captures", "mobile-above-fold.png"),
+    resolve("/captures", "mobile-full-page.png"),
   ]);
   expect(files.stat).toHaveBeenCalledTimes(4);
 });
