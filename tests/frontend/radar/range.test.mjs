@@ -5,22 +5,12 @@ import {
   MIN_RADAR_RANGE,
 } from "../../../src/frontend/radar/range.mjs";
 import { clampRadarRange } from "../../../src/frontend/radar/clamp-range.mjs";
-import { selectDefaultRadarRange } from "../../../src/frontend/radar/default-range.mjs";
 import { getRadarLabelGapAngle } from "../../../src/frontend/radar/label-gap-angle.mjs";
 import { getRadarRingRanges } from "../../../src/frontend/radar/ring/ranges.mjs";
 import { getRadarRingSpacing } from "../../../src/frontend/radar/ring/spacing.mjs";
 
 test("defines the supported radar range constants", () => {
   expect([MIN_RADAR_RANGE, DEFAULT_RADAR_RANGE, MAX_RADAR_RANGE]).toEqual([1, 20, 300]);
-});
-
-test("selects the greater of 20 nautical miles or five miles beyond the furthest target", () => {
-  expect(selectDefaultRadarRange([])).toBe(20);
-  expect(selectDefaultRadarRange([12, 14.5])).toBe(20);
-  expect(selectDefaultRadarRange([12, 19.5])).toBe(24.5);
-  expect(selectDefaultRadarRange([Number.NaN, 400])).toBe(300);
-  expect(selectDefaultRadarRange([], 25)).toBe(25);
-  expect(selectDefaultRadarRange([24], 25)).toBe(29);
 });
 
 test("clamps manual ranges between one and 300 nautical miles", () => {

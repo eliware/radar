@@ -3,7 +3,7 @@ import { createFlightStripAircraftStore } from "../../../src/frontend/flight/air
 
 const item = (icao, options = {}) => ({ icao, distanceNauticalMiles: 1, ...options });
 
-test("updates collections and expires stale aircraft", () => {
+test("updates collections and classifies retained aircraft", () => {
   const store = createFlightStripAircraftStore(() => 1000);
   store.update([item("FRESH", { lastSeen: 1000 }), item("OLD", { lastSeen: 0 }), {}]);
   store.update(item("SECOND", { lastSeen: 1000 }));

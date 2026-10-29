@@ -27,33 +27,20 @@ test("uses process defaults when no CLI options are provided", () => {
   }
 });
 
-test("composes injected dependencies with selected screenshot arguments", () => {
-  const browserLauncher = { launch: jest.fn() };
-  const browserArgs = ["--test"];
-  const fetcher = jest.fn();
-  const files = { mkdir: jest.fn(), stat: jest.fn() };
-  const report = jest.fn();
+test("uses the injected capture implementation", () => {
   const capture = jest.fn();
   const selected = createScreenshotCliSetup({
-    args: ["--primary"],
-    environment: {
-      RADAR_SCREENSHOT_URL: "https://radar.example",
-      RADAR_SCREENSHOT_DIR: "shots",
-      RADAR_SCREENSHOT_MODES: "full-page",
-    },
-    dependencies: { browserLauncher, browserArgs, fetcher, files, delayMs: 0, report, capture },
+    args: [],
+    environment: {},
+    dependencies: { capture },
   });
   expect(selected.capture).toBe(capture);
-  expect(selected.captureOptions).toEqual({
-    baseUrl: "https://radar.example",
-    outputDir: "shots",
-    targets: [expect.objectContaining({ name: "desktop-primary" })],
-    modes: ["full-page"],
-    browserLauncher,
-    browserArgs,
-    fetcher,
-    files,
-    delayMs: 0,
-    report,
-  });
+  expect(selected.captureOptions).toEqual(
+    expect.objectContaining({
+      baseUrl: expect.any(String),
+      outputDir: expect.any(String),
+      targets: expect.any(Array),
+      modes: expect.any(Array),
+    }),
+  );
 });

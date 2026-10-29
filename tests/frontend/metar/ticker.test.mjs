@@ -30,5 +30,16 @@ test("renders and restarts the ticker animation with escaped report data", () =>
 test("skips animation reset if there is no rendered ticker line", () => {
   const ticker = { innerHTML: "" };
   renderMetarTicker(ticker, []);
-  expect(ticker.innerHTML).toBe("<span></span>");
+  expect(ticker.textContent).toBe("No METAR reports available.");
+});
+
+test("accepts response data and handles empty or missing reports", () => {
+  const ticker = { textContent: "", innerHTML: "", firstElementChild: null };
+  renderMetarTicker(ticker, { reports: [{ id: "KPWM", metar: "04006KT" }] });
+  expect(ticker.innerHTML).toContain("KPWM");
+  renderMetarTicker(ticker, { reports: [] });
+  expect(ticker.textContent).toBe("No METAR reports available.");
+  renderMetarTicker(ticker, {});
+  expect(ticker.textContent).toBe("No METAR reports available.");
+  expect(() => renderMetarTicker(null, { reports: [] })).not.toThrow();
 });
