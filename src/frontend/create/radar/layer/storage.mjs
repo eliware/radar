@@ -1,45 +1,48 @@
-import { persistLayerVisibility } from "./persist-visibility.mjs";
-import { readSavedLayerVisibility } from "./visibility-persistence.mjs";
-import { restoreLayerVisibility } from "./restore.mjs";
+import { readAndRestoreLayerVisibility } from "./storage/read.mjs";
+import { persistLayerVisibilityChanges } from "./storage/write.mjs";
 
 export function createLayerVisibilityStorage(onChange, onReferenceChange) {
   let restoring = true;
   function changed(key, value, callback = onChange) {
     if (restoring) return;
-    persistLayerVisibility(key, value);
+    persistLayerVisibilityChanges({ [key]: value });
     callback?.(value);
   }
   return {
     ils: (value) => changed("ils", value),
     procedures(value) {
       if (restoring) return;
-      persistLayerVisibility("sid", value.sidVisible);
-      persistLayerVisibility("star", value.starVisible);
+      persistLayerVisibilityChanges({ sid: value.sidVisible, star: value.starVisible });
       onChange?.(value);
     },
     airways(value) {
       if (restoring) return;
-      Object.entries(value).forEach(([type, visible]) =>
-        persistLayerVisibility(`airway-${type}`, visible),
+      persistLayerVisibilityChanges(
+        Object.fromEntries(
+          Object.entries(value).map(([type, visible]) => [`airway-${type}`, visible]),
+        ),
       );
       onChange?.(value);
     },
     runways(value) {
       if (restoring) return;
-      persistLayerVisibility("runways", value.runwaysVisible);
-      persistLayerVisibility("extensions", value.extensionsVisible);
-      persistLayerVisibility("baseLegs", value.baseLegsVisible);
+      persistLayerVisibilityChanges({
+        runways: value.runwaysVisible,
+        extensions: value.extensionsVisible,
+        baseLegs: value.baseLegsVisible,
+      });
       onChange?.(value);
     },
     references(value) {
       if (restoring) return;
-      persistLayerVisibility("airports", value.airportsVisible);
-      persistLayerVisibility("navaids", value.navaidsVisible);
+      persistLayerVisibilityChanges({
+        airports: value.airportsVisible,
+        navaids: value.navaidsVisible,
+      });
       (onReferenceChange ?? onChange)?.(value);
     },
     restore(controllers) {
-      const saved = readSavedLayerVisibility();
-      restoreLayerVisibility(controllers, saved, onReferenceChange);
+      readAndRestoreLayerVisibility(controllers, onReferenceChange);
       restoring = false;
     },
   };
