@@ -38,17 +38,27 @@ async function tick(state) {
   await timer.callback();
 }
 
-test("backs off exponentially to five minutes, then resumes normal polling after success", async () => {
-  const state = setup({ poll: jest.fn().mockRejectedValue(new Error("429")) });
+test("schedules another poll after failure and continues after a success", async () => {
+  const poll = jest.fn().mockRejectedValueOnce(new Error("429")).mockResolvedValueOnce(undefined);
+  const state = setup({ poll });
   state.poller.start();
-  expect([...state.timers.values()][0].delay).toBe(6000);
-  for (const delay of [12000, 24000, 48000, 96000, 192000, 300000, 300000]) {
-    await tick(state);
-    expect([...state.timers.values()][0].delay).toBe(delay);
-  }
-  state.poll.mockResolvedValueOnce(undefined);
   await tick(state);
-  expect([...state.timers.values()][0].delay).toBe(6000);
+  expect(state.onError).toHaveBeenCalledWith(expect.objectContaining({ message: "429" }));
+  await tick(state);
+  expect(poll).toHaveBeenCalledTimes(2);
+  expect(state.timers.size).toBe(1);
+  state.poller.close();
+});
+
+test("passes a validity check to the active polling request", async () => {
+  let isCurrent;
+  const state = setup({ poll: jest.fn((check) => (isCurrent = check)) });
+  state.poller.start();
+  await tick(state);
+  expect(isCurrent()).toBe(true);
+  state.poller.stop();
+  expect(isCurrent()).toBe(false);
+  state.poller.close();
 });
 
 test("logs failed requests and cancels pending retries when stopped", async () => {

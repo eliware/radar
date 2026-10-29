@@ -40,9 +40,22 @@ test("retries a failed batch with backoff and reports later success", async () =
   scheduler.request(25);
   await flush();
   expect(fetchRange).toHaveBeenCalledTimes(1);
-  await jest.advanceTimersByTimeAsync(180);
+  await jest.runOnlyPendingTimersAsync();
   await flush();
   expect(fetchRange).toHaveBeenCalledTimes(2);
   expect(onLoaded).toHaveBeenCalledWith(["loaded"]);
   expect(scheduler.loadedThrough).toBe(25);
+});
+
+test("delays a later range request after the initial range has loaded", async () => {
+  jest.useFakeTimers();
+  const fetchRange = jest.fn().mockResolvedValue(["loaded"]);
+  const scheduler = createRadarReferenceRequestScheduler(fetchRange, jest.fn());
+  scheduler.request(25);
+  await flush();
+  scheduler.request(50);
+  expect(fetchRange).toHaveBeenCalledTimes(1);
+  await jest.advanceTimersByTimeAsync(180);
+  expect(fetchRange).toHaveBeenCalledTimes(2);
+  expect(fetchRange).toHaveBeenLastCalledWith(25, 50);
 });

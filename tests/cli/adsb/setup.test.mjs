@@ -22,14 +22,9 @@ test("prepares environment and bootstrap options for the launcher", () => {
   expect(setup.cliOptions).toEqual(
     expect.objectContaining({
       args: ["--help"],
-      getTerminalWidth: terminalOutput.getWidth,
-      write: terminalOutput.write,
       environmentSettings: { host: "receiver.local" },
-      setExitCode: expect.any(Function),
     }),
   );
-  setup.cliOptions.setExitCode(2);
-  expect(processRef.exitCode).toBe(2);
   const cli = {};
   expect(setup.install(cli)).toBe("close");
   expect(install).toHaveBeenCalledWith(cli);

@@ -1,3 +1,5 @@
+import { createRadarReferenceRetryPolicy } from "./retry-policy.mjs";
+
 const NEXT_RANGE_DELAY_MS = 180;
 
 export function createRadarReferenceRequestScheduler(fetchRange, onLoaded) {
@@ -5,7 +7,7 @@ export function createRadarReferenceRequestScheduler(fetchRange, onLoaded) {
   let requestedThrough = 0;
   let timer;
   let loading;
-  let failures = 0;
+  const retryPolicy = createRadarReferenceRetryPolicy(NEXT_RANGE_DELAY_MS, 30_000);
 
   function run() {
     const start = loadedThrough;
@@ -14,18 +16,17 @@ export function createRadarReferenceRequestScheduler(fetchRange, onLoaded) {
     loading = fetchRange(start, end)
       .then((collections) => {
         loadedThrough = end;
-        failures = 0;
+        retryPolicy.reset();
         onLoaded(collections);
       })
       .catch(() => {
         requestedThrough = Math.max(requestedThrough, end);
-        failures = Math.min(failures + 1, 8);
+        retryPolicy.recordFailure();
       })
       .finally(() => {
         loading = null;
         if (requestedThrough > loadedThrough) {
-          const delay = Math.min(30_000, NEXT_RANGE_DELAY_MS * 2 ** Math.max(0, failures - 1));
-          timer = setTimeout(() => ((timer = null), run()), delay);
+          timer = setTimeout(() => ((timer = null), run()), retryPolicy.delay());
         }
       });
   }
