@@ -14,7 +14,7 @@ import { createSceneWater } from "../../create/scene-water.mjs";
 import { createAircraftRadarCamera } from "../../create/aircraft/radar/camera.mjs";
 import { createRadarConnectionState } from "../../create/radar/connection-state.mjs";
 import { createOrbitRadarState } from "../../create/orbit-radar-state.mjs";
-import { destroyAircraftSceneResources } from "../../destroy/aircraft-scene-resources.mjs";
+import { disposeAircraftSceneResources } from "./dispose.mjs";
 
 export function createAircraftSceneResources({
   container,
@@ -90,7 +90,7 @@ export function createAircraftSceneResources({
       water,
     },
     destroy(workflow) {
-      destroyAircraftSceneResources({
+      disposeAircraftSceneResources({
         workflow,
         layers,
         water,

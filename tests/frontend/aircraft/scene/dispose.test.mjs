@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
-import { destroyAircraftSceneResources } from "../../../src/frontend/destroy/aircraft-scene-resources.mjs";
+import { disposeAircraftSceneResources } from "../../../../src/frontend/aircraft/scene/dispose.mjs";
 
-test("stops the scene and releases each resource", () => {
+test("stops the workflow and releases every scene resource", () => {
   const resources = {
     workflow: { stop: jest.fn() },
     layers: { destroy: jest.fn() },
@@ -13,7 +13,7 @@ test("stops the scene and releases each resource", () => {
     renderer: { dispose: jest.fn() },
     container: { replaceChildren: jest.fn() },
   };
-  destroyAircraftSceneResources(resources);
+  disposeAircraftSceneResources(resources);
   expect(resources.workflow.stop).toHaveBeenCalledTimes(1);
   expect(resources.layers.destroy).toHaveBeenCalledTimes(1);
   expect(resources.water.destroy).toHaveBeenCalledTimes(1);

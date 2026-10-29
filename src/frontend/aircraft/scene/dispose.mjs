@@ -1,4 +1,4 @@
-export function destroyAircraftSceneResources(resources) {
+export function disposeAircraftSceneResources(resources) {
   resources.workflow.stop();
   resources.layers.destroy();
   resources.water.destroy();
