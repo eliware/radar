@@ -1,5 +1,12 @@
 import { classifyFlightAircraftNearHome } from "./near-home.mjs";
-import { pruneExpiredFlightAircraft } from "./expiry.mjs";
+
+const AIRCRAFT_EXPIRY_MS = 120000;
+
+function pruneExpiredAircraft(aircraft, now) {
+  for (const [icao, item] of aircraft)
+    if (Number.isFinite(item.lastSeen) && now - item.lastSeen > AIRCRAFT_EXPIRY_MS)
+      aircraft.delete(icao);
+}
 
 export function createFlightStripAircraftStore(clock = Date.now) {
   const aircraft = new Map();
@@ -20,7 +27,7 @@ export function createFlightStripAircraftStore(clock = Date.now) {
         if (item?.icao) aircraft.set(item.icao, item);
     },
     list(location, elevationFeet, now = clock()) {
-      pruneExpiredFlightAircraft(aircraft, now);
+      pruneExpiredAircraft(aircraft, now);
       return classifyFlightAircraftNearHome(aircraft.values(), location, elevationFeet);
     },
   };

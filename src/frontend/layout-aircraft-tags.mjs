@@ -1,19 +1,11 @@
-import { tagCandidates } from "./aircraft/tag/layout.mjs";
+import { measureAircraftTag } from "./aircraft/tag/measure.mjs";
 import { placementCost } from "./aircraft/tag/placement-cost.mjs";
 
 export function layoutAircraftTags(context, aircraft, fontSize, viewportWidth, viewportHeight) {
-  const lineHeight = fontSize * 1.15;
-  context.font = `${fontSize}px Consolas, "Courier New", monospace`;
   const sorted = [...aircraft].sort((a, b) => a.y - b.y || a.x - b.x);
   const placed = [];
   for (const item of sorted) {
-    const height = lineHeight * item.lines.length + 8;
-    const lineWidths = item.lines.map((line) => context.measureText(line).width);
-    const emergencyWidth = item.emergencyTag
-      ? context.measureText(item.emergencyTag).width + fontSize
-      : 0;
-    const width = Math.max(...lineWidths) + emergencyWidth + 14;
-    const candidates = tagCandidates(item, width, height);
+    const { width, height, candidates } = measureAircraftTag(context, item, fontSize);
     const rect = candidates.reduce(
       (best, candidate) => {
         const cost = placementCost(candidate, width, height, viewportWidth, viewportHeight, placed);

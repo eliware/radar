@@ -1,4 +1,4 @@
-import { expect, test } from "@jest/globals";
+import { expect, jest, test } from "@jest/globals";
 import { getAircraftAgeBrightness } from "../../../src/frontend/aircraft/age-brightness.mjs";
 
 test("fades from full brightness to invisible over the tracking timeout", () => {
@@ -10,4 +10,13 @@ test("fades from full brightness to invisible over the tracking timeout", () => 
 
 test("keeps full brightness when the receive time is unavailable", () => {
   expect(getAircraftAgeBrightness(undefined, 1000)).toBe(1);
+});
+
+test("uses the current time when no comparison time is supplied", () => {
+  jest.useFakeTimers().setSystemTime(61_000);
+  try {
+    expect(getAircraftAgeBrightness(1000)).toBe(0.5);
+  } finally {
+    jest.useRealTimers();
+  }
 });
