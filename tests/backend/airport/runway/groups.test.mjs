@@ -21,7 +21,6 @@ test("groups only valid pairs of runway ends by airport", () => {
     end("PWM", "triple"),
     end("PWM", "triple"),
     end("BAD", "invalid", { latitude: Number.NaN }),
-    end("BAD", "invalid", { alignmentDegrees: Number.NaN }),
   ];
 
   expect(groupRunwayEnds(ends)).toEqual(new Map([["PWM", [[first, second]]]]));

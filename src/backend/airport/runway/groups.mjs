@@ -1,8 +1,9 @@
+import { isValidRunwayEnd } from "./valid-end.mjs";
+
 export function groupRunwayEnds(ends) {
   const airports = new Map();
   for (const end of ends) {
-    if (!Number.isFinite(end.latitude) || !Number.isFinite(end.longitude)) continue;
-    if (!Number.isFinite(end.alignmentDegrees)) continue;
+    if (!isValidRunwayEnd(end)) continue;
     const runways = airports.get(end.airportId) ?? new Map();
     const group = runways.get(end.runwayId) ?? [];
     group.push(end);
