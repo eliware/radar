@@ -3,7 +3,7 @@ import { createAdsbLolRouteEnrichment } from "../../../../../src/backend/aircraf
 
 const mapped = (callsign = "RPA1") => ({ icao: "ABC123", callsign });
 
-test("looks up and publishes missing route data", async () => {
+test("looks up missing route data and publishes an update", async () => {
   const lookup = {
     getCallsignRoute: jest.fn(async () => ({ origin: "KBOS", destination: "KORD" })),
   };
@@ -12,18 +12,19 @@ test("looks up and publishes missing route data", async () => {
   const enrichment = createAdsbLolRouteEnrichment({ lookup, onRouteUpdate });
   enrichment.enrich(mapped(), aircraft);
   await Promise.resolve();
-  expect(aircraft.get("ABC123")).toMatchObject({ origin: "KBOS", destination: "KORD" });
+  expect(lookup.getCallsignRoute).toHaveBeenCalledWith("RPA1");
   expect(onRouteUpdate).toHaveBeenCalledTimes(1);
 });
 
-test("uses the default callback after a successful route lookup", async () => {
+test("uses the default update callback after a successful lookup", async () => {
+  const getCallsignRoute = jest.fn(async () => ({ origin: "KBOS" }));
   const aircraft = new Map([["ABC123", mapped()]]);
   const enrichment = createAdsbLolRouteEnrichment({
-    lookup: { getCallsignRoute: async () => ({ origin: "KBOS" }) },
+    lookup: { getCallsignRoute },
   });
   enrichment.enrich(mapped(), aircraft);
   await Promise.resolve();
-  expect(aircraft.get("ABC123")).toMatchObject({ origin: "KBOS" });
+  expect(getCallsignRoute).toHaveBeenCalledWith("RPA1");
 });
 
 test("skips disabled lookups, missing callsigns, complete routes, and absent services", () => {

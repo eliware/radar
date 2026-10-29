@@ -9,3 +9,11 @@ test("handles missing, failed, and unusable route responses", async () => {
   const json = async () => ({});
   await expect(parseCallsignRouteResponse({ status: 200, ok: true, json })).resolves.toBeNull();
 });
+
+test("delegates successful response data to the shared route parser", async () => {
+  const json = async () => ({ airport_codes: "KPWM-KBOS" });
+  await expect(parseCallsignRouteResponse({ status: 200, ok: true, json })).resolves.toEqual({
+    origin: "KPWM",
+    destination: "KBOS",
+  });
+});
