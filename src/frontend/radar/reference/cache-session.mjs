@@ -1,4 +1,4 @@
-import { selectVisibleReferenceItems } from "./select-visible-items.mjs";
+import { selectVisibleReferenceItems } from "./select-visible/items.mjs";
 import { createRadarReferenceViewApplier } from "./view/applier.mjs";
 
 const LAYERS = [

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectVisibleReferenceItems } from "../../../../src/frontend/radar/reference/select-visible-items.mjs";
+import { selectVisibleReferenceItems } from "../../../../../src/frontend/radar/reference/select-visible/items.mjs";
 
 test("selects visible points and clips visible portions of line geometry", () => {
   const items = [

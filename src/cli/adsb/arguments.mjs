@@ -1,3 +1,5 @@
+import { parseAdsbOptionValue } from "./option-value.mjs";
+
 export function parseAdsbArguments(args) {
   const options = {};
   for (let index = 0; index < args.length; index += 1) {
@@ -18,10 +20,7 @@ export function parseAdsbArguments(args) {
       throw new Error(`Unknown option: ${argument}`);
     }
 
-    const value = args[index + 1];
-    if (!value || value.startsWith("--")) {
-      throw new Error(`Option ${argument} needs a value`);
-    }
+    const value = parseAdsbOptionValue(argument, args[index + 1]);
     index += 1;
     if (argument === "--host") {
       options.host = value;
