@@ -1,14 +1,14 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftTrails } from "../../../../src/frontend/draw/aircraft/trails.mjs";
+import { drawAircraftHistory } from "../../../../src/frontend/draw/aircraft/history.mjs";
 
-test("draws trail marks before each aircraft's current position", () => {
+test("draws history marks before each aircraft's current position", () => {
   const context = { fillText: jest.fn() };
   const history = [
     { x: 1, y: 2 },
     { x: 3, y: 4 },
     { x: 5, y: 6 },
   ];
-  drawAircraftTrails(context, [{ history }, {}], 12, "#888");
+  drawAircraftHistory(context, [{ history }, {}], 12, "#888");
   expect(context.fillStyle).toBe("#888");
   expect(context.font).toBe('6px Consolas, "Courier New", monospace');
   expect(context.fillText).toHaveBeenCalledTimes(2);

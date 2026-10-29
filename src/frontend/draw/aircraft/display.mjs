@@ -1,7 +1,7 @@
 import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
 import { getRadarPalette } from "../../radar/palette.mjs";
 import { displayColor } from "./display-color.mjs";
-import { drawAircraftTrails } from "./trails.mjs";
+import { drawAircraftHistory } from "./history.mjs";
 import { drawAircraftTags } from "./tags.mjs";
 import { drawAircraftTrack } from "./track.mjs";
 import { withAircraftDrawingStyle } from "./style.mjs";
@@ -17,7 +17,7 @@ export function drawAircraftDisplay(
 ) {
   return withAircraftDrawingStyle(context, () => {
     const palette = getRadarPalette(connected);
-    drawAircraftTrails(context, aircraft, fontSize, palette.trail);
+    drawAircraftHistory(context, aircraft, fontSize, palette.trail);
     context.fillStyle = palette.bright;
     context.strokeStyle = palette.bright;
     const previousAlpha = context.globalAlpha ?? 1;

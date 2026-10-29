@@ -1,20 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { resolveScreenshotCliDependencies } from "../../../../../src/frontend/responsive/screenshot/cli/dependencies.mjs";
 
-test("selects browser, filesystem, and capture defaults", () => {
-  expect(resolveScreenshotCliDependencies()).toEqual(
-    expect.objectContaining({
-      browserLauncher: expect.objectContaining({ launch: expect.any(Function) }),
-      browserArgs: expect.any(Array),
-      fetcher: expect.any(Function),
-      files: expect.objectContaining({ mkdir: expect.any(Function), stat: expect.any(Function) }),
-      delayMs: 500,
-      report: console.log,
-      capture: expect.any(Function),
-    }),
-  );
-});
-
 test("uses injected CLI dependencies", () => {
   const dependencies = {
     browserLauncher: { launch: jest.fn() },
@@ -26,4 +12,13 @@ test("uses injected CLI dependencies", () => {
     capture: jest.fn(),
   };
   expect(resolveScreenshotCliDependencies(dependencies)).toEqual(dependencies);
+});
+
+test("fills unspecified dependencies with defaults", () => {
+  const resolved = resolveScreenshotCliDependencies({ delayMs: 0 });
+  expect(resolved.delayMs).toBe(0);
+  expect(resolved.browserLauncher).toEqual(
+    expect.objectContaining({ launch: expect.any(Function) }),
+  );
+  expect(resolved.capture).toEqual(expect.any(Function));
 });

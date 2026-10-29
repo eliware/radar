@@ -1,4 +1,4 @@
-export function drawAircraftTrails(context, aircraft, fontSize, trailColor) {
+export function drawAircraftHistory(context, aircraft, fontSize, trailColor) {
   context.fillStyle = trailColor;
   context.font = `${fontSize / 2}px Consolas, "Courier New", monospace`;
   for (const item of aircraft) {
