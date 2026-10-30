@@ -14,13 +14,14 @@ afterEach(() => {
     "NASR_DATABASE_PATH",
     "METAR_STATIONS",
     "LOG_LEVEL",
+    "ADSBLOL_POLL_INTERVAL_MS",
   ]) {
     delete process.env[key];
   }
 });
 
 function dependencies() {
-  const log = { info: jest.fn(), warn: jest.fn() };
+  const log = { debug: jest.fn(), info: jest.fn(), warn: jest.fn() };
   const feed = { close: jest.fn() };
   const enrichedFeed = { close: jest.fn() };
   const remoteSource = { close: jest.fn() };
@@ -87,8 +88,22 @@ test("starts Fastify and closes the feed after a signal", async () => {
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 8080 });
   deps.values.createAircraftFeed.mock.calls[0][0].onError(new Error("offline"));
   deps.values.createAdsbLolRemoteSource.mock.calls[0][0].onError(new Error("remote offline"));
+  deps.values.createAdsbLolRemoteSource.mock.calls[0][0].onRequest({
+    radiusNm: 42,
+    apiKeyHeaderPresent: true,
+  });
+  deps.values.createAdsbLolRemoteSource.mock.calls[0][0].onRequest({
+    radiusNm: 42,
+    apiKeyHeaderPresent: false,
+  });
   expect(deps.log.warn).toHaveBeenCalledWith("ADS-B stream error: offline");
   expect(deps.log.warn).toHaveBeenCalledWith("ADSB.lol remote feed error: remote offline");
+  expect(deps.log.debug).toHaveBeenCalledWith(
+    "ADSB.lol re-api query: radius=42 NM; x-api-key header present.",
+  );
+  expect(deps.log.debug).toHaveBeenCalledWith(
+    "ADSB.lol re-api query: radius=42 NM; x-api-key header missing.",
+  );
   expect(runtime.app).toBe(deps.app);
   expect(runtime.feed).toBe(deps.mergedFeed);
   expect(runtime.shutdown).toBe(deps.signals.shutdownHook);
@@ -106,4 +121,16 @@ test("uses default web and feed settings", async () => {
   );
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
+  expect(deps.values.createAdsbLolRemoteSource).toHaveBeenCalledWith(
+    expect.objectContaining({ pollIntervalMs: 6000, onRequest: expect.any(Function) }),
+  );
+});
+
+test("passes the configured ADSB.lol polling interval to the remote source", async () => {
+  process.env.ADSBLOL_POLL_INTERVAL_MS = "45000";
+  const deps = dependencies();
+  await startWebApplication(deps.values);
+  expect(deps.values.createAdsbLolRemoteSource).toHaveBeenCalledWith(
+    expect.objectContaining({ pollIntervalMs: 45000 }),
+  );
 });

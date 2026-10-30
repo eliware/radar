@@ -11,6 +11,7 @@ export function createAdsbLolRemotePolling({
   setTimeoutFn,
   clearTimeoutFn,
   onError,
+  onRequest,
   intervalMs,
 }) {
   async function poll(isCurrent) {
@@ -22,6 +23,7 @@ export function createAdsbLolRemotePolling({
       isCurrent,
       aircraft,
       publish,
+      onRequest,
     });
   }
 

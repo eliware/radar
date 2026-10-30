@@ -57,6 +57,13 @@ test("polls using the connected client's radius and publishes aircraft updates",
   expect(state.source.list()).toEqual([]);
 });
 
+test("uses a configured polling interval", () => {
+  const state = setup({ pollIntervalMs: 45000 });
+  state.source.connectClient("browser");
+  expect([...state.timers.values()][0].delay).toBe(45000);
+  state.source.close();
+});
+
 test("backs off failures exponentially, caps at five minutes, then resets after success", async () => {
   const onError = jest.fn();
   const request = jest.fn(async () => ({ ok: false, status: 429 }));

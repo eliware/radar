@@ -25,8 +25,13 @@ export async function startWebApplication(dependencies) {
   const remoteSource = dependencies.createAdsbLolRemoteSource({
     location,
     defaultRangeNm: radarViewSettings.defaultRangeNm,
+    pollIntervalMs: configuration.adsbLolPollIntervalMs,
     lookup,
     onError: (error) => log.warn(`ADSB.lol remote feed error: ${error.message}`),
+    onRequest: ({ radiusNm, apiKeyHeaderPresent }) =>
+      log.debug(
+        `ADSB.lol re-api query: radius=${radiusNm} NM; x-api-key header ${apiKeyHeaderPresent ? "present" : "missing"}.`,
+      ),
   });
   const mergedFeed = dependencies.createMergedAircraftFeed(enrichedFeed, remoteSource, {
     defaultRangeNm: radarViewSettings.defaultRangeNm,

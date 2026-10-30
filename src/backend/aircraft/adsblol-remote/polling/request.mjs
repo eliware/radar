@@ -7,8 +7,9 @@ export async function requestAndApplyAdsbLolCircle({
   isCurrent,
   aircraft,
   publish,
+  onRequest = () => {},
 }) {
-  const records = await requestAdsbLolCircle(request, location, radiusNm);
+  const records = await requestAdsbLolCircle(request, location, radiusNm, undefined, onRequest);
   if (!isCurrent()) return;
   records.forEach((item) => aircraft.update(item));
   publish();
