@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseAdsbLolPollInterval } from "../../../src/backend/config/adsblol-poll-interval.mjs";
+import { parseAdsbLolPollInterval } from "../../../../src/backend/config/adsblol/poll-interval.mjs";
 
 test("accepts configured ADSB.lol poll intervals within the supported range", () => {
   expect(parseAdsbLolPollInterval("1000")).toBe(1000);

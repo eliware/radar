@@ -1,10 +1,12 @@
-import { parseAdsbLolPollInterval } from "./adsblol-poll-interval.mjs";
+import { parseAdsbLolPollInterval } from "./adsblol/poll-interval.mjs";
+import { parseAdsbLolRemoteEnabled } from "./adsblol/remote-enabled.mjs";
 
 export function resolveWebServiceConfiguration(environment, parseMetarStations) {
   return {
     airportDatabasePath: environment.NASR_DATABASE_PATH,
     metarStations: parseMetarStations(environment.METAR_STATIONS),
     logLevel: environment.LOG_LEVEL ?? "info",
+    adsbLolRemoteEnabled: parseAdsbLolRemoteEnabled(environment.ADSBLOL_REMOTE),
     adsbLolPollIntervalMs: parseAdsbLolPollInterval(environment.ADSBLOL_POLL_INTERVAL_MS),
   };
 }

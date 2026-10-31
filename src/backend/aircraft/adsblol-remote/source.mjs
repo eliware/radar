@@ -9,6 +9,7 @@ import { MAX_RADIUS_NM, POLL_INTERVAL_MS } from "./settings.mjs";
 export function createAdsbLolRemoteSource({
   location,
   defaultRangeNm = 20,
+  enabled = true,
   pollIntervalMs = POLL_INTERVAL_MS,
   lookup,
   request = globalThis.fetch,
@@ -36,7 +37,7 @@ export function createAdsbLolRemoteSource({
     pollingPolicy,
     aircraft,
     publish,
-    hasClients: () => pollingPolicy().hasRemoteClients,
+    hasClients: () => enabled && pollingPolicy().hasRemoteClients,
     setTimeoutFn,
     clearTimeoutFn,
     onError,

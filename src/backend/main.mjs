@@ -25,6 +25,7 @@ export async function startWebApplication(dependencies) {
   const remoteSource = dependencies.createAdsbLolRemoteSource({
     location,
     defaultRangeNm: radarViewSettings.defaultRangeNm,
+    enabled: configuration.adsbLolRemoteEnabled,
     pollIntervalMs: configuration.adsbLolPollIntervalMs,
     lookup,
     onError: (error) => log.warn(`ADSB.lol remote feed error: ${error.message}`),

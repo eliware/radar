@@ -17,6 +17,7 @@ test("resolves NASR, METAR, logging, and ADSB.lol polling settings", () => {
     airportDatabasePath: "nasr.sqlite",
     metarStations: ["KLEW", "KPWM"],
     logLevel: "debug",
+    adsbLolRemoteEnabled: true,
     adsbLolPollIntervalMs: 45000,
   });
   expect(parseMetarStations).toHaveBeenCalledWith("KLEW,KPWM");
@@ -24,6 +25,12 @@ test("resolves NASR, METAR, logging, and ADSB.lol polling settings", () => {
 
 test("uses the default ADSB.lol polling interval", () => {
   expect(resolveWebServiceConfiguration({}, () => []).adsbLolPollIntervalMs).toBe(15000);
+});
+
+test("disables ADSB.lol remote lookups when configured", () => {
+  expect(
+    resolveWebServiceConfiguration({ ADSBLOL_REMOTE: "false" }, () => []).adsbLolRemoteEnabled,
+  ).toBe(false);
 });
 
 test("rejects an invalid ADSB.lol polling interval", () => {

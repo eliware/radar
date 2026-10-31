@@ -1,4 +1,4 @@
-import { POLL_INTERVAL_MS } from "../aircraft/adsblol-remote/settings.mjs";
+import { POLL_INTERVAL_MS } from "../../aircraft/adsblol-remote/settings.mjs";
 
 export function parseAdsbLolPollInterval(value) {
   const interval = value === undefined ? POLL_INTERVAL_MS : Number(value);

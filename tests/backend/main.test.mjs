@@ -14,6 +14,7 @@ afterEach(() => {
     "NASR_DATABASE_PATH",
     "METAR_STATIONS",
     "LOG_LEVEL",
+    "ADSBLOL_REMOTE",
     "ADSBLOL_POLL_INTERVAL_MS",
   ]) {
     delete process.env[key];
@@ -122,7 +123,11 @@ test("uses default web and feed settings", async () => {
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
   expect(deps.values.createAdsbLolRemoteSource).toHaveBeenCalledWith(
-    expect.objectContaining({ pollIntervalMs: 15000, onRequest: expect.any(Function) }),
+    expect.objectContaining({
+      enabled: true,
+      pollIntervalMs: 15000,
+      onRequest: expect.any(Function),
+    }),
   );
 });
 
@@ -131,6 +136,15 @@ test("passes the configured ADSB.lol polling interval to the remote source", asy
   const deps = dependencies();
   await startWebApplication(deps.values);
   expect(deps.values.createAdsbLolRemoteSource).toHaveBeenCalledWith(
-    expect.objectContaining({ pollIntervalMs: 45000 }),
+    expect.objectContaining({ enabled: true, pollIntervalMs: 45000 }),
+  );
+});
+
+test("passes disabled ADSB.lol remote lookups to the remote source", async () => {
+  process.env.ADSBLOL_REMOTE = "false";
+  const deps = dependencies();
+  await startWebApplication(deps.values);
+  expect(deps.values.createAdsbLolRemoteSource).toHaveBeenCalledWith(
+    expect.objectContaining({ enabled: false }),
   );
 });

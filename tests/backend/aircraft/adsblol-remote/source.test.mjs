@@ -64,6 +64,15 @@ test("uses a configured polling interval", () => {
   state.source.close();
 });
 
+test("does not query ADSB.lol when remote aircraft are disabled", async () => {
+  const request = jest.fn();
+  const state = setup({ enabled: false, request });
+  state.source.connectClient("browser");
+  expect(state.timers.size).toBe(0);
+  expect(request).not.toHaveBeenCalled();
+  state.source.close();
+});
+
 test("backs off failures without Retry-After and resumes normal polling after success", async () => {
   const onError = jest.fn();
   const request = jest
