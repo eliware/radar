@@ -64,7 +64,7 @@ test("uses a configured polling interval", () => {
   state.source.close();
 });
 
-test("retries failures at the default interval and resumes polling after success", async () => {
+test("backs off failures without Retry-After and resumes normal polling after success", async () => {
   const onError = jest.fn();
   const request = jest
     .fn()
@@ -75,7 +75,7 @@ test("retries failures at the default interval and resumes polling after success
   expect([...state.timers.values()][0].delay).toBe(15000);
   await tick(state);
   expect(onError).toHaveBeenCalledTimes(1);
-  expect([...state.timers.values()][0].delay).toBe(15000);
+  expect([...state.timers.values()][0].delay).toBe(30000);
   await tick(state);
   expect(request).toHaveBeenCalledTimes(2);
   expect([...state.timers.values()][0].delay).toBe(15000);

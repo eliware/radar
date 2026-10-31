@@ -38,15 +38,40 @@ async function tick(state) {
   await timer.callback();
 }
 
-test("schedules another poll after failure and continues after a success", async () => {
+test("backs off after failures and resets the delay after a success", async () => {
   const poll = jest.fn().mockRejectedValueOnce(new Error("429")).mockResolvedValueOnce(undefined);
   const state = setup({ poll });
   state.poller.start();
+  expect([...state.timers.values()][0].delay).toBe(15000);
   await tick(state);
   expect(state.onError).toHaveBeenCalledWith(expect.objectContaining({ message: "429" }));
+  expect([...state.timers.values()][0].delay).toBe(30000);
   await tick(state);
   expect(poll).toHaveBeenCalledTimes(2);
   expect(state.timers.size).toBe(1);
+  expect([...state.timers.values()][0].delay).toBe(15000);
+  state.poller.close();
+});
+
+test("caps exponential backoff at five minutes", async () => {
+  const poll = jest.fn().mockRejectedValue(new Error("network"));
+  const state = setup({ poll });
+  state.poller.start();
+  const expectedDelays = [30000, 60000, 120000, 240000, 300000, 300000];
+  for (const delay of expectedDelays) {
+    await tick(state);
+    expect([...state.timers.values()][0].delay).toBe(delay);
+  }
+  state.poller.close();
+});
+
+test("uses Retry-After instead of the backoff delay when provided", async () => {
+  const error = Object.assign(new Error("429"), { retryAfterMs: 45000 });
+  const poll = jest.fn().mockRejectedValue(error);
+  const state = setup({ poll });
+  state.poller.start();
+  await tick(state);
+  expect([...state.timers.values()][0].delay).toBe(45000);
   state.poller.close();
 });
 

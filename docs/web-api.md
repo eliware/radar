@@ -38,7 +38,7 @@ The API does not require authentication. Do not expose it to an untrusted networ
 
 Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each update uses the CLI debug fields and adds lookup fields when available.
 
-While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every six seconds after success. Failed requests use exponential backoff, with delays capped at five minutes. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
+While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every 15 seconds after success. If a response includes `Retry-After`, Radar follows the server's requested wait. Without a valid header, Radar applies exponential backoff with a five-minute limit. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
 
 Remote aircraft are combined with local readsb reports by ICAO address. When both sources report a target, readsb fields replace remote fields. ADSB.lol re-api supplies type codes and callsigns. Radar requests route data only when a remote record lacks a departure or arrival airport code. Local targets are green, remote-only targets are amber, and both sources use bright red for emergency aircraft. Targets fade with age and remote-only targets expire when reports stop.
 

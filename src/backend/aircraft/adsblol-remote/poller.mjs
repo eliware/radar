@@ -1,3 +1,5 @@
+import { createAdsbLolPollingRetryPolicy } from "./polling/retry-policy.mjs";
+
 export function createAdsbLolPoller({
   poll,
   hasClients,
@@ -5,9 +7,11 @@ export function createAdsbLolPoller({
   clearTimeoutFn = clearTimeout,
   onError = () => {},
   intervalMs = 15_000,
+  maxBackoffMs = 300_000,
 }) {
   let timer;
   let pending = false;
+  const retryPolicy = createAdsbLolPollingRetryPolicy(intervalMs, maxBackoffMs);
   let generation = 0;
   let closed = false;
   function schedule(delay) {
@@ -21,10 +25,14 @@ export function createAdsbLolPoller({
     let retryDelayMs = intervalMs;
     try {
       await poll(() => token === generation && hasClients() && !closed);
+      retryPolicy.reset();
     } catch (error) {
       if (token === generation && !closed) {
-        if (Number.isFinite(error?.retryAfterMs) && error.retryAfterMs >= 0)
+        retryPolicy.recordFailure();
+        retryDelayMs = retryPolicy.delay();
+        if (Number.isFinite(error?.retryAfterMs) && error.retryAfterMs >= 0) {
           retryDelayMs = error.retryAfterMs;
+        }
         onError(error);
       }
     } finally {
@@ -36,6 +44,7 @@ export function createAdsbLolPoller({
     if (timer !== undefined) clearTimeoutFn(timer);
     timer = undefined;
     generation += 1;
+    retryPolicy.reset();
   }
   return {
     start: () => schedule(intervalMs),
