@@ -4,7 +4,7 @@ import { parseAdsbLolPollInterval } from "../../../src/backend/config/adsblol-po
 test("accepts configured ADSB.lol poll intervals within the supported range", () => {
   expect(parseAdsbLolPollInterval("1000")).toBe(1000);
   expect(parseAdsbLolPollInterval("300000")).toBe(300000);
-  expect(parseAdsbLolPollInterval(undefined)).toBe(6000);
+  expect(parseAdsbLolPollInterval(undefined)).toBe(15000);
 });
 
 test.each(["", "invalid", "1000.5", "999", "300001"])(

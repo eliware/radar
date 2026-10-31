@@ -10,7 +10,7 @@ Copy `.env.example` to `.env` and edit the settings you want to change. Most set
 | -------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `PORT`                     | `3000`                        | Web server TCP port. Use an integer from 1 to 65535. The app listens on all network interfaces.                                                |
 | `LOG_LEVEL`                | `info`                        | Server log level: `error`, `warn`, `info`, `http`, `verbose`, `debug`, or `silly`.                                                             |
-| `ADSBLOL_POLL_INTERVAL_MS` | `6000`                        | Interval between remote aircraft queries in milliseconds. Use an integer from 1000 through 300000.                                             |
+| `ADSBLOL_POLL_INTERVAL_MS` | `15000`                       | Interval between remote aircraft queries in milliseconds. Use an integer from 1000 through 300000.                                             |
 | `ADSB_HOST`                | `127.0.0.1`                   | Host name or IP address of the SBS/BaseStation TCP source. The web app and CLI use it.                                                         |
 | `ADSB_PORT`                | `30003`                       | TCP port number. Use an integer from 1 to 65535.                                                                                               |
 | `ADSB_LAT`                 | unset                         | Home or receiver latitude in decimal degrees, from -90 to 90. Set it with `ADSB_LON`. It centers the radar and supports CLI range and bearing. |

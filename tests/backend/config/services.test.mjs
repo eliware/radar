@@ -23,7 +23,7 @@ test("resolves NASR, METAR, logging, and ADSB.lol polling settings", () => {
 });
 
 test("uses the default ADSB.lol polling interval", () => {
-  expect(resolveWebServiceConfiguration({}, () => []).adsbLolPollIntervalMs).toBe(6000);
+  expect(resolveWebServiceConfiguration({}, () => []).adsbLolPollIntervalMs).toBe(15000);
 });
 
 test("rejects an invalid ADSB.lol polling interval", () => {

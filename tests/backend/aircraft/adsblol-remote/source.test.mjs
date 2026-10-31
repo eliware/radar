@@ -47,7 +47,7 @@ test("polls using the connected client's radius and publishes aircraft updates",
   state.source.subscribe(subscriber);
   state.source.connectClient("phone");
   state.source.setClientRadius("phone", 42.1);
-  expect([...state.timers.values()][0].delay).toBe(6000);
+  expect([...state.timers.values()][0].delay).toBe(15000);
   await tick(state);
   expect(state.request.mock.calls[0][0]).toContain("circle=43.8,-70.4,43");
   expect(state.request.mock.calls[0][1].headers["user-agent"]).toContain("radar@eliware.org");
@@ -64,22 +64,31 @@ test("uses a configured polling interval", () => {
   state.source.close();
 });
 
-test("backs off failures exponentially, caps at five minutes, then resets after success", async () => {
+test("retries failures at the default interval and resumes polling after success", async () => {
   const onError = jest.fn();
-  const request = jest.fn(async () => ({ ok: false, status: 429 }));
+  const request = jest
+    .fn()
+    .mockResolvedValueOnce({ ok: false, status: 429 })
+    .mockResolvedValueOnce({ ok: true, json: async () => ({ aircraft: [] }) });
   const state = setup({ request, onError });
   state.source.connectClient("browser");
-  expect([...state.timers.values()][0].delay).toBe(6000);
-  const expected = [12000, 24000, 48000, 96000, 192000, 300000, 300000];
-  for (const delay of expected) {
-    await tick(state);
-    expect([...state.timers.values()][0].delay).toBe(delay);
-  }
-  expect(onError).toHaveBeenCalledTimes(expected.length);
-  request.mockImplementationOnce(async () => ({ ok: true, json: async () => ({ aircraft: [] }) }));
+  expect([...state.timers.values()][0].delay).toBe(15000);
   await tick(state);
-  expect([...state.timers.values()][0].delay).toBe(6000);
+  expect(onError).toHaveBeenCalledTimes(1);
+  expect([...state.timers.values()][0].delay).toBe(15000);
+  await tick(state);
+  expect(request).toHaveBeenCalledTimes(2);
+  expect([...state.timers.values()][0].delay).toBe(15000);
   state.source.disconnectClient("browser");
+});
+
+test("uses the server Retry-After delay after a failed request", async () => {
+  const request = jest.fn(async () => ({ ok: false, status: 429, headers: { get: () => "45" } }));
+  const state = setup({ request });
+  state.source.connectClient("browser");
+  await tick(state);
+  expect([...state.timers.values()][0].delay).toBe(45000);
+  state.source.close();
 });
 
 test("expires old positions and rejects invalid remote aircraft", async () => {
@@ -115,7 +124,7 @@ test("handles invalid viewport reports, missing location, and subscription clean
   state.source.setClientRadius("browser", Number.NaN);
   await tick(state);
   expect(state.request).not.toHaveBeenCalled();
-  expect([...state.timers.values()][0].delay).toBe(6000);
+  expect([...state.timers.values()][0].delay).toBe(15000);
   state.source.disconnectClient("unknown");
   expect(state.timers.size).toBe(1);
   state.source.close();

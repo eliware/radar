@@ -122,7 +122,7 @@ test("uses default web and feed settings", async () => {
   expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
   expect(deps.values.createAdsbLolRemoteSource).toHaveBeenCalledWith(
-    expect.objectContaining({ pollIntervalMs: 6000, onRequest: expect.any(Function) }),
+    expect.objectContaining({ pollIntervalMs: 15000, onRequest: expect.any(Function) }),
   );
 });
 

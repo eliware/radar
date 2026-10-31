@@ -105,7 +105,7 @@ test("restarts at the normal interval after an old request finishes", async () =
   await tick(state);
   resolve();
   await pending;
-  expect([...state.timers.values()][0].delay).toBe(6000);
+  expect([...state.timers.values()][0].delay).toBe(15000);
   state.poller.close();
 });
 

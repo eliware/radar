@@ -42,3 +42,11 @@ test("rejects failed HTTP requests", async () => {
     requestAdsbLolCircle(async () => ({ ok: false, status: 503 }), location, 25, ""),
   ).rejects.toThrow("HTTP 503");
 });
+
+test("attaches Retry-After from a failed HTTP response", async () => {
+  const response = { ok: false, status: 429, headers: { get: jest.fn(() => "45") } };
+  await expect(
+    requestAdsbLolCircle(async () => response, { latitude: 43, longitude: -70 }, 25, ""),
+  ).rejects.toMatchObject({ retryAfterMs: 45000 });
+  expect(response.headers.get).toHaveBeenCalledWith("retry-after");
+});

@@ -22,7 +22,7 @@ function setup(location = { latitude: 43.8, longitude: -70.4 }, requestOverride)
     setTimeoutFn: (callback, delay) => (timers.set(++id, { callback, delay }), id),
     clearTimeoutFn: (timerId) => timers.delete(timerId),
     onError: jest.fn(),
-    intervalMs: 6000,
+    intervalMs: 15000,
   });
   return { poller, timers, request, aircraft, publish };
 }
