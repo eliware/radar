@@ -1,8 +1,7 @@
 import { hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
+import { createRadarUserAgent } from "../../user-agent.mjs";
 import { parseCallsignRouteResponse } from "./response.mjs";
 import { buildCallsignRouteUrl } from "./route/url.mjs";
-
-const userAgent = "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)";
 
 export function createCallsignRouteLookup(request, lookup, routeTtlMs) {
   return (value) => {
@@ -12,7 +11,7 @@ export function createCallsignRouteLookup(request, lookup, routeTtlMs) {
       `route:${callsign}`,
       async () => {
         const response = await request(buildCallsignRouteUrl(callsign), {
-          headers: { "user-agent": userAgent },
+          headers: { "user-agent": createRadarUserAgent() },
         });
         return parseCallsignRouteResponse(response);
       },

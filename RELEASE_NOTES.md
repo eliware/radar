@@ -1,22 +1,30 @@
 # Release Notes
 
-## 15.0.1 — 2026-10-27
+## 15.1.0 — 2026-11-03
 
 ### Added
 
-- Add a local-only aircraft mode that pauses remote polling while all connected clients use it.
+- Add a local-only aircraft mode that pauses remote aircraft lookups while all connected clients use it.
 - Add a separate B toggle for runway base legs and color flight strips by aircraft source.
+- Add `ADSBLOL_REMOTE` to disable app-side ADSB.lol lookups independently of the feeder.
+- Add configurable ADSB.lol polling with a 15-second default. Debug logs report query radius and API-key header use without exposing the key.
 
 ### Changed
 
+- Send the ADSB.lol API key in the `x-api-key` request header.
+- Honor a valid `Retry-After` response header. When missing or invalid, exponential backoff grows to a five-minute maximum.
 - Pin readsb to the configured RTL-SDR device.
-- Update lookup user-agent version strings to Radar 15.0.1.
-- Update shared Eliware packages, dotenv, Puppeteer, and webpack.
-- Expand end-user setup, configuration, CLI, API, and deployment documentation.
-- The root README and repository guidance contain only convention-required information.
-- Use camera frustum intersections to limit 3D reference data and omit overlays behind the camera.
-- Keep remote polling range tied to zoom when the 3D view tilts.
-- Set wrapped flight-card rows to one-pixel vertical padding and offset the mobile 2D legend from the iOS status area.
+- Use the package version in all Radar HTTP user-agent strings and their tests.
+- Update the NASR database to the 2026-10-29 data.
+- Refine 3D viewport culling and projection, and keep remote polling range tied to zoom in tilted views.
+- Update outdated direct dependencies and refresh the dependency lockfile.
+- Expand and update end-user documentation for setup, configuration, CLI, API, and deployment workflows.
+- Refactor backend, CLI, frontend, tests, and supporting modules into focused responsibilities without changing their documented behavior.
+
+### Fixed
+
+- Require a browser context with secure-origin APIs for compass tracking.
+- Offset the mobile 2D legend from the iOS status area and set wrapped flight-card rows to one-pixel vertical padding.
 
 ## 14.0.0 — 2026-10-21
 

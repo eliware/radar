@@ -1,6 +1,6 @@
 {
   "name": "@eliware/radar",
-  "version": "15.0.1",
+  "version": "15.1.0",
   "type": "module",
   "description": "Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
   "keywords": [
@@ -48,10 +48,10 @@
   },
   "dependencies": {
     "@eliware/common": "^15.0.1",
-    "@fastify/websocket": "^11.3.5",
+    "@fastify/websocket": "^11.3.6",
     "@mapbox/vector-tile": "^3.0.0",
     "dotenv": "^18.0.9",
-    "fastify": "^5.12.7",
+    "fastify": "^5.12.8",
     "lighthouse": "^13.6.0",
     "metar-taf-parser": "^9.1.3",
     "pbf": "^5.1.2",
@@ -61,7 +61,7 @@
     "webpack-cli": "^7.3.1"
   },
   "devDependencies": {
-    "@eliware/test": "^15.0.1"
+    "@eliware/test": "^15.1.0"
   },
   "jest": {
     "testEnvironment": "node",

@@ -1,10 +1,11 @@
 import { expect, jest, test } from "@jest/globals";
 import { createAdsbLolLookup } from "../../src/backend/adsblol-lookup.mjs";
+import { createRadarUserAgent } from "../../src/backend/user-agent.mjs";
 
 const response = (body) => ({ ok: true, status: 200, json: async () => body });
 const requestOptions = {
   headers: {
-    "user-agent": "EliwareRadar/15.0.1 (+https://radar.purinton.us; contact: radar@eliware.org)",
+    "user-agent": createRadarUserAgent(),
   },
 };
 
