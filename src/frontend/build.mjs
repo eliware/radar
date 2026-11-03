@@ -3,13 +3,15 @@ import { existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { default as config } from "./webpack-config.mjs";
 
-export function buildFrontend(run = execFileSync) {
+export function buildFrontend(run = execFileSync, mode = config.mode) {
   run(
     process.execPath,
     [
       resolve(config.context, "node_modules/webpack-cli/bin/cli.js"),
       "--config",
       "webpack.config.mjs",
+      "--mode",
+      mode,
     ],
     { cwd: config.context, stdio: "pipe" },
   );
