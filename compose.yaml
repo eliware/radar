@@ -1,4 +1,21 @@
 services:
+  dump978:
+    image: ghcr.io/sdr-enthusiasts/docker-dump978:latest
+    environment:
+      TZ: ${TZ:-UTC}
+      LAT: ${ADSB_LAT:?Set ADSB_LAT in .env}
+      LON: ${ADSB_LON:?Set ADSB_LON in .env}
+      DUMP978_RTLSDR_DEVICE: ${UAT_SDR_DEVICE:?Set UAT_SDR_DEVICE in .env}
+    device_cgroup_rules:
+      - "c 189:* rwm"
+    volumes:
+      - type: bind
+        source: /dev/bus/usb
+        target: /dev/bus/usb
+    restart: unless-stopped
+    networks:
+      - radar
+
   readsb:
     build:
       context: .
@@ -14,8 +31,12 @@ services:
         "30003",
         "--net-bo-port",
         "30005",
+        "--net-connector=dump978,30978,uat_in",
         "--quiet",
       ]
+    depends_on:
+      dump978:
+        condition: service_started
     device_cgroup_rules:
       - "c 189:* rwm"
     expose:
@@ -60,11 +81,16 @@ services:
     depends_on:
       readsb:
         condition: service_healthy
+      dump978:
+        condition: service_started
     environment:
       TZ: ${TZ:-UTC}
       RECEIVER_TYPE: relay
       BEASTHOST: readsb
       BEASTPORT: "30005"
+      UAT_RECEIVER_TYPE: relay
+      UAT_RECEIVER_HOST: dump978
+      UAT_RECEIVER_PORT: "30978"
       FEEDER_ID: ${PIAWARE_FEEDER_ID:?Set PIAWARE_FEEDER_ID in .env}
     restart: unless-stopped
     tmpfs:
@@ -102,6 +128,9 @@ services:
       BEASTHOST: readsb
       BEASTPORT: "30005"
       FR24KEY: ${FR24_KEY:-}
+      FR24KEY_UAT: ${FR24_UAT_KEY:-}
+      UATHOST: dump978
+      UATPORT: "30978"
       MLAT: "no"
     restart: unless-stopped
     networks:

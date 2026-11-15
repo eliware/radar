@@ -1,15 +1,18 @@
 # Linux Compose deployment
 
-This guide runs Radar and readsb together on Linux with an RTL-SDR receiver. Docker Compose builds both images locally and starts ADSBX, FlightAware, ADSB.lol, and Flightradar24 feeders in the default stack. The private Compose network carries readsb SBS and Beast data. Radar listens on host TCP port `1390`.
+This guide runs Radar and readsb together on Linux with RTL-SDR receivers. Docker Compose builds Radar and readsb locally and starts dump978, ADSBX, FlightAware, ADSB.lol, and Flightradar24 in the default stack. The private Compose network carries decoded data. Radar listens on host TCP port `1390`.
 
 ## Requirements
 
 - Linux with Docker Engine and the Docker Compose plugin.
 - Node is not required on the host to run the Compose deployment.
-- An RTL-SDR receiver connected to the host. An antenna and received aircraft are not required for the containers to report healthy status.
+- An RTL-SDR receiver connected to the host. Use a second receiver for UAT at 978 MHz.
+- An antenna and received aircraft are not required for the containers to report healthy status.
 - Git LFS to retrieve the NASR SQLite database when cloning the repository.
 
 The Compose configuration binds `/dev/bus/usb` into readsb and grants access to USB character devices (major 189). This lets the container see device nodes when the receiver is re-enumerated. The container is not privileged. Keep host USB permissions and Docker access for trusted administrators only.
+
+The dump978 container uses the second receiver and decodes UAT at 978 MHz. Set `UAT_SDR_DEVICE` to that receiver's serial number. The decoder exposes raw UAT on private TCP port `30978`. Readsb combines that input with its 1090 MHz receiver.
 
 The ADSBX container reads readsb Beast data at private TCP endpoint `30005`. It has no SDR access. Radar keeps its SBS connection at endpoint `30003`. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` in `.env` for the antenna location and altitude in feet above sea level.
 
@@ -17,13 +20,21 @@ Radar, ADSBX, and ADSB.lol use these location values. Set `ADSBX_SITENAME` to la
 
 Compose downloads the feeder images from GHCR. Radar and readsb build locally.
 
-The FlightAware PiAware container also reads Beast data at private TCP endpoint `30005` without SDR access. Its assigned `PIAWARE_FEEDER_ID` is in `.env`, keeping the site identity stable. Claim the receiver through FlightAware. Set its location and antenna altitude on the FlightAware stats page.
+The FlightAware PiAware container reads Beast data at private TCP endpoint `30005` and raw UAT from dump978 at `30978`. It receives data through network connections and does not access the receiver hardware. Its assigned `PIAWARE_FEEDER_ID` is in `.env`, keeping the site identity stable. Claim the receiver through FlightAware. Set its location and antenna altitude on the FlightAware stats page.
 
-Flightradar24 uses the same readsb Beast endpoint, `30005`. After getting a sharing key, run `docker compose run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Supply the account email and antenna location. Select Beast TCP, host `readsb`, and endpoint `30005`. Disable MLAT.
+Flightradar24 uses the readsb Beast endpoint `30005` and dump978 UAT endpoint `30978`. UAT sharing needs a separate key. After you get a sharing key, run `docker compose run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively for 1090 MHz. Supply the account email and antenna location. Select Beast TCP, host `readsb`, and endpoint `30005`. Disable MLAT.
 
 This command runs the signup tool directly before a sharing key exists.
 
 Save the issued key as `FR24_KEY` in `.env` before starting the stack. Compose includes FR24 by default, and the container needs a configured key before startup. Without one, FR24 does not send data. MLAT is disabled in Compose. Do not enable it while sharing with other networks. Flightradar24 recommends this.
+
+Request a separate UAT sharing key from Flightradar24 with this command:
+
+```sh
+docker run -it --rm --entrypoint /usr/bin/fr24feed ghcr.io/sdr-enthusiasts/docker-flightradar24:latest --signup --uat --configfile=/tmp/config.txt
+```
+
+Provide the account email and the antenna location. Use no key at the sharing key prompt. Select receiver option `2` and use port `30978`. Save the new key as `FR24_UAT_KEY` in `.env`. The FR24 container connects to dump978 when that key exists. The decoder runs without this key.
 
 The ADSB.lol Ultrafeeder container runs in network-only mode. It forwards readsb Beast data from endpoint `30005` to ADSB.lol. It does not access the SDR or change Radar's SBS connection.
 
@@ -46,7 +57,7 @@ Copy `.env.example` to `.env`. Set `READSB_DEVICE` to the receiver's serial numb
 
 Use `uuidgen` to create UUID values, then keep them stable. Set `ADSBX_SITENAME` to label your receiver. See [Runtime configuration](configuration.md) for all variables.
 
-The default Compose stack starts six containers: `readsb`, `radar`, `adsbx`, `piaware`, `adsblol`, and `fr24`. Set each feeder's required values in `.env`. To run only Radar and readsb, disable the feeder services in `compose.yaml` for that host.
+The default Compose stack starts seven containers: `dump978`, `readsb`, `radar`, `adsbx`, `piaware`, `adsblol`, and `fr24`. Set `UAT_SDR_DEVICE` when the second receiver is attached. Set `FR24_UAT_KEY` only after Flightradar24 issues a UAT key. To run only Radar and readsb, disable the feeder services in `compose.yaml` for that host.
 
 Compose sets `ADSB_HOST=readsb` and `ADSB_PORT=30003`. It does not publish the host input endpoint. Open Radar at `http://<server-ip>:1390` on the LAN.
 
@@ -94,7 +105,7 @@ Inspect container state and logs:
 
 ```sh
 docker compose ps
-docker compose logs -f radar readsb
+docker compose logs -f radar readsb dump978
 ```
 
 Run these commands to start the receiver decoder again and check Radar's connection:
@@ -104,7 +115,7 @@ docker compose restart readsb
 curl -i http://127.0.0.1:1390/ready
 ```
 
-If the RTL-SDR is unplugged and re-enumerated, readsb can see the new node through the bound USB bus. Check `docker compose logs -f readsb` for device detection, then check `/ready` again. A healthy readsb listener does not confirm RF reception. Check for aircraft after installing the antenna.
+If an RTL-SDR is unplugged and re-enumerated, its container can see the new node through the bound USB bus. Check `docker compose logs -f readsb dump978` for device detection, then check `/ready` again. A healthy listener does not confirm RF reception. Check for aircraft after installing the antenna.
 
 Stop the stack while keeping its containers:
 
