@@ -4,9 +4,9 @@ Radar provides a web dashboard, HTTP API, and WebSocket connection. The server r
 
 ## Start the app
 
-From the repository root, run `npm ci` once, then `npm run build` to build browser files. Run `node bin/radar.mjs` to start the server. The default HTTP port is `3000`. The server listens on `0.0.0.0` for local network access. Use `Ctrl+C` to stop it cleanly.
+From the repository root, run `npm ci` once, then `npm run build` to build browser files. Run `node bin/radar.mjs` to start the server. The default HTTP port is `1390`. The server listens on `0.0.0.0` for local network access. Use `Ctrl+C` to stop it cleanly.
 
-Open `http://localhost:3000` on the server computer. Find its Wi-Fi address with `ipconfig` on Windows. Open `http://<computer-ip>:3000` on a device on the same network.
+Open `http://localhost:1390` on the server computer. Find its Wi-Fi address with `ipconfig` on Windows. Open `http://<computer-ip>:1390` on a device on the same network.
 
 Set runtime options in `.env` or the process environment. See [Configuration](configuration.md) for defaults, accepted values, and validation rules. The web API has no authentication, so limit access to a trusted network.
 
@@ -36,7 +36,7 @@ The API does not require authentication. Do not expose it to an untrusted networ
 
 ## WebSocket
 
-Connect to `ws://localhost:3000/ws` to receive decoded aircraft JSON updates, with lookup fields added when available.
+Connect to `ws://localhost:1390/ws` to receive decoded aircraft JSON updates, with lookup fields added when available.
 
 While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every 15 seconds after success. If a response includes `Retry-After`, Radar follows the server's requested wait. Without a valid header, Radar applies exponential backoff with a five-minute limit. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
 
@@ -119,11 +119,11 @@ Set `METAR_STATIONS` to a comma-separated list of ICAO airport codes. The defaul
 
 ## Check app health
 
-Run `curl.exe http://127.0.0.1:3000/health` to check server status. Run `curl.exe http://127.0.0.1:3000/api/aircraft` to read current aircraft.
+Run `curl.exe http://127.0.0.1:1390/health` to check server status. Run `curl.exe http://127.0.0.1:1390/api/aircraft` to read current aircraft.
 
-Run `curl.exe "http://127.0.0.1:3000/api/airports?minRangeNm=0&maxRangeNm=20"` to read nearby airports. Use the same range values with `/api/navaids`, `/api/airspace-boundaries`, `/api/ils`, or `/api/procedures`.
+Run `curl.exe "http://127.0.0.1:1390/api/airports?minRangeNm=0&maxRangeNm=20"` to read nearby airports. Use the same range values with `/api/navaids`, `/api/airspace-boundaries`, `/api/ils`, or `/api/procedures`.
 
-Connect a WebSocket client to `ws://127.0.0.1:3000/ws` to read live updates.
+Connect a WebSocket client to `ws://127.0.0.1:1390/ws` to read live updates.
 
 ## Browser checks
 

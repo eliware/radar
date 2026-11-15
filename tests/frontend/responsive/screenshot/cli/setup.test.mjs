@@ -6,7 +6,7 @@ test("assembles default capture dependencies and screenshot settings", () => {
   expect(capture).toEqual(expect.any(Function));
   expect(captureOptions).toEqual(
     expect.objectContaining({
-      baseUrl: "http://127.0.0.1:3000",
+      baseUrl: "http://127.0.0.1:1390",
       outputDir: "artifacts/screenshots",
       targets: expect.any(Array),
       modes: ["above-fold", "full-page"],

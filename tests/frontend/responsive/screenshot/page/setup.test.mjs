@@ -14,10 +14,10 @@ test("sets the viewport and navigates to the screenshot page", async () => {
     }),
   };
 
-  await prepareScreenshotPage(page, "http://127.0.0.1:3000", { width: 1000 });
+  await prepareScreenshotPage(page, "http://127.0.0.1:1390", { width: 1000 });
 
   expect(page.setViewport).toHaveBeenCalledWith({ width: 1000 });
-  expect(page.goto).toHaveBeenCalledWith("http://127.0.0.1:3000", {
+  expect(page.goto).toHaveBeenCalledWith("http://127.0.0.1:1390", {
     waitUntil: "domcontentloaded",
     timeout: 30000,
   });

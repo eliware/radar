@@ -30,7 +30,7 @@ function makeDocument(protocol = "https:") {
   return {
     compass,
     strips,
-    location: { protocol, host: "localhost:3000" },
+    location: { protocol, host: "localhost:1390" },
     addEventListener: jest.fn((name, callback) => keyListeners.get(name).push(callback)),
     removeEventListener: jest.fn(),
     sendKey: (event) => keyListeners.get("keydown").forEach((callback) => callback(event)),
@@ -86,7 +86,7 @@ test("starts the secure live view and cleans up dashboard resources", async () =
     createScene,
   });
   expect(result).toEqual(expect.objectContaining({ scene, socket }));
-  expect(socket.url).toBe("wss://localhost:3000/ws");
+  expect(socket.url).toBe("wss://localhost:1390/ws");
   expect(fetchData).not.toHaveBeenCalledWith("/api/aircraft");
   expect(scene.onViewChange).toHaveBeenCalled();
   scene.onViewChange.mock.calls.at(-1)[0]();

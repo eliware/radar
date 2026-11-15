@@ -4,7 +4,7 @@ import { parsePort } from "./port.mjs";
 
 export function resolveWebNetworkConfiguration(environment, parseAdsbLocation) {
   return {
-    port: parsePort(environment.PORT ?? "3000", "PORT"),
+    port: parsePort(environment.PORT ?? "1390", "PORT"),
     feedPort: parsePort(environment.ADSB_PORT ?? "30003", "ADSB_PORT"),
     feedHost: environment.ADSB_HOST ?? "127.0.0.1",
     location: parseAdsbLocation(environment.ADSB_LAT, environment.ADSB_LON),

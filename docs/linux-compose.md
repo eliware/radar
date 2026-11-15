@@ -1,6 +1,6 @@
 # Linux Compose deployment
 
-This guide runs Radar and readsb together on Linux with an RTL-SDR receiver. Docker Compose builds both images locally and starts ADSBX, FlightAware, ADSB.lol, and Flightradar24 feeders in the default stack. The private Compose network carries readsb SBS and Beast data. Radar listens on host TCP port `3000`.
+This guide runs Radar and readsb together on Linux with an RTL-SDR receiver. Docker Compose builds both images locally and starts ADSBX, FlightAware, ADSB.lol, and Flightradar24 feeders in the default stack. The private Compose network carries readsb SBS and Beast data. Radar listens on host TCP port `1390`.
 
 ## Requirements
 
@@ -48,7 +48,7 @@ Use `uuidgen` to create UUID values, then keep them stable. Set `ADSBX_SITENAME`
 
 The default Compose stack starts six containers: `readsb`, `radar`, `adsbx`, `piaware`, `adsblol`, and `fr24`. Set each feeder's required values in `.env`. To run only Radar and readsb, disable the feeder services in `compose.yaml` for that host.
 
-Compose sets `ADSB_HOST=readsb` and `ADSB_PORT=30003`. It does not publish the host input endpoint. Open Radar at `http://<server-ip>:3000` on the LAN.
+Compose sets `ADSB_HOST=readsb` and `ADSB_PORT=30003`. It does not publish the host input endpoint. Open Radar at `http://<server-ip>:1390` on the LAN.
 
 ## Build and check
 
@@ -74,8 +74,8 @@ docker compose ps
 Compose waits for readsb's SBS listener before starting Radar. Check the app endpoints from the host:
 
 ```sh
-curl -i http://127.0.0.1:3000/health
-curl -i http://127.0.0.1:3000/ready
+curl -i http://127.0.0.1:1390/health
+curl -i http://127.0.0.1:1390/ready
 ```
 
 `/health` confirms that Radar responds to requests. `/ready` returns HTTP 200 when Radar connects to readsb and HTTP 503 while that connection is down. Readiness does not depend on aircraft reception. An antenna is not required for a healthy container status.
@@ -86,8 +86,8 @@ After committing app changes, run `docker compose up -d --build` to build and st
 
 ```sh
 docker compose up -d --build
-curl -i http://127.0.0.1:3000/health
-curl -i http://127.0.0.1:3000/ready
+curl -i http://127.0.0.1:1390/health
+curl -i http://127.0.0.1:1390/ready
 ```
 
 Inspect container state and logs:
@@ -101,7 +101,7 @@ Run these commands to start the receiver decoder again and check Radar's connect
 
 ```sh
 docker compose restart readsb
-curl -i http://127.0.0.1:3000/ready
+curl -i http://127.0.0.1:1390/ready
 ```
 
 If the RTL-SDR is unplugged and re-enumerated, readsb can see the new node through the bound USB bus. Check `docker compose logs -f readsb` for device detection, then check `/ready` again. A healthy readsb listener does not confirm RF reception. Check for aircraft after installing the antenna.

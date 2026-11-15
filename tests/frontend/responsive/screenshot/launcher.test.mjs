@@ -3,7 +3,7 @@ import { createScreenshotLaunchOptions } from "../../../../src/frontend/responsi
 
 test("uses default launch locations", () => {
   expect(createScreenshotLaunchOptions()).toEqual({
-    baseUrl: "http://127.0.0.1:3000",
+    baseUrl: "http://127.0.0.1:1390",
     outputDir: "artifacts/screenshots",
     targets: expect.any(Array),
     modes: expect.any(Array),

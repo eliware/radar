@@ -19,5 +19,5 @@ COPY --chown=node:node public ./public
 COPY --chown=node:node nasr/NASR.sqlite ./nasr/NASR.sqlite
 COPY --from=build --chown=node:node /app/dist ./dist
 USER node
-EXPOSE 3000
+EXPOSE 1390
 CMD ["node", "bin/radar.mjs"]

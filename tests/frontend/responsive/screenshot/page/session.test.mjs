@@ -25,11 +25,11 @@ test("captures and closes a newly created browser page", async () => {
   const capture = jest.fn(() => "captured");
 
   await expect(
-    session.capturePage("http://127.0.0.1:3000", { width: 1000 }, 0, onPageError, capture),
+    session.capturePage("http://127.0.0.1:1390", { width: 1000 }, 0, onPageError, capture),
   ).resolves.toBe("captured");
   expect(page.on).toHaveBeenCalledWith("pageerror", onPageError);
   expect(page.setViewport).toHaveBeenCalledWith({ width: 1000 });
-  expect(page.goto).toHaveBeenCalledWith("http://127.0.0.1:3000", {
+  expect(page.goto).toHaveBeenCalledWith("http://127.0.0.1:1390", {
     waitUntil: "domcontentloaded",
     timeout: 30000,
   });

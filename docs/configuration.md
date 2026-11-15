@@ -8,7 +8,7 @@ Copy `.env.example` to `.env` and edit the settings you want to change. Most set
 
 | Variable                   | Default                       | Required                                 | Meaning and accepted values                                                                                                     |
 | -------------------------- | ----------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `PORT`                     | `3000`                        | No                                       | Web server TCP port. Use an integer from 1 to 65535. The app listens on all network interfaces.                                 |
+| `PORT`                     | `1390`                        | No                                       | Web server TCP port. Use an integer from 1 to 65535. The app listens on all network interfaces.                                 |
 | `LOG_LEVEL`                | `info`                        | No                                       | Server log level: `error`, `warn`, `info`, `http`, `verbose`, `debug`, or `silly`.                                              |
 | `ADSBLOL_REMOTE`           | `true`                        | No                                       | Set to `false` to stop Radar's ADSB.lol re-api aircraft lookups. The separate ADSB.lol feeder remains unaffected.               |
 | `ADSBLOL_POLL_INTERVAL_MS` | `15000`                       | No                                       | Interval between remote aircraft queries in milliseconds. Use an integer from 1000 through 300000.                              |

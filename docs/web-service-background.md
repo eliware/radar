@@ -15,7 +15,7 @@ Create a task named `Radar Web`. Run these steps with administrator rights.
 7. Set **Start in** to the Radar repository folder.
 8. Save and start the task.
 
-The task reads `.env` from the repository folder. Give the task account read access to the folder and `.env` file. The app listens on `0.0.0.0:3000` by default.
+The task reads `.env` from the repository folder. Give the task account read access to the folder and `.env` file. The app listens on `0.0.0.0:1390` by default.
 
 ## Start and stop both tasks
 
@@ -32,7 +32,7 @@ Get-ScheduledTask -TaskName 'Radar Web' | Select-Object TaskName,State
 Run this command to check server status:
 
 ```powershell
-curl.exe http://127.0.0.1:3000/health
+curl.exe http://127.0.0.1:1390/health
 ```
 
-Run `ipconfig` to find the computer's Wi-Fi IPv4 address. Open `http://<computer-ip>:3000` on a second device on the same network. Allow inbound TCP endpoint `3000` in Windows Firewall for the trusted local network.
+Run `ipconfig` to find the computer's Wi-Fi IPv4 address. Open `http://<computer-ip>:1390` on a second device on the same network. Allow inbound TCP endpoint `1390` in Windows Firewall for the trusted local network.

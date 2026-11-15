@@ -31,7 +31,7 @@ test("captures selected modes and checks the local server", async () => {
   const tools = makeCaptureTools();
   const report = jest.fn();
   const result = await captureResponsiveScreenshots({
-    baseUrl: "http://127.0.0.1:3000",
+    baseUrl: "http://127.0.0.1:1390",
     outputDir: "artifacts/test-shots",
     targets: selectScreenshotViewports("desktop-1080p"),
     modes: ["above-fold", "full-page"],
@@ -59,7 +59,7 @@ test("captures selected modes and checks the local server", async () => {
 test("rejects an unhealthy local server", async () => {
   await expect(
     captureResponsiveScreenshots({
-      baseUrl: "http://127.0.0.1:3000",
+      baseUrl: "http://127.0.0.1:1390",
       outputDir: "artifacts/test-shots",
       targets: selectScreenshotViewports("desktop-1080p"),
       modes: ["above-fold"],
@@ -76,7 +76,7 @@ test("rejects small screenshots and closes the browser", async () => {
   const tools = makeCaptureTools({ size: 999 });
   await expect(
     captureResponsiveScreenshots({
-      baseUrl: "http://127.0.0.1:3000",
+      baseUrl: "http://127.0.0.1:1390",
       outputDir: "artifacts/test-shots",
       targets: selectScreenshotViewports("desktop-1080p"),
       modes: ["above-fold"],

@@ -75,7 +75,7 @@ The app serves public files from `public/` and built browser files from `dist/`.
 
 ## Development server
 
-Run `npm run build`, then `node bin/radar.mjs`. Open `http://localhost:3000` by default. See the [web guide](docs/web-api.md).
+Run `npm run build`, then `node bin/radar.mjs`. Open `http://localhost:1390` by default. See the [web guide](docs/web-api.md).
 
 ## Build
 

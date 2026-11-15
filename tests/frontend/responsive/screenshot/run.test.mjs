@@ -7,7 +7,7 @@ test("runs screenshot capture, closes the browser, then reports its result", asy
   const report = jest.fn();
   const result = await runScreenshotCapture({
     folder: "artifacts/shots",
-    baseUrl: "http://127.0.0.1:3000",
+    baseUrl: "http://127.0.0.1:1390",
     targets: [],
     modes: [],
     browserLauncher,

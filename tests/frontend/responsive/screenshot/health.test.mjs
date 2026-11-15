@@ -3,6 +3,6 @@ import { checkScreenshotHealth } from "../../../../src/frontend/responsive/scree
 
 test("reports an unhealthy radar endpoint", async () => {
   await expect(
-    checkScreenshotHealth("http://127.0.0.1:3000", async () => ({ ok: false, status: 503 })),
+    checkScreenshotHealth("http://127.0.0.1:1390", async () => ({ ok: false, status: 503 })),
   ).rejects.toThrow("Radar health check failed with HTTP 503");
 });

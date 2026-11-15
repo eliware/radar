@@ -120,7 +120,7 @@ test("uses default web and feed settings", async () => {
   expect(deps.values.createRadarServer).toHaveBeenCalledWith(
     expect.objectContaining({ defaultRangeNm: 20, defaultRotationDegrees: 0 }),
   );
-  expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 3000 });
+  expect(deps.app.listen).toHaveBeenCalledWith({ host: "0.0.0.0", port: 1390 });
   expect(deps.values.createLogger).toHaveBeenCalledWith({ level: "info" });
   expect(deps.values.createAdsbLolRemoteSource).toHaveBeenCalledWith(
     expect.objectContaining({
