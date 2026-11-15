@@ -27,3 +27,13 @@ test("returns named airway paths that cross the requested range band", () => {
   query(home, 0, 20);
   expect(statement.all).toHaveBeenCalledTimes(1);
 });
+
+test("reprojects cached airway rows when the home location changes", () => {
+  const statement = { all: jest.fn(() => [point("WEST", -0.5, "EAST"), point("EAST", 0.5)]) };
+  const query = createAirwayQuery({ prepare: () => statement });
+  const first = query(home, 0, 100);
+  const second = query({ latitude: 0, longitude: 1 }, 0, 100);
+  expect(first[0].points[0].x).toBeCloseTo(-30);
+  expect(second[0].points[0].x).toBeCloseTo(-90);
+  expect(statement.all).toHaveBeenCalledTimes(1);
+});

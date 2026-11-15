@@ -58,4 +58,5 @@ test("clears aircraft on disconnect only when no remote clients remain", () => {
   lifecycle.close();
   expect(poller.close).toHaveBeenCalledTimes(1);
   expect(aircraft.clear).toHaveBeenCalledTimes(3);
+  expect(publish).toHaveBeenCalledTimes(3);
 });

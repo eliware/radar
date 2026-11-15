@@ -32,6 +32,7 @@ export function createAdsbLolClientLifecycle({
       poller.close();
       clients.clear();
       aircraft.clear();
+      publish();
     },
   };
 }
