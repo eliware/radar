@@ -1,6 +1,7 @@
 import { createAircraftEnrichmentState } from "./state.mjs";
 import { createAircraftRouteLookup } from "./route-lookup.mjs";
 import { createAircraftTypeLookup } from "./type-lookup.mjs";
+import { normalizeAircraftMetadataKey } from "./metadata-key.mjs";
 
 export function createAircraftEnrichmentCoordinator(lookup) {
   const state = createAircraftEnrichmentState();
@@ -13,7 +14,12 @@ export function createAircraftEnrichmentCoordinator(lookup) {
   }
 
   const typeLookup = createAircraftTypeLookup(lookup, state.metadata, publishIfChanged);
-  const routeLookup = createAircraftRouteLookup(lookup, state.metadata, publishIfChanged);
+  const routeLookup = createAircraftRouteLookup(
+    lookup,
+    state.metadata,
+    publishIfChanged,
+    (icao, callsign) => normalizeAircraftMetadataKey(state.get(icao)?.callsign) === callsign,
+  );
 
   function update(aircraft, publish) {
     if (closed) return;

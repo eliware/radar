@@ -79,6 +79,7 @@ test("does not apply an old route to a new callsign", async () => {
   complete[0]({ origin: "EGLL", destination: "KBOS" });
   await Promise.resolve();
   expect(state.changes.at(-1)).toEqual(second);
+  expect(state.changes).toHaveLength(2);
   complete[1]({ origin: "LFPG", destination: "KJFK" });
   await Promise.resolve();
   expect(state.changes.at(-1)).toMatchObject({ origin: "LFPG", destination: "KJFK" });

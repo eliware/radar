@@ -37,6 +37,17 @@ test("applies age fading and the normal color to each track", () => {
   expect(styles[1].alpha).toBeLessThan(0.8);
 });
 
+test("calculates marker opacity using the drawing frame timestamp", () => {
+  const { context, styles } = contextWithStrokeStyles();
+  jest.useFakeTimers().setSystemTime(900_000);
+  try {
+    drawAircraftTracks(context, [{ x: 1, y: 2, receivedAt: 940_000 }], "#ffffff", 1, 1_000_000);
+  } finally {
+    jest.useRealTimers();
+  }
+  expect(styles[0].alpha).toBeCloseTo(0.5);
+});
+
 test("flashes near-home tracks green and white on alternating half-second phases", () => {
   const { context, styles } = contextWithStrokeStyles();
   const target = { x: 20, y: 20, nearHomePass: true };

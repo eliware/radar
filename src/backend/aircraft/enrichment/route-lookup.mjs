@@ -1,6 +1,11 @@
 import { hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
 
-export function createAircraftRouteLookup(lookup, metadata, publishIfChanged) {
+export function createAircraftRouteLookup(
+  lookup,
+  metadata,
+  publishIfChanged,
+  isCurrentCallsign = () => true,
+) {
   let enabled = true;
   let version = 0;
 
@@ -11,7 +16,7 @@ export function createAircraftRouteLookup(lookup, metadata, publishIfChanged) {
     lookup
       .getCallsignRoute(callsign)
       .then((result) => {
-        if (requestVersion === version && enabled)
+        if (requestVersion === version && enabled && isCurrentCallsign(icao, callsign))
           publishIfChanged(icao, metadata.updateRoute(callsign, result), publish);
       })
       .catch(() => undefined);

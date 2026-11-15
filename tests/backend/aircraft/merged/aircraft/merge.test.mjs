@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { mergeAircraftRecord } from "../../../../../src/backend/aircraft/merged/aircraft/merge.mjs";
+import { filterAircraftSnapshot } from "../../../../../src/backend/aircraft/merged/snapshot/filter.mjs";
 
 test("merges the remote-only record and sorts missing distances last", () => {
   expect(mergeAircraftRecord({ remote: { icao: "ABC" } }, 0, 8000)).toEqual({
@@ -28,16 +29,16 @@ test("keeps fresh local data primary and falls back to remote fields", () => {
 });
 
 test("selects a newer remote record when local data is stale", () => {
-  expect(
-    mergeAircraftRecord(
-      {
-        local: { icao: "ABC", lastSeen: 700, callsign: "LOCAL" },
-        remote: { icao: "ABC", lastSeen: 900, callsign: "REMOTE", remoteOnly: true },
-      },
-      1000,
-      100,
-    ),
-  ).toMatchObject({ callsign: "REMOTE", remoteOnly: false });
+  const merged = mergeAircraftRecord(
+    {
+      local: { icao: "ABC", lastSeen: 700, callsign: "LOCAL" },
+      remote: { icao: "ABC", lastSeen: 900, callsign: "REMOTE", remoteOnly: true },
+    },
+    1000,
+    100,
+  );
+  expect(merged).toMatchObject({ callsign: "REMOTE", remoteOnly: true });
+  expect(filterAircraftSnapshot([merged], 300, true)).toEqual([]);
 });
 
 test("merges local data when no remote fallback exists", () => {

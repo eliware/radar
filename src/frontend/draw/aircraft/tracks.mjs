@@ -7,7 +7,7 @@ export function drawAircraftTracks(context, aircraft, normalColor, previousAlpha
     const color = displayColor(item, normalColor, now);
     context.fillStyle = color;
     context.strokeStyle = color;
-    context.globalAlpha = previousAlpha * getAircraftAgeBrightness(item.receivedAt);
+    context.globalAlpha = previousAlpha * getAircraftAgeBrightness(item.receivedAt, now);
     drawAircraftTrack(context, item);
   }
 }
