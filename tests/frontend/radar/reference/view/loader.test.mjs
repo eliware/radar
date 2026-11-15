@@ -51,3 +51,19 @@ test("caps a requested range at the radar limit", () => {
   loader.load({ ...bounds, maxRangeNm: 400 });
   expect(scheduler.request).toHaveBeenCalledWith(300);
 });
+
+test("clears references when the nearest visible range exceeds the radar limit", () => {
+  const { loader, session, scheduler } = setup();
+  loader.load({ ...bounds, minRangeNm: 350, maxRangeNm: 400 });
+  expect(session.clear).toHaveBeenCalledTimes(1);
+  expect(scheduler.request).not.toHaveBeenCalled();
+});
+
+test("defaults missing range bounds and clamps negative minimum ranges", () => {
+  const empty = setup();
+  empty.loader.load({ ...bounds, minRangeNm: undefined, maxRangeNm: undefined });
+  expect(empty.session.clear).toHaveBeenCalledTimes(1);
+  const negativeMinimum = setup();
+  negativeMinimum.loader.load({ ...bounds, minRangeNm: -10, maxRangeNm: 20 });
+  expect(negativeMinimum.scheduler.request).toHaveBeenCalledWith(25);
+});

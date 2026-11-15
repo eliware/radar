@@ -11,7 +11,7 @@ export function createRadarReferenceViewLoader(session, scheduler) {
         lastKey = "";
         return session.clear();
       }
-      const minimum = bounds.minRangeNm ?? 0;
+      const minimum = Math.min(MAX_RADAR_RANGE, Math.max(0, bounds.minRangeNm ?? 0));
       const maximum = Math.min(MAX_RADAR_RANGE, bounds.maxRangeNm ?? 0);
       const key = [bounds.minX, bounds.maxX, bounds.minZ, bounds.maxZ, minimum, maximum]
         .map((value) => Math.round(value * 2) / 2)

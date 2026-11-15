@@ -15,12 +15,12 @@ test("selects remote-only, fresh-local, and newer-stale-remote sources", () => {
   ).toMatchObject({ primary: { lastSeen: 900 }, fallback: { lastSeen: 700 } });
 });
 
-test("keeps stale local data primary when remote data is not newer", () => {
+test("keeps stale local data primary without an older remote fallback", () => {
   const local = { lastSeen: 700 };
   const remote = { lastSeen: 600 };
   expect(selectAircraftRecordSources(local, remote, 1000, 100)).toMatchObject({
     primary: local,
-    fallback: remote,
+    fallback: null,
     remoteOnly: false,
   });
 });

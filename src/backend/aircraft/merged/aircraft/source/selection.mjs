@@ -5,7 +5,7 @@ export function selectAircraftRecordSources(local, remote, now, localFreshnessMs
     !localIsFresh && Number.isFinite(remote?.lastSeen) && remote.lastSeen > local.lastSeen;
   return {
     primary: useNewerRemote ? remote : local,
-    fallback: useNewerRemote ? local : remote,
+    fallback: useNewerRemote ? local : localIsFresh ? remote : null,
     remoteOnly: false,
   };
 }

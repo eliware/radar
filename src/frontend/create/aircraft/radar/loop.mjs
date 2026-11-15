@@ -7,6 +7,7 @@ const OVERLAY_REFRESH_MS = 100;
 export function createAircraftRadarLoop({
   targets,
   trails,
+  receiveTimes,
   getTargetItems = () => targets.items(),
   windowRef,
   controls,
@@ -47,6 +48,7 @@ export function createAircraftRadarLoop({
     windowRef,
     onExpire: (expired) => {
       trails.remove(expired);
+      receiveTimes?.remove(expired);
       if (isAutoZoom())
         radarCamera.setRange(selectDefaultRadarRange(targets.localDistances(), defaultRangeNm));
     },

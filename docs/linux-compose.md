@@ -21,7 +21,7 @@ The FlightAware PiAware container also reads Beast data at private TCP endpoint 
 
 Flightradar24 uses the same readsb Beast endpoint, `30005`. After getting a sharing key, run `docker compose run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Supply the account email and antenna location. Select Beast TCP, host `readsb`, and endpoint `30005`. Disable MLAT.
 
-Save the issued key as `FR24_KEY` in `.env`. The default `docker compose up -d` command starts this feeder with the others. Keep MLAT disabled when feeding multiple networks, as Flightradar24 recommends.
+Save the issued key as `FR24_KEY` in `.env` before starting the stack. Compose includes FR24 by default, and the container needs a configured key before startup. Without one, FR24 does not send data. MLAT is disabled in Compose. Do not enable it while sharing with other networks. Flightradar24 recommends this.
 
 The ADSB.lol Ultrafeeder container runs in network-only mode. It forwards readsb Beast data from endpoint `30005` to ADSB.lol. It does not access the SDR or change Radar's SBS connection.
 

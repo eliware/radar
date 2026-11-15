@@ -16,6 +16,16 @@ test("formats coordinate and altitude rows for the current camera position", () 
   ]);
 });
 
+test.each([90, -90])("keeps the longitude finite at latitude %s", (latitude) => {
+  const rows = cameraReadoutRows(
+    { position: { x: 10, y: 0, z: 0 } },
+    { latitude, longitude: -70 },
+    0,
+    400,
+  );
+  expect(rows[1].value).toBe(" -70.0000°");
+});
+
 test.each([
   [null, { latitude: 43, longitude: -70 }, 300],
   [{ position: { x: 0, y: 0, z: 0 } }, null, 300],

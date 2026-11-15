@@ -8,6 +8,7 @@ test("starts frame and expiry loops, then stops them", () => {
   let expired = [{ icao: "ABC123" }];
   const renderer = { render: jest.fn(), setSize: jest.fn() };
   const overlay = { draw: jest.fn() };
+  const receiveTimes = { remove: jest.fn() };
   const controls = {
     addEventListener: jest.fn((name, listener) => controlListeners.set(name, listener)),
     removeEventListener: jest.fn(),
@@ -29,6 +30,7 @@ test("starts frame and expiry loops, then stops them", () => {
   const stop = createAircraftRadarLoop({
     targets: { items: () => new Map(), localDistances: () => [], prune: () => expired },
     trails: { remove: jest.fn() },
+    receiveTimes,
     windowRef,
     controls,
     radarCamera: { setRange: jest.fn(), range: () => 20 },
@@ -50,6 +52,7 @@ test("starts frame and expiry loops, then stops them", () => {
   callbacks[4](160);
   expect(overlay.draw).toHaveBeenCalledTimes(3);
   expiryCallbacks[0]();
+  expect(receiveTimes.remove).toHaveBeenCalledWith([{ icao: "ABC123" }]);
   expired = [];
   expiryCallbacks[0]();
   stop();

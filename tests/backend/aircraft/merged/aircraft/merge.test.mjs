@@ -47,3 +47,16 @@ test("merges local data when no remote fallback exists", () => {
     remoteOnly: false,
   });
 });
+
+test("does not fill missing stale-local fields from an older remote report", () => {
+  expect(
+    mergeAircraftRecord(
+      {
+        local: { icao: "ABC", lastSeen: 700 },
+        remote: { icao: "ABC", lastSeen: 600, callsign: "OLDER" },
+      },
+      1000,
+      100,
+    ),
+  ).toEqual({ icao: "ABC", lastSeen: 700, remoteOnly: false });
+});

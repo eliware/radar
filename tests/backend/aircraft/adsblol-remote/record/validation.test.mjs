@@ -11,6 +11,9 @@ test("returns normalized identity, position, and selected observation age", () =
     ageSeconds: 2,
   });
   expect(validateRemoteAircraftRecord({ ...valid, seen_pos: 1 })).toMatchObject({ ageSeconds: 1 });
+  expect(validateRemoteAircraftRecord({ ...valid, seen_pos: Number.NaN })).toMatchObject({
+    ageSeconds: 2,
+  });
 });
 
 test("rejects records without identity, valid coordinates, or an observation age", () => {
