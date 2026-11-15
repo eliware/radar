@@ -8,7 +8,7 @@ Use Node.js 26 or later. From a repository checkout, install dependencies with `
 
 Pass `--host HOST` and `--port PORT` to select a data source. Set `ADSB_HOST` and `ADSB_PORT` for defaults. CLI options override environment values.
 
-The command accepts no positional arguments. Set the TCP endpoint number from 1 through 65535. The command supports Windows and Linux with Node.js 26. macOS support is inferred from Node.js TCP APIs and is not tested directly.
+The command accepts no positional arguments. Set the TCP endpoint number from 1 through 65535. Repository CI tests on Ubuntu. Windows and macOS compatibility is not tested.
 
 Set `ADSB_LAT` and `ADSB_LON` as decimal latitude and longitude. The CLI uses this point to calculate range and bearing.
 

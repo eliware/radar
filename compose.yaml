@@ -95,8 +95,6 @@ services:
 
   fr24:
     image: ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
-    profiles:
-      - fr24
     depends_on:
       readsb:
         condition: service_healthy

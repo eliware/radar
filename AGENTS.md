@@ -14,7 +14,7 @@ Keep source in `src/`, launchers in `bin/`, tests in `tests/`, fixtures in `test
 
 ## Development
 
-Use Node.js 26 or later, npm, and native ESM. Keep repository documentation current with maintained behavior and workflows.
+Use Node.js 26 or later, npm, and native ESM.
 
 ## Validation
 

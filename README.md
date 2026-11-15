@@ -29,7 +29,7 @@ Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.
 
 ## Features
 
-Radar provides a web app and terminal client for decoded ADS-B aircraft data. See the [user guides](docs/README.md).
+See the [user guides](docs/README.md) for current web and CLI features.
 
 ## Requirements
 
