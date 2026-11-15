@@ -86,7 +86,7 @@ test("renders synchronized pass colors, source colors, emergencies, and fading",
     91000,
   );
   expect(container.innerHTML).toContain('class="flight-strip-aircraft remote-only emergency"');
-  expect(container.innerHTML).toContain('style="opacity:0.25"');
+  expect(container.innerHTML).toContain('style="opacity:0.93"');
 });
 
 test("builds markup separately from DOM replacement", () => {

@@ -7,8 +7,12 @@ test("selects age opacity and remote or emergency status classes", () => {
     classNames: "remote-only",
   });
   expect(getFlightStripStatus({ squawk: "7700", lastSeen: 1 }, 121_000)).toEqual({
-    opacity: 0.25,
+    opacity: 0.93,
     classNames: "emergency",
+  });
+  expect(getFlightStripStatus({ remoteOnly: true, lastSeen: 1 }, 121_000)).toEqual({
+    opacity: 0.6,
+    classNames: "remote-only",
   });
 });
 

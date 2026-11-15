@@ -1,7 +1,8 @@
 import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
 import { getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
 
-const MIN_FLIGHT_STRIP_OPACITY = 0.25;
+const MIN_FLIGHT_STRIP_OPACITY = 0.6;
+const MIN_EMERGENCY_STRIP_OPACITY = 0.93;
 
 export function getFlightStripStatus(item, now = Date.now()) {
   const remoteOnly = Boolean(item.remoteOnly);
@@ -14,7 +15,10 @@ export function getFlightStripStatus(item, now = Date.now()) {
     nearHomePass && (Math.floor(now / 500) % 2 ? "flash-white" : "flash-green"),
   ].filter(Boolean);
   return {
-    opacity: Math.max(MIN_FLIGHT_STRIP_OPACITY, getAircraftAgeBrightness(item.lastSeen, now)),
+    opacity: Math.max(
+      emergency ? MIN_EMERGENCY_STRIP_OPACITY : MIN_FLIGHT_STRIP_OPACITY,
+      getAircraftAgeBrightness(item.lastSeen, now),
+    ),
     classNames: classes.join(" "),
   };
 }
