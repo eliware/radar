@@ -1,11 +1,7 @@
-import { drawAircraftDisplay } from "../draw/aircraft/display.mjs";
-import { RADAR_SCOPE_RADIUS_RATIO } from "../radar/range.mjs";
-import { drawRadarScale } from "../draw/radar/scale.mjs";
-import { drawRadarScaleLegend } from "../draw/radar/legend/draw-scale-legend.mjs";
-import { drawRadarReferences } from "../draw/radar/references.mjs";
-import { projectAircraftDisplayItems } from "../project/aircraft-display-items.mjs";
-import { drawCameraReadout } from "./overlay/readout.mjs";
 import { createOverlayProjection } from "./overlay/projection.mjs";
+import { drawAircraftOverlayReferences } from "./overlay/references.mjs";
+import { drawAircraftOverlayTargets } from "./overlay/aircraft.mjs";
+import { drawAircraftOverlayScope } from "./overlay/scope.mjs";
 
 export function createOverlayDrawer({ THREE, container, windowRef, canvas, context }) {
   const projection = createOverlayProjection({ THREE, container, windowRef, canvas, context });
@@ -36,33 +32,40 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
       elevationFeet,
     );
     context.clearRect(0, 0, width, height);
-    drawRadarReferences(
+    drawAircraftOverlayReferences(
       context,
       { airports, navaids, boundaries, ilsApproaches, procedures, airways },
       projectReference,
-      ilsVisible,
-      procedureVisibility,
-      airwayVisibility,
-      runwayVisibility,
-      referenceVisibility,
-      // The 3D shell supplies airspace geometry. Skip flat rings to prevent duplicate ground edges.
-      false,
+      { ilsVisible, procedureVisibility, airwayVisibility, runwayVisibility, referenceVisibility },
     );
-    const items = projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project);
-    drawAircraftDisplay(context, items, 18, width, height, connected);
-    drawRadarScaleLegend(
+    drawAircraftOverlayTargets(
       context,
+      aircraft,
+      trails,
+      location,
+      elevationFeet,
+      project,
+      connected,
+      width,
+      height,
+    );
+    drawAircraftOverlayScope(
+      context,
+      camera,
+      location,
+      elevationFeet,
+      range,
       width,
       height,
       connected,
-      ilsVisible,
-      procedureVisibility,
-      waterVisible,
-      airwayVisibility,
-      runwayVisibility,
-      referenceVisibility,
+      {
+        ilsVisible,
+        procedureVisibility,
+        waterVisible,
+        airwayVisibility,
+        runwayVisibility,
+        referenceVisibility,
+      },
     );
-    drawRadarScale(context, range, Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO, height);
-    drawCameraReadout(context, camera, location, elevationFeet, width);
   };
 }

@@ -1,4 +1,4 @@
-import { projectAircraftPosition } from "./space-position.mjs";
+import { projectAircraftTargetPosition } from "./position.mjs";
 
 export function updateAircraftTargetAndTrail({
   aircraft,
@@ -10,9 +10,9 @@ export function updateAircraftTargetAndTrail({
   addTrail = true,
   removeExpiredTrails = true,
 }) {
-  const position = projectAircraftPosition(aircraft, location, elevationFeet);
-  if (!position) return null;
-  const distanceNm = Math.hypot(position.x, position.z);
+  const targetPosition = projectAircraftTargetPosition(aircraft, location, elevationFeet);
+  if (!targetPosition) return null;
+  const { position, distanceNm } = targetPosition;
   const expired = targets.update(aircraft, distanceNm);
   if (removeExpiredTrails) {
     trails.remove(expired);

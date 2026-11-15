@@ -1,4 +1,4 @@
-import { updateAircraftTargetAndTrail } from "../../../aircraft/target-updates.mjs";
+import { updateAircraftTargetAndTrail } from "../../../aircraft/target/updates.mjs";
 
 export function updateCanvasRadarRemoteTargets(items, location, targets, trails, receiveTimes) {
   const remote = items.filter((item) => item.remoteOnly);
