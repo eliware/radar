@@ -1,4 +1,4 @@
-import { PAVED_SURFACES } from "../../sql-query-rules.mjs";
+import { PAVED_SURFACES } from "./surfaces.mjs";
 
 export const RUNWAY_QUERY = `WITH selected_airports AS (
   SELECT value AS airportId FROM json_each(?)

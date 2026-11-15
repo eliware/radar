@@ -13,6 +13,7 @@ test("fetches a requested tile once and shares its pending response", async () =
   const second = request.load(tileJson, tile, () => true);
   expect(fetchRef).toHaveBeenCalledTimes(1);
   expect(fetchRef).toHaveBeenCalledWith("https://tiles/1/2/3", { signal: expect.any(AbortSignal) });
+  request.retain(new Set([tile.key]));
   release();
   expect(await Promise.all([first, second])).toEqual([
     expect.any(ArrayBuffer),

@@ -1,0 +1,1 @@
+export const PAVED_SURFACES = "'ASPH', 'CONC', 'ASPH-CONC', 'CONC-ASPH', 'ASPH/CONC', 'CONC/ASPH'";

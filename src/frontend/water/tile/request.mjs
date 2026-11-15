@@ -1,3 +1,5 @@
+import { createWaterTileUrl } from "./url.mjs";
+
 export function createWaterTileRequest(fetchRef) {
   const pending = new Map();
 
@@ -11,13 +13,10 @@ export function createWaterTileRequest(fetchRef) {
 
   function load(tileJson, tile, isRequested) {
     if (pending.has(tile.key)) return pending.get(tile.key).promise;
-    const template = tileJson.tiles?.[0];
-    if (!template) return Promise.resolve(null);
+    const url = createWaterTileUrl(tileJson, tile);
+    if (!url) return Promise.resolve(null);
     const entry = { controller: new AbortController() };
-    entry.promise = fetchRef(
-      template.replace("{z}", tile.z).replace("{x}", tile.x).replace("{y}", tile.y),
-      { signal: entry.controller.signal },
-    )
+    entry.promise = fetchRef(url, { signal: entry.controller.signal })
       .then(async (response) => {
         if (!response.ok || !isRequested()) return null;
         return response.arrayBuffer();

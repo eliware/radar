@@ -1,4 +1,6 @@
-export const PAVED_SURFACES = "'ASPH', 'CONC', 'ASPH-CONC', 'CONC-ASPH', 'ASPH/CONC', 'CONC/ASPH'";
+import { PAVED_SURFACES } from "./airport/runway/surfaces.mjs";
+
+export { PAVED_SURFACES };
 
 export const AIRPORT_QUERY = `SELECT A.ARPT_ID AS faaId, A.ICAO_ID AS icao, A.ARPT_NAME AS name,
   A.CITY AS city, A.STATE_CODE AS state, A.COUNTRY_CODE AS country,
