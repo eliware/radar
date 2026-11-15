@@ -1,5 +1,7 @@
-const MAX_TRAIL_POINTS = 20;
-const MAX_TRAIL_AGE_MS = 60_000;
+import { RADAR_TARGET_STALE_MS } from "../radar/range.mjs";
+
+const MAX_TRAIL_POINTS = 120;
+const MAX_TRAIL_AGE_MS = RADAR_TARGET_STALE_MS;
 const MIN_MOVEMENT_NM = 0.005;
 
 export function createAircraftTrails(clock = Date.now) {
@@ -45,7 +47,7 @@ export function createAircraftTrails(clock = Date.now) {
 }
 
 function recentPoints(points, now) {
-  return points.filter((point) => now - point.recordedAt <= MAX_TRAIL_AGE_MS);
+  return points.filter((point) => now - point.recordedAt < MAX_TRAIL_AGE_MS);
 }
 
 function distance(a, b) {

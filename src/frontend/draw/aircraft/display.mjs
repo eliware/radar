@@ -17,10 +17,10 @@ export function drawAircraftDisplay(
 ) {
   return withAircraftDrawingStyle(context, () => {
     const palette = getRadarPalette(connected);
-    drawAircraftHistory(context, aircraft, fontSize, palette.trail);
+    const previousAlpha = context.globalAlpha ?? 1;
+    drawAircraftHistory(context, aircraft, palette.trail, now);
     context.fillStyle = palette.bright;
     context.strokeStyle = palette.bright;
-    const previousAlpha = context.globalAlpha ?? 1;
     for (const item of aircraft) {
       const color = displayColor(item, palette.bright, now);
       context.fillStyle = color;

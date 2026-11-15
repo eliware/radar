@@ -19,6 +19,13 @@ test("projects only history points visible to the camera", () => {
   ]);
 });
 
+test("preserves timestamps for fading projected history points", () => {
+  const history = new Map([["A1", [{ x: 1, y: 2, z: 3, recordedAt: 1200 }]]]);
+  expect(projectAircraftHistory(history, "A1", ({ x, z }) => ({ x, y: z }))).toEqual([
+    { x: 1, y: 3, recordedAt: 1200 },
+  ]);
+});
+
 test("returns empty history when an aircraft has no recorded trail", () => {
   expect(projectAircraftHistory(new Map(), "A1", (point) => point)).toEqual([]);
 });

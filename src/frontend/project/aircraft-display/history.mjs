@@ -1,5 +1,13 @@
 export function projectAircraftHistory(trails, icao, project) {
-  return (trails.get(icao) ?? []).map(project).filter(isVisible);
+  return (trails.get(icao) ?? [])
+    .map((point) => {
+      const projected = project(point);
+      if (!isVisible(projected)) return null;
+      return Number.isFinite(point.recordedAt)
+        ? { ...projected, recordedAt: point.recordedAt }
+        : projected;
+    })
+    .filter(Boolean);
 }
 
 function isVisible(point) {

@@ -66,7 +66,7 @@ The radar shows green symbols while connected. It shows dark gray symbols when t
 
 Labels show callsign, altitude, vertical trend, speed, and known type. If callsign is missing or a placeholder, the label uses the ICAO address. Aircraft marks and labels fade with age. Targets are removed after two minutes without an update.
 
-A predicted path lasts 60 seconds. History marks cover the last 60 seconds.
+A predicted path lasts 60 seconds. Hollow diamond history markers show aircraft locations from the previous two minutes and fade as they age.
 
 ADS-B altitude is barometric altitude. It may not match true altitude above mean sea level.
 
