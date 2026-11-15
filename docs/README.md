@@ -1,11 +1,10 @@
 # Radar user guides
 
-Radar is a browser-based aircraft tracking app and terminal client for ADS-B receiver data. It reads SBS/BaseStation streams. It does not decode radio signals. For installation, startup, network access, and shutdown instructions, see the Web API and radar view guide.
+Radar is a browser-based aircraft tracking app for decoded ADS-B receiver data. It reads SBS/BaseStation streams. It does not decode radio signals. For installation, startup, network access, and shutdown instructions, see the Web API and radar view guide.
 
 ## Guides
 
-- [ADS-B command-line tool](adsb-cli.md) explains commands, data connection settings, table fields, and errors.
-- [Configuration](configuration.md) lists web and CLI environment variables, defaults, and validation rules.
+- [Configuration](configuration.md) lists environment variables, defaults, and validation rules.
 - [FAA NASR data](nasr-data.md) explains airport, runway, navigation equipment, and procedure data.
 - [Linux Compose deployment](linux-compose.md) explains Docker setup, receiver access, app health, and operations.
 - [RTL1090 background task](rtl1090-background.md) explains receiver setup and Windows task control.

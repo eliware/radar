@@ -2,7 +2,7 @@
 
 ## @eliware/radar [![License](https://img.shields.io/github/license/eliware/radar)](https://github.com/eliware/radar/blob/main/LICENSE) [![CI](https://github.com/eliware/radar/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/radar/actions/workflows/ci.yaml)
 
-Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.
+Web-based aviation tracking app for decoded ADS-B data.
 
 ## Table of Contents
 
@@ -16,8 +16,6 @@ Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.
 - [Security](#security)
 - [Configuration](#configuration)
 - [Operations](#operations)
-- [Commands](#commands)
-- [Exit codes](#exit-codes)
 - [Routes](#routes)
 - [Assets](#assets)
 - [Development server](#development-server)
@@ -29,7 +27,7 @@ Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.
 
 ## Features
 
-See the [user guides](docs/README.md) for current web and CLI features.
+See the [user guides](docs/README.md) for web features and operations.
 
 ## Requirements
 
@@ -41,7 +39,7 @@ Follow [docs/README.md](docs/README.md) to install, configure, and run Radar.
 
 ## Usage
 
-Start the [web app](docs/web-api.md) or [CLI](docs/adsb-cli.md). See [release notes](RELEASE_NOTES.md) for released changes.
+Start the [web app](docs/web-api.md). See [release notes](RELEASE_NOTES.md) for released changes.
 
 ## Development
 
@@ -66,16 +64,6 @@ Set runtime options in `.env` or the process environment. See [.env.example](.en
 ## Operations
 
 Use the [Linux Compose guide](docs/linux-compose.md) or Windows [web task guide](docs/web-service-background.md) and [receiver guide](docs/rtl1090-background.md).
-
-## Commands
-
-- `node bin/adsb.mjs` starts the CLI.
-- `node bin/adsb.mjs --help` prints its options.
-- `node bin/adsb.mjs --version` prints the app version.
-
-## Exit codes
-
-The CLI returns `0` after help, version, or signal shutdown. It returns `1` after an unrecoverable error and `2` after invalid options.
 
 ## Routes
 

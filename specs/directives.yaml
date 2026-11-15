@@ -7,9 +7,7 @@ directives:
       - Keep the second SDR available to other apps.
       - Keep recent aircraft data in memory. Do not write aircraft data to files.
       - Parse all available stream fields into named values. Do not keep a rawLine field.
-      - Keep the CLI table as the default output. Redraw it every second.
-      - Print one aircraft JSON object for each stream update with `--debug`.
-      - Retry stream errors after two seconds. Write errors to standard error.
+      - Retry stream errors after two seconds.
       - Sort aircraft by distance from `ADSB_LAT` and `ADSB_LON`, with the closest aircraft first.
       - Calculate distance and bearing from decimal coordinates in `ADSB_LAT` and `ADSB_LON`.
       - Read `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` from `.env`. Default elevation to 300 feet.
@@ -22,24 +20,12 @@ directives:
       - Require HTTPS for mobile compass tracking outside trusted local origins.
       - Keep manual heading available when phone compass tracking is off.
       - Load `.env` settings with `dotenv`.
-      - Use the full terminal width for the CLI table. Give each field equal width.
-      - Use full field names on wide terminals. Use short names when the width is narrow.
-      - Use short headers to keep data on one line before wrapping fields.
-      - Use two header lines when short headers require more width. Add a third only if needed.
-      - Allow no more than three lines for each header or aircraft row.
-      - Show table headers once. Do not repeat headers in aircraft rows.
-      - Keep all table borders and column dividers aligned at each terminal width.
-      - Align the aircraft count divider with the last column divider under it.
-      - Use a double outer border and a double divider under the title row.
-      - Use Unicode box drawing lines.
-      - Show the aircraft count at the right side of the title row.
-      - Use single horizontal rules between aircraft rows and single column dividers.
-      - Keep CLI code in `src/cli/` and browser code in `src/frontend/`.
+      - Keep browser code in `src/frontend/`.
       - Keep server code in `src/backend/` and shared code in `src/shared/`.
       - Add one matching test for each source module.
       - Use Fastify for the web server. Provide HTTP routes and a WebSocket stream.
       - Provide `GET /health`, `GET /api/config`, and `GET /api/aircraft`.
-      - Send the same aircraft JSON schema on `/ws` that `--debug` prints.
+      - Send decoded aircraft records with the documented JSON schema on `/ws`.
       - Read FAA NASR airport and runway data from SQLite in read-only mode.
       - Return airports by distance band through `GET /api/airports`.
       - Return VOR, VOR/DME, and VORTAC records by distance band through `GET /api/navaids`.
@@ -255,7 +241,5 @@ directives:
     donts:
       - Read or decode raw SDR samples in the Radar app.
       - Write an aircraft JSON file for second app to monitor.
-      - Print the flight table in `--debug` mode.
-      - Use more than three view lines for a table header or aircraft row.
       - Replace the Three.js radar scene with a map renderer.
       - Add a server proxy or stable tile store for map requests.

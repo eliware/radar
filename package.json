@@ -2,7 +2,7 @@
   "name": "@eliware/radar",
   "version": "15.1.0",
   "type": "module",
-  "description": "Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
+  "description": "Web-based aviation tracking app for decoded ADS-B data.",
   "keywords": [
     "radar",
     "aviation",
@@ -12,14 +12,10 @@
     "sbs",
     "basestation",
     "tcp",
-    "cli",
     "web",
     "nodejs"
   ],
   "private": true,
-  "bin": {
-    "radar-adsb": "./bin/adsb.mjs"
-  },
   "files": [
     "bin/",
     "scripts/",
@@ -114,7 +110,6 @@
     "apply": [
       "general",
       "application",
-      "cli",
       "web"
     ]
   }

@@ -36,7 +36,7 @@ The API does not require authentication. Do not expose it to an untrusted networ
 
 ## WebSocket
 
-Connect to `ws://localhost:3000/ws` to receive aircraft JSON updates. Each update uses the CLI debug fields and adds lookup fields when available.
+Connect to `ws://localhost:3000/ws` to receive decoded aircraft JSON updates, with lookup fields added when available.
 
 While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every 15 seconds after success. If a response includes `Retry-After`, Radar follows the server's requested wait. Without a valid header, Radar applies exponential backoff with a five-minute limit. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
 

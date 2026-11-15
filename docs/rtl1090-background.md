@@ -50,7 +50,7 @@ Run this command to check the TCP listener:
 Get-NetTCPConnection -State Listen -LocalPort 30003
 ```
 
-A listener does not prove that aircraft updates appear. From the Radar repository, run `node bin/adsb.mjs --debug`. Confirm that JSON lines appear. Type `Ctrl+C` to end the CLI.
+A listener does not prove that aircraft updates appear. Open the Radar web app and confirm aircraft appear on the radar. If none appear, confirm that the receiver is connected and sending SBS/BaseStation records.
 
 ## Troubleshoot
 
@@ -58,6 +58,6 @@ A listener does not prove that aircraft updates appear. From the Radar repositor
 - Check that the USB driver can see the receiver.
 - Check that `rtl1090.ini` enables SBS/BaseStation output at endpoint `30003`.
 - If no listener appears there, stop and start the RTL1090 task.
-- If the endpoint listens but the CLI has no data, select the Table tab and close RTL1090 as usual.
+- If the endpoint listens but Radar has no aircraft, select the Table tab and close RTL1090 as usual.
 - If the receiver is unavailable at startup, start the tasks again after you connect it.
-- If the CLI continues to show no data, check the antenna and local aircraft traffic.
+- If Radar continues to show no aircraft, check the antenna and local aircraft traffic.

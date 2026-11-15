@@ -2,11 +2,11 @@
 
 ## Project
 
-Maintain @eliware/radar, Eliware's web app and CLI for decoded ADS-B data.
+Maintain @eliware/radar, Eliware's web app for decoded ADS-B data.
 
 ## Scope and boundaries
 
-Apply these instructions to this repository's application, CLI, tests, and documentation.
+Apply these instructions to this repository's application, tests, and documentation.
 
 ## Layout
 
@@ -37,10 +37,6 @@ Run one test file with `npm test -- tests/path/to/example.test.mjs`.
 Run multiple test files with `npm test -- tests/path/to/first.test.mjs tests/path/to/second.test.mjs`.
 Prevent repeated full-suite runs during development.
 Run the full `npm test` suite for final validation before a commit, milestone, or release.
-
-## CLI
-
-Keep command behavior, options, defaults, help, and exit codes documented in the user guides.
 
 ## Web
 

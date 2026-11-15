@@ -9,10 +9,11 @@ test("redraws when legend toggle keys are pressed and detaches cleanly", () => {
   };
   const redraw = jest.fn();
   const detach = attachRadarLegendRedraw(documentRef, redraw);
+  listeners.forEach((listener) => listener({ key: "L" }));
   listeners.forEach((listener) => listener({ key: "M" }));
   listeners.forEach((listener) => listener({ key: "f" }));
   listeners.forEach((listener) => listener({ key: "x" }));
-  expect(redraw).toHaveBeenCalledTimes(2);
+  expect(redraw).toHaveBeenCalledTimes(3);
   detach();
   expect(listeners.size).toBe(0);
 });

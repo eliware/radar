@@ -3,7 +3,7 @@
   "short_name": "Radar",
   "id": "/",
   "start_url": "/",
-  "description": "Web-based aviation tracking app and real-time ADS-B CLI for RTL-SDR receivers.",
+  "description": "Web-based aviation tracking app for decoded ADS-B data.",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
