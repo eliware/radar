@@ -4,9 +4,14 @@ import { createAircraftRadarLoop } from "../../../../../src/frontend/create/airc
 test("starts frame and expiry loops, then stops them", () => {
   const callbacks = [];
   const expiryCallbacks = [];
+  const controlListeners = new Map();
   let expired = [{ icao: "ABC123" }];
   const renderer = { render: jest.fn(), setSize: jest.fn() };
   const overlay = { draw: jest.fn() };
+  const controls = {
+    addEventListener: jest.fn((name, listener) => controlListeners.set(name, listener)),
+    removeEventListener: jest.fn(),
+  };
   const windowRef = {
     requestAnimationFrame: jest.fn((callback) => {
       callbacks.push(callback);
@@ -25,6 +30,7 @@ test("starts frame and expiry loops, then stops them", () => {
     targets: { items: () => new Map(), localDistances: () => [], prune: () => expired },
     trails: { remove: jest.fn() },
     windowRef,
+    controls,
     radarCamera: { setRange: jest.fn(), range: () => 20 },
     isAutoZoom: () => true,
     renderer,
@@ -38,12 +44,20 @@ test("starts frame and expiry loops, then stops them", () => {
   });
   callbacks[0](0);
   callbacks[1](50);
-  callbacks[2](100);
-  expect(overlay.draw).toHaveBeenCalledTimes(2);
+  controlListeners.get("change")();
+  callbacks[2](60);
+  callbacks[3](100);
+  callbacks[4](160);
+  expect(overlay.draw).toHaveBeenCalledTimes(3);
   expiryCallbacks[0]();
   expired = [];
   expiryCallbacks[0]();
   stop();
+  expect(controls.addEventListener).toHaveBeenCalledWith("change", expect.any(Function));
+  expect(controls.removeEventListener).toHaveBeenCalledWith(
+    "change",
+    controlListeners.get("change"),
+  );
   expect(windowRef.cancelAnimationFrame).toHaveBeenCalled();
   expect(windowRef.clearInterval).toHaveBeenCalledWith(5);
 });

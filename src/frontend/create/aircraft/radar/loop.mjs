@@ -9,6 +9,7 @@ export function createAircraftRadarLoop({
   trails,
   getTargetItems = () => targets.items(),
   windowRef,
+  controls,
   radarCamera,
   isAutoZoom,
   renderer,
@@ -38,6 +39,9 @@ export function createAircraftRadarLoop({
   isWaterVisible = () => true,
 }) {
   let lastOverlayFrame = null;
+  let overlayDirty = true;
+  const onCameraChange = () => (overlayDirty = true);
+  controls?.addEventListener("change", onCameraChange);
   const stopWatch = watchRadarTargets({
     targets,
     windowRef,
@@ -55,8 +59,10 @@ export function createAircraftRadarLoop({
     windowRef,
     onFrame: (time) => {
       const now = Number.isFinite(time) ? time : (windowRef.performance?.now?.() ?? Date.now());
-      if (lastOverlayFrame !== null && now - lastOverlayFrame < OVERLAY_REFRESH_MS) return;
+      if (!overlayDirty && lastOverlayFrame !== null && now - lastOverlayFrame < OVERLAY_REFRESH_MS)
+        return;
       lastOverlayFrame = now;
+      overlayDirty = false;
       overlay.draw(
         getTargetItems(),
         trails,
@@ -90,5 +96,6 @@ export function createAircraftRadarLoop({
   return () => {
     stopRender();
     stopWatch();
+    controls?.removeEventListener("change", onCameraChange);
   };
 }
