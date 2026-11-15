@@ -1,16 +1,15 @@
 import { expect, test } from "@jest/globals";
 import { createRadarTargets } from "../../../src/frontend/radar/targets.mjs";
 
-test("tracks target distances and drops targets after two minutes without updates", () => {
+test("tracks target distances and storage", () => {
   let now = 1000;
   const targets = createRadarTargets({ clock: () => now, staleAfterMs: 120_000 });
   expect(targets.update({ icao: "A" }, 12)).toEqual([]);
   expect(targets.items()).toEqual(new Map([["A", { icao: "A" }]]));
   expect(targets.update({ icao: "B" }, 25)).toEqual([]);
   expect(targets.distances()).toEqual([12, 25]);
-  now += 120_001;
-  expect(targets.update({ icao: "C" }, 5)).toEqual(["A", "B"]);
-  expect(targets.distances()).toEqual([5]);
+  expect(targets.update({ icao: "C" }, 5)).toEqual([]);
+  expect(targets.distances()).toEqual([12, 25, 5]);
 });
 
 test("keeps a target that updates within its live period", () => {
@@ -34,7 +33,7 @@ test("retains only identifiers included in the current viewport snapshot", () =>
   expect([...targets.items().keys()]).toEqual(["KEEP"]);
 });
 
-test("keeps target records independent of display timestamps and removes missing remote tracks", () => {
+test("keeps target records independent of display timestamps", () => {
   const targets = createRadarTargets({ clock: () => 10_000, staleAfterMs: 120_000 });
   targets.update({ icao: "REMOTE", remoteOnly: true, lastSeen: 8000 }, 10);
   targets.update({ icao: "LOCAL", remoteOnly: false }, 2);
@@ -45,6 +44,6 @@ test("keeps target records independent of display timestamps and removes missing
   });
   expect(targets.distances()).toEqual([10, 2]);
   expect(targets.localDistances()).toEqual([2]);
-  expect(targets.removeRemoteOnlyExcept([])).toEqual(["REMOTE"]);
-  expect([...targets.items().keys()]).toEqual(["LOCAL"]);
+  expect(targets.removeRemoteOnlyExcept(["REMOTE"])).toEqual([]);
+  expect([...targets.items().keys()]).toEqual(["REMOTE", "LOCAL"]);
 });

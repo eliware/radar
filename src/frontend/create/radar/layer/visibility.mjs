@@ -6,6 +6,7 @@ import { createReferenceVisibility } from "./references.mjs";
 import { createAircraftVisibility } from "../../aircraft-visibility.mjs";
 import { createLayerVisibilityStorage } from "./storage.mjs";
 import { attachRadarLayerShortcuts } from "./shortcuts.mjs";
+import { disposeRadarLayerVisibility } from "./dispose.mjs";
 
 export function createRadarLayerVisibility(documentRef, onChange, onReferenceChange) {
   const persistence = createLayerVisibilityStorage(onChange, onReferenceChange);
@@ -25,10 +26,7 @@ export function createRadarLayerVisibility(documentRef, onChange, onReferenceCha
     references,
     aircraft,
     destroy() {
-      ils.destroy();
-      procedures.destroy();
-      detachShortcuts();
-      aircraft.destroy();
+      disposeRadarLayerVisibility({ ils, procedures, aircraft, detachShortcuts });
     },
   };
 }

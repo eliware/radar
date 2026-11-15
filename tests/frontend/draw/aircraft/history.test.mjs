@@ -19,7 +19,7 @@ test("draws history diamonds before each aircraft's current position", () => {
   expect(context.lineTo).toHaveBeenNthCalledWith(4, 7, 4);
 });
 
-test("fades older history diamonds and restores the canvas opacity", () => {
+test("draws prepared history diamonds and restores the canvas opacity", () => {
   const context = Object.fromEntries(
     ["beginPath", "moveTo", "lineTo", "closePath", "stroke"].map((name) => [name, jest.fn()]),
   );
