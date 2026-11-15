@@ -136,4 +136,4 @@ npm run puppeteer
 RADAR_SCREENSHOT_VIEWPORTS=all npm run screenshots
 ```
 
-Images are written to `artifacts/screenshots/`. Use `RADAR_SCREENSHOT_URL`, `RADAR_SCREENSHOT_VIEWPORTS`, `RADAR_SCREENSHOT_MODES`, or `RADAR_SCREENSHOT_DIR` to select a server, viewport, mode, or output directory. The configured viewport names are defined in `src/frontend/responsive/screenshot-options.mjs`.
+Images are written to `artifacts/screenshots/`. Use `RADAR_SCREENSHOT_URL`, `RADAR_SCREENSHOT_VIEWPORTS`, `RADAR_SCREENSHOT_MODES`, or `RADAR_SCREENSHOT_DIR` to select a server, viewport, mode, or output directory. The configured viewport names are defined in `src/frontend/responsive/screenshot/viewports.mjs`.

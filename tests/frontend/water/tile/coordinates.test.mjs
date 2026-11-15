@@ -14,3 +14,13 @@ test("wraps longitude tiles at the antimeridian", () => {
   expect(tiles.length).toBeGreaterThan(0);
   expect(tiles.every(({ x }) => x >= 0 && x < 4)).toBe(true);
 });
+
+test.each([89, -89])(
+  "keeps polar tile rows inside the Web Mercator range at latitude %s",
+  (latitude) => {
+    const zoom = 4;
+    const tiles = selectWaterTiles({ latitude, longitude: 0 }, 300, zoom);
+    expect(tiles.length).toBeGreaterThan(0);
+    expect(tiles.every(({ y }) => y >= 0 && y < 2 ** zoom)).toBe(true);
+  },
+);

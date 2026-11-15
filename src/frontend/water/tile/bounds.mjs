@@ -7,11 +7,17 @@ export function calculateWaterTileBounds(center, rangeNm, tileZoom) {
   const maxLat = clampWaterLatitude(center.latitude + radius / 60);
   const longitudeRadius =
     radius / (60 * Math.max(0.05, Math.cos((center.latitude * Math.PI) / 180)));
-  return projectWaterTileRange(
+  const bounds = projectWaterTileRange(
     center.longitude - longitudeRadius,
     center.longitude + longitudeRadius,
     minLat,
     maxLat,
     tileZoom,
   );
+  const lastTile = 2 ** tileZoom - 1;
+  return {
+    ...bounds,
+    minY: Math.max(0, Math.min(lastTile, bounds.minY)),
+    maxY: Math.max(0, Math.min(lastTile, bounds.maxY)),
+  };
 }

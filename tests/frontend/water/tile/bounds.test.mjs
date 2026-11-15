@@ -11,7 +11,7 @@ test("clamps polar view bounds to the Web Mercator latitude limits", () => {
   const north = calculateWaterTileBounds({ latitude: 89, longitude: 0 }, 300, 2);
   const south = calculateWaterTileBounds({ latitude: -89, longitude: 0 }, 300, 2);
   expect(north.minY).toBeGreaterThanOrEqual(0);
-  expect(north.maxY).toBeLessThanOrEqual(4);
+  expect(north.maxY).toBeLessThanOrEqual(3);
   expect(south.minY).toBeGreaterThanOrEqual(0);
-  expect(south.maxY).toBeLessThanOrEqual(4);
+  expect(south.maxY).toBeLessThanOrEqual(3);
 });
