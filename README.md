@@ -83,7 +83,7 @@ Run `npm run build` to write the browser bundle to `dist/`.
 
 ## Deployment
 
-The `dev` deployment target runs `git pull`, `npm ci`, and `npm test`. It does not start or publish the app.
+The `dev` and `nas` deployment targets each run `git pull`, `npm ci`, and `npm test`. They do not start or publish the app.
 
 ## Support
 

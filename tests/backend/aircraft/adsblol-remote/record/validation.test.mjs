@@ -21,7 +21,18 @@ test("rejects records without identity, valid coordinates, or an observation age
   expect(validateRemoteAircraftRecord({ ...valid, hex: " " })).toBeNull();
   expect(validateRemoteAircraftRecord({ ...valid, lat: Number.NaN })).toBeNull();
   expect(validateRemoteAircraftRecord({ ...valid, lon: "-70" })).toBeNull();
+  expect(validateRemoteAircraftRecord({ ...valid, hex: "ABC12G" })).toBeNull();
+  expect(validateRemoteAircraftRecord({ ...valid, hex: 123456 })).toBeNull();
+  expect(validateRemoteAircraftRecord({ ...valid, lat: 90.1 })).toBeNull();
+  expect(validateRemoteAircraftRecord({ ...valid, lat: -90.1 })).toBeNull();
+  expect(validateRemoteAircraftRecord({ ...valid, lon: 180.1 })).toBeNull();
+  expect(validateRemoteAircraftRecord({ ...valid, lon: -180.1 })).toBeNull();
   expect(validateRemoteAircraftRecord({ ...valid, seen: undefined })).toBeNull();
+});
+
+test("accepts coordinates at the geographic boundaries", () => {
+  expect(validateRemoteAircraftRecord({ ...valid, lat: 90, lon: -180 })).not.toBeNull();
+  expect(validateRemoteAircraftRecord({ ...valid, lat: -90, lon: 180 })).not.toBeNull();
 });
 
 test("rejects negative and stale observation ages", () => {
