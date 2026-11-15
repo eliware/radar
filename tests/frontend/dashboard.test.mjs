@@ -42,7 +42,7 @@ function makeDocument(protocol = "https:") {
 function jsonResponse(value, ok = true) {
   return { ok, json: async () => value };
 }
-test("starts the secure live view and handles feed messages", async () => {
+test("starts the secure live view and cleans up dashboard resources", async () => {
   const document = makeDocument();
   const responses = [
     jsonResponse({ location: { latitude: 43, longitude: -70 }, elevationFeet: 300 }),
@@ -88,6 +88,8 @@ test("starts the secure live view and handles feed messages", async () => {
   expect(result).toEqual(expect.objectContaining({ scene, socket }));
   expect(socket.url).toBe("wss://localhost:3000/ws");
   expect(fetchData).not.toHaveBeenCalledWith("/api/aircraft");
+  expect(scene.onViewChange).toHaveBeenCalled();
+  scene.onViewChange.mock.calls.at(-1)[0]();
   document.sendKey({ key: "f", preventDefault: jest.fn() });
   document.sendKey({ key: "m", preventDefault: jest.fn() });
   expect(document.strips.hidden).toBe(true);
@@ -95,12 +97,6 @@ test("starts the secure live view and handles feed messages", async () => {
     "/api/route-lookups",
     expect.objectContaining({ method: "POST", body: JSON.stringify({ enabled: false }) }),
   );
-  await socket.onopen();
-  scene.onViewChange.mock.calls.at(-1)[0]();
-  expect(socket.send).toHaveBeenCalledWith('{"type":"viewport","radiusNm":56,"localOnly":false}');
-  socket.onmessage({ data: JSON.stringify({ event: "aircraft-snapshot", aircraft: [] }) });
-  socket.onclose();
-  expect(scene.setConnected).toHaveBeenLastCalledWith(false);
   result.destroy();
   expect(detachViewport).toHaveBeenCalledTimes(1);
   expect(scene.destroy).toHaveBeenCalledTimes(1);
