@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachRadarLegendClick } from "../../../src/frontend/attach/radar-legend-click.mjs";
+import { attachRadarLegendClick } from "../../../../src/frontend/attach/radar-legend/click.mjs";
 
 test("routes AIRCRAFT, METAR, flight, base, and ILS clicks through document key handlers", () => {
   const listeners = new Map();
@@ -27,8 +27,7 @@ test("routes AIRCRAFT, METAR, flight, base, and ILS clicks through document key 
       Object.assign(this, { type }, options);
     }
   }
-  const redraw = jest.fn();
-  const detach = attachRadarLegendClick(element, documentRef, { KeyboardEvent }, redraw);
+  const detach = attachRadarLegendClick(element, documentRef, { KeyboardEvent });
   const click = listeners.get("element:click");
   click({ clientX: 120, clientY: 74 });
   click({ clientX: 120, clientY: 330 });
@@ -37,7 +36,6 @@ test("routes AIRCRAFT, METAR, flight, base, and ILS clicks through document key 
   click({ clientX: 120, clientY: 218 });
 
   expect(keys).toEqual(["l", "m", "f", "b", "i"]);
-  expect(redraw).toHaveBeenCalledTimes(2);
   detach();
   expect(element.removeEventListener).toHaveBeenCalledWith("click", click);
   expect(documentListeners.size).toBe(0);
@@ -58,7 +56,7 @@ test("uses the same top inset for mobile 2D legend taps", () => {
       this.key = options.key;
     }
   }
-  attachRadarLegendClick(element, documentRef, { KeyboardEvent }, undefined, 48);
+  attachRadarLegendClick(element, documentRef, { KeyboardEvent }, 48);
   click({ clientX: 20, clientY: 72 });
   expect(documentRef.dispatchEvent.mock.calls[0][0].key).toBe("l");
 });
@@ -71,16 +69,13 @@ test("does not dispatch keyboard actions when a non-toggle legend item is clicke
     addEventListener: (type, listener) => clickListeners.set(type, listener),
     getBoundingClientRect: () => ({ left: 0, top: 0, width: 320, height: 400 }),
   };
-  let keyHandler;
   const documentRef = {
-    addEventListener: (_type, listener) => (keyHandler = listener),
-    dispatchEvent: jest.fn((event) => keyHandler(event)),
+    dispatchEvent: jest.fn(),
   };
   attachRadarLegendClick(element, documentRef, { KeyboardEvent: class {} });
   clickListeners.get("click")({ clientX: 200, clientY: 90 });
   expect(documentRef.dispatchEvent).not.toHaveBeenCalled();
   clickListeners.get("click")({ clientX: 20, clientY: 264 });
-  keyHandler({ key: "x" });
   expect(documentRef.dispatchEvent).toHaveBeenCalledTimes(1);
 });
 

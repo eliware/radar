@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { createAircraftTrails } from "../../../../../src/frontend/aircraft/trails.mjs";
+import { createAircraftReceiveTimes } from "../../../../../src/frontend/aircraft/receive-times.mjs";
 import { createRadarTargets } from "../../../../../src/frontend/radar/targets.mjs";
 import { updateCanvasRadarTarget } from "../../../../../src/frontend/create/canvas/radar/targets.mjs";
 import { updateCanvasRadarRemoteTargets } from "../../../../../src/frontend/create/canvas/radar/remote-targets.mjs";
@@ -10,8 +11,15 @@ const location = { latitude: 43, longitude: -70 };
 test("updates valid targets and leaves invalid targets unchanged", () => {
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
+  const receiveTimes = createAircraftReceiveTimes();
   expect(
-    updateCanvasRadarTarget({ icao: "A", latitude: 43, longitude: -69 }, location, targets, trails),
+    updateCanvasRadarTarget(
+      { icao: "A", latitude: 43, longitude: -69 },
+      location,
+      targets,
+      trails,
+      receiveTimes,
+    ),
   ).toBeTruthy();
   expect(
     updateCanvasRadarTarget(
@@ -22,7 +30,7 @@ test("updates valid targets and leaves invalid targets unchanged", () => {
     ),
   ).toBeFalsy();
   expect(targets.items().has("A")).toBe(true);
-  expect(listCanvasRadarTargets(targets, trails).has("A")).toBe(true);
+  expect(listCanvasRadarTargets(targets, receiveTimes).has("A")).toBe(true);
 });
 
 test("prunes expired targets when a newer local target arrives", () => {

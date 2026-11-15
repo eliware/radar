@@ -1,14 +1,17 @@
 import { updateAircraftTargetAndTrail } from "../../../aircraft/target-updates.mjs";
 
-export function updateCanvasRadarRemoteTargets(items, location, targets, trails) {
+export function updateCanvasRadarRemoteTargets(items, location, targets, trails, receiveTimes) {
   const remote = items.filter((item) => item.remoteOnly);
-  trails.remove(targets.removeRemoteOnlyExcept(remote.map((item) => item.icao)));
+  const removed = targets.removeRemoteOnlyExcept(remote.map((item) => item.icao));
+  trails.remove(removed);
+  receiveTimes?.remove(removed);
   for (const item of remote) {
     updateAircraftTargetAndTrail({
       aircraft: item,
       location,
       targets,
       trails,
+      receiveTimes,
       addTrail: false,
       removeExpiredTrails: false,
     });

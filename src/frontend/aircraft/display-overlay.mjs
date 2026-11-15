@@ -1,4 +1,4 @@
-import { attachRadarLegendClick } from "../attach/radar-legend-click.mjs";
+import { attachRadarLegendClick } from "../attach/radar-legend/click.mjs";
 import { createAircraftOverlayCanvas } from "./overlay/canvas.mjs";
 import { createOverlayDrawer } from "./overlay-draw.mjs";
 

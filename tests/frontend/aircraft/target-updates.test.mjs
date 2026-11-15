@@ -7,17 +7,20 @@ test("projects aircraft into a target and records its trail", () => {
   const aircraft = { icao: "ABC123", latitude: 43.1, longitude: -70, lastSeen: 10 };
   const targets = { update: jest.fn(() => ["EXPIRED"]) };
   const trails = { remove: jest.fn(), add: jest.fn() };
+  const receiveTimes = { remove: jest.fn(), set: jest.fn() };
   const result = updateAircraftTargetAndTrail({
     aircraft,
     location,
     elevationFeet: 300,
     targets,
     trails,
+    receiveTimes,
   });
   expect(result.distanceNm).toEqual(expect.any(Number));
   expect(targets.update).toHaveBeenCalledWith(aircraft, result.distanceNm);
   expect(trails.remove).toHaveBeenCalledWith(["EXPIRED"]);
-  expect(trails.add).toHaveBeenCalledWith("ABC123", result.position, 10);
+  expect(trails.add).toHaveBeenCalledWith("ABC123", result.position);
+  expect(receiveTimes.set).toHaveBeenCalledWith("ABC123", 10);
 });
 
 test("rejects invalid positions without changing targets or trails", () => {

@@ -6,6 +6,7 @@ export function updateAircraftTargetAndTrail({
   elevationFeet = 0,
   targets,
   trails,
+  receiveTimes,
   addTrail = true,
   removeExpiredTrails = true,
 }) {
@@ -13,7 +14,11 @@ export function updateAircraftTargetAndTrail({
   if (!position) return null;
   const distanceNm = Math.hypot(position.x, position.z);
   const expired = targets.update(aircraft, distanceNm);
-  if (removeExpiredTrails) trails.remove(expired);
-  if (addTrail) trails.add(aircraft.icao, position, aircraft.lastSeen);
+  if (removeExpiredTrails) {
+    trails.remove(expired);
+    receiveTimes?.remove(expired);
+  }
+  if (addTrail) trails.add(aircraft.icao, position);
+  receiveTimes?.set(aircraft.icao, aircraft.lastSeen);
   return { position, distanceNm };
 }

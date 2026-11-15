@@ -1,12 +1,7 @@
-import { findRadarLegendToggle } from "../draw/radar/legend/hit-test.mjs";
+import { findRadarLegendToggle } from "../../draw/radar/legend/hit-test.mjs";
 
-export function attachRadarLegendClick(element, documentRef, windowRef, redraw, topInset = 0) {
-  if (
-    !element?.addEventListener ||
-    !documentRef?.dispatchEvent ||
-    !documentRef?.addEventListener ||
-    !windowRef?.KeyboardEvent
-  )
+export function attachRadarLegendClick(element, documentRef, windowRef, topInset = 0) {
+  if (!element?.addEventListener || !documentRef?.dispatchEvent || !windowRef?.KeyboardEvent)
     return () => {};
   const onClick = (event) => {
     const rect = element.getBoundingClientRect();
@@ -21,13 +16,8 @@ export function attachRadarLegendClick(element, documentRef, windowRef, redraw, 
       new windowRef.KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }),
     );
   };
-  const onKeyDown = (event) => {
-    if (["m", "f"].includes(event.key?.toLowerCase())) redraw?.();
-  };
   element.addEventListener("click", onClick);
-  documentRef.addEventListener("keydown", onKeyDown);
   return () => {
     element.removeEventListener("click", onClick);
-    documentRef.removeEventListener("keydown", onKeyDown);
   };
 }

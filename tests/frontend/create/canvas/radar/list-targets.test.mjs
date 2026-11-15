@@ -4,6 +4,6 @@ import { listCanvasRadarTargets } from "../../../../../src/frontend/create/canva
 test("returns aircraft targets with their received timestamps", () => {
   const items = new Map([["ABC123", { icao: "ABC123" }]]);
   const targets = { items: () => items };
-  const trails = { withReceivedAt: (value) => new Map([...value, ["received", true]]) };
-  expect(listCanvasRadarTargets(targets, trails).get("received")).toBe(true);
+  const receiveTimes = { withReceivedAt: (value) => new Map([...value, ["received", true]]) };
+  expect(listCanvasRadarTargets(targets, receiveTimes).get("received")).toBe(true);
 });

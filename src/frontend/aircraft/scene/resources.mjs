@@ -6,6 +6,7 @@ import { DEFAULT_RADAR_RANGE } from "../../radar/range.mjs";
 import { createRadarTargets } from "../../radar/targets.mjs";
 import { createRadarSceneOverlays } from "../../radar/scene-overlays.mjs";
 import { createAircraftTrails } from "../trails.mjs";
+import { createAircraftReceiveTimes } from "../receive-times.mjs";
 import { createAircraftDisplayOverlay } from "../display-overlay.mjs";
 import { createRadarHome } from "../../create/radar/home.mjs";
 import { createAirspaceVolumes } from "../../create/airspace-volumes.mjs";
@@ -36,6 +37,7 @@ export function createAircraftSceneResources({
   const connection = createRadarConnectionState(setRadarConnected);
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
+  const receiveTimes = createAircraftReceiveTimes();
   const documentRef = browserWindow.document ?? globalThis.document;
   const layers = createRadarLayerVisibility(documentRef, undefined, airspace.setVisible);
   const overlay = createAircraftDisplayOverlay({
@@ -77,6 +79,7 @@ export function createAircraftSceneResources({
       elevationFeet,
       targets,
       trails,
+      receiveTimes,
       windowRef: browserWindow,
       radarCamera: radar.radarCamera,
       renderer,

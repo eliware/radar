@@ -60,7 +60,6 @@ test("draws projected aircraft and history over the scene, then removes its canv
   });
   expect(overlay.canvas).toBe(canvas);
   expect(container.addEventListener).toHaveBeenCalledWith("click", expect.any(Function));
-  expect(documentRef.addEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
   const ilsApproaches = new Map([
     [
       "PWM:11",
@@ -143,5 +142,4 @@ test("draws projected aircraft and history over the scene, then removes its canv
   overlay.destroy();
   expect(canvas.remove).toHaveBeenCalled();
   expect(container.removeEventListener).toHaveBeenCalledWith("click", expect.any(Function));
-  expect(documentRef.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
 });

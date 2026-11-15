@@ -6,6 +6,7 @@ export function createAircraftSceneUpdater({
   elevationFeet,
   targets,
   trails,
+  receiveTimes,
   radarCamera,
   isAutoZoom,
   defaultRangeNm,
@@ -17,6 +18,7 @@ export function createAircraftSceneUpdater({
       elevationFeet,
       targets,
       trails,
+      receiveTimes,
     });
     if (!update) return;
     if (!autoZoom || !isAutoZoom()) return;
@@ -25,18 +27,22 @@ export function createAircraftSceneUpdater({
   }
   update.updateRemote = (items) => {
     const remote = items.filter((item) => item.remoteOnly);
-    trails.remove(targets.removeRemoteOnlyExcept(remote.map((item) => item.icao)));
+    const removed = targets.removeRemoteOnlyExcept(remote.map((item) => item.icao));
+    trails.remove(removed);
+    receiveTimes?.remove(removed);
     remote.forEach((item) => update(item, false));
   };
   update.updateSnapshot = (items, localFurthestDistanceNm) => {
     const aircraft = Array.isArray(items) ? items : [];
-    trails.remove(targets.retain(aircraft.map((item) => item.icao)));
+    const removed = targets.retain(aircraft.map((item) => item.icao));
+    trails.remove(removed);
+    receiveTimes?.remove(removed);
     aircraft.forEach((item) => update(item, false));
     if (isAutoZoom() && Number.isFinite(localFurthestDistanceNm)) {
       const nextRange = selectDefaultRadarRange([localFurthestDistanceNm], defaultRangeNm);
       if (nextRange !== radarCamera.range()) radarCamera.setRange(nextRange);
     }
   };
-  update.items = () => trails.withReceivedAt(targets.items());
+  update.items = () => receiveTimes?.withReceivedAt(targets.items()) ?? targets.items();
   return update;
 }

@@ -5,7 +5,8 @@ import { watchRadarTargets } from "../../watch-radar-targets.mjs";
 import { createCanvasRadarGestures } from "../../create/canvas/radar/gestures.mjs";
 import { clampRadarRange } from "../../radar/clamp-range.mjs";
 import { selectDefaultRadarRange } from "../../radar/default-range.mjs";
-import { attachRadarLegendClick } from "../radar-legend-click.mjs";
+import { attachRadarLegendClick } from "../radar-legend/click.mjs";
+import { attachRadarLegendRedraw } from "../radar-legend/redraw.mjs";
 
 export function attachCanvasRadarEvents(
   canvas,
@@ -15,6 +16,7 @@ export function attachCanvasRadarEvents(
   trails,
   windowRef,
   legendTopInset = 0,
+  receiveTimes,
 ) {
   const gestures = attachMobileRadarGestures(canvas, createCanvasRadarGestures(state, draw));
   const pan = attachCanvasPan(canvas, (x, y) => {
@@ -29,6 +31,7 @@ export function attachCanvasRadarEvents(
     onTick: draw,
     onExpire: (expired) => {
       trails.remove(expired);
+      receiveTimes?.remove(expired);
       if (state.autoZoom)
         state.range = selectDefaultRadarRange(targets.localDistances(), state.defaultRangeNm);
       draw();
@@ -42,8 +45,8 @@ export function attachCanvasRadarEvents(
     canvas,
     windowRef.document ?? globalThis.document,
     windowRef,
-    draw,
     legendTopInset,
   );
-  return () => [refresh, watch, gestures, pan, legend].forEach((detach) => detach());
+  const legendRedraw = attachRadarLegendRedraw(windowRef.document ?? globalThis.document, draw);
+  return () => [refresh, watch, gestures, pan, legend, legendRedraw].forEach((detach) => detach());
 }

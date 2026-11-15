@@ -1,3 +1,3 @@
-export function listCanvasRadarTargets(targets, trails) {
-  return trails.withReceivedAt(targets.items());
+export function listCanvasRadarTargets(targets, receiveTimes) {
+  return receiveTimes.withReceivedAt(targets.items());
 }

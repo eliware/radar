@@ -6,13 +6,11 @@ const MIN_MOVEMENT_NM = 0.005;
 
 export function createAircraftTrails(clock = Date.now) {
   const trails = new Map();
-  const receivedAt = new Map();
   return {
-    add(icao, position, observedAt = clock()) {
+    add(icao, position) {
       if (!icao || !position || ![position.x, position.y, position.z].every(Number.isFinite))
         return;
       const now = clock();
-      receivedAt.set(icao, Number.isFinite(observedAt) ? observedAt : now);
       const points = recentPoints(trails.get(icao) ?? [], now);
       const last = points.at(-1);
       if (last && distance(last, position) < MIN_MOVEMENT_NM) return;
@@ -23,7 +21,6 @@ export function createAircraftTrails(clock = Date.now) {
     remove(icaos) {
       for (const icao of icaos) {
         trails.delete(icao);
-        receivedAt.delete(icao);
       }
     },
     get(icao) {
@@ -33,15 +30,6 @@ export function createAircraftTrails(clock = Date.now) {
     },
     clear() {
       trails.clear();
-      receivedAt.clear();
-    },
-    withReceivedAt(items) {
-      return new Map(
-        [...items].map(([icao, item]) => [
-          icao,
-          { ...item, receivedAt: receivedAt.get(icao) ?? item.lastSeen },
-        ]),
-      );
     },
   };
 }
