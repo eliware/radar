@@ -3,7 +3,11 @@ export function createRadarRenderer({ THREE, windowRef }) {
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true });
   } catch {
-    renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" });
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" });
+    } catch (error) {
+      throw new Error("WebGL context unavailable", { cause: error });
+    }
   }
   renderer.setPixelRatio(Math.min(windowRef.devicePixelRatio || 1, 2));
   return renderer;

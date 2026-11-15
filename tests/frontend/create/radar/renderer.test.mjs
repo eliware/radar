@@ -22,12 +22,18 @@ test("retries without antialiasing when the high quality context fails", () => {
 });
 
 test("preserves a clear failure when WebGL stays unavailable", () => {
+  const cause = new Error("unrecognized graphics initialization failure");
   const WebGLRenderer = jest.fn(() => {
-    throw new Error("WebGL unavailable");
+    throw cause;
   });
-  expect(() =>
-    createRadarRenderer({ THREE: { WebGLRenderer }, windowRef: { devicePixelRatio: 1 } }),
-  ).toThrow("WebGL unavailable");
+  let failure;
+  try {
+    createRadarRenderer({ THREE: { WebGLRenderer }, windowRef: { devicePixelRatio: 1 } });
+  } catch (error) {
+    failure = error;
+  }
+  expect(failure.message).toBe("WebGL context unavailable");
+  expect(failure.cause).toBe(cause);
 });
 
 test("uses a pixel ratio of one when the browser reports zero", () => {

@@ -10,6 +10,15 @@ export function createCameraProjector(THREE, camera) {
       if (depth < camera.near || depth > camera.far) return null;
     }
     projectedPosition.set(position.x, position.y, position.z).project(camera);
+    if (
+      !Number.isFinite(projectedPosition.x) ||
+      !Number.isFinite(projectedPosition.y) ||
+      projectedPosition.x < -1 ||
+      projectedPosition.x > 1 ||
+      projectedPosition.y < -1 ||
+      projectedPosition.y > 1
+    )
+      return null;
     return {
       x: ((projectedPosition.x + 1) * width) / 2,
       y: ((1 - projectedPosition.y) * height) / 2,

@@ -13,6 +13,7 @@ test("projects visible positions and rejects positions behind the camera", () =>
   expect(visible.x).toBeCloseTo(400);
   expect(visible.y).toBeCloseTo(300);
   expect(project({ x: 0, y: 30, z: 0 }, 800, 600)).toBeNull();
+  expect(project({ x: 100, y: 0, z: 0 }, 800, 600)).toBeNull();
 });
 
 test("projects positions for simple cameras without depth matrices", () => {
@@ -32,4 +33,20 @@ test("projects positions for simple cameras without depth matrices", () => {
     x: 50,
     y: 25,
   });
+});
+
+test("rejects non-finite projected screen coordinates", () => {
+  const THREEStub = {
+    Vector3: class {
+      set(x, y, z) {
+        Object.assign(this, { x, y, z });
+        return this;
+      }
+      project() {
+        this.x = Number.NaN;
+        return this;
+      }
+    },
+  };
+  expect(createCameraProjector(THREEStub, {})({ x: 0, y: 0, z: 0 }, 100, 50)).toBeNull();
 });

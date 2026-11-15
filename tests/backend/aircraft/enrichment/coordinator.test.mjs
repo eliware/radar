@@ -39,6 +39,22 @@ test("publishes aircraft first and adds lookup results to later updates", async 
   expect(state.lookup.getCallsignRoute).toHaveBeenCalledWith("BAW183");
 });
 
+test("shares one pending type lookup across repeated aircraft updates", async () => {
+  const state = createState();
+  let resolveType;
+  state.lookup.getAircraftType.mockImplementation(
+    () => new Promise((resolve) => (resolveType = resolve)),
+  );
+  const first = { icao: "ABC123", callsign: "BAW183" };
+  state.coordinator.update(first, state.publish);
+  state.coordinator.update({ ...first, altitudeFeet: 12000 }, state.publish);
+  expect(state.lookup.getAircraftType).toHaveBeenCalledTimes(1);
+  resolveType({ aircraftTypeCode: "B738" });
+  await Promise.resolve();
+  expect(state.changes.at(-1)).toMatchObject({ altitudeFeet: 12000, aircraftTypeCode: "B738" });
+  expect(state.changes.filter((item) => item.aircraftTypeCode === "B738")).toHaveLength(1);
+});
+
 test("skips aircraft without an ICAO and ignores unusable callsigns", async () => {
   const state = createState();
   state.coordinator.update({ callsign: "BAW183" }, state.publish);

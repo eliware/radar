@@ -25,3 +25,14 @@ test("expires stale records and clears the record map", () => {
   records.clear();
   expect(records.list()).toEqual([]);
 });
+
+test("prunes an expired record when a later poll adds a different aircraft", () => {
+  let now = 10_000;
+  const records = createAdsbLolTrackRecords({ clock: () => now });
+  records.set("STALE", { lastSeen: now });
+  now += 120_001;
+  const current = { lastSeen: now };
+  records.set("CURRENT", current);
+  expect(records.list()).toEqual([current]);
+  expect(records.get("STALE")).toBeUndefined();
+});

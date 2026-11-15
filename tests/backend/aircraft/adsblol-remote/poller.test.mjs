@@ -107,6 +107,21 @@ test("restarts at the normal interval after an old request finishes", async () =
   state.poller.close();
 });
 
+test("keeps polling when reconnect scheduling races with an old pending request", async () => {
+  let resolveOldRequest;
+  const state = setup({ poll: () => new Promise((resolve) => (resolveOldRequest = resolve)) });
+  state.poller.start();
+  const oldRequest = tick(state);
+  state.poller.stop();
+  state.poller.start();
+  await tick(state);
+  expect(state.timers.size).toBe(0);
+  resolveOldRequest();
+  await oldRequest;
+  expect([...state.timers.values()][0].delay).toBe(15000);
+  state.poller.close();
+});
+
 test("uses default timers and delays without clients", () => {
   const poller = createAdsbLolPoller({ poll: jest.fn(), hasClients: () => false });
   poller.start();

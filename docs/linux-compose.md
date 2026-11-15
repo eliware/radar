@@ -21,6 +21,8 @@ The FlightAware PiAware container also reads Beast data at private TCP endpoint 
 
 Flightradar24 uses the same readsb Beast endpoint, `30005`. After getting a sharing key, run `docker compose run --rm --no-deps --entrypoint /usr/bin/fr24feed fr24 --signup --configfile=/tmp/config.txt` interactively. Supply the account email and antenna location. Select Beast TCP, host `readsb`, and endpoint `30005`. Disable MLAT.
 
+This command runs the signup tool directly before a sharing key exists.
+
 Save the issued key as `FR24_KEY` in `.env` before starting the stack. Compose includes FR24 by default, and the container needs a configured key before startup. Without one, FR24 does not send data. MLAT is disabled in Compose. Do not enable it while sharing with other networks. Flightradar24 recommends this.
 
 The ADSB.lol Ultrafeeder container runs in network-only mode. It forwards readsb Beast data from endpoint `30005` to ADSB.lol. It does not access the SDR or change Radar's SBS connection.
@@ -131,7 +133,7 @@ With the stack running, install Puppeteer's Chrome and capture both above-fold a
 ```sh
 npm ci
 npm run puppeteer
-npm run screenshots
+RADAR_SCREENSHOT_VIEWPORTS=all npm run screenshots
 ```
 
 Images are written to `artifacts/screenshots/`. Use `RADAR_SCREENSHOT_URL`, `RADAR_SCREENSHOT_VIEWPORTS`, `RADAR_SCREENSHOT_MODES`, or `RADAR_SCREENSHOT_DIR` to select a server, viewport, mode, or output directory. The configured viewport names are defined in `src/frontend/responsive/screenshot-options.mjs`.
