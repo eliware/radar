@@ -3,5 +3,7 @@ import { formatAircraftStripHeading } from "../../../../src/shared/aircraft/stri
 
 test("formats shared flight strip heading", () => {
   expect(formatAircraftStripHeading({ trackDegrees: 359.6 })).toBe("000°");
+  expect(formatAircraftStripHeading({ trackDegrees: -1 })).toBe("359°");
+  expect(formatAircraftStripHeading({ trackDegrees: -360 })).toBe("000°");
   expect(formatAircraftStripHeading({ trackDegrees: Number.NaN })).toBe("-");
 });

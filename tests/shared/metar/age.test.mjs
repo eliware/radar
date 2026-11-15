@@ -6,6 +6,9 @@ test("calculates METAR age and handles invalid observations", () => {
   expect(getMetarAgeMinutes("13 17:00Z", now)).toBe(60);
   expect(getMetarAgeMinutes("13 16:59Z", now)).toBe(61);
   expect(getMetarAgeMinutes("bad", now)).toBeNull();
+  expect(getMetarAgeMinutes("99 12:00Z", now)).toBeNull();
+  expect(getMetarAgeMinutes("13 24:00Z", now)).toBeNull();
+  expect(getMetarAgeMinutes("13 12:60Z", now)).toBeNull();
   expect(getMetarAgeMinutes("bad")).toBeNull();
 });
 
