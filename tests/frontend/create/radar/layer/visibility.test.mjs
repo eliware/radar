@@ -16,11 +16,12 @@ test("creates visible layers and destroys all keyboard listeners", () => {
   });
   const removed = [];
   const listeners = [];
+  const onLocalOnlyChange = jest.fn();
   const documentRef = {
     addEventListener: (_type, listener) => listeners.push(listener),
     removeEventListener: (_type, callback) => removed.push(callback),
   };
-  const layers = createRadarLayerVisibility(documentRef, jest.fn());
+  const layers = createRadarLayerVisibility(documentRef, jest.fn(), undefined, onLocalOnlyChange);
   expect(layers.ils.isVisible()).toBe(false);
   expect(layers.procedures.isSidVisible()).toBe(true);
   expect(layers.procedures.isStarVisible()).toBe(true);
@@ -45,6 +46,7 @@ test("creates visible layers and destroys all keyboard listeners", () => {
   expect(layers.references.isAirportsVisible()).toBe(false);
   expect(layers.references.isNavaidsVisible()).toBe(false);
   expect(layers.aircraft.isLocalOnly()).toBe(true);
+  expect(onLocalOnlyChange).toHaveBeenCalledWith({ localOnly: true });
   expect(stored.get("radar.visibility.ils")).toBe("true");
   layers.destroy();
   expect(removed).toHaveLength(4);

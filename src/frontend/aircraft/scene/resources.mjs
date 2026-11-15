@@ -39,7 +39,17 @@ export function createAircraftSceneResources({
   const trails = createAircraftTrails();
   const receiveTimes = createAircraftReceiveTimes();
   const documentRef = browserWindow.document ?? globalThis.document;
-  const layers = createRadarLayerVisibility(documentRef, undefined, airspace.setVisible);
+  const layers = createRadarLayerVisibility(
+    documentRef,
+    undefined,
+    airspace.setVisible,
+    ({ localOnly }) => {
+      if (!localOnly) return;
+      const removed = targets.removeRemoteOnlyExcept([]);
+      trails.remove(removed);
+      receiveTimes.remove(removed);
+    },
+  );
   const overlay = createAircraftDisplayOverlay({
     THREE,
     container,

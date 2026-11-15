@@ -36,10 +36,12 @@ export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/fr
   const airspace = { update: jest.fn(), dispose: jest.fn() };
   const targets = {
     update: jest.fn(() => []),
+    removeRemoteOnlyExcept: jest.fn(() => []),
     localDistances: jest.fn(() => []),
     items: jest.fn(() => []),
   };
   const trails = { add: jest.fn(), remove: jest.fn() };
+  const receiveTimes = { remove: jest.fn() };
   const overlay = { draw: jest.fn(), destroy: jest.fn() };
   const stopRadarLoops = jest.fn();
   const radarCamera = {
@@ -93,6 +95,7 @@ export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/fr
     createRadarCamera: jest.fn(() => radarCamera),
     createRadarTargets: jest.fn(() => targets),
     createAircraftTrails: jest.fn(() => trails),
+    createAircraftReceiveTimes: jest.fn(() => receiveTimes),
     createAircraftDisplayOverlay: jest.fn(() => overlay),
     createAircraftRadarLoop: jest.fn(() => stopRadarLoops),
     createRadarReferenceStore: jest.fn(() => references),
@@ -106,6 +109,7 @@ export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/fr
     createRadarCamera: "radar/camera",
     createRadarTargets: "radar/targets",
     createAircraftTrails: "aircraft/trails",
+    createAircraftReceiveTimes: "aircraft/receive-times",
     createAircraftDisplayOverlay: "aircraft/display-overlay",
     createAircraftRadarLoop: "create/aircraft/radar/loop",
     createRadarReferenceStore: "radar/reference/store",
@@ -150,6 +154,7 @@ export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/fr
     airspace,
     targets,
     trails,
+    receiveTimes,
     overlay,
     stopRadarLoops,
     radarCamera,
