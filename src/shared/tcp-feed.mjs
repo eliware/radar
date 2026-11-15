@@ -17,25 +17,38 @@ export function connectSbsFeed({
   let closed = false;
   let connected = false;
 
+  function scheduleRetry(error, connection, cleanup) {
+    if (closed || connection?.retryScheduled) return;
+    if (connection) connection.retryScheduled = true;
+    connected = false;
+    activeConnection = undefined;
+    onError(error);
+    cleanup();
+    retryTimer = timerFactory(() => {
+      retryTimer = undefined;
+      connect();
+    }, retryDelayMs);
+  }
+
   function connect() {
     if (closed) return;
-    const socket = connectionFactory({ host, port });
-    const reader = lineReaderFactory({ input: socket });
+    let socket;
+    let reader;
+    try {
+      socket = connectionFactory({ host, port });
+      reader = lineReaderFactory({ input: socket });
+    } catch (error) {
+      scheduleRetry(error, undefined, () => socket?.destroy());
+      return;
+    }
     const connection = { socket, reader, retryScheduled: false };
     activeConnection = connection;
 
     function retry(error) {
-      if (closed || connection.retryScheduled) return;
-      connection.retryScheduled = true;
-      connected = false;
-      activeConnection = undefined;
-      onError(error);
-      reader.close();
-      socket.destroy();
-      retryTimer = timerFactory(() => {
-        retryTimer = undefined;
-        connect();
-      }, retryDelayMs);
+      scheduleRetry(error, connection, () => {
+        reader.close();
+        socket.destroy();
+      });
     }
 
     reader.on("line", onLine);

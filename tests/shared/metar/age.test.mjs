@@ -17,3 +17,7 @@ test("handles month and year rollover and future observations", () => {
   expect(getMetarAgeMinutes("31 23:00Z", new Date("2026-01-01T00:10:00Z"))).toBe(70);
   expect(getMetarAgeMinutes("13 23:00Z", new Date("2026-10-13T18:00:00Z"))).toBe(0);
 });
+
+test("finds the prior occurrence when the previous month had fewer days", () => {
+  expect(getMetarAgeMinutes("31 23:00Z", new Date("2026-10-01T00:10:00Z"))).toBe(43_270);
+});

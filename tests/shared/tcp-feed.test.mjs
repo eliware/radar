@@ -91,6 +91,48 @@ test("retries after a socket close and cancels retry on close", () => {
   expect(reader.close).toHaveBeenCalledTimes(1);
 });
 
+test("retries when either connection factory throws synchronously", () => {
+  const firstSocket = new EventEmitter();
+  firstSocket.destroy = jest.fn();
+  const secondSocket = new EventEmitter();
+  secondSocket.destroy = jest.fn();
+  const reader = new EventEmitter();
+  reader.close = jest.fn();
+  const retries = [];
+  const errors = jest.fn();
+  let connectionAttempts = 0;
+  let readerAttempts = 0;
+  const feed = connectSbsFeed({
+    host: "localhost",
+    port: 30003,
+    onLine: jest.fn(),
+    onError: errors,
+    connectionFactory: () => {
+      connectionAttempts += 1;
+      if (connectionAttempts === 1) throw new Error("connection factory failed");
+      return connectionAttempts === 2 ? firstSocket : secondSocket;
+    },
+    lineReaderFactory: () => {
+      readerAttempts += 1;
+      if (readerAttempts === 1) throw new Error("reader factory failed");
+      return reader;
+    },
+    timerFactory: (callback) => (retries.push(callback), retries.length),
+    clearTimer: jest.fn(),
+  });
+
+  expect(errors).toHaveBeenCalledWith(new Error("connection factory failed"));
+  retries.shift()();
+  expect(errors).toHaveBeenCalledWith(new Error("reader factory failed"));
+  expect(firstSocket.destroy).toHaveBeenCalledTimes(1);
+  retries.shift()();
+  expect(connectionAttempts).toBe(3);
+  expect(readerAttempts).toBe(2);
+  feed.close();
+  expect(reader.close).toHaveBeenCalledTimes(1);
+  expect(secondSocket.destroy).toHaveBeenCalledTimes(1);
+});
+
 test("uses the built-in TCP and line reader factories", () => {
   const feed = connectSbsFeed({
     host: "127.0.0.1",
