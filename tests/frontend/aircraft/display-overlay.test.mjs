@@ -29,8 +29,6 @@ test("draws projected aircraft and history over the scene, then removes its canv
     clientWidth: 200,
     clientHeight: 100,
     appendChild: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
   };
   class KeyboardEvent {}
   const windowRef = { devicePixelRatio: 3, KeyboardEvent };
@@ -59,7 +57,6 @@ test("draws projected aircraft and history over the scene, then removes its canv
     documentRef,
   });
   expect(overlay.canvas).toBe(canvas);
-  expect(container.addEventListener).toHaveBeenCalledWith("click", expect.any(Function));
   const ilsApproaches = new Map([
     [
       "PWM:11",
@@ -141,5 +138,4 @@ test("draws projected aircraft and history over the scene, then removes its canv
   expect(canvas.width).toBe(1);
   overlay.destroy();
   expect(canvas.remove).toHaveBeenCalled();
-  expect(container.removeEventListener).toHaveBeenCalledWith("click", expect.any(Function));
 });

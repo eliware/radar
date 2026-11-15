@@ -1,5 +1,5 @@
-import { buildFlightStripData } from "./flight/strip/data.mjs";
-import { renderFlightStripMarkup } from "./flight/strip/renderer.mjs";
+import { buildFlightStripData } from "./data.mjs";
+import { renderFlightStripMarkup } from "./renderer.mjs";
 
 export function renderFlightStrips(container, aircraft, width, now = Date.now()) {
   if (!container) return;

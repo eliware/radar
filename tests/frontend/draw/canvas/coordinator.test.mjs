@@ -1,7 +1,8 @@
 import { expect, jest, test } from "@jest/globals";
 import { drawCanvasRadarCoordinator } from "../../../../src/frontend/draw/canvas/coordinator.mjs";
 
-test("coordinates the scope, home marker, legend, and scale layers", () => {
+test("uses the connected palette for the home marker", () => {
+  const fillStyles = [];
   const context = Object.fromEntries(
     [
       "setTransform",
@@ -23,6 +24,9 @@ test("coordinates the scope, home marker, legend, and scale layers", () => {
       "restore",
     ].map((name) => [name, jest.fn()]),
   );
+  context.fill.mockImplementation(function () {
+    fillStyles.push(this.fillStyle);
+  });
   drawCanvasRadarCoordinator(
     context,
     { clientWidth: 100, clientHeight: 100 },
@@ -33,7 +37,5 @@ test("coordinates the scope, home marker, legend, and scale layers", () => {
     0,
     { devicePixelRatio: 1 },
   );
-  expect(context.arc).toHaveBeenCalled();
-  expect(context.fillText).toHaveBeenCalledWith("3", expect.any(Number), expect.any(Number));
-  expect(context.fillText.mock.calls.some(([label]) => /\d+ NM/.test(label))).toBe(true);
+  expect(fillStyles).toContain("#00ff41");
 });

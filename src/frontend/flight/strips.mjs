@@ -1,5 +1,5 @@
 import { createFlightStripAircraftStore } from "./aircraft-store.mjs";
-import { renderFlightStrips } from "../render-flight-strips.mjs";
+import { renderFlightStrips } from "./strip/dom-renderer.mjs";
 import { scheduleFlightStripRefresh } from "./strip/scheduling.mjs";
 
 export function createFlightStripView(container, windowRef, clock = Date.now) {
