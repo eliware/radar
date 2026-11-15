@@ -1,10 +1,10 @@
 import { expect, jest, test } from "@jest/globals";
 import { createAdsbLolClientLifecycle } from "../../../../src/backend/aircraft/adsblol-remote/client-lifecycle.mjs";
-import { createAdsbLolClients } from "../../../../src/backend/aircraft/adsblol-remote/clients.mjs";
+import { createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
 import { getAdsbLolPollingPolicy } from "../../../../src/backend/aircraft/adsblol-remote/policy.mjs";
 
 function setup() {
-  const clients = createAdsbLolClients(25, 300);
+  const clients = createAircraftClientState(25, 300);
   const poller = { start: jest.fn(), stop: jest.fn(), close: jest.fn() };
   const aircraft = { clear: jest.fn() };
   const publish = jest.fn();

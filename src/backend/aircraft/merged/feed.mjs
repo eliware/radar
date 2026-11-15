@@ -4,10 +4,9 @@ import { createMergedAircraftRuntime } from "./runtime.mjs";
 export function createMergedAircraftFeed(
   localFeed,
   remoteSource,
-  { defaultRangeNm = 20, setIntervalFn = setInterval, clearIntervalFn = clearInterval } = {},
+  { setIntervalFn = setInterval, clearIntervalFn = clearInterval } = {},
 ) {
   const runtime = createMergedAircraftRuntime(localFeed, remoteSource, {
-    defaultRangeNm,
     setIntervalFn,
     clearIntervalFn,
   });
@@ -35,14 +34,14 @@ export function createMergedAircraftFeed(
     },
     subscribe(send, key = Symbol("feed-client")) {
       if (closed) return () => false;
-      clients.add(key, send);
+      clients.connect(key, send);
       remoteSource.connectClient(key);
       snapshots.start();
       let active = true;
       return () => {
         if (!active) return false;
         active = false;
-        clients.remove(key);
+        clients.disconnect(key);
         remoteSource.disconnectClient(key);
         if (!clients.size) snapshots.stop();
         return true;

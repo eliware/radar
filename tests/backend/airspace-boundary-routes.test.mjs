@@ -11,27 +11,6 @@ function route(database, location = { latitude: 43, longitude: -70 }) {
   return routes.get("/api/airspace-boundaries");
 }
 
-test("reports missing NASR data", async () => {
-  const reply = {
-    code: jest.fn(function (status) {
-      this.status = status;
-      return this;
-    }),
-    send: jest.fn(),
-  };
-  await route(null)({ query: { maxRangeNm: "20" } }, reply);
-  expect(reply.code).toHaveBeenCalledWith(503);
-});
-
-test("rejects a missing home location", async () => {
-  const reply = {
-    code: jest.fn(function (status) {
-      this.status = status;
-      return this;
-    }),
-    send: jest.fn(),
-  };
-  await route({ findBoundariesBetween: jest.fn() }, null)({ query: { maxRangeNm: "20" } }, reply);
-  expect(reply.code).toHaveBeenCalledWith(503);
-  expect(reply.send).toHaveBeenCalledWith({ error: "Home location is not configured." });
+test("registers the airspace boundary endpoint", () => {
+  expect(route({ findBoundariesBetween: jest.fn() })).toBeInstanceOf(Function);
 });

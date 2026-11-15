@@ -8,8 +8,7 @@ export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} 
     const stored = aircraft.get(mapped.icao);
     if (stored?.origin && stored?.destination) return;
     routeLookup.request(mapped, aircraft, (result) => {
-      applyAdsbLolRouteResult(aircraft, mapped.icao, result);
-      onRouteUpdate();
+      applyAdsbLolRouteResult(aircraft, mapped.icao, result, onRouteUpdate);
     });
   }
 

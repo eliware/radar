@@ -126,3 +126,47 @@ test("forwards range bands and rejects invalid ranges through registered routes"
     }
   }
 });
+
+test("reports missing database and home configuration for every range route", async () => {
+  const location = { latitude: 43, longitude: -70 };
+  const routesFor = (airportDatabase, home = location) => {
+    const routes = new Map();
+    registerApiRoutes(
+      {
+        get: (path, handler) => routes.set(path, handler),
+        post: (path, handler) => routes.set(path, handler),
+      },
+      { list: () => [] },
+      { location: home, airportDatabase },
+    );
+    return routes;
+  };
+  const paths = [
+    "/api/airports",
+    "/api/navaids",
+    "/api/ils",
+    "/api/procedures",
+    "/api/airways",
+    "/api/airspace-boundaries",
+  ];
+  for (const [routes, expectedError] of [
+    [routesFor(null), "NASR database is not available."],
+    [routesFor({}, null), "Home location is not configured."],
+  ]) {
+    for (const path of paths) {
+      const reply = {
+        code: jest.fn(function (status) {
+          this.status = status;
+          return this;
+        }),
+        send: jest.fn(function (body) {
+          this.body = body;
+          return this;
+        }),
+      };
+      await routes.get(path)({ query: { maxRangeNm: "20" } }, reply);
+      expect(reply.status).toBe(503);
+      expect(reply.body).toEqual({ error: expectedError });
+    }
+  }
+});

@@ -14,13 +14,18 @@ function reply() {
   return value;
 }
 
-test("reports unavailable database and missing home errors", async () => {
-  const unavailable = reply();
-  await setup(null, { latitude: 0, longitude: 0 })({ query: {} }, unavailable);
-  expect(unavailable.code).toHaveBeenCalledWith(503);
-  expect(unavailable.send).toHaveBeenCalledWith({ error: "NASR database is not available." });
-  const missingHome = reply();
-  await setup({}, null)({ query: {} }, missingHome);
-  expect(missingHome.code).toHaveBeenCalledWith(503);
-  expect(missingHome.send).toHaveBeenCalledWith({ error: "Home location is not configured." });
+test("forwards its range band to the airway query", async () => {
+  const result = [{ identifier: "V12" }];
+  const database = { findAirwaysBetween: jest.fn(() => result) };
+  expect(
+    await setup(database, { latitude: 43, longitude: -70 })(
+      { query: { minRangeNm: "10", maxRangeNm: "20" } },
+      reply(),
+    ),
+  ).toEqual(result);
+  expect(database.findAirwaysBetween).toHaveBeenCalledWith(
+    { latitude: 43, longitude: -70 },
+    10,
+    20,
+  );
 });

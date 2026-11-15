@@ -1,5 +1,5 @@
 import { createAdsbLolAircraftStore } from "./aircraft-store.mjs";
-import { createAdsbLolClients } from "./clients.mjs";
+import { createAircraftClientState } from "../client-state.mjs";
 import { getAdsbLolPollingPolicy } from "./policy.mjs";
 import { createAdsbLolSubscribers } from "./subscribers.mjs";
 import { createAdsbLolClientLifecycle } from "./client-lifecycle.mjs";
@@ -19,7 +19,7 @@ export function createAdsbLolRemoteSource({
   onError = () => {},
   onRequest = () => {},
 }) {
-  const clients = createAdsbLolClients(defaultRangeNm, MAX_RADIUS_NM);
+  const clients = createAircraftClientState(defaultRangeNm, MAX_RADIUS_NM);
   const pollingPolicy = () => getAdsbLolPollingPolicy(clients, MAX_RADIUS_NM);
   let publish;
   const aircraft = createAdsbLolAircraftStore({
@@ -29,7 +29,7 @@ export function createAdsbLolRemoteSource({
     onRouteUpdate: () => publish(),
   });
   const subscribers = createAdsbLolSubscribers(aircraft.list);
-  const sourceApi = createAdsbLolRemoteSourceApi({ aircraft, subscribers });
+  const sourceApi = createAdsbLolRemoteSourceApi({ aircraft, subscribers, clients });
   publish = sourceApi.publish;
   const poller = createAdsbLolRemotePolling({
     location,

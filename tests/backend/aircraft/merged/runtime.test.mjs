@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { createMergedAircraftRuntime } from "../../../../src/backend/aircraft/merged/runtime.mjs";
+import { createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
 
 test("assembles merged state, clients, publishing, and snapshot timing", () => {
   let localItems = [{ icao: "LOCAL1", distanceNauticalMiles: 2 }];
@@ -9,12 +10,12 @@ test("assembles merged state, clients, publishing, and snapshot timing", () => {
   const clearIntervalFn = jest.fn();
   const runtime = createMergedAircraftRuntime(
     { list: () => localItems },
-    { list: () => remoteItems },
+    { list: () => remoteItems, clientState: createAircraftClientState(10) },
     { defaultRangeNm: 10, setIntervalFn, clearIntervalFn },
   );
   expect(runtime.state.list().map(({ icao }) => icao)).toEqual(["LOCAL1", "REMOTE1"]);
   const send = jest.fn();
-  runtime.clients.add("client", send);
+  runtime.clients.connect("client", send);
   runtime.snapshots.start();
   timerCallback();
   expect(send).toHaveBeenCalledWith(
@@ -35,6 +36,9 @@ test("assembles merged state, clients, publishing, and snapshot timing", () => {
 });
 
 test("uses default range and timer functions when options are omitted", () => {
-  const runtime = createMergedAircraftRuntime({ list: () => [] }, { list: () => [] });
+  const runtime = createMergedAircraftRuntime(
+    { list: () => [] },
+    { list: () => [], clientState: createAircraftClientState(20) },
+  );
   expect(runtime.state.list()).toEqual([]);
 });

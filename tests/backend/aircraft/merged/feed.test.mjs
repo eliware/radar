@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { createMergedAircraftFeed } from "../../../../src/backend/aircraft/merged/feed.mjs";
+import { createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
 
 function setup() {
   let localItems = [{ icao: "ABC123", distanceNauticalMiles: 4, altitudeFeet: 12000 }];
@@ -18,6 +19,7 @@ function setup() {
     setRouteLookupsEnabled: jest.fn(),
   };
   const remoteSource = {
+    clientState: createAircraftClientState(10),
     list: () => remoteItems,
     subscribe: jest.fn((listener) => ((onRemote = listener), jest.fn())),
     connectClient: jest.fn(),
@@ -132,6 +134,7 @@ test("closes without clients and rejects subscribers after close", () => {
 test("uses built-in timers when no options object is provided", () => {
   const localFeed = { list: () => [], isReady: () => true, subscribe: () => () => {} };
   const remoteSource = {
+    clientState: createAircraftClientState(20),
     list: () => [],
     subscribe: () => () => {},
     connectClient: jest.fn(),
@@ -168,6 +171,7 @@ test("filters missing and out-of-range aircraft and supports default options", (
   const subscriber = jest.fn();
   const localFeed = { list: () => [], isReady: () => true, subscribe: () => () => {} };
   const remoteSource = {
+    clientState: createAircraftClientState(20),
     list: () => [
       { icao: "UNKNOWN", remoteOnly: true },
       { icao: "FAR999", distanceNauticalMiles: 50, remoteOnly: true },

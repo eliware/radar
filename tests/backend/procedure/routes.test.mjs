@@ -35,25 +35,3 @@ test("returns routes for a valid distance band", async () => {
     20,
   );
 });
-
-test("reports missing database and location", async () => {
-  const noDatabase = reply();
-  await setup(null).handler({ query: { maxRangeNm: "20" } }, noDatabase);
-  expect(noDatabase.code).toHaveBeenCalledWith(503);
-  const noLocation = reply();
-  await setup({ findProceduresBetween: jest.fn() }, null).handler(
-    { query: { maxRangeNm: "20" } },
-    noLocation,
-  );
-  expect(noLocation.code).toHaveBeenCalledWith(503);
-});
-
-test("reports the route-specific invalid range message", async () => {
-  const { handler } = setup();
-  const response = reply();
-  await handler({ query: { minRangeNm: "20", maxRangeNm: "20" } }, response);
-  expect(response.code).toHaveBeenCalledWith(400);
-  expect(response.send).toHaveBeenCalledWith({
-    error: "Use a valid range from 0 to 300 nautical miles.",
-  });
-});

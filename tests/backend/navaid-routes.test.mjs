@@ -18,28 +18,3 @@ test("returns navaids in the requested range band", async () => {
   );
   expect(result).toEqual(navaids);
 });
-
-test("reports unavailable data", async () => {
-  const reply = {
-    code: jest.fn(function (status) {
-      this.status = status;
-      return this;
-    }),
-    send: jest.fn(),
-  };
-  await route(null)({ query: { maxRangeNm: "20" } }, reply);
-  expect(reply.code).toHaveBeenCalledWith(503);
-});
-
-test("rejects a missing home location", async () => {
-  const reply = {
-    code: jest.fn(function (status) {
-      this.status = status;
-      return this;
-    }),
-    send: jest.fn(),
-  };
-  await route({ findNavaidsBetween: jest.fn() }, null)({ query: { maxRangeNm: "20" } }, reply);
-  expect(reply.code).toHaveBeenCalledWith(503);
-  expect(reply.send).toHaveBeenCalledWith({ error: "Home location is not configured." });
-});

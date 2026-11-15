@@ -1,20 +1,25 @@
-import { filterAircraftSnapshot } from "./snapshot/filter.mjs";
+import { filterAircraftSnapshot } from "./merged/snapshot/filter.mjs";
 
-const MAX_VIEW_RADIUS_NM = 300;
-
-export function createMergedAircraftClients(defaultRangeNm) {
+export function createAircraftClientState(defaultRangeNm, maximumRangeNm = 300) {
   const clients = new Map();
+  const initialRadiusNm = clampRadius(defaultRangeNm, maximumRangeNm);
+
   return {
     get size() {
       return clients.size;
     },
-    add(key, send) {
-      clients.set(key, { send, radiusNm: clampRadius(defaultRangeNm), localOnly: false });
+    settings() {
+      return [...clients.values()].map(({ radiusNm, localOnly }) => ({ radiusNm, localOnly }));
+    },
+    connect(key, send) {
+      const client = clients.get(key) ?? { radiusNm: initialRadiusNm, localOnly: false };
+      if (typeof send === "function") client.send = send;
+      clients.set(key, client);
     },
     setRadius(key, value) {
       const client = clients.get(key);
       if (!client || !Number.isFinite(value)) return undefined;
-      client.radiusNm = clampRadius(value);
+      client.radiusNm = clampRadius(value, maximumRangeNm);
       return client.radiusNm;
     },
     setLocalOnly(key, value) {
@@ -23,7 +28,7 @@ export function createMergedAircraftClients(defaultRangeNm) {
       client.localOnly = value;
       return true;
     },
-    remove(key) {
+    disconnect(key) {
       return clients.delete(key);
     },
     clear() {
@@ -31,6 +36,7 @@ export function createMergedAircraftClients(defaultRangeNm) {
     },
     publish(aircraft, localFurthestDistanceNm) {
       for (const client of clients.values()) {
+        if (typeof client.send !== "function") continue;
         const visible = filterAircraftSnapshot(aircraft, client.radiusNm, client.localOnly);
         client.send({ event: "aircraft-snapshot", aircraft: visible, localFurthestDistanceNm });
       }
@@ -38,6 +44,6 @@ export function createMergedAircraftClients(defaultRangeNm) {
   };
 }
 
-function clampRadius(value) {
-  return Math.min(MAX_VIEW_RADIUS_NM, Math.max(1, Math.ceil(value)));
+function clampRadius(value, maximumRangeNm) {
+  return Math.min(maximumRangeNm, Math.max(1, Math.ceil(value)));
 }
