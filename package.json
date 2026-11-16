@@ -1,6 +1,6 @@
 {
   "name": "@eliware/radar",
-  "version": "15.1.0",
+  "version": "15.1.1",
   "type": "module",
   "description": "Web-based aviation tracking app for decoded ADS-B data.",
   "keywords": [

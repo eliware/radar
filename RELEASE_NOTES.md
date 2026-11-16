@@ -1,5 +1,20 @@
 # Release Notes
 
+## 15.1.1 — 2026-11-16
+
+### Added
+
+- Add UAT reception at 978 MHz through dump978 and a second RTL-SDR.
+- Route UAT data through readsb to Radar, FlightAware, and Flightradar24.
+- Add `npm run deploy:compose` to build and start containers during NAS deployment.
+
+### Changed
+
+- Update the package version to 15.1.1.
+- Refresh the lockfile with newer transitive dependencies.
+- Document UAT receiver settings and the Compose deployment command.
+- Clarify which deployment targets start the Compose stack.
+
 ## 15.1.0 — 2026-11-15
 
 ### Added
