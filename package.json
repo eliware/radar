@@ -37,7 +37,8 @@
     "screenshots": "node scripts/screenshots-verify.mjs",
     "screenshots:primary": "node scripts/screenshots-verify.mjs --primary",
     "lighthouse": "lighthouse http://127.0.0.1:1390 --only-categories=accessibility --output=json --output-path=artifacts/lighthouse.json --chrome-flags=--headless",
-    "puppeteer": "puppeteer browsers install chrome"
+    "puppeteer": "puppeteer browsers install chrome",
+    "deploy:compose": "docker compose up -d --build"
   },
   "engines": {
     "node": ">=26"

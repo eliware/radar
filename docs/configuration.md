@@ -34,11 +34,13 @@ Docker Compose uses these values for feeder containers. `ADSB_LAT`, `ADSB_LON`, 
 | Variable            | Default     | Required               | Meaning                                                                         |
 | ------------------- | ----------- | ---------------------- | ------------------------------------------------------------------------------- |
 | `READSB_DEVICE`     | Unset       | Yes                    | RTL-SDR serial number or device index passed to readsb.                         |
+| `UAT_SDR_DEVICE`    | Unset       | With UAT               | RTL-SDR serial number used by the dump978 decoder for 978 MHz UAT reception.    |
 | `ADSBX_SITENAME`    | `Home Roof` | No                     | Optional ADSBX receiver label.                                                  |
 | `ADSBX_UUID`        | Unset       | Yes                    | Stable ADSBX receiver UUID. Create it once with `uuidgen` and keep it.          |
 | `PIAWARE_FEEDER_ID` | Unset       | Yes                    | Stable feeder ID assigned by FlightAware.                                       |
 | `ADSBLOL_UUID`      | Unset       | Yes                    | Stable UUID for the ADSB.lol feeder. Create it once with `uuidgen` and keep it. |
 | `FR24_KEY`          | Empty       | Required after signup. | Flightradar24 sharing key.                                                      |
+| `FR24_UAT_KEY`      | Empty       | No                     | Separate Flightradar24 key for UAT data at 978 MHz.                             |
 | `TZ`                | `UTC`       | No                     | Timezone for feeder containers.                                                 |
 
 The Docker Compose guide explains how to get feeder IDs and keys. Do not commit real keys or private configuration files.

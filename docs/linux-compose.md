@@ -93,10 +93,10 @@ curl -i http://127.0.0.1:1390/ready
 
 ## Operate
 
-After committing app changes, run `docker compose up -d --build` to build and start the updated containers. Then check both endpoints:
+After committing app changes, run `npm run deploy:compose` to build and start the default Compose stack. You can also run `docker compose up -d --build`. Then check both endpoints:
 
 ```sh
-docker compose up -d --build
+npm run deploy:compose
 curl -i http://127.0.0.1:1390/health
 curl -i http://127.0.0.1:1390/ready
 ```
