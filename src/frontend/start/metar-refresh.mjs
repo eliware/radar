@@ -1,14 +1,9 @@
-import { default as renderMetarRefreshResponse } from "../metar/refresh-display.mjs";
+import { default as refreshMetar } from "../metar/refresh.mjs";
 
 function startMetarRefresh({ fetchData, panel, ticker, timerHost, enabled = true }) {
   const refresh = async () => {
     if (!enabled) return;
-    await renderMetarRefreshResponse(
-      panel,
-      ticker,
-      () => fetchData("/api/metar"),
-      () => enabled,
-    );
+    await refreshMetar({ fetchData, panel, ticker, isEnabled: () => enabled });
   };
   refresh();
   const timer = timerHost?.setInterval?.(refresh, 300000) ?? null;

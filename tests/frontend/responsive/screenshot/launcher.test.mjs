@@ -10,11 +10,10 @@ test("uses default launch locations", () => {
   });
 });
 
-test("uses CLI selections and configured launch locations", () => {
-  const options = createScreenshotLaunchOptions(["--primary"], {
+test("uses configured launch locations", () => {
+  const options = createScreenshotLaunchOptions([], {
     RADAR_SCREENSHOT_URL: "https://radar.example",
     RADAR_SCREENSHOT_DIR: "output/shots",
-    RADAR_SCREENSHOT_MODES: "full-page",
   });
   expect(options).toMatchObject({
     baseUrl: "https://radar.example",

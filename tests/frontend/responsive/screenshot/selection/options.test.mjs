@@ -11,7 +11,9 @@ test("combines configured viewport and mode values", () => {
 });
 
 test("uses defaults and lets primary selection override configured viewports", () => {
-  expect(createScreenshotSelectionOptions(false, {}).modes).toEqual(["above-fold", "full-page"]);
+  const defaults = createScreenshotSelectionOptions(false, {});
+  expect(defaults.modes).toEqual(["above-fold", "full-page"]);
+  expect(defaults.targets).toEqual(expect.any(Array));
   const primary = createScreenshotSelectionOptions(true, {
     RADAR_SCREENSHOT_VIEWPORTS: "iphone-12-portrait",
     RADAR_SCREENSHOT_MODES: "full-page",

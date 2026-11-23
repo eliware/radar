@@ -60,34 +60,6 @@ test("starts disabled without an initial or timer request", async () => {
   refresh.destroy();
 });
 
-test("ignores a report that completes after METAR refresh is disabled", async () => {
-  const nodes = elements();
-  let complete;
-  const fetchData = jest.fn(() => new Promise((resolve) => (complete = resolve)));
-  const refresh = startMetarRefresh({ fetchData, ...nodes });
-  await Promise.resolve();
-  refresh.setEnabled(false);
-  complete({ ok: true, json: async () => ({ reports: [{ id: "KPWM" }] }) });
-  await Promise.resolve();
-  await Promise.resolve();
-  expect(nodes.panel.innerHTML).toBe("");
-  refresh.destroy();
-});
-
-test("ignores a failed request that finishes after METAR refresh is disabled", async () => {
-  let fail;
-  const refresh = startMetarRefresh({
-    fetchData: () => new Promise((_resolve, reject) => (fail = reject)),
-    ...elements(),
-  });
-  await Promise.resolve();
-  refresh.setEnabled(false);
-  fail(new Error("offline"));
-  await Promise.resolve();
-  await Promise.resolve();
-  refresh.destroy();
-});
-
 test("supports missing elements and timer hosts", () => {
   const refresh = startMetarRefresh({
     fetchData: async () => ({ ok: true, json: async () => ({}) }),

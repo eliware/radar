@@ -1,5 +1,5 @@
-import { expect, test } from "@jest/globals";
-import { default as renderMetarRefreshResponse } from "../../../src/frontend/metar/refresh-display.mjs";
+import { expect, jest, test } from "@jest/globals";
+import { default as refreshMetar } from "../../../src/frontend/metar/refresh.mjs";
 
 function elements() {
   return {
@@ -8,44 +8,50 @@ function elements() {
   };
 }
 
-test("renders successful responses in the table and ticker", async () => {
+test("requests METAR data and renders successful responses", async () => {
   const { panel, ticker } = elements();
-  await renderMetarRefreshResponse(panel, ticker, async () => ({
+  const fetchData = jest.fn(async () => ({
     ok: true,
     json: async () => ({ reports: [{ id: "KPWM", metar: "04006KT", decoded: null }] }),
   }));
+  await refreshMetar({ fetchData, panel, ticker });
+  expect(fetchData).toHaveBeenCalledWith("/api/metar");
   expect(panel.innerHTML).toContain("KPWM");
   expect(ticker.innerHTML).toContain("KPWM");
 });
 
 test("shows empty states for unsuccessful and rejected responses", async () => {
   const { panel, ticker } = elements();
-  await renderMetarRefreshResponse(panel, ticker, async () => ({ ok: false }));
+  await refreshMetar({ fetchData: async () => ({ ok: false }), panel, ticker });
   expect(panel.textContent).toBe("No METAR reports available.");
   expect(ticker.textContent).toBe("No METAR reports available.");
-  await renderMetarRefreshResponse(panel, ticker, async () => {
-    throw new Error("offline");
+  await refreshMetar({
+    fetchData: async () => {
+      throw new Error("offline");
+    },
+    panel,
+    ticker,
   });
   expect(panel.textContent).toBe("No METAR reports available.");
   expect(ticker.textContent).toBe("No METAR reports available.");
 });
 
-test("ignores a response after refresh has been disabled", async () => {
+test("ignores a response when the refresh is disabled", async () => {
   const { panel, ticker } = elements();
-  await renderMetarRefreshResponse(
+  await refreshMetar({
+    fetchData: async () => ({ ok: true, json: async () => ({ reports: [{ id: "KPWM" }] }) }),
     panel,
     ticker,
-    async () => ({ ok: true, json: async () => ({ reports: [{ id: "KPWM", metar: "METAR" }] }) }),
-    () => false,
-  );
-  await renderMetarRefreshResponse(
-    panel,
-    ticker,
-    async () => {
+    isEnabled: () => false,
+  });
+  await refreshMetar({
+    fetchData: async () => {
       throw new Error("offline");
     },
-    () => false,
-  );
+    panel,
+    ticker,
+    isEnabled: () => false,
+  });
   expect(panel.innerHTML).toBe("");
   expect(ticker.innerHTML).toBe("");
 });
