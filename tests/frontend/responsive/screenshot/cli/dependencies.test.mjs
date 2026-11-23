@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import { default as resolveScreenshotCliDependencies } from "../../../../../src/frontend/responsive/screenshot/cli/dependencies.mjs";
 
-test("uses injected CLI dependencies", () => {
+test("uses injected browser, file, reporting, and delay dependencies", () => {
   const dependencies = {
     browserLauncher: { launch: jest.fn() },
     browserArgs: ["--test"],
@@ -9,9 +9,11 @@ test("uses injected CLI dependencies", () => {
     files: { mkdir: jest.fn(), stat: jest.fn() },
     delayMs: 0,
     report: jest.fn(),
-    capture: jest.fn(),
   };
-  expect(resolveScreenshotCliDependencies(dependencies)).toEqual(dependencies);
+  expect(resolveScreenshotCliDependencies(dependencies)).toEqual({
+    ...dependencies,
+    capture: expect.any(Function),
+  });
 });
 
 test("fills unspecified dependencies with defaults", () => {

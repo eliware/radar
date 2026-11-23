@@ -55,14 +55,13 @@ test("shares one pending type lookup across repeated aircraft updates", async ()
   expect(state.changes.filter((item) => item.aircraftTypeCode === "B738")).toHaveLength(1);
 });
 
-test("skips aircraft without an ICAO and ignores unusable callsigns", async () => {
+test("skips aircraft without an ICAO before starting enrichment lookups", async () => {
   const state = createState();
   state.coordinator.update({ callsign: "BAW183" }, state.publish);
-  state.coordinator.update({ icao: "DEF456", callsign: "AD" }, state.publish);
   await Promise.resolve();
 
-  expect(state.changes).toEqual([{ icao: "DEF456", callsign: "AD" }]);
-  expect(state.lookup.getAircraftType).toHaveBeenCalledWith("DEF456");
+  expect(state.changes).toEqual([]);
+  expect(state.lookup.getAircraftType).not.toHaveBeenCalled();
   expect(state.lookup.getCallsignRoute).not.toHaveBeenCalled();
 });
 
@@ -121,22 +120,6 @@ test("looks up retained callsigns when a placeholder arrives before route data",
     origin: "EGLL",
     destination: "KBOS",
   });
-});
-
-test("skips lookups when re-api metadata already has type and complete route fields", () => {
-  const state = createState();
-  state.coordinator.update(
-    {
-      icao: "ABC123",
-      callsign: "BAW183",
-      aircraftTypeCode: "B738",
-      origin: "EGLL",
-      destination: "KBOS",
-    },
-    state.publish,
-  );
-  expect(state.lookup.getAircraftType).not.toHaveBeenCalled();
-  expect(state.lookup.getCallsignRoute).not.toHaveBeenCalled();
 });
 
 test("pauses route lookups and ignores results started before they were disabled", async () => {

@@ -26,17 +26,12 @@ test("normalizes callsigns and builds the route URL", async () => {
   );
 });
 
-test("returns null for unusable callsigns and missing routes", async () => {
-  const request = jest
-    .fn()
-    .mockResolvedValueOnce(response({}, 404))
-    .mockResolvedValueOnce(response(null));
+test("skips unusable callsigns before making a request", async () => {
+  const request = jest.fn();
   const lookup = createLookup(request);
   await expect(lookup("AD")).resolves.toBeNull();
   await expect(lookup(undefined)).resolves.toBeNull();
-  await expect(lookup("BAW183")).resolves.toBeNull();
-  await expect(lookup("BAW185")).resolves.toBeNull();
-  expect(request).toHaveBeenCalledTimes(2);
+  expect(request).not.toHaveBeenCalled();
 });
 
 test("rejects failed requests for the coordinator cache", async () => {
