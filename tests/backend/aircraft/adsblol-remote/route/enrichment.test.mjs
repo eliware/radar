@@ -27,6 +27,17 @@ test("uses the default update callback after a successful lookup", async () => {
   expect(getCallsignRoute).toHaveBeenCalledWith("RPA1");
 });
 
+test("preserves partial route data while adding missing route fields", async () => {
+  const existing = { ...mapped(), origin: "KBOS" };
+  const aircraft = new Map([["ABC123", existing]]);
+  const enrichment = createAdsbLolRouteEnrichment({
+    lookup: { getCallsignRoute: async () => ({ destination: "KORD" }) },
+  });
+  enrichment.enrich(mapped(), aircraft);
+  await Promise.resolve();
+  expect(aircraft.get("ABC123")).toEqual({ ...existing, destination: "KORD" });
+});
+
 test("skips disabled lookups, missing callsigns, complete routes, and absent services", () => {
   const lookup = { getCallsignRoute: jest.fn() };
   const enrichment = createAdsbLolRouteEnrichment({ lookup });

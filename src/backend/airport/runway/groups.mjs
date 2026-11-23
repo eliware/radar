@@ -13,7 +13,7 @@ function groupRunwayEnds(ends) {
   return new Map(
     [...airports].map(([airportId, runways]) => [
       airportId,
-      [...runways.values()].filter((group) => group.length === 2),
+      [...runways.values()].filter((group) => group.length === 1 || group.length === 2),
     ]),
   );
 }

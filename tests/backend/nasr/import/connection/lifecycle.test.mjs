@@ -9,6 +9,6 @@ test("opens temporary databases with defaults and closes after operation errors"
       throw new Error("validation failed");
     }),
   ).toThrow("validation failed");
-  expect(Database).toHaveBeenCalledWith("temporary.sqlite");
+  expect(Database).toHaveBeenCalledWith("temporary.sqlite", { readOnly: false });
   expect(database.close).toHaveBeenCalledTimes(1);
 });

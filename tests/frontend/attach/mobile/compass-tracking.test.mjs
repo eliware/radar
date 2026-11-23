@@ -43,6 +43,51 @@ test("tracks iOS compass heading and stops on the next tap", async () => {
   detach();
 });
 
+test("cancels a pending compass permission request when the user taps again", async () => {
+  let grantPermission;
+  const requestPermission = jest.fn(() => new Promise((resolve) => (grantPermission = resolve)));
+  const state = setup({ sensor: { requestPermission } });
+  attachMobileCompassTracking(state.documentRef, state.windowRef, state.view);
+  const pendingRequest = state.click();
+  expect(requestPermission).toHaveBeenCalledTimes(1);
+  await state.click();
+  grantPermission("granted");
+  await pendingRequest;
+  expect(state.windowRef.addEventListener).not.toHaveBeenCalled();
+  expect(state.button.textContent).toBe("FOLLOW");
+  expect(state.button.setAttribute).toHaveBeenLastCalledWith("aria-pressed", "false");
+});
+
+test("ignores a denied permission result after the user cancels the request", async () => {
+  let denyPermission;
+  const state = setup({
+    sensor: { requestPermission: () => new Promise((resolve) => (denyPermission = resolve)) },
+  });
+  attachMobileCompassTracking(state.documentRef, state.windowRef, state.view);
+  const pendingRequest = state.click();
+  await state.click();
+  denyPermission("denied");
+  await pendingRequest;
+  expect(state.button.textContent).toBe("FOLLOW");
+  expect(state.windowRef.addEventListener).not.toHaveBeenCalled();
+});
+
+test("ignores a permission rejection after the user cancels the request", async () => {
+  let rejectPermission;
+  const state = setup({
+    sensor: {
+      requestPermission: () => new Promise((_resolve, reject) => (rejectPermission = reject)),
+    },
+  });
+  attachMobileCompassTracking(state.documentRef, state.windowRef, state.view);
+  const pendingRequest = state.click();
+  await state.click();
+  rejectPermission(new Error("cancelled"));
+  await pendingRequest;
+  expect(state.button.textContent).toBe("FOLLOW");
+  expect(state.windowRef.addEventListener).not.toHaveBeenCalled();
+});
+
 test("uses absolute alpha on browsers without the iOS heading field", async () => {
   const state = setup();
   attachMobileCompassTracking(state.documentRef, state.windowRef, state.view);

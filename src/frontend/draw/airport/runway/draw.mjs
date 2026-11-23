@@ -18,7 +18,7 @@ function drawAirportRunway(
   context.lineWidth = 1.5;
   context.setLineDash([]);
   const { ends, points } = segment;
-  if (runwaysVisible) drawRunwayLine(context, points[0], points[1]);
+  if (runwaysVisible && points.length === 2) drawRunwayLine(context, points[0], points[1]);
   if (extensionsVisible || baseLegsVisible)
     for (const end of ends)
       drawRunwayGuides(context, end, project, extensionsVisible, baseLegsVisible);

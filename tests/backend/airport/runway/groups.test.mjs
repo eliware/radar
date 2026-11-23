@@ -10,7 +10,7 @@ const end = (airportId, runwayId, overrides = {}) => ({
   ...overrides,
 });
 
-test("groups only valid pairs of runway ends by airport", () => {
+test("groups valid runway ends and preserves a single valid end", () => {
   const first = end("PWM", "09/27");
   const second = end("PWM", "09/27", { alignmentDegrees: 270 });
   const ends = [
@@ -23,7 +23,7 @@ test("groups only valid pairs of runway ends by airport", () => {
     end("BAD", "invalid", { latitude: Number.NaN }),
   ];
 
-  expect(groupRunwayEnds(ends)).toEqual(new Map([["PWM", [[first, second]]]]));
+  expect(groupRunwayEnds(ends)).toEqual(new Map([["PWM", [[first, second], [ends[2]]]]]));
 });
 
 test("returns an empty map when there are no valid runway ends", () => {

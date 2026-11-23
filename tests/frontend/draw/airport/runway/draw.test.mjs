@@ -49,3 +49,18 @@ test("skips invalid projections and draws guides without the runway line", () =>
   expect(context.stroke).toHaveBeenCalled();
   expect(context.strokeStyle).toBe("#333333");
 });
+
+test("draws guides for a runway with one valid end without drawing a runway line", () => {
+  const context = createContext();
+  drawAirportRunway(
+    context,
+    [runway[0]],
+    {},
+    (point) => ({ x: point.longitude, y: point.latitude }),
+    true,
+    true,
+    false,
+  );
+  expect(context.stroke).toHaveBeenCalledTimes(1);
+  expect(context.strokeStyle).toBe("#333333");
+});

@@ -8,6 +8,8 @@ function attachMobileCompassTracking(documentRef, windowRef, view) {
   const button = documentRef?.querySelector?.("[data-compass-follow]");
   if (!button || !windowRef?.addEventListener) return () => {};
   let active = false;
+  let pending = false;
+  let permissionVersion = 0;
   const setStatus = (text) => {
     button.textContent = text;
     button.setAttribute("aria-pressed", String(active));
@@ -20,6 +22,8 @@ function attachMobileCompassTracking(documentRef, windowRef, view) {
     }
   };
   const stop = () => {
+    permissionVersion += 1;
+    pending = false;
     active = false;
     windowRef.removeEventListener("deviceorientation", onHeading);
     setStatus("FOLLOW");
@@ -29,18 +33,31 @@ function attachMobileCompassTracking(documentRef, windowRef, view) {
     const sensor = windowRef.DeviceOrientationEvent;
     if (!sensor) return setStatus("NO COMPASS");
     if (typeof sensor.requestPermission === "function") {
+      pending = true;
+      const currentPermissionVersion = ++permissionVersion;
       try {
-        if ((await sensor.requestPermission()) !== "granted")
-          return setStatus("PERMISSION BLOCKED");
+        if ((await sensor.requestPermission()) !== "granted") {
+          if (permissionVersion === currentPermissionVersion) {
+            pending = false;
+            setStatus("PERMISSION BLOCKED");
+          }
+          return;
+        }
       } catch {
-        return setStatus("PERMISSION BLOCKED");
+        if (permissionVersion === currentPermissionVersion) {
+          pending = false;
+          setStatus("PERMISSION BLOCKED");
+        }
+        return;
       }
+      if (permissionVersion !== currentPermissionVersion || !pending) return;
+      pending = false;
     }
     active = true;
     setStatus("PHONE ACTIVE");
     windowRef.addEventListener("deviceorientation", onHeading);
   };
-  const onClick = () => (active ? stop() : start());
+  const onClick = () => (active || pending ? stop() : start());
   button.addEventListener("click", onClick);
   return () => {
     stop();

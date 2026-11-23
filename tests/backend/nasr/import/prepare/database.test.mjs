@@ -15,7 +15,7 @@ test("prepares and validates the temporary database before closing it", () => {
   const database = retainOnClose(createNasrTestDatabase());
   const Database = jest.fn(() => database);
   expect(prepareNasrTemporaryDatabase(Database, "temporary.sqlite")).toBe(NASR_INDEXES.length);
-  expect(Database).toHaveBeenCalledWith("temporary.sqlite");
+  expect(Database).toHaveBeenCalledWith("temporary.sqlite", { readOnly: false });
   expect(database.close).toHaveBeenCalledTimes(1);
 });
 
