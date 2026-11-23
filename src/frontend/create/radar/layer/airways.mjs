@@ -1,4 +1,4 @@
-export function createAirwayVisibility(onChange = () => {}) {
+function createAirwayVisibility(onChange = () => {}) {
   const visible = { Q: true, J: true, V: true };
   function setVisible(type, value) {
     if (!(type in visible)) return;
@@ -10,3 +10,4 @@ export function createAirwayVisibility(onChange = () => {}) {
     setVisible,
   };
 }
+export default createAirwayVisibility;

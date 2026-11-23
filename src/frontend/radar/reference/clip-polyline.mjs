@@ -1,8 +1,8 @@
-import { createClippedPointOperations } from "./clipped-point.mjs";
+import { default as createClippedPointOperations } from "./clipped-point.mjs";
 
 const { interpolate, same } = createClippedPointOperations();
 
-export function clipPolylineToViewport(item, bounds, location) {
+function clipPolylineToViewport(item, bounds, location) {
   const points = item.points;
   if (!Array.isArray(points) || !points.length) return [];
   if (points.length === 1) return inside(localPoint(points[0], location), bounds) ? [item] : [];
@@ -73,3 +73,4 @@ function localPoint(point, location) {
 function inside(point, box) {
   return point.x >= box.minX && point.x <= box.maxX && point.z >= box.minZ && point.z <= box.maxZ;
 }
+export default clipPolylineToViewport;

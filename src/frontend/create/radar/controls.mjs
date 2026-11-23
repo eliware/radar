@@ -1,9 +1,9 @@
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { configureRadarOrbitOrientation } from "../../configure-radar/orbit-orientation.mjs";
+import { default as configureRadarOrbitOrientation } from "../../configure-radar/orbit-orientation.mjs";
 
 const FEET_PER_NM = 6076.12;
 
-export function createRadarControls(camera, element, homeElevationFeet = 0) {
+function createRadarControls(camera, element, homeElevationFeet = 0) {
   const screenUp = { x: camera.up.x, y: camera.up.y, z: camera.up.z };
   camera.up.set(0, 1, 0);
   const controls = new OrbitControls(camera, element);
@@ -29,3 +29,4 @@ export function createRadarControls(camera, element, homeElevationFeet = 0) {
   };
   return controls;
 }
+export default createRadarControls;

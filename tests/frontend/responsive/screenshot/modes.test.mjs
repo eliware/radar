@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectScreenshotModes } from "../../../../src/frontend/responsive/screenshot/modes.mjs";
+import { default as selectScreenshotModes } from "../../../../src/frontend/responsive/screenshot/modes.mjs";
 
 test("selects default and requested screenshot modes", () => {
   expect(selectScreenshotModes()).toEqual(["above-fold", "full-page"]);

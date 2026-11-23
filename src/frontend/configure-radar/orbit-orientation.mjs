@@ -1,4 +1,4 @@
-export function configureRadarOrbitOrientation(camera, controls, screenUp) {
+function configureRadarOrbitOrientation(camera, controls, screenUp) {
   const originalUp = { x: camera.up.x, y: camera.up.y, z: camera.up.z };
   const originalLookAt = camera.lookAt;
   const lookAt = originalLookAt.bind(camera);
@@ -21,3 +21,4 @@ export function configureRadarOrbitOrientation(camera, controls, screenUp) {
     camera.up.set(originalUp.x, originalUp.y, originalUp.z);
   };
 }
+export default configureRadarOrbitOrientation;

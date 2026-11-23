@@ -1,11 +1,11 @@
-import { projectAircraftPosition } from "../aircraft/space-position.mjs";
-import { airportAirspaceBands } from "../airport-airspace/bands.mjs";
-import { airportAirspaceEdges } from "../airport-airspace/edges.mjs";
-import { createAirspaceVertices } from "./airspace/geometry.mjs";
+import { default as projectAircraftPosition } from "../aircraft/space-position.mjs";
+import { default as airportAirspaceBands } from "../airport-airspace/bands.mjs";
+import { default as airportAirspaceEdges } from "../airport-airspace/edges.mjs";
+import { default as createAirspaceVertices } from "./airspace/geometry.mjs";
 
 const AIRSPACE_COLOR = 0x777777;
 
-export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet) {
+function createAirspaceVolumes(THREE, scene, location, homeElevationFeet) {
   const shapes = new Map();
   let material;
   let visible = true;
@@ -62,3 +62,4 @@ export function createAirspaceVolumes(THREE, scene, location, homeElevationFeet)
   }
   return { update, setVisible, dispose };
 }
+export default createAirspaceVolumes;

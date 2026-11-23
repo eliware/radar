@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createSceneWater } from "../../../src/frontend/create/scene-water.mjs";
+import { default as createSceneWater } from "../../../src/frontend/create/scene-water.mjs";
 
 test("loads map outlines around the current camera target and cleans up", async () => {
   const listeners = new Map();

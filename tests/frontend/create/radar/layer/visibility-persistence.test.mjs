@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { readSavedLayerVisibility } from "../../../../../src/frontend/create/radar/layer/visibility-persistence.mjs";
+import { default as readSavedLayerVisibility } from "../../../../../src/frontend/create/radar/layer/visibility-persistence.mjs";
 
 test("reads saved layer visibility", () => {
   const originalStorage = Object.getOwnPropertyDescriptor(globalThis, "localStorage");

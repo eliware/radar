@@ -1,8 +1,8 @@
-import { drawRunwayGuides } from "../guides.mjs";
-import { drawRunwayLine } from "./line.mjs";
-import { drawRunwaySegment } from "./segment.mjs";
+import { default as drawRunwayGuides } from "../guides.mjs";
+import { default as drawRunwayLine } from "./line.mjs";
+import { default as drawRunwaySegment } from "./segment.mjs";
 
-export function drawAirportRunway(
+function drawAirportRunway(
   context,
   runway,
   airport,
@@ -23,3 +23,4 @@ export function drawAirportRunway(
     for (const end of ends)
       drawRunwayGuides(context, end, project, extensionsVisible, baseLegsVisible);
 }
+export default drawAirportRunway;

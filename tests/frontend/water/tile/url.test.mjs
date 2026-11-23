@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createWaterTileUrl } from "../../../../src/frontend/water/tile/url.mjs";
+import { default as createWaterTileUrl } from "../../../../src/frontend/water/tile/url.mjs";
 
 test("fills z, x, and y tile coordinates into the metadata URL template", () => {
   expect(

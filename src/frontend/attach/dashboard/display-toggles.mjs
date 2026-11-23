@@ -1,9 +1,9 @@
-import { attachFlightStripsToggle } from "../flight-strips-toggle.mjs";
-import { attachMetarDisplayToggle } from "../metar-display-toggle.mjs";
-import { readToggleState } from "../../toggle-state-storage.mjs";
-import { writeToggleState } from "../../write-toggle-state.mjs";
+import { default as attachFlightStripsToggle } from "../flight-strips-toggle.mjs";
+import { default as attachMetarDisplayToggle } from "../metar-display-toggle.mjs";
+import { default as readToggleState } from "../../toggle-state-storage.mjs";
+import { default as writeToggleState } from "../../write-toggle-state.mjs";
 
-export function attachDashboardDisplayToggles(documentRef, fetchData, onMetarEnabled) {
+function attachDashboardDisplayToggles(documentRef, fetchData, onMetarEnabled) {
   const dashboard = documentRef.querySelector(".dashboard");
   const flightPanel = documentRef.querySelector("[data-flight-strips]");
   const metarPanel = documentRef.querySelector("[data-metar]");
@@ -28,3 +28,4 @@ function setRouteLookupsEnabled(fetchData, enabled) {
     body: JSON.stringify({ enabled }),
   }).catch(() => undefined);
 }
+export default attachDashboardDisplayToggles;

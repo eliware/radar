@@ -1,8 +1,8 @@
-import { formatAircraftAltitude } from "../../aircraft/tag/altitude.mjs";
-import { formatAircraftStripHeading } from "../../../shared/aircraft/strip/heading.mjs";
-import { formatAircraftStripSpeed } from "../../../shared/aircraft/strip/speed.mjs";
+import { default as formatAircraftAltitude } from "../../aircraft/tag/altitude.mjs";
+import { default as formatAircraftStripHeading } from "../../../shared/aircraft/strip/heading.mjs";
+import { default as formatAircraftStripSpeed } from "../../../shared/aircraft/strip/speed.mjs";
 
-export function formatAircraftStripFields(aircraft) {
+function formatAircraftStripFields(aircraft) {
   const heading = formatAircraftStripHeading(aircraft);
   const speed = formatAircraftStripSpeed(aircraft);
   const bearingAndRange =
@@ -19,3 +19,4 @@ export function formatAircraftStripFields(aircraft) {
     destination: aircraft.destination || "-",
   };
 }
+export default formatAircraftStripFields;

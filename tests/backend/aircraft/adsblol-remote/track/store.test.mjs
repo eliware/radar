@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAdsbLolTrackStore } from "../../../../../src/backend/aircraft/adsblol-remote/track/store.mjs";
+import { default as createAdsbLolTrackStore } from "../../../../../src/backend/aircraft/adsblol-remote/track/store.mjs";
 
 test("expires remote tracks using the injected clock", () => {
   let now = 1_000;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildFlightStripRows } from "../../../../../src/frontend/flight/strip/layout/rows.mjs";
+import { default as buildFlightStripRows } from "../../../../../src/frontend/flight/strip/layout/rows.mjs";
 
 test("aligns selected groups and maps each row to its labels", () => {
   const result = buildFlightStripRows(

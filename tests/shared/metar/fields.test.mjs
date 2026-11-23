@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { decodedFields } from "../../../src/shared/metar/fields.mjs";
+import { default as decodedFields } from "../../../src/shared/metar/fields.mjs";
 
 test("formats parsed METAR display fields", () => {
   expect(

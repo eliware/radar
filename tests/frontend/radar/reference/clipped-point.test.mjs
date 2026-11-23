@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createClippedPointOperations } from "../../../../src/frontend/radar/reference/clipped-point.mjs";
+import { default as createClippedPointOperations } from "../../../../src/frontend/radar/reference/clipped-point.mjs";
 
 const { interpolate, same } = createClippedPointOperations();
 

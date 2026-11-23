@@ -1,13 +1,13 @@
-import { metarFlightCategory } from "./fields/category.mjs";
-import { cloudText } from "./fields/clouds.mjs";
-import { conditionText } from "./fields/conditions.mjs";
-import { fahrenheitText } from "./fields/temperature.mjs";
-import { timeText } from "./fields/time.mjs";
-import { visibilityText } from "./fields/visibility.mjs";
-import { windDirectionText } from "./fields/wind.mjs";
-import { windSpeedText } from "./fields/wind-speed.mjs";
+import { default as metarFlightCategory } from "./fields/category.mjs";
+import { default as cloudText } from "./fields/clouds.mjs";
+import { default as conditionText } from "./fields/conditions.mjs";
+import { default as fahrenheitText } from "./fields/temperature.mjs";
+import { default as timeText } from "./fields/time.mjs";
+import { default as visibilityText } from "./fields/visibility.mjs";
+import { default as windDirectionText } from "./fields/wind.mjs";
+import { default as windSpeedText } from "./fields/wind-speed.mjs";
 
-export function decodedFields(data) {
+function decodedFields(data) {
   return {
     automated: Boolean(data.auto),
     observed: timeText(data),
@@ -22,3 +22,4 @@ export function decodedFields(data) {
     altimeter: data.altimeter ? Number(data.altimeter.value).toFixed(2) : "—",
   };
 }
+export default decodedFields;

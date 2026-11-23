@@ -1,6 +1,6 @@
-import { getRadarCanvasViewport } from "../viewport.mjs";
+import { default as getRadarCanvasViewport } from "../viewport.mjs";
 
-export function createCanvasRadarViewApi({
+function createCanvasRadarViewApi({
   state,
   aircraftState,
   layers,
@@ -39,3 +39,4 @@ export function createCanvasRadarViewApi({
     },
   };
 }
+export default createCanvasRadarViewApi;

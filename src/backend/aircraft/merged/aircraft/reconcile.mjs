@@ -1,4 +1,4 @@
-export function reconcileAircraftSource(entries, source, items, setSourceItem) {
+function reconcileAircraftSource(entries, source, items, setSourceItem) {
   const current = new Set();
   for (const item of items) {
     const icao = setSourceItem(source, item);
@@ -9,3 +9,4 @@ export function reconcileAircraftSource(entries, source, items, setSourceItem) {
     if (!entry.local && !entry.remote) entries.delete(icao);
   }
 }
+export default reconcileAircraftSource;

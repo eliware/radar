@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildFlightStripLayout } from "../../../../src/frontend/flight/strip/layout.mjs";
+import { default as buildFlightStripLayout } from "../../../../src/frontend/flight/strip/layout.mjs";
 
 const labels = [
   "CALLSIGN",

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { fetchMetarReports } from "../../../src/backend/metar/fetch.mjs";
+import { default as fetchMetarReports } from "../../../src/backend/metar/fetch.mjs";
 
 test("fetches configured stations and filters unrelated or invalid reports", async () => {
   const reports = [

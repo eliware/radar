@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { clipProcedureSegment } from "../../../src/frontend/clip/procedure-segment.mjs";
+import { default as clipProcedureSegment } from "../../../src/frontend/clip/procedure-segment.mjs";
 
 const point = (x, rangeNm) => ({ rangeNm, screen: { x, y: x * 2 } });
 

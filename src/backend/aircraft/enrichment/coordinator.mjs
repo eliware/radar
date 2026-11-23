@@ -1,9 +1,9 @@
-import { createAircraftEnrichmentState } from "./state.mjs";
-import { createAircraftRouteLookup } from "./route-lookup.mjs";
-import { createAircraftTypeLookup } from "./type-lookup.mjs";
-import { normalizeAircraftMetadataKey } from "./metadata-key.mjs";
+import { default as createAircraftEnrichmentState } from "./state.mjs";
+import { default as createAircraftRouteLookup } from "./route-lookup.mjs";
+import { default as createAircraftTypeLookup } from "./type-lookup.mjs";
+import { default as normalizeAircraftMetadataKey } from "./metadata-key.mjs";
 
-export function createAircraftEnrichmentCoordinator(lookup) {
+function createAircraftEnrichmentCoordinator(lookup) {
   const state = createAircraftEnrichmentState();
   let closed = false;
 
@@ -42,3 +42,4 @@ export function createAircraftEnrichmentCoordinator(lookup) {
     },
   };
 }
+export default createAircraftEnrichmentCoordinator;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawRadarScale } from "../../../../src/frontend/draw/radar/scale.mjs";
+import { default as drawRadarScale } from "../../../../src/frontend/draw/radar/scale.mjs";
 
 test("draws the scale label and measured line", () => {
   const context = Object.fromEntries(

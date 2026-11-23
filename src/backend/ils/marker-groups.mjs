@@ -1,7 +1,7 @@
-import { distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
-import { ilsSystemKey } from "./system-key.mjs";
+import { default as distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
+import { default as ilsSystemKey } from "./system-key.mjs";
 
-export function createIlsMarkerIndex(rows, location) {
+function createIlsMarkerIndex(rows, location) {
   const groups = new Map();
   for (const row of rows) {
     if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude)) continue;
@@ -12,3 +12,4 @@ export function createIlsMarkerIndex(rows, location) {
   }
   return groups;
 }
+export default createIlsMarkerIndex;

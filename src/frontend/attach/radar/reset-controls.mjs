@@ -1,6 +1,6 @@
 const EDITABLE_TAGS = new Set(["input", "textarea", "select"]);
 
-export function attachRadarResetControls(documentRef, view) {
+function attachRadarResetControls(documentRef, view) {
   const compass = documentRef?.querySelector?.("[data-radar-compass]");
   const reset = () => view.reset();
   const onKeyDown = (event) => {
@@ -24,3 +24,4 @@ export function attachRadarResetControls(documentRef, view) {
     compass?.removeEventListener?.("keydown", onCompassKeyDown);
   };
 }
+export default attachRadarResetControls;

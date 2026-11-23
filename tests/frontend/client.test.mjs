@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { renderHome } from "../../src/frontend/client.mjs";
+import { default as renderHome } from "../../src/frontend/client.mjs";
 
 test("leaves pages without a status element unchanged", () => {
   const document = { querySelector: jest.fn(() => null) };

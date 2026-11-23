@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatAircraftAltitude } from "../../../../src/frontend/aircraft/tag/altitude.mjs";
+import { default as formatAircraftAltitude } from "../../../../src/frontend/aircraft/tag/altitude.mjs";
 
 test("formats flight level and vertical rate", () => {
   expect(formatAircraftAltitude({ altitudeFeet: 12300, verticalRateFeetPerMinute: 2150 })).toBe(

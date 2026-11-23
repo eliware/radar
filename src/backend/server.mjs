@@ -1,10 +1,10 @@
 import websocket from "@fastify/websocket";
 import Fastify from "fastify";
 import { resolve } from "node:path";
-import { registerApiRoutes } from "./api-routes.mjs";
-import { registerStaticRoutes } from "./static-routes.mjs";
+import { default as registerApiRoutes } from "./api-routes.mjs";
+import { default as registerStaticRoutes } from "./static-routes.mjs";
 
-export async function createRadarServer({
+async function createRadarServer({
   feed,
   location = null,
   elevationFeet = 300,
@@ -32,3 +32,4 @@ export async function createRadarServer({
   registerStaticRoutes(app, { publicRoot, buildRoot, read });
   return app;
 }
+export default createRadarServer;

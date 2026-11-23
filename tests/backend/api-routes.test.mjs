@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerApiRoutes } from "../../src/backend/api-routes.mjs";
+import { default as registerApiRoutes } from "../../src/backend/api-routes.mjs";
 
 test("registers core and composed API routes", () => {
   const routes = new Map();

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachMetarDisplayToggle } from "../../../src/frontend/attach/metar-display-toggle.mjs";
+import { default as attachMetarDisplayToggle } from "../../../src/frontend/attach/metar-display-toggle.mjs";
 
 test("M toggles METAR visibility and refresh state", () => {
   let listener;

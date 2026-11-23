@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseNasrIndexDefinition } from "../../../../src/backend/nasr/index/definition.mjs";
+import { default as parseNasrIndexDefinition } from "../../../../src/backend/nasr/index/definition.mjs";
 
 test("parses index names and normalizes SQL definitions", () => {
   expect(

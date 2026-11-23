@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { installNasrTemporaryCopy } from "../../../../../src/backend/nasr/import/temporary/install.mjs";
+import { default as installNasrTemporaryCopy } from "../../../../../src/backend/nasr/import/temporary/install.mjs";
 
 function createFiles() {
   return {

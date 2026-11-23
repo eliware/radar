@@ -1,4 +1,4 @@
-export function intersectsRange(points, location, minRangeNm, maxRangeNm) {
+function intersectsRange(points, location, minRangeNm, maxRangeNm) {
   const projected = points.map((point) => toLocal(point, location));
   if (projected.length === 1) {
     const distance = Math.hypot(projected[0].x, projected[0].y);
@@ -30,3 +30,4 @@ function segmentIntersectsRange(start, end, minRangeNm, maxRangeNm) {
   const farthest = Math.max(Math.hypot(start.x, start.y), Math.hypot(end.x, end.y));
   return nearest <= maxRangeNm && farthest >= minRangeNm;
 }
+export default intersectsRange;

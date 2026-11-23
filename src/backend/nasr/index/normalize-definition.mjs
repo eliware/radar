@@ -1,3 +1,4 @@
-export function normalizeNasrIndexSql(sql) {
+function normalizeNasrIndexSql(sql) {
   return sql?.replace(/\s+/g, " ").trim().toUpperCase();
 }
+export default normalizeNasrIndexSql;

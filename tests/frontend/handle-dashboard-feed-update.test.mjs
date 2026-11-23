@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { handleDashboardFeedUpdate } from "../../src/frontend/handle-dashboard-feed-update.mjs";
+import { default as handleDashboardFeedUpdate } from "../../src/frontend/handle-dashboard-feed-update.mjs";
 
 test("replaces scene and strip aircraft from a snapshot", () => {
   const scene = { updateSnapshot: jest.fn() };

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAirwayQuery } from "../../../src/backend/airway/query.mjs";
+import { default as createAirwayQuery } from "../../../src/backend/airway/query.mjs";
 import { AIRWAY_QUERY } from "../../../src/backend/airway/query-rules.mjs";
 
 const home = { latitude: 0, longitude: 0 };

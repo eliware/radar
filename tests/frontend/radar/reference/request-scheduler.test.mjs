@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { createRadarReferenceRequestScheduler } from "../../../../src/frontend/radar/reference/request-scheduler.mjs";
+import { default as createRadarReferenceRequestScheduler } from "../../../../src/frontend/radar/reference/request-scheduler.mjs";
 
 async function flush() {
   for (let index = 0; index < 8; index += 1) await Promise.resolve();

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftVisibility } from "../../../src/frontend/create/aircraft-visibility.mjs";
+import { default as createAircraftVisibility } from "../../../src/frontend/create/aircraft-visibility.mjs";
 
 test("L toggles and stores local-only state without changing the legend style", () => {
   const originalStorage = Object.getOwnPropertyDescriptor(globalThis, "localStorage");

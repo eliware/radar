@@ -1,10 +1,10 @@
-import { getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
-import { getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
+import { default as getAircraftAgeBrightness } from "../../aircraft/age-brightness.mjs";
+import { default as getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
 
 const MIN_FLIGHT_STRIP_OPACITY = 0.6;
 const MIN_EMERGENCY_STRIP_OPACITY = 0.93;
 
-export function getFlightStripStatus(item, now = Date.now()) {
+function getFlightStripStatus(item, now = Date.now()) {
   const remoteOnly = Boolean(item.remoteOnly);
   const emergency = Boolean(getAircraftEmergencyLabel(item));
   const nearHomePass = Boolean(item.nearHomePass && !remoteOnly && !emergency);
@@ -22,3 +22,4 @@ export function getFlightStripStatus(item, now = Date.now()) {
     classNames: classes.join(" "),
   };
 }
+export default getFlightStripStatus;

@@ -1,10 +1,10 @@
-import { getRadarPalette } from "../../radar/palette.mjs";
-import { drawAircraftHistory } from "./history.mjs";
-import { drawAircraftTags } from "./tags.mjs";
-import { drawAircraftTracks } from "./tracks.mjs";
-import { withAircraftDrawingStyle } from "./style.mjs";
+import { default as getRadarPalette } from "../../radar/palette.mjs";
+import { default as drawAircraftHistory } from "./history.mjs";
+import { default as drawAircraftTags } from "./tags.mjs";
+import { default as drawAircraftTracks } from "./tracks.mjs";
+import { default as withAircraftDrawingStyle } from "./style.mjs";
 
-export function drawAircraftDisplay(
+function drawAircraftDisplay(
   context,
   aircraft,
   fontSize,
@@ -32,3 +32,4 @@ export function drawAircraftDisplay(
     );
   });
 }
+export default drawAircraftDisplay;

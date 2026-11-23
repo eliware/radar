@@ -1,9 +1,9 @@
-import { hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
-import { createRadarUserAgent } from "../../user-agent.mjs";
-import { parseCallsignRouteResponse } from "./response.mjs";
-import { buildCallsignRouteUrl } from "./route/url.mjs";
+import { default as hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
+import { default as createRadarUserAgent } from "../../user-agent.mjs";
+import { default as parseCallsignRouteResponse } from "./response.mjs";
+import { default as buildCallsignRouteUrl } from "./route/url.mjs";
 
-export function createCallsignRouteLookup(request, lookup, routeTtlMs) {
+function createCallsignRouteLookup(request, lookup, routeTtlMs) {
   return (value) => {
     const callsign = normalize(value);
     if (!hasUsefulCallsign(callsign)) return Promise.resolve(null);
@@ -23,3 +23,4 @@ export function createCallsignRouteLookup(request, lookup, routeTtlMs) {
 function normalize(value) {
   return typeof value === "string" ? value.trim().toUpperCase() : "";
 }
+export default createCallsignRouteLookup;

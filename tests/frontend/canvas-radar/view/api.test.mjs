@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarViewApi } from "../../../../src/frontend/canvas-radar/view/api.mjs";
+import { default as createCanvasRadarViewApi } from "../../../../src/frontend/canvas-radar/view/api.mjs";
 
 test("composes view operations and destroys owned resources", () => {
   const draw = jest.fn();

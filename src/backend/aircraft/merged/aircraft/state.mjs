@@ -1,7 +1,7 @@
-import { createMergedAircraftList } from "./list.mjs";
-import { createMergedAircraftSourceState } from "./source/state.mjs";
+import { default as createMergedAircraftList } from "./list.mjs";
+import { default as createMergedAircraftSourceState } from "./source/state.mjs";
 
-export function createMergedAircraftState({ clock = Date.now, localFreshnessMs = 8000 } = {}) {
+function createMergedAircraftState({ clock = Date.now, localFreshnessMs = 8000 } = {}) {
   const entries = new Map();
   const sources = createMergedAircraftSourceState(entries);
   const aircraftList = createMergedAircraftList(entries, clock, localFreshnessMs);
@@ -12,3 +12,4 @@ export function createMergedAircraftState({ clock = Date.now, localFreshnessMs =
     ...aircraftList,
   };
 }
+export default createMergedAircraftState;

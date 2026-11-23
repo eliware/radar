@@ -1,7 +1,7 @@
-import { createLookupCache } from "../../lookup-cache.mjs";
-import { createAircraftTypeLookup } from "./type.mjs";
+import { default as createLookupCache } from "../../lookup-cache.mjs";
+import { default as createAircraftTypeLookup } from "./type.mjs";
 
-export function createAircraftTypeService({
+function createAircraftTypeService({
   request,
   clock = Date.now,
   successTtlMs = 24 * 60 * 60 * 1000,
@@ -14,3 +14,4 @@ export function createAircraftTypeService({
     cache.lookup(key, load, { successTtlMs, missingTtlMs, failureTtlMs });
   return createAircraftTypeLookup(request, lookup);
 }
+export default createAircraftTypeService;

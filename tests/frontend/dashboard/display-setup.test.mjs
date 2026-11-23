@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createDashboardDisplaySetup } from "../../../src/frontend/dashboard/display-setup.mjs";
+import { default as createDashboardDisplaySetup } from "../../../src/frontend/dashboard/display-setup.mjs";
 
 test("creates the flight-strip view and dashboard display controls together", () => {
   const listeners = [];

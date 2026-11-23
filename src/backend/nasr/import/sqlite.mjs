@@ -1,5 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 
-export function selectNasrDatabase(Database = DatabaseSync) {
+function selectNasrDatabase(Database = DatabaseSync) {
   return Database;
 }
+export default selectNasrDatabase;

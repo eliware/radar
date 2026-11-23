@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import * as THREE from "three";
-import { createCameraProjector } from "../../../src/frontend/project/camera-position.mjs";
+import { default as createCameraProjector } from "../../../src/frontend/project/camera-position.mjs";
 
 test("projects visible positions and rejects positions behind the camera", () => {
   const camera = new THREE.PerspectiveCamera(48, 1, 0.05, 100);

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { projectRadarReference } from "../../../src/frontend/project/radar-reference.mjs";
+import { default as projectRadarReference } from "../../../src/frontend/project/radar-reference.mjs";
 
 test("projects reference elevation relative to home", () => {
   const project = jest.fn((point) => ({ x: point.x, y: point.y, z: point.z }));

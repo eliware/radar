@@ -3,7 +3,7 @@ import { existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { default as config } from "./webpack-config.mjs";
 
-export function buildFrontend(run = execFileSync, mode = config.mode) {
+function buildFrontend(run = execFileSync, mode = config.mode) {
   run(
     process.execPath,
     [
@@ -23,3 +23,4 @@ export function buildFrontend(run = execFileSync, mode = config.mode) {
       existsSync(chunksPath) && readdirSync(chunksPath).some((file) => file.endsWith(".js")),
   };
 }
+export default buildFrontend;

@@ -1,6 +1,6 @@
-import { calculateWaterTileBounds } from "./bounds.mjs";
+import { default as calculateWaterTileBounds } from "./bounds.mjs";
 
-export function selectWaterTiles(center, rangeNm, tileZoom) {
+function selectWaterTiles(center, rangeNm, tileZoom) {
   const { minX, maxX, minY, maxY } = calculateWaterTileBounds(center, rangeNm, tileZoom);
   const size = 2 ** tileZoom;
   const tiles = [];
@@ -12,3 +12,4 @@ export function selectWaterTiles(center, rangeNm, tileZoom) {
   }
   return tiles;
 }
+export default selectWaterTiles;

@@ -1,4 +1,4 @@
-export function radarReferenceData(references) {
+function radarReferenceData(references) {
   return {
     airports: references.airports ?? new Map(),
     navaids: references.navaids ?? new Map(),
@@ -8,3 +8,4 @@ export function radarReferenceData(references) {
     airways: references.airways ?? new Map(),
   };
 }
+export default radarReferenceData;

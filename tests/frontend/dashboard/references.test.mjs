@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { loadDashboardReferences } from "../../../src/frontend/dashboard/references.mjs";
+import { default as loadDashboardReferences } from "../../../src/frontend/dashboard/references.mjs";
 
 test("loads viewport references and subscribes to view changes", async () => {
   const bounds = { minX: -5, maxX: 5, minZ: -5, maxZ: 5, minRangeNm: 0, maxRangeNm: 20 };

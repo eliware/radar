@@ -1,6 +1,6 @@
-import { mapRemoteAircraftNumericFields } from "./numeric-fields.mjs";
+import { default as mapRemoteAircraftNumericFields } from "./numeric-fields.mjs";
 
-export function mapRemoteAircraftFieldValues(item) {
+function mapRemoteAircraftFieldValues(item) {
   return {
     ...mapRemoteAircraftNumericFields(item),
     ...(text(item.flight) ? { callsign: text(item.flight) } : {}),
@@ -13,3 +13,4 @@ export function mapRemoteAircraftFieldValues(item) {
 function text(value) {
   return typeof value === "string" ? value.trim() : "";
 }
+export default mapRemoteAircraftFieldValues;

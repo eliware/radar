@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectProcedurePaths } from "../../../src/backend/procedure/select-paths.mjs";
+import { default as selectProcedurePaths } from "../../../src/backend/procedure/select-paths.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 const path = {

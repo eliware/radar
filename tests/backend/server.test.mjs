@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarServer } from "../../src/backend/server.mjs";
+import { default as createRadarServer } from "../../src/backend/server.mjs";
 
 function createApp() {
   const hooks = [];

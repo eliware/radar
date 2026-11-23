@@ -1,7 +1,7 @@
-import { createAdsbLolTypeService } from "./lookup/adsblol/type-service.mjs";
-import { createAdsbLolRouteService } from "./lookup/adsblol/route-service.mjs";
+import { default as createAdsbLolTypeService } from "./lookup/adsblol/type-service.mjs";
+import { default as createAdsbLolRouteService } from "./lookup/adsblol/route-service.mjs";
 
-export function createAdsbLolLookup({
+function createAdsbLolLookup({
   request = globalThis.fetch,
   clock = Date.now,
   successTtlMs = 24 * 60 * 60 * 1000,
@@ -29,3 +29,4 @@ export function createAdsbLolLookup({
     }),
   };
 }
+export default createAdsbLolLookup;

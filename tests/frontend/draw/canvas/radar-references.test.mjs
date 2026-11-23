@@ -2,9 +2,9 @@ import { expect, jest, test } from "@jest/globals";
 
 const drawRadarReferences = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/draw/radar/references.mjs", () => ({
-  drawRadarReferences,
+  default: drawRadarReferences,
 }));
-const { drawCanvasRadarReferences } =
+const { default: drawCanvasRadarReferences } =
   await import("../../../../src/frontend/draw/canvas/radar-references.mjs");
 
 test("renders reference layers with shared visibility and without a scope clip", () => {

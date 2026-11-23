@@ -1,6 +1,6 @@
-import { selectMetarObservationDate } from "./observation-date.mjs";
+import { default as selectMetarObservationDate } from "./observation-date.mjs";
 
-export function getMetarAgeMinutes(observed, now = new Date()) {
+function getMetarAgeMinutes(observed, now = new Date()) {
   const match = String(observed ?? "").match(/^(\d{1,2}) (\d{2}):(\d{2})Z$/);
   if (!match) return null;
   const [, day, hour, minute] = match;
@@ -14,3 +14,4 @@ export function getMetarAgeMinutes(observed, now = new Date()) {
   if (stamp > now.getTime()) stamp = now.getTime();
   return Math.max(0, Math.floor((now.getTime() - stamp) / 60000));
 }
+export default getMetarAgeMinutes;

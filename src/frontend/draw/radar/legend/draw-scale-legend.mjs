@@ -1,7 +1,7 @@
-import { createRadarLegendState } from "./state.mjs";
-import { drawRadarLegendTable } from "./table.mjs";
+import { default as createRadarLegendState } from "./state.mjs";
+import { default as drawRadarLegendTable } from "./table.mjs";
 
-export function drawRadarScaleLegend(
+function drawRadarScaleLegend(
   context,
   width,
   height,
@@ -30,3 +30,4 @@ export function drawRadarScaleLegend(
     legendTopInset,
   );
 }
+export default drawRadarScaleLegend;

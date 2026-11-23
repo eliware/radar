@@ -1,6 +1,6 @@
-import { createCallsignRouteService } from "../callsign/route/service.mjs";
+import { default as createCallsignRouteService } from "../callsign/route/service.mjs";
 
-export function createAdsbLolRouteService({
+function createAdsbLolRouteService({
   request,
   clock,
   routeTtlMs = 60 * 60 * 1000,
@@ -17,3 +17,4 @@ export function createAdsbLolRouteService({
     maxCacheEntries,
   });
 }
+export default createAdsbLolRouteService;

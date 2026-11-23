@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { pathInRange } from "../../../src/backend/airway/range.mjs";
+import { default as pathInRange } from "../../../src/backend/airway/range.mjs";
 
 test("selects a single fix inside the requested distance band", () => {
   expect(pathInRange([{ rangeNm: 10 }], 5, 20)).toBe(true);

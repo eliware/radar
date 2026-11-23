@@ -1,4 +1,4 @@
-export function createAdsbLolRouteLookupControl() {
+function createAdsbLolRouteLookupControl() {
   let enabled = true;
   let generation = 0;
   return {
@@ -12,3 +12,4 @@ export function createAdsbLolRouteLookupControl() {
     },
   };
 }
+export default createAdsbLolRouteLookupControl;

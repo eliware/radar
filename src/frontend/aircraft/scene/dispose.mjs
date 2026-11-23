@@ -1,4 +1,4 @@
-export function disposeAircraftSceneResources(resources) {
+function disposeAircraftSceneResources(resources) {
   resources.workflow.stop();
   resources.layers.destroy();
   resources.water.destroy();
@@ -9,3 +9,4 @@ export function disposeAircraftSceneResources(resources) {
   resources.renderer.dispose();
   resources.container.replaceChildren();
 }
+export default disposeAircraftSceneResources;

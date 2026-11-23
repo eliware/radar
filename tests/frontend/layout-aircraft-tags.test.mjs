@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { layoutAircraftTags } from "../../src/frontend/layout-aircraft-tags.mjs";
+import { default as layoutAircraftTags } from "../../src/frontend/layout-aircraft-tags.mjs";
 
 test("places tags inside the view and reduces label overlap", () => {
   const context = { measureText: (value) => ({ width: value.length * 8 }) };

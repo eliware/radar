@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseAdsbLolResponse } from "../../../../src/backend/aircraft/adsblol-remote/response.mjs";
+import { default as parseAdsbLolResponse } from "../../../../src/backend/aircraft/adsblol-remote/response.mjs";
 
 test("extracts aircraft records from an ADSB.lol response", async () => {
   const aircraft = [{ hex: "abc123" }];

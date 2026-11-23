@@ -1,5 +1,6 @@
-FROM node:26-bookworm-slim AS build
+FROM ghcr.io/eliware/centos10-node26:latest AS build
 
+USER root
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -7,9 +8,10 @@ COPY src ./src
 COPY webpack.config.mjs ./webpack.config.mjs
 RUN npm run build
 
-FROM node:26-bookworm-slim
+FROM ghcr.io/eliware/centos10-node26:latest
 
 ENV NODE_ENV=production
+USER root
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force

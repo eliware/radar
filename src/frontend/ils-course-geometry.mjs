@@ -1,9 +1,9 @@
 const APPROACH_LENGTH_NM = 10;
 const FEET_PER_NM = 6076.12;
-import { runwayDestination } from "./runway-destination.mjs";
-import { safeIlsElevation } from "./safe-ils-elevation.mjs";
+import { default as runwayDestination } from "./runway-destination.mjs";
+import { default as safeIlsElevation } from "./safe-ils-elevation.mjs";
 
-export function buildIlsCourseGeometry(approach) {
+function buildIlsCourseGeometry(approach) {
   if (!Number.isFinite(approach.magneticCourse)) return null;
   const variation = Number.isFinite(approach.magneticVariation) ? approach.magneticVariation : 0;
   const correction = approach.magneticVariationHemisphere === "W" ? -variation : variation;
@@ -20,3 +20,4 @@ export function buildIlsCourseGeometry(approach) {
     },
   };
 }
+export default buildIlsCourseGeometry;

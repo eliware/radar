@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasWater } from "../../../../src/frontend/create/canvas/water.mjs";
+import { default as createCanvasWater } from "../../../../src/frontend/create/canvas/water.mjs";
 
 test("loads the visible map area once and redraws when tile data arrives", async () => {
   const events = new Map();

@@ -1,13 +1,13 @@
-import { drawAirportLayer } from "./airport-layer.mjs";
-import { drawNavaidMarkers } from "../navaid-markers.mjs";
-import { drawArtccBoundaries } from "../artcc-boundaries.mjs";
-import { drawIlsApproaches } from "../ils-approaches.mjs";
-import { drawProcedures } from "../procedures.mjs";
-import { drawAirways } from "../airways.mjs";
-import { normalizeProcedureVisibility } from "./procedure-visibility.mjs";
-import { radarReferenceData } from "./reference-data.mjs";
+import { default as drawAirportLayer } from "./airport-layer.mjs";
+import { default as drawNavaidMarkers } from "../navaid-markers.mjs";
+import { default as drawArtccBoundaries } from "../artcc-boundaries.mjs";
+import { default as drawIlsApproaches } from "../ils-approaches.mjs";
+import { default as drawProcedures } from "../procedures.mjs";
+import { default as drawAirways } from "../airways.mjs";
+import { default as normalizeProcedureVisibility } from "./procedure-visibility.mjs";
+import { default as radarReferenceData } from "./reference-data.mjs";
 
-export function drawRadarReferences(
+function drawRadarReferences(
   context,
   references,
   project,
@@ -41,3 +41,4 @@ export function drawRadarReferences(
   drawProcedures(context, referenceProcedures, project, procedures);
   drawAirways(context, airways, project, airwayVisibility);
 }
+export default drawRadarReferences;

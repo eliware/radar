@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawCanvasBackground } from "../../../../src/frontend/draw/canvas/background.mjs";
+import { default as drawCanvasBackground } from "../../../../src/frontend/draw/canvas/background.mjs";
 
 test("paints the radar canvas black at its layout size", () => {
   const context = { fillRect: jest.fn() };

@@ -1,19 +1,14 @@
-import { createIlsVisibility } from "../../ils-visibility.mjs";
-import { createProcedureVisibility } from "../../procedure-visibility.mjs";
-import { createAirwayVisibility } from "./airways.mjs";
-import { createRunwayVisibility } from "./runways.mjs";
-import { createReferenceVisibility } from "./references.mjs";
-import { createAircraftVisibility } from "../../aircraft-visibility.mjs";
-import { createLayerVisibilityStorage } from "./storage.mjs";
-import { attachRadarLayerShortcuts } from "./shortcuts.mjs";
-import { disposeRadarLayerVisibility } from "./dispose.mjs";
+import { default as createIlsVisibility } from "../../ils-visibility.mjs";
+import { default as createProcedureVisibility } from "../../procedure-visibility.mjs";
+import { default as createAirwayVisibility } from "./airways.mjs";
+import { default as createRunwayVisibility } from "./runways.mjs";
+import { default as createReferenceVisibility } from "./references.mjs";
+import { default as createAircraftVisibility } from "../../aircraft-visibility.mjs";
+import { default as createLayerVisibilityStorage } from "./storage.mjs";
+import { default as attachRadarLayerShortcuts } from "./shortcuts.mjs";
+import { default as disposeRadarLayerVisibility } from "./dispose.mjs";
 
-export function createRadarLayerVisibility(
-  documentRef,
-  onChange,
-  onReferenceChange,
-  onLocalOnlyChange,
-) {
+function createRadarLayerVisibility(documentRef, onChange, onReferenceChange, onLocalOnlyChange) {
   const persistence = createLayerVisibilityStorage(onChange, onReferenceChange);
   const aircraft = createAircraftVisibility(documentRef, onLocalOnlyChange);
   const ils = createIlsVisibility(documentRef, persistence.ils);
@@ -35,3 +30,4 @@ export function createRadarLayerVisibility(
     },
   };
 }
+export default createRadarLayerVisibility;

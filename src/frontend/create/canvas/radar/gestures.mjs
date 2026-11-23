@@ -1,6 +1,6 @@
-import { clampRadarRange } from "../../../radar/clamp-range.mjs";
+import { default as clampRadarRange } from "../../../radar/clamp-range.mjs";
 
-export function createCanvasRadarGestures(state, draw) {
+function createCanvasRadarGestures(state, draw) {
   return {
     onZoom(factor) {
       state.autoZoom = false;
@@ -13,3 +13,4 @@ export function createCanvasRadarGestures(state, draw) {
     },
   };
 }
+export default createCanvasRadarGestures;

@@ -1,7 +1,7 @@
-import { formatAircraftStripFields } from "./fields.mjs";
-import { formatAircraftStripCallsign } from "../../../shared/aircraft/strip/fields.mjs";
+import { default as formatAircraftStripFields } from "./fields.mjs";
+import { default as formatAircraftStripCallsign } from "../../../shared/aircraft/strip/fields.mjs";
 
-export function valuesOf(aircraft) {
+function valuesOf(aircraft) {
   const fields = formatAircraftStripFields(aircraft);
   return [
     formatAircraftStripCallsign(aircraft),
@@ -15,3 +15,4 @@ export function valuesOf(aircraft) {
     fields.destination,
   ];
 }
+export default valuesOf;

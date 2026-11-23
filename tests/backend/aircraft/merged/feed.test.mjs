@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { createMergedAircraftFeed } from "../../../../src/backend/aircraft/merged/feed.mjs";
-import { createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
+import { default as createMergedAircraftFeed } from "../../../../src/backend/aircraft/merged/feed.mjs";
+import { default as createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
 
 function setup() {
   let localItems = [{ icao: "ABC123", distanceNauticalMiles: 4, altitudeFeet: 12000 }];

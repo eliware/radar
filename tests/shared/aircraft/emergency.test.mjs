@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getAircraftEmergencyLabel } from "../../../src/shared/aircraft/emergency.mjs";
+import { default as getAircraftEmergencyLabel } from "../../../src/shared/aircraft/emergency.mjs";
 
 test.each([
   [{ emergency: 1 }, "EMERG"],

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createScreenshotLaunchOptions } from "../../../../src/frontend/responsive/screenshot/launcher.mjs";
+import { default as createScreenshotLaunchOptions } from "../../../../src/frontend/responsive/screenshot/launcher.mjs";
 
 test("uses default launch locations", () => {
   expect(createScreenshotLaunchOptions()).toEqual({

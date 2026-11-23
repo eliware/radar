@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftTagCandidates } from "../../../../src/frontend/aircraft/tag/candidates.mjs";
+import { default as createAircraftTagCandidates } from "../../../../src/frontend/aircraft/tag/candidates.mjs";
 
 test("generates candidate positions around an aircraft marker", () => {
   expect(createAircraftTagCandidates({ x: 50, y: 60 }, 20, 10)).toEqual([

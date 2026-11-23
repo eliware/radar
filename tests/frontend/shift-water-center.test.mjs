@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { shiftWaterCenter } from "../../src/frontend/shift-water-center.mjs";
+import { default as shiftWaterCenter } from "../../src/frontend/shift-water-center.mjs";
 
 test("shifts the tile center by local east and north distances", () => {
   expect(shiftWaterCenter({ latitude: 40, longitude: -70 }, 0, 60)).toEqual({

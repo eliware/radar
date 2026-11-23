@@ -1,15 +1,7 @@
-import { screenshotOutputPath } from "./path.mjs";
-import { validateScreenshotFile } from "./file-validation.mjs";
+import { default as screenshotOutputPath } from "./path.mjs";
+import { default as validateScreenshotFile } from "./file-validation.mjs";
 
-export async function captureScreenshotTargets(
-  session,
-  folder,
-  baseUrl,
-  targets,
-  modes,
-  delayMs,
-  files,
-) {
+async function captureScreenshotTargets(session, folder, baseUrl, targets, modes, delayMs, files) {
   for (const { name, viewport } of targets) {
     await session.capturePage(name, baseUrl, viewport, delayMs, async (page) => {
       for (const mode of modes) {
@@ -20,3 +12,4 @@ export async function captureScreenshotTargets(
     });
   }
 }
+export default captureScreenshotTargets;

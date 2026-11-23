@@ -1,4 +1,4 @@
-export function createAdsbLolSubscribers(listAircraft) {
+function createAdsbLolSubscribers(listAircraft) {
   const subscribers = new Set();
   return {
     subscribe(subscriber) {
@@ -14,3 +14,4 @@ export function createAdsbLolSubscribers(listAircraft) {
     },
   };
 }
+export default createAdsbLolSubscribers;

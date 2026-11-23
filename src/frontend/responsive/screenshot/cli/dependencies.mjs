@@ -1,6 +1,6 @@
-import { createDefaultScreenshotCliDependencies } from "./defaults.mjs";
+import { default as createDefaultScreenshotCliDependencies } from "./defaults.mjs";
 
-export function resolveScreenshotCliDependencies(dependencies = {}) {
+function resolveScreenshotCliDependencies(dependencies = {}) {
   const defaults = createDefaultScreenshotCliDependencies();
   return Object.fromEntries(
     Object.keys(defaults).map((key) => [
@@ -9,3 +9,4 @@ export function resolveScreenshotCliDependencies(dependencies = {}) {
     ]),
   );
 }
+export default resolveScreenshotCliDependencies;

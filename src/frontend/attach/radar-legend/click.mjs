@@ -1,6 +1,6 @@
-import { findRadarLegendToggle } from "../../draw/radar/legend/hit-test.mjs";
+import { default as findRadarLegendToggle } from "../../draw/radar/legend/hit-test.mjs";
 
-export function attachRadarLegendClick(element, documentRef, windowRef, topInset = 0) {
+function attachRadarLegendClick(element, documentRef, windowRef, topInset = 0) {
   if (!element?.addEventListener || !documentRef?.dispatchEvent || !windowRef?.KeyboardEvent)
     return () => {};
   const onClick = (event) => {
@@ -21,3 +21,4 @@ export function attachRadarLegendClick(element, documentRef, windowRef, topInset
     element.removeEventListener("click", onClick);
   };
 }
+export default attachRadarLegendClick;

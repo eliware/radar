@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { loadSceneWaterView } from "../../src/frontend/load-scene-water-view.mjs";
+import { default as loadSceneWaterView } from "../../src/frontend/load-scene-water-view.mjs";
 
 test("requests scene water around the camera target", () => {
   const loader = { load: jest.fn() };

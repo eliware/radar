@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarLabel } from "../../../src/frontend/radar/label.mjs";
+import { default as createRadarLabel } from "../../../src/frontend/radar/label.mjs";
 
 function makeThree() {
   class Sprite {

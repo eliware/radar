@@ -1,6 +1,6 @@
-import { createAdsbLolPollingRetryPolicy } from "./polling/retry-policy.mjs";
+import { default as createAdsbLolPollingRetryPolicy } from "./polling/retry-policy.mjs";
 
-export function createAdsbLolPoller({
+function createAdsbLolPoller({
   poll,
   hasClients,
   setTimeoutFn = setTimeout,
@@ -55,3 +55,4 @@ export function createAdsbLolPoller({
     },
   };
 }
+export default createAdsbLolPoller;

@@ -1,6 +1,6 @@
-import { createViewportReporter } from "../report-viewport.mjs";
+import { default as createViewportReporter } from "../report-viewport.mjs";
 
-export function createDashboardViewport(scene, documentRef) {
+function createDashboardViewport(scene, documentRef) {
   const send = createViewportReporter(scene, documentRef);
   return {
     send,
@@ -10,3 +10,4 @@ export function createDashboardViewport(scene, documentRef) {
     destroy: send.destroy,
   };
 }
+export default createDashboardViewport;

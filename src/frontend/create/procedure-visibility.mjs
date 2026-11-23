@@ -1,6 +1,6 @@
-import { attachProcedureToggleKey } from "../attach/procedure-toggle-key.mjs";
+import { default as attachProcedureToggleKey } from "../attach/procedure-toggle-key.mjs";
 
-export function createProcedureVisibility(documentRef, onChange = () => {}) {
+function createProcedureVisibility(documentRef, onChange = () => {}) {
   let sidVisible = true;
   let starVisible = true;
   const changed = () => onChange({ sidVisible, starVisible });
@@ -19,3 +19,4 @@ export function createProcedureVisibility(documentRef, onChange = () => {}) {
     destroy: detach,
   };
 }
+export default createProcedureVisibility;

@@ -1,6 +1,6 @@
 const TILE_JSON_URL = "https://tiles.openfreemap.org/planet";
 
-export function createWaterTileMetadataLoader(fetchRef) {
+function createWaterTileMetadataLoader(fetchRef) {
   let metadataPromise;
   return {
     load() {
@@ -17,3 +17,4 @@ export function createWaterTileMetadataLoader(fetchRef) {
     },
   };
 }
+export default createWaterTileMetadataLoader;

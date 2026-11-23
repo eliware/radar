@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { findRadarLegendToggle } from "../../../../../src/frontend/draw/radar/legend/hit-test.mjs";
-import { radarLegendLayout } from "../../../../../src/frontend/draw/radar/legend/entries.mjs";
+import { default as findRadarLegendToggle } from "../../../../../src/frontend/draw/radar/legend/hit-test.mjs";
+import { default as radarLegendLayout } from "../../../../../src/frontend/draw/radar/legend/entries.mjs";
 
 test("finds legend shortcuts at their layout positions across columns and touch inset", () => {
   expect(findRadarLegendToggle(800, 400, 20, 152)).toBe("b");

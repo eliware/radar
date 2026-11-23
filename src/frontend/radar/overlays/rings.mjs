@@ -1,11 +1,11 @@
 import { RADAR_RING_LABEL_ANGLE } from "../range.mjs";
-import { getRadarLabelGapAngle } from "../label-gap-angle.mjs";
-import { getRadarRingRanges } from "../ring/ranges.mjs";
-import { getRadarRingSpacing } from "../ring/spacing.mjs";
-import { createRadarLabel } from "../label.mjs";
-import { getRadarRingColor } from "../ring/color.mjs";
+import { default as getRadarLabelGapAngle } from "../label-gap-angle.mjs";
+import { default as getRadarRingRanges } from "../ring/ranges.mjs";
+import { default as getRadarRingSpacing } from "../ring/spacing.mjs";
+import { default as createRadarLabel } from "../label.mjs";
+import { default as getRadarRingColor } from "../ring/color.mjs";
 
-export function createRadarRings(THREE, scene, documentRef) {
+function createRadarRings(THREE, scene, documentRef) {
   const rings = new Map();
   const labels = new Map();
   const paletteObjects = [];
@@ -82,3 +82,4 @@ export function createRadarRings(THREE, scene, documentRef) {
     }
   }
 }
+export default createRadarRings;

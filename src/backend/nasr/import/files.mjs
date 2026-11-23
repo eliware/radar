@@ -1,5 +1,5 @@
 import { copyFileSync, existsSync, mkdirSync, renameSync, rmSync } from "node:fs";
-export function createNasrImportFiles({
+function createNasrImportFiles({
   exists = existsSync,
   copy = copyFileSync,
   mkdir = mkdirSync,
@@ -14,3 +14,4 @@ export function createNasrImportFiles({
     remove,
   };
 }
+export default createNasrImportFiles;

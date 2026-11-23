@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerWebSocketRoutes } from "../../src/backend/websocket-routes.mjs";
+import { default as registerWebSocketRoutes } from "../../src/backend/websocket-routes.mjs";
 
 test("publishes feed snapshots and applies viewport settings", () => {
   let handler;

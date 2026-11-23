@@ -1,8 +1,8 @@
-import { normalizeRemoteAircraft } from "../normalize.mjs";
-import { preserveRouteData } from "./route-data.mjs";
-import { createAdsbLolTrackRecords } from "./records.mjs";
+import { default as normalizeRemoteAircraft } from "../normalize.mjs";
+import { default as preserveRouteData } from "./route-data.mjs";
+import { default as createAdsbLolTrackRecords } from "./records.mjs";
 
-export function createAdsbLolTrackStore({ location, clock = Date.now }) {
+function createAdsbLolTrackStore({ location, clock = Date.now }) {
   const aircraft = createAdsbLolTrackRecords({ clock });
 
   function update(record) {
@@ -21,3 +21,4 @@ export function createAdsbLolTrackStore({ location, clock = Date.now }) {
     clear: aircraft.clear,
   };
 }
+export default createAdsbLolTrackStore;

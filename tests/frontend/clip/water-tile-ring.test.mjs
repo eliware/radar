@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { clipWaterTileRing } from "../../../src/frontend/clip/water-tile-ring.mjs";
+import { default as clipWaterTileRing } from "../../../src/frontend/clip/water-tile-ring.mjs";
 
 test("converts a ring that does not touch the tile edge", () => {
   const paths = clipWaterTileRing(

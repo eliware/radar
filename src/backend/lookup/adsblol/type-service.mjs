@@ -1,6 +1,6 @@
-import { createAircraftTypeService } from "../aircraft/type-service.mjs";
+import { default as createAircraftTypeService } from "../aircraft/type-service.mjs";
 
-export function createAdsbLolTypeService({
+function createAdsbLolTypeService({
   request,
   clock,
   successTtlMs = 24 * 60 * 60 * 1000,
@@ -17,3 +17,4 @@ export function createAdsbLolTypeService({
     maxCacheEntries,
   });
 }
+export default createAdsbLolTypeService;

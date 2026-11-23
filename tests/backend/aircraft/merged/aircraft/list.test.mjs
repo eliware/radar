@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createMergedAircraftList } from "../../../../../src/backend/aircraft/merged/aircraft/list.mjs";
+import { default as createMergedAircraftList } from "../../../../../src/backend/aircraft/merged/aircraft/list.mjs";
 
 test("projects merged records in distance order and calculates local range", () => {
   const entries = new Map([

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createRadarViewport } from "../../../../src/frontend/radar/reference/viewport.mjs";
+import { default as createRadarViewport } from "../../../../src/frontend/radar/reference/viewport.mjs";
 
 test("viewport bounds include the rotated mobile screen and cap fetch range", () => {
   const bounds = createRadarViewport(400, 800, 20, 0, 0, 0);

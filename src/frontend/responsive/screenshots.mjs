@@ -1,7 +1,7 @@
-import { setupScreenshotCapture } from "./screenshot/setup.mjs";
-import { runScreenshotCapture } from "./screenshot/run.mjs";
+import { default as setupScreenshotCapture } from "./screenshot/setup.mjs";
+import { default as runScreenshotCapture } from "./screenshot/run.mjs";
 
-export async function captureResponsiveScreenshots({
+async function captureResponsiveScreenshots({
   baseUrl,
   outputDir,
   targets,
@@ -26,3 +26,4 @@ export async function captureResponsiveScreenshots({
     report,
   });
 }
+export default captureResponsiveScreenshots;

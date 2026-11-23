@@ -1,7 +1,7 @@
 const EMERGENCY_SQUAWKS = new Set(["7600", "7700"]);
 const HIJACK_SQUAWK = "7500";
 
-export function getAircraftEmergencyLabel(aircraft) {
+function getAircraftEmergencyLabel(aircraft) {
   const squawk = String(aircraft?.squawk ?? "")
     .trim()
     .padStart(4, "0");
@@ -20,3 +20,4 @@ export function getAircraftEmergencyLabel(aircraft) {
 function isEmergencyValue(value) {
   return value !== "" && !["0", "false", "none", "normal"].includes(value);
 }
+export default getAircraftEmergencyLabel;

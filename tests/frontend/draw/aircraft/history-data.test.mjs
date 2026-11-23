@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getAircraftHistoryMarks } from "../../../../src/frontend/draw/aircraft/history-data.mjs";
+import { default as getAircraftHistoryMarks } from "../../../../src/frontend/draw/aircraft/history-data.mjs";
 
 test("excludes current and expired points and calculates opacity for retained history", () => {
   const now = 120_000;

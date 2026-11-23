@@ -1,7 +1,8 @@
-export function isValidRunwayEnd(end) {
+function isValidRunwayEnd(end) {
   return (
     Number.isFinite(end.latitude) &&
     Number.isFinite(end.longitude) &&
     Number.isFinite(end.alignmentDegrees)
   );
 }
+export default isValidRunwayEnd;

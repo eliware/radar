@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAirspaceVolumes } from "../../../src/frontend/create/airspace-volumes.mjs";
+import { default as createAirspaceVolumes } from "../../../src/frontend/create/airspace-volumes.mjs";
 
 test("adds a bounded airspace shell once and disposes it", () => {
   class Geometry {

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarCamera } from "../../../src/frontend/radar/camera.mjs";
+import { default as createRadarCamera } from "../../../src/frontend/radar/camera.mjs";
 
 function setup(coarse = false) {
   const events = new Map();

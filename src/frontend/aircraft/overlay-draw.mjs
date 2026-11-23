@@ -1,9 +1,9 @@
-import { createOverlayProjection } from "./overlay/projection.mjs";
-import { drawAircraftOverlayReferences } from "./overlay/references.mjs";
-import { drawAircraftOverlayTargets } from "./overlay/aircraft.mjs";
-import { drawAircraftOverlayScope } from "./overlay/scope.mjs";
+import { default as createOverlayProjection } from "./overlay/projection.mjs";
+import { default as drawAircraftOverlayReferences } from "./overlay/references.mjs";
+import { default as drawAircraftOverlayTargets } from "./overlay/aircraft.mjs";
+import { default as drawAircraftOverlayScope } from "./overlay/scope.mjs";
 
-export function createOverlayDrawer({ THREE, container, windowRef, canvas, context }) {
+function createOverlayDrawer({ THREE, container, windowRef, canvas, context }) {
   const projection = createOverlayProjection({ THREE, container, windowRef, canvas, context });
   return function draw(
     aircraft,
@@ -69,3 +69,4 @@ export function createOverlayDrawer({ THREE, container, windowRef, canvas, conte
     );
   };
 }
+export default createOverlayDrawer;

@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { startWebApplication } from "../../src/backend/main.mjs";
+import { default as startWebApplication } from "../../src/backend/main.mjs";
 
 afterEach(() => {
   for (const key of [

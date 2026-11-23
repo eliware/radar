@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerIlsApproachRoutes } from "../../../../src/backend/ils/approach/routes.mjs";
+import { default as registerIlsApproachRoutes } from "../../../../src/backend/ils/approach/routes.mjs";
 
 function route(database, location = { latitude: 43, longitude: -70 }) {
   const routes = new Map();

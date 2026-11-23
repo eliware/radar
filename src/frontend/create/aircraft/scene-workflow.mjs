@@ -1,7 +1,7 @@
-import { createAircraftSceneUpdater } from "../../update-aircraft-scene.mjs";
-import { startAircraftSceneLoop } from "../../start/aircraft-scene-loop.mjs";
+import { default as createAircraftSceneUpdater } from "../../update-aircraft-scene.mjs";
+import { default as startAircraftSceneLoop } from "../../start/aircraft-scene-loop.mjs";
 
-export function createAircraftSceneWorkflow(options) {
+function createAircraftSceneWorkflow(options) {
   const update = createAircraftSceneUpdater(options);
   return {
     stop: startAircraftSceneLoop({ ...options, getTargetItems: update.items }),
@@ -10,3 +10,4 @@ export function createAircraftSceneWorkflow(options) {
     updateSnapshot: update.updateSnapshot,
   };
 }
+export default createAircraftSceneWorkflow;

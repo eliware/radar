@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { runScreenshotCapture } from "../../../../src/frontend/responsive/screenshot/run.mjs";
+import { default as runScreenshotCapture } from "../../../../src/frontend/responsive/screenshot/run.mjs";
 
 test("runs screenshot capture, closes the browser, then reports its result", async () => {
   const browser = { close: jest.fn() };

@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { distanceNauticalMiles } from "../../src/shared/distance-nautical-miles.mjs";
-import { runwayDestination } from "../../src/frontend/runway-destination.mjs";
+import { default as distanceNauticalMiles } from "../../src/shared/distance-nautical-miles.mjs";
+import { default as runwayDestination } from "../../src/frontend/runway-destination.mjs";
 
 test.each([
   [0, 1, 0],

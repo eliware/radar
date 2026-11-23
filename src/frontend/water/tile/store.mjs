@@ -1,4 +1,4 @@
-export function createWaterTileStore(maxEntries = 96) {
+function createWaterTileStore(maxEntries = 96) {
   const entries = new Map();
 
   function set(key, paths) {
@@ -20,3 +20,4 @@ export function createWaterTileStore(maxEntries = 96) {
     },
   };
 }
+export default createWaterTileStore;

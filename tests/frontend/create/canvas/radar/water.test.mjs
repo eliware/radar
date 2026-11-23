@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarWater } from "../../../../../src/frontend/create/canvas/radar/water.mjs";
+import { default as createCanvasRadarWater } from "../../../../../src/frontend/create/canvas/radar/water.mjs";
 
 test("composes the canvas water controller and exposes its lifecycle", () => {
   const documentRef = { addEventListener: jest.fn(), removeEventListener: jest.fn() };

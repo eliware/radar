@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachProcedureToggleKey } from "../../../src/frontend/attach/procedure-toggle-key.mjs";
+import { default as attachProcedureToggleKey } from "../../../src/frontend/attach/procedure-toggle-key.mjs";
 
 function event(key, extra = {}) {
   return { key, target: {}, preventDefault: jest.fn(), ...extra };

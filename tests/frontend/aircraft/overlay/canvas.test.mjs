@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftOverlayCanvas } from "../../../../src/frontend/aircraft/overlay/canvas.mjs";
+import { default as createAircraftOverlayCanvas } from "../../../../src/frontend/aircraft/overlay/canvas.mjs";
 
 test("creates a non-interactive canvas and appends it to the container", () => {
   const context = {};

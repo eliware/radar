@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getRadarCanvasViewport } from "../../../src/frontend/canvas-radar/viewport.mjs";
+import { default as getRadarCanvasViewport } from "../../../src/frontend/canvas-radar/viewport.mjs";
 
 test("builds viewport bounds from canvas dimensions and current view state", () => {
   const canvas = { clientWidth: 400, clientHeight: 800 };

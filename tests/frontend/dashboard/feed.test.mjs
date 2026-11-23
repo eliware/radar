@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { connectDashboardFeed } from "../../../src/frontend/dashboard/feed.mjs";
+import { default as connectDashboardFeed } from "../../../src/frontend/dashboard/feed.mjs";
 
 test("reports WebSocket connection state and invokes the open callback", async () => {
   let socket;

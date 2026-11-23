@@ -1,5 +1,6 @@
-import { writeToggleState } from "../../../write-toggle-state.mjs";
+import { default as writeToggleState } from "../../../write-toggle-state.mjs";
 
-export function persistLayerVisibility(key, visible) {
+function persistLayerVisibility(key, visible) {
   writeToggleState(key, visible);
 }
+export default persistLayerVisibility;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { restoreLayerVisibility } from "../../../../../src/frontend/create/radar/layer/restore.mjs";
+import { default as restoreLayerVisibility } from "../../../../../src/frontend/create/radar/layer/restore.mjs";
 
 test("applies saved visibility settings to every controller", () => {
   const controllers = {

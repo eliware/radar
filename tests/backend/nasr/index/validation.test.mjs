@@ -2,7 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { expect, test } from "@jest/globals";
 import { NASR_INDEXES } from "../../../../src/backend/nasr/index/definitions.mjs";
 import { REQUIRED_COLUMNS } from "../../../../src/backend/nasr/required-columns.mjs";
-import { verifyNasrIndexes } from "../../../../src/backend/nasr/index/validation.mjs";
+import { default as verifyNasrIndexes } from "../../../../src/backend/nasr/index/validation.mjs";
 
 test("verifies installed index definitions", () => {
   const database = new DatabaseSync(":memory:");

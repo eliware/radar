@@ -2,9 +2,9 @@ import { expect, test } from "@jest/globals";
 import {
   DEFAULT_RADAR_RANGE_NM,
   DEFAULT_RADAR_ROTATION_DEGREES,
-  parseRadarRangeSetting,
 } from "../../src/shared/radar-view-settings.mjs";
-import { parseRadarViewSettings } from "../../src/shared/parse-radar-view-settings.mjs";
+import { default as parseRadarRangeSetting } from "../../src/shared/radar-view-settings.mjs";
+import { default as parseRadarViewSettings } from "../../src/shared/parse-radar-view-settings.mjs";
 
 test("uses default radar view settings when values are absent", () => {
   expect(parseRadarViewSettings({})).toEqual({

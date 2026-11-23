@@ -1,8 +1,9 @@
-import { launchScreenshotBrowser } from "../browser.mjs";
-import { createScreenshotPageCapture } from "../capture-page.mjs";
+import { default as launchScreenshotBrowser } from "../browser.mjs";
+import { default as createScreenshotPageCapture } from "../capture-page.mjs";
 
-export async function createScreenshotBrowserSession(browserLauncher, browserArgs = []) {
+async function createScreenshotBrowserSession(browserLauncher, browserArgs = []) {
   const browser = await launchScreenshotBrowser(browserLauncher, browserArgs);
   const capture = createScreenshotPageCapture(browser.browser);
   return { ...capture, close: browser.close };
 }
+export default createScreenshotBrowserSession;

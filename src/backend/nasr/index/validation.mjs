@@ -1,8 +1,8 @@
 import { NASR_INDEXES } from "./definitions.mjs";
-import { parseNasrIndexDefinition } from "./definition.mjs";
-import { normalizeNasrIndexSql } from "./normalize-definition.mjs";
+import { default as parseNasrIndexDefinition } from "./definition.mjs";
+import { default as normalizeNasrIndexSql } from "./normalize-definition.mjs";
 
-export function verifyNasrIndexes(database) {
+function verifyNasrIndexes(database) {
   const stored = new Map(
     database
       .prepare("SELECT name, sql FROM sqlite_master WHERE type = 'index'")
@@ -15,3 +15,4 @@ export function verifyNasrIndexes(database) {
       throw new Error(`NASR index ${name} is missing or has an incorrect definition.`);
   }
 }
+export default verifyNasrIndexes;

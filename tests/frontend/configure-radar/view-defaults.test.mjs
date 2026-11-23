@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { configureRadarViewDefaults } from "../../../src/frontend/configure-radar/view-defaults.mjs";
+import { default as configureRadarViewDefaults } from "../../../src/frontend/configure-radar/view-defaults.mjs";
 
 test("sets configured defaults and returns a reset action", () => {
   const radarCamera = { setRange: jest.fn(), setRotation: jest.fn() };

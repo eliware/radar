@@ -1,8 +1,8 @@
-import { isAllowedAppIcon } from "./static/asset/policy.mjs";
-import { isAllowedPwaScreenshot } from "./static/asset/pwa-screenshot-policy.mjs";
-import { sendStaticAsset } from "./static/asset/response.mjs";
+import { default as isAllowedAppIcon } from "./static/asset/policy.mjs";
+import { default as isAllowedPwaScreenshot } from "./static/asset/pwa-screenshot-policy.mjs";
+import { default as sendStaticAsset } from "./static/asset/response.mjs";
 
-export function registerStaticRoutes(app, { publicRoot, buildRoot, read }) {
+function registerStaticRoutes(app, { publicRoot, buildRoot, read }) {
   app.get("/", async (_request, reply) => {
     reply.header("Cache-Control", "no-cache");
     return sendStaticAsset(reply, `${publicRoot}/index.html`, "text/html", read);
@@ -34,3 +34,4 @@ export function registerStaticRoutes(app, { publicRoot, buildRoot, read }) {
     return sendStaticAsset(reply, `${buildRoot}/chunks/${filename}`, "text/javascript", read);
   });
 }
+export default registerStaticRoutes;

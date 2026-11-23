@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { distanceNauticalMiles } from "../../src/shared/distance-nautical-miles.mjs";
+import { default as distanceNauticalMiles } from "../../src/shared/distance-nautical-miles.mjs";
 
 test("returns zero for the same point", () => {
   expect(

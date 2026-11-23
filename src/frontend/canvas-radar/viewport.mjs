@@ -1,6 +1,6 @@
-import { createRadarViewport } from "../radar/reference/viewport.mjs";
+import { default as createRadarViewport } from "../radar/reference/viewport.mjs";
 
-export function getRadarCanvasViewport(canvas, state) {
+function getRadarCanvasViewport(canvas, state) {
   return createRadarViewport(
     canvas.clientWidth,
     canvas.clientHeight,
@@ -10,3 +10,4 @@ export function getRadarCanvasViewport(canvas, state) {
     state.rotation,
   );
 }
+export default getRadarCanvasViewport;

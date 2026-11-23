@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { getWaterFetch } from "../../src/frontend/get-water-fetch.mjs";
+import { default as getWaterFetch } from "../../src/frontend/get-water-fetch.mjs";
 
 test("binds browser fetch and returns a safe unavailable response otherwise", async () => {
   const owner = { fetch: jest.fn(async () => ({ ok: true })) };

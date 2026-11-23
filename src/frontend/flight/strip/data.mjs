@@ -1,7 +1,7 @@
-import { buildFlightStripLayout } from "./layout.mjs";
-import { getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
-import { valuesOf } from "./values.mjs";
-import { orderFlightStripAircraft } from "./order.mjs";
+import { default as buildFlightStripLayout } from "./layout.mjs";
+import { default as getAircraftEmergencyLabel } from "../../../shared/aircraft/emergency.mjs";
+import { default as valuesOf } from "./values.mjs";
+import { default as orderFlightStripAircraft } from "./order.mjs";
 
 const fieldLabels = [
   "CALLSIGN",
@@ -14,7 +14,7 @@ const fieldLabels = [
   "ORIGIN",
   "DESTINATION",
 ];
-export function buildFlightStripData(aircraft, width) {
+function buildFlightStripData(aircraft, width) {
   const sorted = orderFlightStripAircraft(aircraft);
   const values = sorted.map(valuesOf);
   const layout = buildFlightStripLayout(values, width, fieldLabels);
@@ -32,3 +32,4 @@ export function buildFlightStripData(aircraft, width) {
     count: sorted.length,
   };
 }
+export default buildFlightStripData;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectDefaultRadarRange } from "../../../src/frontend/radar/default-range.mjs";
+import { default as selectDefaultRadarRange } from "../../../src/frontend/radar/default-range.mjs";
 
 test("selects a default range beyond the furthest finite target", () => {
   expect(selectDefaultRadarRange([])).toBe(20);

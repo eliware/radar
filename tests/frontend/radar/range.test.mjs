@@ -4,9 +4,9 @@ import {
   MAX_RADAR_RANGE,
   MIN_RADAR_RANGE,
 } from "../../../src/frontend/radar/range.mjs";
-import { clampRadarRange } from "../../../src/frontend/radar/clamp-range.mjs";
-import { getRadarRingRanges } from "../../../src/frontend/radar/ring/ranges.mjs";
-import { getRadarRingSpacing } from "../../../src/frontend/radar/ring/spacing.mjs";
+import { default as clampRadarRange } from "../../../src/frontend/radar/clamp-range.mjs";
+import { default as getRadarRingRanges } from "../../../src/frontend/radar/ring/ranges.mjs";
+import { default as getRadarRingSpacing } from "../../../src/frontend/radar/ring/spacing.mjs";
 
 test("defines the supported radar range constants", () => {
   expect([MIN_RADAR_RANGE, DEFAULT_RADAR_RANGE, MAX_RADAR_RANGE]).toEqual([1, 20, 300]);

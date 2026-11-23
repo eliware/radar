@@ -1,4 +1,4 @@
-export function drawRunwaySegment(runway, airport, project) {
+function drawRunwaySegment(runway, airport, project) {
   const ends = runway.map((end) => ({
     ...end,
     elevationFeet: Number.isFinite(end.elevationFeet) ? end.elevationFeet : airport.elevationFeet,
@@ -11,3 +11,4 @@ export function drawRunwaySegment(runway, airport, project) {
 function validPoint(point) {
   return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }
+export default drawRunwaySegment;

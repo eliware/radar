@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createViewChangeListeners } from "../../../src/frontend/create/view-change-listeners.mjs";
+import { default as createViewChangeListeners } from "../../../src/frontend/create/view-change-listeners.mjs";
 
 test("notifies view listeners and removes them on unsubscribe", () => {
   const viewChanges = createViewChangeListeners();

@@ -1,6 +1,7 @@
-import { attachDashboardPagehide } from "./pagehide.mjs";
-import { cleanupDashboardSetup } from "../../dashboard/cleanup.mjs";
+import { default as attachDashboardPagehide } from "./pagehide.mjs";
+import { default as cleanupDashboardSetup } from "../../dashboard/cleanup.mjs";
 
-export function attachDashboardLifecycle(windowRef, resources) {
+function attachDashboardLifecycle(windowRef, resources) {
   return attachDashboardPagehide(windowRef, () => cleanupDashboardSetup(resources));
 }
+export default attachDashboardLifecycle;

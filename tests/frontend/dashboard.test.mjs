@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { startDashboard } from "../../src/frontend/dashboard.mjs";
+import { default as startDashboard } from "../../src/frontend/dashboard.mjs";
 function makeDocument(protocol = "https:") {
   const keyListeners = new Map([["keydown", []]]),
     compassListeners = new Map();

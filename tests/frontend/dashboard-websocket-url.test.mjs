@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { dashboardWebSocketUrl } from "../../src/frontend/dashboard-websocket-url.mjs";
+import { default as dashboardWebSocketUrl } from "../../src/frontend/dashboard-websocket-url.mjs";
 
 test.each([
   ["https:", "wss://localhost:1390/ws"],

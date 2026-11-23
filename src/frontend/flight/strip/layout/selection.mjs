@@ -13,10 +13,11 @@ function requiredWidth(group, values, columns) {
   return columns * (chars * 8 + 10);
 }
 
-export function selectFlightStripLayout(values, width, labels) {
+function selectFlightStripLayout(values, width, labels) {
   const indexes = labels.map((_, index) => index);
   if (width >= requiredWidth(indexes, values, indexes.length)) return [indexes];
   return Math.max(...twoRows.map((group) => requiredWidth(group, values, 5))) <= width
     ? twoRows
     : threeRows;
 }
+export default selectFlightStripLayout;

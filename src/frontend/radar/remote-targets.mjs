@@ -1,4 +1,4 @@
-export function removeRadarRemoteTargetsExcept(targets, icaos) {
+function removeRadarRemoteTargetsExcept(targets, icaos) {
   const keep = new Set(icaos);
   const removed = [];
   for (const [icao, target] of targets)
@@ -8,3 +8,4 @@ export function removeRadarRemoteTargetsExcept(targets, icaos) {
     }
   return removed;
 }
+export default removeRadarRemoteTargetsExcept;

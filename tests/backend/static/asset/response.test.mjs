@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { sendStaticAsset } from "../../../../src/backend/static/asset/response.mjs";
+import { default as sendStaticAsset } from "../../../../src/backend/static/asset/response.mjs";
 
 function reply() {
   const value = {

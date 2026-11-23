@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { mapIlsApproachRows } from "../../../../src/backend/ils/approach/mapper.mjs";
-import { distanceNauticalMiles } from "../../../../src/shared/distance-nautical-miles.mjs";
+import { default as mapIlsApproachRows } from "../../../../src/backend/ils/approach/mapper.mjs";
+import { default as distanceNauticalMiles } from "../../../../src/shared/distance-nautical-miles.mjs";
 
 const location = { latitude: 0, longitude: 0 };
 const row = (latitude, longitude, runwayEnd = "18") => ({

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawNavaidMarkers } from "../../../src/frontend/draw/navaid-markers.mjs";
+import { default as drawNavaidMarkers } from "../../../src/frontend/draw/navaid-markers.mjs";
 
 test("draws a blue identifier and symbol for in-range VORs", () => {
   const context = {

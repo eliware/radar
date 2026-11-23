@@ -1,7 +1,7 @@
 import { MAX_RADAR_RANGE } from "../../radar/range.mjs";
-import { drawAirportRunway } from "./runway/draw.mjs";
+import { default as drawAirportRunway } from "./runway/draw.mjs";
 
-export function drawAirportRunways(
+function drawAirportRunways(
   context,
   airports,
   project,
@@ -24,3 +24,4 @@ export function drawAirportRunways(
     }
   }
 }
+export default drawAirportRunways;

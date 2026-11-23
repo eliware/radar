@@ -1,4 +1,4 @@
-import { createIlsVisibility } from "../../../src/frontend/create/ils-visibility.mjs";
+import { default as createIlsVisibility } from "../../../src/frontend/create/ils-visibility.mjs";
 import { expect, test } from "@jest/globals";
 
 test("sets visibility and notifies the view", () => {

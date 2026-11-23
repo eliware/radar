@@ -1,6 +1,6 @@
-import { createWaterTileUrl } from "./url.mjs";
+import { default as createWaterTileUrl } from "./url.mjs";
 
-export function createWaterTileRequest(fetchRef) {
+function createWaterTileRequest(fetchRef) {
   const pending = new Map();
 
   function retain(keys) {
@@ -30,3 +30,4 @@ export function createWaterTileRequest(fetchRef) {
 
   return { load, retain };
 }
+export default createWaterTileRequest;

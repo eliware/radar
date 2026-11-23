@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawCameraReadout } from "../../../../src/frontend/aircraft/overlay/readout.mjs";
+import { default as drawCameraReadout } from "../../../../src/frontend/aircraft/overlay/readout.mjs";
 
 test("skips invalid camera or home coordinates", () => {
   const context = { fillText: jest.fn() };

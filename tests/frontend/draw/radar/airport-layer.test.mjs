@@ -4,15 +4,16 @@ const drawAirportMarkers = jest.fn();
 const drawAirspaceRings = jest.fn();
 const drawAirportRunways = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/draw/airport/markers.mjs", () => ({
-  drawAirportMarkers,
+  default: drawAirportMarkers,
 }));
 jest.unstable_mockModule("../../../../src/frontend/draw/airspace-rings.mjs", () => ({
-  drawAirspaceRings,
+  default: drawAirspaceRings,
 }));
 jest.unstable_mockModule("../../../../src/frontend/draw/airport/runways.mjs", () => ({
-  drawAirportRunways,
+  default: drawAirportRunways,
 }));
-const { drawAirportLayer } = await import("../../../../src/frontend/draw/radar/airport-layer.mjs");
+const { default: drawAirportLayer } =
+  await import("../../../../src/frontend/draw/radar/airport-layer.mjs");
 
 test("draws airport layers using their visibility settings", () => {
   drawAirportLayer(

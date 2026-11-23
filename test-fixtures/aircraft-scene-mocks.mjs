@@ -118,11 +118,11 @@ export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/fr
   for (const [name, factory] of Object.entries(factories)) {
     const path = modules[name];
     jest.unstable_mockModule(`${sourcePrefix}/${path}.mjs`, () => ({
-      [name]: factory,
+      default: factory,
     }));
   }
   jest.unstable_mockModule(`${sourcePrefix}/aircraft/space-position.mjs`, () => ({
-    projectAircraftPosition,
+    default: projectAircraftPosition,
   }));
   jest.unstable_mockModule(`${sourcePrefix}/radar/range.mjs`, () => ({
     DEFAULT_RADAR_RANGE: 20,
@@ -134,7 +134,7 @@ export function registerAircraftSceneMocks(jest, sourcePrefix = "../../../src/fr
     selectDefaultRadarRange,
   }));
   jest.unstable_mockModule(`${sourcePrefix}/create/orbit-radar-state.mjs`, () => ({
-    createOrbitRadarState: jest.fn(() => orbitState),
+    default: jest.fn(() => orbitState),
   }));
   jest.unstable_mockModule("three/addons/controls/OrbitControls.js", () => ({
     OrbitControls: class {

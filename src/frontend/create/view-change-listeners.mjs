@@ -1,4 +1,4 @@
-export function createViewChangeListeners() {
+function createViewChangeListeners() {
   const listeners = new Set();
   return {
     emit(range) {
@@ -14,3 +14,4 @@ export function createViewChangeListeners() {
     },
   };
 }
+export default createViewChangeListeners;

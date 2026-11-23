@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { renderMetarTicker } from "../../../src/frontend/metar/ticker.mjs";
+import { default as renderMetarTicker } from "../../../src/frontend/metar/ticker.mjs";
 
 test("renders and restarts the ticker animation with escaped report data", () => {
   const reflow = jest.fn();

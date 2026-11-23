@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAirportDatabase } from "../../../src/backend/airport/database.mjs";
+import { default as createAirportDatabase } from "../../../src/backend/airport/database.mjs";
 test("guards query access after repeatable database close", () => {
   const statement = { all: jest.fn(() => []) };
   const database = { prepare: jest.fn(() => statement), close: jest.fn() };

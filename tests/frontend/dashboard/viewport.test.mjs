@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createDashboardViewport } from "../../../src/frontend/dashboard/viewport.mjs";
+import { default as createDashboardViewport } from "../../../src/frontend/dashboard/viewport.mjs";
 
 test("reports view changes through the live feed and detaches its reporter", () => {
   const listeners = new Set();

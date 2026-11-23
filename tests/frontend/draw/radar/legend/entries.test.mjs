@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { radarLegendLayout } from "../../../../../src/frontend/draw/radar/legend/entries.mjs";
-import { radarLegendTopInset } from "../../../../../src/frontend/draw/radar/legend/top-inset.mjs";
+import { default as radarLegendLayout } from "../../../../../src/frontend/draw/radar/legend/entries.mjs";
+import { default as radarLegendTopInset } from "../../../../../src/frontend/draw/radar/legend/top-inset.mjs";
 
 test("lays out clickable actions in the same one or two columns as the legend", () => {
   const desktop = radarLegendLayout(800, 400);

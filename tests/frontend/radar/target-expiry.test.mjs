@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { pruneExpiredRadarTargets } from "../../../src/frontend/radar/target-expiry.mjs";
+import { default as pruneExpiredRadarTargets } from "../../../src/frontend/radar/target-expiry.mjs";
 
 test("removes only targets older than their stale interval", () => {
   const targets = new Map([

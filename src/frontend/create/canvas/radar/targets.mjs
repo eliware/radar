@@ -1,5 +1,6 @@
-import { updateAircraftTargetAndTrail } from "../../../aircraft/target/updates.mjs";
+import { default as updateAircraftTargetAndTrail } from "../../../aircraft/target/updates.mjs";
 
-export function updateCanvasRadarTarget(item, location, targets, trails, receiveTimes) {
+function updateCanvasRadarTarget(item, location, targets, trails, receiveTimes) {
   return updateAircraftTargetAndTrail({ aircraft: item, location, targets, trails, receiveTimes });
 }
+export default updateCanvasRadarTarget;

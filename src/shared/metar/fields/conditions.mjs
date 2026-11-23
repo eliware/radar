@@ -1,4 +1,4 @@
-export function conditionText(conditions) {
+function conditionText(conditions) {
   return conditions.length
     ? conditions
         .map(
@@ -8,3 +8,4 @@ export function conditionText(conditions) {
         .join(" ")
     : "—";
 }
+export default conditionText;

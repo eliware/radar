@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { windDirectionText } from "../../../../src/shared/metar/fields/wind.mjs";
+import { default as windDirectionText } from "../../../../src/shared/metar/fields/wind.mjs";
 
 test("formats wind direction", () => {
   expect(windDirectionText({ direction: "VRB" })).toBe("VRB");

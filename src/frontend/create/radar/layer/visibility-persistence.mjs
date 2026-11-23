@@ -1,4 +1,4 @@
-import { readToggleState } from "../../../toggle-state-storage.mjs";
+import { default as readToggleState } from "../../../toggle-state-storage.mjs";
 
 const LAYER_KEYS = [
   "ils",
@@ -14,6 +14,7 @@ const LAYER_KEYS = [
   "navaids",
 ];
 
-export function readSavedLayerVisibility() {
+function readSavedLayerVisibility() {
   return Object.fromEntries(LAYER_KEYS.map((key) => [key, readToggleState(key)]));
 }
+export default readSavedLayerVisibility;

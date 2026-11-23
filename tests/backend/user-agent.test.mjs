@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import packageJson from "../../package.json" with { type: "json" };
-import { createRadarUserAgent } from "../../src/backend/user-agent.mjs";
+import { default as createRadarUserAgent } from "../../src/backend/user-agent.mjs";
 
 test("includes the package version in the Radar user agent", () => {
   expect(createRadarUserAgent()).toBe(

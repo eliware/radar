@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import * as THREE from "three";
-import { getFrustumPlaneIntersections } from "../../../../src/frontend/radar/viewport/intersections.mjs";
+import { default as getFrustumPlaneIntersections } from "../../../../src/frontend/radar/viewport/intersections.mjs";
 
 test("calculates finite intersections between the camera frustum and altitude planes", () => {
   const camera = new THREE.PerspectiveCamera(48, 16 / 9, 0.05, 1000);

@@ -1,16 +1,10 @@
-import { createAdsbLolRequestHeaders } from "./headers.mjs";
-import { parseAdsbLolRetryAfter } from "./retry-after.mjs";
-import { parseAdsbLolResponse } from "../response.mjs";
+import { default as createAdsbLolRequestHeaders } from "./headers.mjs";
+import { default as parseAdsbLolRetryAfter } from "./retry-after.mjs";
+import { default as parseAdsbLolResponse } from "../response.mjs";
 
 const API_ROOT = "https://re-api.adsb.lol/";
 
-export async function requestAdsbLolCircle(
-  request,
-  location,
-  radiusNm,
-  apiKey,
-  onRequest = () => {},
-) {
+async function requestAdsbLolCircle(request, location, radiusNm, apiKey, onRequest = () => {}) {
   const circle = `${location.latitude},${location.longitude},${radiusNm}`;
   const options = { headers: createAdsbLolRequestHeaders(apiKey) };
   onRequest({ radiusNm, apiKeyHeaderPresent: Boolean(options.headers["x-api-key"]) });
@@ -23,3 +17,4 @@ export async function requestAdsbLolCircle(
   }
   return parseAdsbLolResponse(response);
 }
+export default requestAdsbLolCircle;

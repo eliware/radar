@@ -1,10 +1,10 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
-import { buildIlsCourseGeometry } from "../ils-course-geometry.mjs";
-import { safeIlsElevation } from "../safe-ils-elevation.mjs";
+import { default as buildIlsCourseGeometry } from "../ils-course-geometry.mjs";
+import { default as safeIlsElevation } from "../safe-ils-elevation.mjs";
 
 const ILS_COLOR = "#604080";
 
-export function drawIlsApproaches(context, approaches, project, visible = true) {
+function drawIlsApproaches(context, approaches, project, visible = true) {
   if (!visible) return;
   context.save();
   context.strokeStyle = ILS_COLOR;
@@ -42,3 +42,4 @@ function drawMarkers(context, markers, project) {
 function validPoint(point) {
   return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }
+export default drawIlsApproaches;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createScreenshotPageCapture } from "../../../../src/frontend/responsive/screenshot/capture-page.mjs";
+import { default as createScreenshotPageCapture } from "../../../../src/frontend/responsive/screenshot/capture-page.mjs";
 
 test("registers page errors with the collector", async () => {
   const page = {

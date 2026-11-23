@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftTypeLookup } from "../../../../src/backend/aircraft/enrichment/type-lookup.mjs";
+import { default as createAircraftTypeLookup } from "../../../../src/backend/aircraft/enrichment/type-lookup.mjs";
 
 test("applies aircraft type lookup results through the metadata store", async () => {
   const metadata = { updateType: jest.fn(() => true) };

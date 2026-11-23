@@ -1,6 +1,6 @@
-import { mapRemoteAircraftFieldValues } from "./field-values.mjs";
+import { default as mapRemoteAircraftFieldValues } from "./field-values.mjs";
 
-export function mapRemoteAircraftRecord(item, { icao, latitude, longitude, ageSeconds }, now) {
+function mapRemoteAircraftRecord(item, { icao, latitude, longitude, ageSeconds }, now) {
   return {
     icao,
     latitude,
@@ -10,3 +10,4 @@ export function mapRemoteAircraftRecord(item, { icao, latitude, longitude, ageSe
     remoteOnly: true,
   };
 }
+export default mapRemoteAircraftRecord;

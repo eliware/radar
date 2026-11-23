@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerMetarRoutes } from "../../../src/backend/metar/routes.mjs";
+import { default as registerMetarRoutes } from "../../../src/backend/metar/routes.mjs";
 
 test("returns configured stations and current reports", async () => {
   const routes = new Map();

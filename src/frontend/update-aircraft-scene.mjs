@@ -1,7 +1,7 @@
-import { updateAircraftTargetAndTrail } from "./aircraft/target/updates.mjs";
-import { selectDefaultRadarRange } from "./radar/default-range.mjs";
+import { default as updateAircraftTargetAndTrail } from "./aircraft/target/updates.mjs";
+import { default as selectDefaultRadarRange } from "./radar/default-range.mjs";
 
-export function createAircraftSceneUpdater({
+function createAircraftSceneUpdater({
   location,
   elevationFeet,
   targets,
@@ -46,3 +46,4 @@ export function createAircraftSceneUpdater({
   update.items = () => receiveTimes?.withReceivedAt(targets.items()) ?? targets.items();
   return update;
 }
+export default createAircraftSceneUpdater;

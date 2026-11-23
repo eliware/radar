@@ -1,6 +1,6 @@
-import { renderMetarTableRow } from "./table/row.mjs";
+import { default as renderMetarTableRow } from "./table/row.mjs";
 
-export function renderMetarTable(reports, now = new Date()) {
+function renderMetarTable(reports, now = new Date()) {
   if (!reports.length) return "No METAR reports available.";
   return `<table><thead><tr>${formatHeaders()}</tr></thead><tbody>${reports
     .map((report) => renderMetarTableRow(report, now))
@@ -22,3 +22,4 @@ function formatHeaders() {
     "<th>ALT</th>",
   ].join("");
 }
+export default renderMetarTable;

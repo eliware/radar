@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getRadarLabelGapAngle } from "../../../src/frontend/radar/label-gap-angle.mjs";
+import { default as getRadarLabelGapAngle } from "../../../src/frontend/radar/label-gap-angle.mjs";
 
 test("calculates a label gap angle within its ring", () => {
   expect(getRadarLabelGapAngle(10, 8, 0)).toBeCloseTo(2 * Math.asin(0.4));

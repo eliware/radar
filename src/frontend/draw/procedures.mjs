@@ -1,9 +1,9 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
-import { clipProcedureSegment } from "../clip/procedure-segment.mjs";
+import { default as clipProcedureSegment } from "../clip/procedure-segment.mjs";
 
 const COLORS = { SID: "#2b3d4d", STAR: "#50402e" };
 
-export function drawProcedures(
+function drawProcedures(
   context,
   procedures,
   project,
@@ -65,3 +65,4 @@ function drawPyramid(context, point) {
 function valid(point) {
   return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }
+export default drawProcedures;

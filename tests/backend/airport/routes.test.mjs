@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerAirportRoutes } from "../../../src/backend/airport/routes.mjs";
+import { default as registerAirportRoutes } from "../../../src/backend/airport/routes.mjs";
 
 function route(database, location = { latitude: 43, longitude: -70 }) {
   const routes = new Map();

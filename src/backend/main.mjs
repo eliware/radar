@@ -1,8 +1,8 @@
-import { resolveWebNetworkConfiguration } from "./config/web.mjs";
-import { resolveWebServiceConfiguration } from "./config/services.mjs";
-import { registerApplicationShutdown } from "./lifecycle/shutdown.mjs";
+import { default as resolveWebNetworkConfiguration } from "./config/web.mjs";
+import { default as resolveWebServiceConfiguration } from "./config/services.mjs";
+import { default as registerApplicationShutdown } from "./lifecycle/shutdown.mjs";
 
-export async function startWebApplication(dependencies) {
+async function startWebApplication(dependencies) {
   dependencies.loadEnvironment({ quiet: true });
   const configuration = {
     ...resolveWebNetworkConfiguration(process.env, dependencies.parseAdsbLocation),
@@ -55,3 +55,4 @@ export async function startWebApplication(dependencies) {
   log.info(`Web application listening at TCP endpoint ${port}`);
   return { app, feed: mergedFeed, shutdown };
 }
+export default startWebApplication;

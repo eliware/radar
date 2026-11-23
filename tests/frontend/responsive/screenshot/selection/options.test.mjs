@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createScreenshotSelectionOptions } from "../../../../../src/frontend/responsive/screenshot/selection/options.mjs";
+import { default as createScreenshotSelectionOptions } from "../../../../../src/frontend/responsive/screenshot/selection/options.mjs";
 
 test("combines configured viewport and mode values", () => {
   const options = createScreenshotSelectionOptions(false, {

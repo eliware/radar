@@ -1,8 +1,8 @@
-import { configureMobileRadarControls } from "../mobile-radar-gestures.mjs";
+import { default as configureMobileRadarControls } from "../mobile-radar-gestures.mjs";
 import { DEFAULT_RADAR_RANGE } from "./range.mjs";
-import { createRadarCameraState } from "./camera/state.mjs";
+import { default as createRadarCameraState } from "./camera/state.mjs";
 
-export function createRadarCamera({
+function createRadarCamera({
   camera,
   controls,
   element,
@@ -35,3 +35,4 @@ export function createRadarCamera({
     },
   };
 }
+export default createRadarCamera;

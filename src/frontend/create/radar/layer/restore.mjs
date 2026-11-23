@@ -1,4 +1,4 @@
-export function restoreLayerVisibility(controllers, saved, onReferenceChange) {
+function restoreLayerVisibility(controllers, saved, onReferenceChange) {
   controllers.ils.setVisible(saved.ils);
   controllers.procedures.setSidVisible(saved.sid);
   controllers.procedures.setStarVisible(saved.star);
@@ -10,3 +10,4 @@ export function restoreLayerVisibility(controllers, saved, onReferenceChange) {
   controllers.references.setNavaidsVisible(saved.navaids);
   onReferenceChange?.({ airportsVisible: saved.airports, navaidsVisible: saved.navaids });
 }
+export default restoreLayerVisibility;

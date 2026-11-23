@@ -4,7 +4,7 @@ const headingFromEvent = (event) => {
   return null;
 };
 
-export function attachMobileCompassTracking(documentRef, windowRef, view) {
+function attachMobileCompassTracking(documentRef, windowRef, view) {
   const button = documentRef?.querySelector?.("[data-compass-follow]");
   if (!button || !windowRef?.addEventListener) return () => {};
   let active = false;
@@ -47,3 +47,4 @@ export function attachMobileCompassTracking(documentRef, windowRef, view) {
     button.removeEventListener("click", onClick);
   };
 }
+export default attachMobileCompassTracking;

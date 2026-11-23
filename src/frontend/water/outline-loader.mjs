@@ -1,8 +1,8 @@
-import { createWaterTileCache } from "./tile/cache.mjs";
-import { createWaterViewLoader } from "./view-loader.mjs";
-import { createWaterViewSource } from "./load-view.mjs";
+import { default as createWaterTileCache } from "./tile/cache.mjs";
+import { default as createWaterViewLoader } from "./view-loader.mjs";
+import { default as createWaterViewSource } from "./load-view.mjs";
 
-export function createWaterOutlineLoader(fetchRef = fetch) {
+function createWaterOutlineLoader(fetchRef = fetch) {
   const cache = createWaterTileCache(fetchRef);
   const source = createWaterViewSource(fetchRef);
   return createWaterViewLoader({
@@ -10,3 +10,4 @@ export function createWaterOutlineLoader(fetchRef = fetch) {
     cache,
   });
 }
+export default createWaterOutlineLoader;

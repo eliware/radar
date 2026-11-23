@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatAircraftName } from "../../../src/frontend/aircraft/name.mjs";
+import { default as formatAircraftName } from "../../../src/frontend/aircraft/name.mjs";
 
 test("uses a trimmed useful callsign as the aircraft name", () => {
   expect(formatAircraftName({ callsign: " TEST ", icao: "ABC123" })).toBe("TEST");

@@ -1,4 +1,4 @@
-export function attachDashboardPagehide(windowRef, cleanup) {
+function attachDashboardPagehide(windowRef, cleanup) {
   let closed = false;
   const close = () => {
     if (closed) return;
@@ -9,3 +9,4 @@ export function attachDashboardPagehide(windowRef, cleanup) {
   windowRef?.addEventListener?.("pagehide", close, { once: true });
   return close;
 }
+export default attachDashboardPagehide;

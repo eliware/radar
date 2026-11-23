@@ -1,6 +1,6 @@
-import { filterAircraftSnapshot } from "./merged/snapshot/filter.mjs";
+import { default as filterAircraftSnapshot } from "./merged/snapshot/filter.mjs";
 
-export function createAircraftClientState(defaultRangeNm, maximumRangeNm = 300) {
+function createAircraftClientState(defaultRangeNm, maximumRangeNm = 300) {
   const clients = new Map();
   const initialRadiusNm = clampRadius(defaultRangeNm, maximumRangeNm);
 
@@ -47,3 +47,4 @@ export function createAircraftClientState(defaultRangeNm, maximumRangeNm = 300) 
 function clampRadius(value, maximumRangeNm) {
   return Math.min(maximumRangeNm, Math.max(1, Math.ceil(value)));
 }
+export default createAircraftClientState;

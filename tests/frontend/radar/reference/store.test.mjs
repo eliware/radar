@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createRadarReferenceStore } from "../../../../src/frontend/radar/reference/store.mjs";
+import { default as createRadarReferenceStore } from "../../../../src/frontend/radar/reference/store.mjs";
 
 test("stores airport, navaid, boundary, ILS, procedure, and airway records by stable keys", () => {
   const store = createRadarReferenceStore();

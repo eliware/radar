@@ -1,7 +1,8 @@
-import { createAircraftSceneSetup } from "./scene/setup.mjs";
-import { createAircraftSceneView } from "./scene/view.mjs";
+import { default as createAircraftSceneSetup } from "./scene/setup.mjs";
+import { default as createAircraftSceneView } from "./scene/view.mjs";
 
-export function createAircraftScene(options) {
+function createAircraftScene(options) {
   const setup = createAircraftSceneSetup(options);
   return createAircraftSceneView(setup);
 }
+export default createAircraftScene;

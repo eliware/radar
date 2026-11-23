@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftEnrichmentCoordinator } from "../../../../src/backend/aircraft/enrichment/coordinator.mjs";
+import { default as createAircraftEnrichmentCoordinator } from "../../../../src/backend/aircraft/enrichment/coordinator.mjs";
 
 function setup() {
   return {

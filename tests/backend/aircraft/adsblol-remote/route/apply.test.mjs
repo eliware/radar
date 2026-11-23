@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { applyAdsbLolRouteResult } from "../../../../../src/backend/aircraft/adsblol-remote/route/apply.mjs";
+import { default as applyAdsbLolRouteResult } from "../../../../../src/backend/aircraft/adsblol-remote/route/apply.mjs";
 
 test("applies route fields while retaining existing aircraft data", () => {
   const aircraft = new Map([["ABC123", { icao: "ABC123", callsign: "RPA1" }]]);

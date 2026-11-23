@@ -1,6 +1,7 @@
-import { validateNasrDatabase } from "../../validation.mjs";
-import { withNasrSourceDatabase } from "./connection.mjs";
+import { default as validateNasrDatabase } from "../../validation.mjs";
+import { default as withNasrSourceDatabase } from "./connection.mjs";
 
-export function validateNasrSource(Database, inputPath) {
+function validateNasrSource(Database, inputPath) {
   return withNasrSourceDatabase(Database, inputPath, validateNasrDatabase);
 }
+export default validateNasrSource;

@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { resolve } from "node:path";
-import { screenshotOutputPath } from "../../../../src/frontend/responsive/screenshot/path.mjs";
+import { default as screenshotOutputPath } from "../../../../src/frontend/responsive/screenshot/path.mjs";
 
 test("names screenshot files by viewport and mode", () => {
   expect(screenshotOutputPath("/captures", "desktop", "full-page")).toBe(

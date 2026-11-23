@@ -1,4 +1,4 @@
-export function pruneExpiredRadarTargets(targets, now, staleAfterMs) {
+function pruneExpiredRadarTargets(targets, now, staleAfterMs) {
   const expired = [];
   for (const [icao, target] of targets) {
     if (now - target.lastSeen <= staleAfterMs) continue;
@@ -7,3 +7,4 @@ export function pruneExpiredRadarTargets(targets, now, staleAfterMs) {
   }
   return expired;
 }
+export default pruneExpiredRadarTargets;

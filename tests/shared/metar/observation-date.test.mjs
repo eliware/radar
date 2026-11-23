@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectMetarObservationDate } from "../../../src/shared/metar/observation-date.mjs";
+import { default as selectMetarObservationDate } from "../../../src/shared/metar/observation-date.mjs";
 
 test("selects the previous month for a METAR day later than today's date", () => {
   expect(selectMetarObservationDate(30, new Date("2026-10-01T00:10:00Z")).toISOString()).toBe(

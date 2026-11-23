@@ -9,22 +9,25 @@ const drawIlsApproaches = layer("ils");
 const drawProcedures = layer("procedures");
 const drawAirways = layer("airways");
 jest.unstable_mockModule("../../../../src/frontend/draw/radar/airport-layer.mjs", () => ({
-  drawAirportLayer,
+  default: drawAirportLayer,
 }));
 jest.unstable_mockModule("../../../../src/frontend/draw/navaid-markers.mjs", () => ({
-  drawNavaidMarkers,
+  default: drawNavaidMarkers,
 }));
 jest.unstable_mockModule("../../../../src/frontend/draw/artcc-boundaries.mjs", () => ({
-  drawArtccBoundaries,
+  default: drawArtccBoundaries,
 }));
 jest.unstable_mockModule("../../../../src/frontend/draw/ils-approaches.mjs", () => ({
-  drawIlsApproaches,
+  default: drawIlsApproaches,
 }));
 jest.unstable_mockModule("../../../../src/frontend/draw/procedures.mjs", () => ({
-  drawProcedures,
+  default: drawProcedures,
 }));
-jest.unstable_mockModule("../../../../src/frontend/draw/airways.mjs", () => ({ drawAirways }));
-const { drawRadarReferences } = await import("../../../../src/frontend/draw/radar/references.mjs");
+jest.unstable_mockModule("../../../../src/frontend/draw/airways.mjs", () => ({
+  default: drawAirways,
+}));
+const { default: drawRadarReferences } =
+  await import("../../../../src/frontend/draw/radar/references.mjs");
 
 const runwayVisibility = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true };
 const referenceVisibility = { airportsVisible: true, navaidsVisible: true };

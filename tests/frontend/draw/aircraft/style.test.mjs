@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { withAircraftDrawingStyle } from "../../../../src/frontend/draw/aircraft/style.mjs";
+import { default as withAircraftDrawingStyle } from "../../../../src/frontend/draw/aircraft/style.mjs";
 
 test("restores canvas drawing style after a draw callback", () => {
   const context = { fillStyle: "fill", strokeStyle: "stroke", font: "font", globalAlpha: 0.7 };

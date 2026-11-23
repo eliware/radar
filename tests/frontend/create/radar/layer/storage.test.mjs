@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createLayerVisibilityStorage } from "../../../../../src/frontend/create/radar/layer/storage.mjs";
+import { default as createLayerVisibilityStorage } from "../../../../../src/frontend/create/radar/layer/storage.mjs";
 
 function controllers() {
   return {

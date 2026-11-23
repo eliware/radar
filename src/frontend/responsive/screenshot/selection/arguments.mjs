@@ -1,4 +1,4 @@
-export function parseScreenshotArguments(args = []) {
+function parseScreenshotArguments(args = []) {
   let primary = false;
   for (const argument of args) {
     if (argument === "--primary") {
@@ -9,3 +9,4 @@ export function parseScreenshotArguments(args = []) {
   }
   return { primary };
 }
+export default parseScreenshotArguments;

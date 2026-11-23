@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateNasrImportDatabase } from "../../../../src/backend/nasr/import/validation.mjs";
+import { default as validateNasrImportDatabase } from "../../../../src/backend/nasr/import/validation.mjs";
 import { createNasrTestDatabase } from "../../../../test-fixtures/nasr-database.mjs";
 
 test("validates the imported database schema", () => {

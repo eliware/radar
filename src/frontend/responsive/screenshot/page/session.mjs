@@ -1,8 +1,8 @@
-import { prepareScreenshotPage } from "./setup.mjs";
-import { waitForScreenshotPageReadiness } from "./readiness.mjs";
-import { waitForScreenshotReadiness } from "./wait.mjs";
+import { default as prepareScreenshotPage } from "./setup.mjs";
+import { default as waitForScreenshotPageReadiness } from "./readiness.mjs";
+import { default as waitForScreenshotReadiness } from "./wait.mjs";
 
-export function createScreenshotPageSession(browser) {
+function createScreenshotPageSession(browser) {
   async function capturePage(baseUrl, viewport, delayMs, onPageError, capture) {
     const page = await browser.newPage();
     page.on("pageerror", onPageError);
@@ -18,3 +18,4 @@ export function createScreenshotPageSession(browser) {
 
   return { capturePage };
 }
+export default createScreenshotPageSession;

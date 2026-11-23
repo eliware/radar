@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createAdsbLolHeaders } from "../../../../src/backend/aircraft/adsblol-remote/headers.mjs";
-import { createRadarUserAgent } from "../../../../src/backend/user-agent.mjs";
+import { default as createAdsbLolHeaders } from "../../../../src/backend/aircraft/adsblol-remote/headers.mjs";
+import { default as createRadarUserAgent } from "../../../../src/backend/user-agent.mjs";
 
 test("includes Radar contact details without an API key", () => {
   expect(createAdsbLolHeaders("")).toEqual({

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { removeRadarRemoteTargetsExcept } from "../../../src/frontend/radar/remote-targets.mjs";
+import { default as removeRadarRemoteTargetsExcept } from "../../../src/frontend/radar/remote-targets.mjs";
 
 test("removes remote targets absent from the current snapshot and preserves local targets", () => {
   const targets = new Map([

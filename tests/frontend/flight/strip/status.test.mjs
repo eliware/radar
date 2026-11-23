@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getFlightStripStatus } from "../../../../src/frontend/flight/strip/status.mjs";
+import { default as getFlightStripStatus } from "../../../../src/frontend/flight/strip/status.mjs";
 
 test("selects age opacity and remote or emergency status classes", () => {
   expect(getFlightStripStatus({ remoteOnly: true, lastSeen: 1_000 }, 1_000)).toEqual({

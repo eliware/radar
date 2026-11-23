@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarHome } from "../../../../src/frontend/create/radar/home.mjs";
+import { default as createRadarHome } from "../../../../src/frontend/create/radar/home.mjs";
 
 test("sets the home marker and ring colors with feed state", () => {
   const material = { color: { setHex: jest.fn() } };

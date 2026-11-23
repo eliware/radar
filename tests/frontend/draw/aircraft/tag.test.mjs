@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { drawAircraftTag } from "../../../../src/frontend/draw/aircraft/tag.mjs";
+import { default as drawAircraftTag } from "../../../../src/frontend/draw/aircraft/tag.mjs";
 
 test("applies aircraft color and age fade before drawing its tag", () => {
   const context = {

@@ -1,6 +1,6 @@
-import { projectAircraftTargetPosition } from "./position.mjs";
+import { default as projectAircraftTargetPosition } from "./position.mjs";
 
-export function updateAircraftTargetAndTrail({
+function updateAircraftTargetAndTrail({
   aircraft,
   location,
   elevationFeet = 0,
@@ -22,3 +22,4 @@ export function updateAircraftTargetAndTrail({
   receiveTimes?.set(aircraft.icao, aircraft.lastSeen);
   return { position, distanceNm };
 }
+export default updateAircraftTargetAndTrail;

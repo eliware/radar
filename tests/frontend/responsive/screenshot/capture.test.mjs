@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { resolve } from "node:path";
-import { captureScreenshotTargets } from "../../../../src/frontend/responsive/screenshot/capture.mjs";
+import { default as captureScreenshotTargets } from "../../../../src/frontend/responsive/screenshot/capture.mjs";
 
 test("captures and validates each requested mode for each viewport", async () => {
   const paths = [];

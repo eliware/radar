@@ -1,8 +1,8 @@
-import { metarCategoryLabel } from "../category-label.mjs";
-import { formatMetarAgeDisplay } from "../age/display.mjs";
-import { escapeHtml } from "../../html/escape.mjs";
+import { default as metarCategoryLabel } from "../category-label.mjs";
+import { default as formatMetarAgeDisplay } from "../age/display.mjs";
+import { default as escapeHtml } from "../../html/escape.mjs";
 
-export function renderMetarTableRow({ id, metar, decoded }, now) {
+function renderMetarTableRow({ id, metar, decoded }, now) {
   if (!decoded)
     return `<tr><td></td><th>${escapeHtml(id)}</th><td>—</td><td colspan="9">${escapeHtml(metar)}</td></tr>`;
   const age = formatMetarAgeDisplay(decoded.observed, now);
@@ -30,3 +30,4 @@ export function renderMetarTableRow({ id, metar, decoded }, now) {
     })
     .join("")}</tr>`;
 }
+export default renderMetarTableRow;

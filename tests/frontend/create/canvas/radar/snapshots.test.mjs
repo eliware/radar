@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { reconcileCanvasRadarSnapshot } from "../../../../../src/frontend/create/canvas/radar/snapshots.mjs";
+import { default as reconcileCanvasRadarSnapshot } from "../../../../../src/frontend/create/canvas/radar/snapshots.mjs";
 
 test("retains snapshot targets, removes stale trails, and updates without drawing", () => {
   const targets = { retain: jest.fn(() => ["OLD"]) };

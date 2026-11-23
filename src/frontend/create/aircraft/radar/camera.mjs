@@ -1,7 +1,7 @@
-import { configureRadarViewDefaults } from "../../../configure-radar/view-defaults.mjs";
-import { createAircraftRadarAutoZoom } from "./auto-zoom.mjs";
+import { default as configureRadarViewDefaults } from "../../../configure-radar/view-defaults.mjs";
+import { default as createAircraftRadarAutoZoom } from "./auto-zoom.mjs";
 
-export function createAircraftRadarCamera({
+function createAircraftRadarCamera({
   createCamera,
   cameraOptions,
   targets,
@@ -22,3 +22,4 @@ export function createAircraftRadarCamera({
   );
   return { radarCamera, reset, isAutoZoom: autoZoom.isEnabled };
 }
+export default createAircraftRadarCamera;

@@ -1,8 +1,8 @@
-import { drawAirportMarkers } from "../airport/markers.mjs";
-import { drawAirspaceRings } from "../airspace-rings.mjs";
-import { drawAirportRunways } from "../airport/runways.mjs";
+import { default as drawAirportMarkers } from "../airport/markers.mjs";
+import { default as drawAirspaceRings } from "../airspace-rings.mjs";
+import { default as drawAirportRunways } from "../airport/runways.mjs";
 
-export function drawAirportLayer(
+function drawAirportLayer(
   context,
   airports,
   project,
@@ -22,3 +22,4 @@ export function drawAirportLayer(
   );
   if (airportsVisible) drawAirportMarkers(context, airports, project);
 }
+export default drawAirportLayer;

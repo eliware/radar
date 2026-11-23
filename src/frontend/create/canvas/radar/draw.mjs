@@ -1,6 +1,6 @@
-import { drawCanvasRadar } from "../../../draw/canvas/radar.mjs";
+import { default as drawCanvasRadar } from "../../../draw/canvas/radar.mjs";
 
-export function createCanvasRadarDraw({
+function createCanvasRadarDraw({
   context,
   canvas,
   targets,
@@ -53,3 +53,4 @@ export function createCanvasRadarDraw({
       legendTopInset,
     );
 }
+export default createCanvasRadarDraw;

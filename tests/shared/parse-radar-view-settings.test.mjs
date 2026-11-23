@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseRadarViewSettings } from "../../src/shared/parse-radar-view-settings.mjs";
+import { default as parseRadarViewSettings } from "../../src/shared/parse-radar-view-settings.mjs";
 
 test("reads configuration without mutating the environment", () => {
   const environment = { RADAR_DEFAULT_RANGE_NM: "25", RADAR_DEFAULT_ROTATION: "140" };

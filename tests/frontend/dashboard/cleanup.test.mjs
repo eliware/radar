@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { cleanupDashboardSetup } from "../../../src/frontend/dashboard/cleanup.mjs";
+import { default as cleanupDashboardSetup } from "../../../src/frontend/dashboard/cleanup.mjs";
 
 test("cleans resources allocated before dashboard setup failed", () => {
   const scene = { destroy: jest.fn() };

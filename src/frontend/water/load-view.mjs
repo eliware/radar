@@ -1,8 +1,8 @@
-import { selectWaterTiles } from "./tile/coordinates.mjs";
-import { selectWaterZoom } from "./tile/zoom.mjs";
-import { createWaterTileMetadataLoader } from "./tile/metadata.mjs";
+import { default as selectWaterTiles } from "./tile/coordinates.mjs";
+import { default as selectWaterZoom } from "./tile/zoom.mjs";
+import { default as createWaterTileMetadataLoader } from "./tile/metadata.mjs";
 
-export function createWaterViewSource(fetchRef) {
+function createWaterViewSource(fetchRef) {
   const metadata = createWaterTileMetadataLoader(fetchRef);
   return {
     async load(center, rangeNm) {
@@ -15,3 +15,4 @@ export function createWaterViewSource(fetchRef) {
     },
   };
 }
+export default createWaterViewSource;

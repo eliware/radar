@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasWaterViewRequester } from "../../src/frontend/request-canvas-water-view.mjs";
+import { default as createCanvasWaterViewRequester } from "../../src/frontend/request-canvas-water-view.mjs";
 
 test("loads each new Canvas view once and updates paths when data arrives", () => {
   const loader = { load: jest.fn() };

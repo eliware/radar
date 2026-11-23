@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarScope } from "../../../../src/frontend/draw/canvas/scope.mjs";
+import { default as createCanvasRadarScope } from "../../../../src/frontend/draw/canvas/scope.mjs";
 
 function createContext() {
   const context = Object.fromEntries(

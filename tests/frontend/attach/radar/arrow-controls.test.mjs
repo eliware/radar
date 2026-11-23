@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachRadarArrowControls } from "../../../../src/frontend/attach/radar/arrow-controls.mjs";
+import { default as attachRadarArrowControls } from "../../../../src/frontend/attach/radar/arrow-controls.mjs";
 
 function setup(documentRef = {}) {
   const listeners = new Map();

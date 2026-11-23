@@ -1,4 +1,4 @@
-export function createCameraProjector(THREE, camera) {
+function createCameraProjector(THREE, camera) {
   const cameraPosition = new THREE.Vector3();
   const projectedPosition = new THREE.Vector3();
   return (position, width, height) => {
@@ -25,3 +25,4 @@ export function createCameraProjector(THREE, camera) {
     };
   };
 }
+export default createCameraProjector;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachMobileRadarGestures } from "../../../../src/frontend/attach/mobile/radar-gestures.mjs";
+import { default as attachMobileRadarGestures } from "../../../../src/frontend/attach/mobile/radar-gestures.mjs";
 
 function setup(capture = false) {
   const listeners = new Map();

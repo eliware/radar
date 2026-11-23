@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { enrichMetarReport } from "../../../src/backend/metar/report-enrichment.mjs";
+import { default as enrichMetarReport } from "../../../src/backend/metar/report-enrichment.mjs";
 
 test("retains useful decoded fields on the original report", () => {
   const report = { id: "KPWM", metar: "raw" };

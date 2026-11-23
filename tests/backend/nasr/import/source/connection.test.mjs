@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { withNasrSourceDatabase } from "../../../../../src/backend/nasr/import/source/connection.mjs";
+import { default as withNasrSourceDatabase } from "../../../../../src/backend/nasr/import/source/connection.mjs";
 import { createNasrTestDatabase } from "../../../../../test-fixtures/nasr-database.mjs";
 
 function retainOnClose(database) {

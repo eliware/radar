@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarViewDraw } from "../../../../src/frontend/canvas-radar/view/draw.mjs";
+import { default as createCanvasRadarViewDraw } from "../../../../src/frontend/canvas-radar/view/draw.mjs";
 
 test("redraws the canvas, updates water, and notifies range listeners", () => {
   const drawRadar = jest.fn();

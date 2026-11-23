@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAirportMarkers } from "../../../../src/frontend/draw/airport/markers.mjs";
+import { default as drawAirportMarkers } from "../../../../src/frontend/draw/airport/markers.mjs";
 
 test("draws a gray identifier for airports inside the current range", () => {
   const context = {

@@ -1,15 +1,15 @@
-import { registerAirportRoutes } from "./airport/routes.mjs";
-import { registerNavaidRoutes } from "./navaid-routes.mjs";
-import { registerAirspaceBoundaryRoutes } from "./airspace-boundary-routes.mjs";
-import { registerIlsApproachRoutes } from "./ils/approach/routes.mjs";
-import { registerProcedureRoutes } from "./procedure/routes.mjs";
-import { registerAirwayRoutes } from "./airway/routes.mjs";
-import { registerMetarRoutes } from "./metar/routes.mjs";
-import { registerWebSocketRoutes } from "./websocket-routes.mjs";
-import { registerRouteLookupControl } from "./routes/route-lookups.mjs";
-import { registerCoreRoutes } from "./core-routes.mjs";
+import { default as registerAirportRoutes } from "./airport/routes.mjs";
+import { default as registerNavaidRoutes } from "./navaid-routes.mjs";
+import { default as registerAirspaceBoundaryRoutes } from "./airspace-boundary-routes.mjs";
+import { default as registerIlsApproachRoutes } from "./ils/approach/routes.mjs";
+import { default as registerProcedureRoutes } from "./procedure/routes.mjs";
+import { default as registerAirwayRoutes } from "./airway/routes.mjs";
+import { default as registerMetarRoutes } from "./metar/routes.mjs";
+import { default as registerWebSocketRoutes } from "./websocket-routes.mjs";
+import { default as registerRouteLookupControl } from "./routes/route-lookups.mjs";
+import { default as registerCoreRoutes } from "./core-routes.mjs";
 
-export function registerApiRoutes(
+function registerApiRoutes(
   app,
   feed,
   {
@@ -37,3 +37,4 @@ export function registerApiRoutes(
   registerRouteLookupControl(app, feed);
   registerWebSocketRoutes(app, feed);
 }
+export default registerApiRoutes;

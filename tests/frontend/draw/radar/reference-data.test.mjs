@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { radarReferenceData } from "../../../../src/frontend/draw/radar/reference-data.mjs";
+import { default as radarReferenceData } from "../../../../src/frontend/draw/radar/reference-data.mjs";
 
 test("provides maps for missing reference layers and preserves configured maps", () => {
   const airports = new Map();

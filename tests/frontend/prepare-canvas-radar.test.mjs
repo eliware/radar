@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { prepareCanvasRadar } from "../../src/frontend/prepare-canvas-radar.mjs";
+import { default as prepareCanvasRadar } from "../../src/frontend/prepare-canvas-radar.mjs";
 
 test("sets capped pixel dimensions and transform", () => {
   const context = { setTransform: jest.fn() };

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarRenderLoop } from "../../../src/frontend/radar/render-loop.mjs";
+import { default as createRadarRenderLoop } from "../../../src/frontend/radar/render-loop.mjs";
 
 test("renders frames, resizes the camera, and stops its browser hooks", () => {
   const callbacks = [];

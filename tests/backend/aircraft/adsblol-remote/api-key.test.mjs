@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "@jest/globals";
-import { getAdsbLolApiKey } from "../../../../src/backend/aircraft/adsblol-remote/api-key.mjs";
+import { default as getAdsbLolApiKey } from "../../../../src/backend/aircraft/adsblol-remote/api-key.mjs";
 
 const originalApiKey = process.env.ADSBLOL_API_KEY;
 

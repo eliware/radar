@@ -1,7 +1,7 @@
-import { readAndRestoreLayerVisibility } from "./storage/read.mjs";
-import { createLayerVisibilityChanges } from "./storage/changes.mjs";
+import { default as readAndRestoreLayerVisibility } from "./storage/read.mjs";
+import { default as createLayerVisibilityChanges } from "./storage/changes.mjs";
 
-export function createLayerVisibilityStorage(onChange, onReferenceChange) {
+function createLayerVisibilityStorage(onChange, onReferenceChange) {
   const changes = createLayerVisibilityChanges(onChange, onReferenceChange);
   return {
     ils: changes.ils,
@@ -15,3 +15,4 @@ export function createLayerVisibilityStorage(onChange, onReferenceChange) {
     },
   };
 }
+export default createLayerVisibilityStorage;

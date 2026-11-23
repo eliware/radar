@@ -1,6 +1,6 @@
-import { cleanupDashboardSetup } from "./cleanup.mjs";
+import { default as cleanupDashboardSetup } from "./cleanup.mjs";
 
-export async function runDashboardStartup(resources, start) {
+async function runDashboardStartup(resources, start) {
   try {
     return await start();
   } catch {
@@ -8,3 +8,4 @@ export async function runDashboardStartup(resources, start) {
     return null;
   }
 }
+export default runDashboardStartup;

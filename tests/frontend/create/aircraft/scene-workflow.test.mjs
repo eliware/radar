@@ -3,12 +3,12 @@ import { expect, jest, test } from "@jest/globals";
 const startLoop = jest.fn();
 const createUpdater = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/start/aircraft-scene-loop.mjs", () => ({
-  startAircraftSceneLoop: startLoop,
+  default: startLoop,
 }));
 jest.unstable_mockModule("../../../../src/frontend/update-aircraft-scene.mjs", () => ({
-  createAircraftSceneUpdater: createUpdater,
+  default: createUpdater,
 }));
-const { createAircraftSceneWorkflow } =
+const { default: createAircraftSceneWorkflow } =
   await import("../../../../src/frontend/create/aircraft/scene-workflow.mjs");
 
 test("starts the scene loop and creates the aircraft updater", () => {

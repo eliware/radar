@@ -1,6 +1,6 @@
-import { selectDefaultRadarRange } from "../../../radar/default-range.mjs";
+import { default as selectDefaultRadarRange } from "../../../radar/default-range.mjs";
 
-export function resetCanvasRadarView(state, draw, distances) {
+function resetCanvasRadarView(state, draw, distances) {
   state.autoZoom = true;
   state.range = selectDefaultRadarRange(distances(), state.defaultRangeNm);
   state.offsetX = 0;
@@ -8,3 +8,4 @@ export function resetCanvasRadarView(state, draw, distances) {
   state.rotation = state.defaultRotationRadians ?? 0;
   draw();
 }
+export default resetCanvasRadarView;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createRadarTargets } from "../../../src/frontend/radar/targets.mjs";
+import { default as createRadarTargets } from "../../../src/frontend/radar/targets.mjs";
 
 test("tracks target distances and storage", () => {
   let now = 1000;

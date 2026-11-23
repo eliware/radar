@@ -1,7 +1,7 @@
-import { requestAndApplyAdsbLolCircle } from "./polling/request.mjs";
-import { createAdsbLolPoller } from "./poller.mjs";
+import { default as requestAndApplyAdsbLolCircle } from "./polling/request.mjs";
+import { default as createAdsbLolPoller } from "./poller.mjs";
 
-export function createAdsbLolRemotePolling({
+function createAdsbLolRemotePolling({
   location,
   request,
   pollingPolicy,
@@ -36,3 +36,4 @@ export function createAdsbLolRemotePolling({
     intervalMs,
   });
 }
+export default createAdsbLolRemotePolling;

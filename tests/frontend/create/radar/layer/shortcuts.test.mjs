@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachRadarLayerShortcuts } from "../../../../../src/frontend/create/radar/layer/shortcuts.mjs";
+import { default as attachRadarLayerShortcuts } from "../../../../../src/frontend/create/radar/layer/shortcuts.mjs";
 
 function setup() {
   const controllers = Object.fromEntries(

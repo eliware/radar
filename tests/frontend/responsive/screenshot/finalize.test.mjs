@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { finalizeScreenshotSession } from "../../../../src/frontend/responsive/screenshot/finalize.mjs";
+import { default as finalizeScreenshotSession } from "../../../../src/frontend/responsive/screenshot/finalize.mjs";
 
 test("closes the browser and checks page errors after capture", async () => {
   const session = { close: jest.fn(), assertNoPageErrors: jest.fn() };

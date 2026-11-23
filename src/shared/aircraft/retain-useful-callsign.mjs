@@ -1,5 +1,6 @@
-import { hasUsefulCallsign } from "./callsign.mjs";
+import { default as hasUsefulCallsign } from "./callsign.mjs";
 
-export function retainUsefulCallsign(previous, incoming) {
+function retainUsefulCallsign(previous, incoming) {
   return hasUsefulCallsign(incoming) || !hasUsefulCallsign(previous) ? incoming : previous;
 }
+export default retainUsefulCallsign;

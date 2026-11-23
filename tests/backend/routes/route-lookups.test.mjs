@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerRouteLookupControl } from "../../../src/backend/routes/route-lookups.mjs";
+import { default as registerRouteLookupControl } from "../../../src/backend/routes/route-lookups.mjs";
 
 function register(feed) {
   let handler;

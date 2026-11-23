@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { handleAircraftRecord } from "../../../src/backend/aircraft/record-handler.mjs";
+import { default as handleAircraftRecord } from "../../../src/backend/aircraft/record-handler.mjs";
 
 function setup({ message = { icao: "ABC123" }, range = null } = {}) {
   const aircraft = { icao: "ABC123", latitude: 43, longitude: -70 };

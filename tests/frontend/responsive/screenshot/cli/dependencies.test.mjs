@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { resolveScreenshotCliDependencies } from "../../../../../src/frontend/responsive/screenshot/cli/dependencies.mjs";
+import { default as resolveScreenshotCliDependencies } from "../../../../../src/frontend/responsive/screenshot/cli/dependencies.mjs";
 
 test("uses injected CLI dependencies", () => {
   const dependencies = {

@@ -5,6 +5,7 @@ const appIcons = new Set([
   "radar-maskable-512.png",
 ]);
 
-export function isAllowedAppIcon(filename) {
+function isAllowedAppIcon(filename) {
   return appIcons.has(filename);
 }
+export default isAllowedAppIcon;

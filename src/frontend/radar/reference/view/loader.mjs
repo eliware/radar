@@ -2,7 +2,7 @@ import { MAX_RADAR_RANGE } from "../../range.mjs";
 
 const RANGE_STEP_NM = 25;
 
-export function createRadarReferenceViewLoader(session, scheduler) {
+function createRadarReferenceViewLoader(session, scheduler) {
   let lastKey = "";
   return {
     load(view) {
@@ -27,3 +27,4 @@ export function createRadarReferenceViewLoader(session, scheduler) {
     },
   };
 }
+export default createRadarReferenceViewLoader;

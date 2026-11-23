@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { mergeAircraftRecord } from "../../../../../src/backend/aircraft/merged/aircraft/merge.mjs";
-import { filterAircraftSnapshot } from "../../../../../src/backend/aircraft/merged/snapshot/filter.mjs";
+import { default as mergeAircraftRecord } from "../../../../../src/backend/aircraft/merged/aircraft/merge.mjs";
+import { default as filterAircraftSnapshot } from "../../../../../src/backend/aircraft/merged/snapshot/filter.mjs";
 
 test("merges the remote-only record and sorts missing distances last", () => {
   expect(mergeAircraftRecord({ remote: { icao: "ABC" } }, 0, 8000)).toEqual({

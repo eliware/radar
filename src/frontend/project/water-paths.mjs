@@ -1,6 +1,6 @@
-import { projectAircraftPosition } from "../aircraft/space-position.mjs";
+import { default as projectAircraftPosition } from "../aircraft/space-position.mjs";
 
-export function projectWaterPaths(paths, location, elevationFeet) {
+function projectWaterPaths(paths, location, elevationFeet) {
   const vertices = [];
   for (const path of paths) {
     const points = path
@@ -21,3 +21,4 @@ export function projectWaterPaths(paths, location, elevationFeet) {
   }
   return vertices;
 }
+export default projectWaterPaths;

@@ -1,4 +1,4 @@
-export function selectAircraftRecordSources(local, remote, now, localFreshnessMs) {
+function selectAircraftRecordSources(local, remote, now, localFreshnessMs) {
   if (!local) return { primary: remote, fallback: null, remoteOnly: true };
   const localIsFresh = !Number.isFinite(local.lastSeen) || now - local.lastSeen <= localFreshnessMs;
   const useNewerRemote =
@@ -9,3 +9,4 @@ export function selectAircraftRecordSources(local, remote, now, localFreshnessMs
     remoteOnly: useNewerRemote,
   };
 }
+export default selectAircraftRecordSources;

@@ -1,10 +1,11 @@
-import { composeScreenshotOptions } from "../options.mjs";
-import { readScreenshotSelectionConfiguration } from "./configuration.mjs";
+import { default as composeScreenshotOptions } from "../options.mjs";
+import { default as readScreenshotSelectionConfiguration } from "./configuration.mjs";
 
-export function createScreenshotSelectionOptions(primary, environment) {
+function createScreenshotSelectionOptions(primary, environment) {
   const { viewportSelection, modeSelection } = readScreenshotSelectionConfiguration(
     { primary },
     environment,
   );
   return composeScreenshotOptions(viewportSelection, modeSelection);
 }
+export default createScreenshotSelectionOptions;

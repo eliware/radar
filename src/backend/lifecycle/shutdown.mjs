@@ -1,4 +1,4 @@
-export function registerApplicationShutdown({ app, resources, log, registerSignals }) {
+function registerApplicationShutdown({ app, resources, log, registerSignals }) {
   let shutdownPromise;
   const shutdown = () => {
     if (shutdownPromise) return shutdownPromise;
@@ -24,3 +24,4 @@ export function registerApplicationShutdown({ app, resources, log, registerSigna
   registerSignals({ log, shutdownHook: shutdown });
   return shutdown;
 }
+export default registerApplicationShutdown;

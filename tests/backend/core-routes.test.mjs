@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerCoreRoutes } from "../../src/backend/core-routes.mjs";
+import { default as registerCoreRoutes } from "../../src/backend/core-routes.mjs";
 
 function register(feed, options) {
   const routes = new Map();

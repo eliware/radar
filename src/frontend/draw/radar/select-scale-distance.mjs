@@ -1,4 +1,4 @@
-export function selectScaleDistance(range, radius, maxLength) {
+function selectScaleDistance(range, radius, maxLength) {
   const maxDistance = Math.min(range, (maxLength * range) / radius);
   let selected = 1;
   for (let exponent = 0; exponent <= 3; exponent += 1) {
@@ -9,3 +9,4 @@ export function selectScaleDistance(range, radius, maxLength) {
   }
   return selected;
 }
+export default selectScaleDistance;

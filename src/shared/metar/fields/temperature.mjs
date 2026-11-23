@@ -1,3 +1,4 @@
-export function fahrenheitText(celsius) {
+function fahrenheitText(celsius) {
   return celsius == null ? "—" : `${Math.round((celsius * 9) / 5 + 32)}°F`;
 }
+export default fahrenheitText;

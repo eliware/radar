@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { requestAdsbLolCircle } from "../../../../../src/backend/aircraft/adsblol-remote/request/circle.mjs";
+import { default as requestAdsbLolCircle } from "../../../../../src/backend/aircraft/adsblol-remote/request/circle.mjs";
 
 test("uses the API key supplied by the environment settings", async () => {
   const originalApiKey = process.env.ADSBLOL_API_KEY;

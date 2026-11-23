@@ -2,7 +2,7 @@ import { beforeEach, expect, jest, test } from "@jest/globals";
 import { registerAircraftSceneMocks } from "../../../../test-fixtures/aircraft-scene-mocks.mjs";
 
 const mocks = registerAircraftSceneMocks(jest, "../../../../src/frontend");
-const { createAircraftSceneSetup } =
+const { default: createAircraftSceneSetup } =
   await import("../../../../src/frontend/aircraft/scene/setup.mjs");
 
 beforeEach(() => jest.clearAllMocks());

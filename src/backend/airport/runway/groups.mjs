@@ -1,6 +1,6 @@
-import { isValidRunwayEnd } from "./valid-end.mjs";
+import { default as isValidRunwayEnd } from "./valid-end.mjs";
 
-export function groupRunwayEnds(ends) {
+function groupRunwayEnds(ends) {
   const airports = new Map();
   for (const end of ends) {
     if (!isValidRunwayEnd(end)) continue;
@@ -17,3 +17,4 @@ export function groupRunwayEnds(ends) {
     ]),
   );
 }
+export default groupRunwayEnds;

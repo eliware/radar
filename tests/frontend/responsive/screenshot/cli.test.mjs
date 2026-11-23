@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { runScreenshotCli } from "../../../../src/frontend/responsive/screenshot/cli.mjs";
+import { default as runScreenshotCli } from "../../../../src/frontend/responsive/screenshot/cli.mjs";
 
 test("invokes the selected capture workflow and returns its result", async () => {
   const capture = jest.fn().mockResolvedValue({ count: 2 });

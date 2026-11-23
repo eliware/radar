@@ -1,7 +1,7 @@
-import { readToggleState } from "../toggle-state-storage.mjs";
-import { writeToggleState } from "../write-toggle-state.mjs";
+import { default as readToggleState } from "../toggle-state-storage.mjs";
+import { default as writeToggleState } from "../write-toggle-state.mjs";
 
-export function createAircraftVisibility(documentRef, onChange = () => {}) {
+function createAircraftVisibility(documentRef, onChange = () => {}) {
   let remoteVisible = readToggleState("remote-aircraft");
   const onKeyDown = (event) => {
     if (event.key?.toLowerCase() !== "l" || event.altKey || event.ctrlKey || event.metaKey) return;
@@ -22,3 +22,4 @@ export function createAircraftVisibility(documentRef, onChange = () => {}) {
     destroy: () => documentRef?.removeEventListener?.("keydown", onKeyDown),
   };
 }
+export default createAircraftVisibility;

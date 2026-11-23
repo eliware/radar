@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createProcedureQuery } from "../../../src/backend/procedure/query.mjs";
+import { default as createProcedureQuery } from "../../../src/backend/procedure/query.mjs";
 import { SID_QUERY, STAR_QUERY } from "../../../src/backend/procedure/query-rules.mjs";
 
 const first = {

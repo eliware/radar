@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawCanvasRadarWater } from "../../../../src/frontend/draw/water/canvas.mjs";
+import { default as drawCanvasRadarWater } from "../../../../src/frontend/draw/water/canvas.mjs";
 
 test("draws water outlines only when the water layer is visible", () => {
   const context = Object.fromEntries(

@@ -1,4 +1,4 @@
-export function createAircraftTypeLookup(lookup, metadata, publishIfChanged) {
+function createAircraftTypeLookup(lookup, metadata, publishIfChanged) {
   const pending = new Map();
 
   function request(icao, enriched, publish) {
@@ -15,3 +15,4 @@ export function createAircraftTypeLookup(lookup, metadata, publishIfChanged) {
 
   return { request };
 }
+export default createAircraftTypeLookup;

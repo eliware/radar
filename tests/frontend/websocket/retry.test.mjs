@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWebSocketRetry } from "../../../src/frontend/websocket/retry.mjs";
-import { connectWebSocketFeed } from "../../../src/frontend/websocket/connection.mjs";
+import { default as createWebSocketRetry } from "../../../src/frontend/websocket/retry.mjs";
+import { default as connectWebSocketFeed } from "../../../src/frontend/websocket/connection.mjs";
 
 test("schedules exponential delays with a thirty-second cap", () => {
   const timers = [];

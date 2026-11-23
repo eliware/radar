@@ -1,4 +1,4 @@
-export function readScreenshotSelectionConfiguration(
+function readScreenshotSelectionConfiguration(
   { primary } = { primary: false },
   environment = process.env,
 ) {
@@ -9,3 +9,4 @@ export function readScreenshotSelectionConfiguration(
     modeSelection: environment.RADAR_SCREENSHOT_MODES ?? "above-fold,full-page",
   };
 }
+export default readScreenshotSelectionConfiguration;

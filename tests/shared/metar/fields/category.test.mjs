@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { metarFlightCategory } from "../../../../src/shared/metar/fields/category.mjs";
+import { default as metarFlightCategory } from "../../../../src/shared/metar/fields/category.mjs";
 
 test("calculates a category from both visibility and ceiling", () => {
   expect(

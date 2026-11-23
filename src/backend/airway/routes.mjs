@@ -1,6 +1,6 @@
-import { parseRangeQuery } from "../reference/range/parameters.mjs";
+import { default as parseRangeQuery } from "../reference/range/parameters.mjs";
 
-export function registerAirwayRoutes(app, database, location) {
+function registerAirwayRoutes(app, database, location) {
   app.get("/api/airways", async (request, reply) => {
     if (!database) return reply.code(503).send({ error: "NASR database is not available." });
     if (!location) return reply.code(503).send({ error: "Home location is not configured." });
@@ -10,3 +10,4 @@ export function registerAirwayRoutes(app, database, location) {
     return database.findAirwaysBetween(location, minRangeNm, maxRangeNm);
   });
 }
+export default registerAirwayRoutes;

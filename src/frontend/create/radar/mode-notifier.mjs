@@ -1,3 +1,4 @@
-export function notifyRadarViewMode(onMode, mode) {
+function notifyRadarViewMode(onMode, mode) {
   onMode?.(mode);
 }
+export default notifyRadarViewMode;

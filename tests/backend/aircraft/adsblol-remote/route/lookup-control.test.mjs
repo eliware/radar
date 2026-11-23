@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAdsbLolRouteLookupControl } from "../../../../../src/backend/aircraft/adsblol-remote/route/lookup-control.mjs";
+import { default as createAdsbLolRouteLookupControl } from "../../../../../src/backend/aircraft/adsblol-remote/route/lookup-control.mjs";
 
 test("invalidates request generations when route lookup is disabled or re-enabled", () => {
   const control = createAdsbLolRouteLookupControl();

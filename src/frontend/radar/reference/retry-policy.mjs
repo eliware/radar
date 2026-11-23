@@ -1,4 +1,4 @@
-export function createRadarReferenceRetryPolicy(baseDelayMs, maxDelayMs) {
+function createRadarReferenceRetryPolicy(baseDelayMs, maxDelayMs) {
   let failures = 0;
   return {
     recordFailure() {
@@ -12,3 +12,4 @@ export function createRadarReferenceRetryPolicy(baseDelayMs, maxDelayMs) {
     },
   };
 }
+export default createRadarReferenceRetryPolicy;

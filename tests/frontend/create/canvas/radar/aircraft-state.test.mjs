@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarAircraftState } from "../../../../../src/frontend/create/canvas/radar/aircraft-state.mjs";
+import { default as createCanvasRadarAircraftState } from "../../../../../src/frontend/create/canvas/radar/aircraft-state.mjs";
 
 test("coordinates target updates, snapshots, remote records, auto-zoom, and drawing", () => {
   const state = { autoZoom: true, defaultRangeNm: 20, range: 20 };

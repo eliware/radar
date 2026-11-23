@@ -1,9 +1,4 @@
-export function createRadarLabel(
-  THREE,
-  text,
-  documentRef = globalThis.document,
-  alignment = "left",
-) {
+function createRadarLabel(THREE, text, documentRef = globalThis.document, alignment = "left") {
   if (!documentRef?.createElement || !THREE.CanvasTexture || !THREE.Sprite) return null;
   const canvas = documentRef.createElement("canvas");
   canvas.width = 512;
@@ -36,3 +31,4 @@ export function createRadarLabel(
   };
   return label;
 }
+export default createRadarLabel;

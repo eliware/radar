@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftMetadataStore } from "../../../src/backend/aircraft/metadata-store.mjs";
+import { default as createAircraftMetadataStore } from "../../../src/backend/aircraft/metadata-store.mjs";
 
 test("normalizes keys and enriches aircraft with type and route data", () => {
   const store = createAircraftMetadataStore();

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachDashboardCompassControls } from "../../../../src/frontend/attach/dashboard/compass-controls.mjs";
+import { default as attachDashboardCompassControls } from "../../../../src/frontend/attach/dashboard/compass-controls.mjs";
 
 test("composes the compass controls and returns their detach functions", () => {
   const documentRef = {

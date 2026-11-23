@@ -1,4 +1,4 @@
-export function tilePointToCoordinate(point, tile, extent) {
+function tilePointToCoordinate(point, tile, extent) {
   const size = 2 ** tile.z;
   const x = (tile.x + point.x / extent) / size;
   const y = (tile.y + point.y / extent) / size;
@@ -7,3 +7,4 @@ export function tilePointToCoordinate(point, tile, extent) {
     latitude: (Math.atan(Math.sinh(Math.PI * (1 - 2 * y))) * 180) / Math.PI,
   };
 }
+export default tilePointToCoordinate;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAdsbLolPollingRetryPolicy } from "../../../../../src/backend/aircraft/adsblol-remote/polling/retry-policy.mjs";
+import { default as createAdsbLolPollingRetryPolicy } from "../../../../../src/backend/aircraft/adsblol-remote/polling/retry-policy.mjs";
 
 test("increases retry delay exponentially, caps it, and resets after success", () => {
   const retry = createAdsbLolPollingRetryPolicy(15000);

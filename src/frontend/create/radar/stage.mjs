@@ -1,4 +1,4 @@
-export function createRadarStage(THREE, container, windowRef) {
+function createRadarStage(THREE, container, windowRef) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000000);
   const camera = new THREE.PerspectiveCamera(48, 1, 0.05, 1000);
@@ -7,4 +7,5 @@ export function createRadarStage(THREE, container, windowRef) {
   container.appendChild(renderer.domElement);
   return { scene, camera, renderer };
 }
-import { createRadarRenderer } from "./renderer.mjs";
+import { default as createRadarRenderer } from "./renderer.mjs";
+export default createRadarStage;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectWaterTileLayer } from "../../../../src/frontend/water/tile/layer-selection.mjs";
+import { default as selectWaterTileLayer } from "../../../../src/frontend/water/tile/layer-selection.mjs";
 
 test("selects the water layer and returns null when it is absent", () => {
   const water = { length: 0 };

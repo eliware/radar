@@ -1,8 +1,8 @@
-import { resizeCanvasBackingStore } from "../../canvas/resize.mjs";
-import { createCameraProjector } from "../../project/camera-position.mjs";
-import { projectRadarReference } from "../../project/radar-reference.mjs";
+import { default as resizeCanvasBackingStore } from "../../canvas/resize.mjs";
+import { default as createCameraProjector } from "../../project/camera-position.mjs";
+import { default as projectRadarReference } from "../../project/radar-reference.mjs";
 
-export function createOverlayProjection({ THREE, container, windowRef, canvas, context }) {
+function createOverlayProjection({ THREE, container, windowRef, canvas, context }) {
   let projectorCamera;
   let projectCameraPosition;
 
@@ -26,3 +26,4 @@ export function createOverlayProjection({ THREE, container, windowRef, canvas, c
 
   return { prepare };
 }
+export default createOverlayProjection;

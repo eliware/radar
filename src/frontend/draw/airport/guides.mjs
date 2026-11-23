@@ -1,6 +1,6 @@
-import { createRunwayGuidePoints } from "./runway/guides.mjs";
+import { default as createRunwayGuidePoints } from "./runway/guides.mjs";
 
-export function drawRunwayGuides(context, end, project, extensionsVisible, baseLegsVisible) {
+function drawRunwayGuides(context, end, project, extensionsVisible, baseLegsVisible) {
   const guide = createRunwayGuidePoints(end);
   const outerPoint = extensionsVisible ? project(guide.extensionEnd) : null;
   const origin = extensionsVisible ? project(guide.extensionStart) : null;
@@ -26,3 +26,4 @@ function drawLine(context, first, second) {
 function validPoint(point) {
   return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }
+export default drawRunwayGuides;

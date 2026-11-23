@@ -1,5 +1,6 @@
-import { formatAircraftStripCallsign } from "../../shared/aircraft/strip/fields.mjs";
+import { default as formatAircraftStripCallsign } from "../../shared/aircraft/strip/fields.mjs";
 
-export function formatAircraftName(aircraft) {
+function formatAircraftName(aircraft) {
   return formatAircraftStripCallsign(aircraft);
 }
+export default formatAircraftName;

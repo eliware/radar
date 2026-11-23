@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { labelProcedurePaths } from "../../src/backend/label-procedure-paths.mjs";
+import { default as labelProcedurePaths } from "../../src/backend/label-procedure-paths.mjs";
 
 const path = (type, portionType, code, fixes) => ({
   type,

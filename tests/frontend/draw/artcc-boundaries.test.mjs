@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawArtccBoundaries } from "../../../src/frontend/draw/artcc-boundaries.mjs";
+import { default as drawArtccBoundaries } from "../../../src/frontend/draw/artcc-boundaries.mjs";
 
 test("draws ordered ARTCC vertices in gray", () => {
   const context = {

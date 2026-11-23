@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { intersectsRange } from "../../../src/backend/artcc-boundary/range.mjs";
+import { default as intersectsRange } from "../../../src/backend/artcc-boundary/range.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 

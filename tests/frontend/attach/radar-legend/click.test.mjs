@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachRadarLegendClick } from "../../../../src/frontend/attach/radar-legend/click.mjs";
+import { default as attachRadarLegendClick } from "../../../../src/frontend/attach/radar-legend/click.mjs";
 
 test("routes AIRCRAFT, METAR, flight, base, and ILS clicks through document key handlers", () => {
   const listeners = new Map();

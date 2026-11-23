@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { measureAircraftTag } from "../../../../src/frontend/aircraft/tag/measure.mjs";
+import { default as measureAircraftTag } from "../../../../src/frontend/aircraft/tag/measure.mjs";
 
 test("measures labels and creates viewport placement candidates", () => {
   const context = { measureText: jest.fn((text) => ({ width: text.length * 8 })) };

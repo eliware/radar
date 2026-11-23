@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftRadarAutoZoom } from "../../../../../src/frontend/create/aircraft/radar/auto-zoom.mjs";
+import { default as createAircraftRadarAutoZoom } from "../../../../../src/frontend/create/aircraft/radar/auto-zoom.mjs";
 
 test("tracks whether aircraft radar auto zoom is enabled", () => {
   const autoZoom = createAircraftRadarAutoZoom();

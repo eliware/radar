@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { createScreenshotPageSession } from "../../../../../src/frontend/responsive/screenshot/page/session.mjs";
+import { default as createScreenshotPageSession } from "../../../../../src/frontend/responsive/screenshot/page/session.mjs";
 
 afterEach(() => delete globalThis.document);
 

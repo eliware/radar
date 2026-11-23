@@ -1,8 +1,6 @@
 import { expect, test } from "@jest/globals";
-import {
-  DEFAULT_RADAR_ROTATION_DEGREES,
-  parseRadarRotationSetting,
-} from "../../../src/shared/radar-view/rotation.mjs";
+import { DEFAULT_RADAR_ROTATION_DEGREES } from "../../../src/shared/radar-view/rotation.mjs";
+import { default as parseRadarRotationSetting } from "../../../src/shared/radar-view/rotation.mjs";
 
 test("uses the default rotation for absent and empty values", () => {
   expect(parseRadarRotationSetting(undefined)).toBe(DEFAULT_RADAR_ROTATION_DEGREES);

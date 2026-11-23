@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getRadarRingSpacing } from "../../../../src/frontend/radar/ring/spacing.mjs";
+import { default as getRadarRingSpacing } from "../../../../src/frontend/radar/ring/spacing.mjs";
 
 test("selects ring spacing for the current radar range", () => {
   expect(getRadarRingSpacing(9.99)).toBe(2);

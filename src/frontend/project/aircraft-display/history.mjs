@@ -1,4 +1,4 @@
-export function projectAircraftHistory(trails, icao, project) {
+function projectAircraftHistory(trails, icao, project) {
   return (trails.get(icao) ?? [])
     .map((point) => {
       const projected = project(point);
@@ -13,3 +13,4 @@ export function projectAircraftHistory(trails, icao, project) {
 function isVisible(point) {
   return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }
+export default projectAircraftHistory;

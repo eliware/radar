@@ -1,12 +1,12 @@
-import { attachDashboardCompassControls } from "./attach/dashboard/compass-controls.mjs";
-import { loadDashboardReferences } from "./dashboard/references.mjs";
-import { connectDashboardFeed } from "./dashboard/feed.mjs";
-import { attachDashboardLifecycle } from "./attach/dashboard/lifecycle.mjs";
-import { runDashboardStartup } from "./dashboard/startup.mjs";
-import { createDashboardViewport } from "./dashboard/viewport.mjs";
-import { readJson } from "./read-json.mjs";
-import { createDashboardDisplaySetup } from "./dashboard/display-setup.mjs";
-export async function startDashboard({
+import { default as attachDashboardCompassControls } from "./attach/dashboard/compass-controls.mjs";
+import { default as loadDashboardReferences } from "./dashboard/references.mjs";
+import { default as connectDashboardFeed } from "./dashboard/feed.mjs";
+import { default as attachDashboardLifecycle } from "./attach/dashboard/lifecycle.mjs";
+import { default as runDashboardStartup } from "./dashboard/startup.mjs";
+import { default as createDashboardViewport } from "./dashboard/viewport.mjs";
+import { default as readJson } from "./read-json.mjs";
+import { default as createDashboardDisplaySetup } from "./dashboard/display-setup.mjs";
+async function startDashboard({
   document,
   fetchData,
   WebSocketClass,
@@ -56,3 +56,4 @@ export async function startDashboard({
     return { scene, socket: feed.socket, feed, flightStrips, destroy };
   });
 }
+export default startDashboard;

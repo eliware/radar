@@ -1,11 +1,6 @@
-import { renderMetarDisplay } from "./display.mjs";
+import { default as renderMetarDisplay } from "./display.mjs";
 
-export async function renderMetarRefreshResponse(
-  panel,
-  ticker,
-  loadResponse,
-  isEnabled = () => true,
-) {
+async function renderMetarRefreshResponse(panel, ticker, loadResponse, isEnabled = () => true) {
   try {
     const response = await loadResponse();
     if (!response.ok) throw new Error("METAR request failed.");
@@ -15,3 +10,4 @@ export async function renderMetarRefreshResponse(
     if (isEnabled()) renderMetarDisplay(panel, ticker, { reports: [] });
   }
 }
+export default renderMetarRefreshResponse;

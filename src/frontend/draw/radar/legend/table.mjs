@@ -1,8 +1,8 @@
-import { radarLegendLayout } from "./entries.mjs";
-import { drawRadarLegendSymbol } from "./symbol.mjs";
-import { resolveRadarLegendColor } from "./colors.mjs";
+import { default as radarLegendLayout } from "./entries.mjs";
+import { default as drawRadarLegendSymbol } from "./symbol.mjs";
+import { default as resolveRadarLegendColor } from "./colors.mjs";
 
-export function drawRadarLegendTable(context, width, height, connected, visibility, topInset = 0) {
+function drawRadarLegendTable(context, width, height, connected, visibility, topInset = 0) {
   context.font = '12px Consolas, "Courier New", monospace';
   context.textAlign = "left";
   radarLegendLayout(width, height, topInset).forEach(({ entry, x, y }) => {
@@ -14,3 +14,4 @@ export function drawRadarLegendTable(context, width, height, connected, visibili
     context.fillText(label, x + 14, y);
   });
 }
+export default drawRadarLegendTable;

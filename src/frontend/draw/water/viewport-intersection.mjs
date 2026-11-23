@@ -1,4 +1,4 @@
-export function waterPathIntersectsView(path, project, width, height) {
+function waterPathIntersectsView(path, project, width, height) {
   if (!Number.isFinite(width) || !Number.isFinite(height)) return true;
   const { minX, maxX, minZ, maxZ } = path.bounds;
   const corners = [
@@ -19,3 +19,4 @@ export function waterPathIntersectsView(path, project, width, height) {
   }
   return !(maxScreenX < 0 || minScreenX > width || maxScreenY < 0 || minScreenY > height);
 }
+export default waterPathIntersectsView;

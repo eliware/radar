@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const DEFAULT_PATH = resolve(dirname(fileURLToPath(import.meta.url)), "../../nasr/NASR.sqlite");
 
-export function openAirportDatabase(path, { Database = DatabaseSync, exists = existsSync } = {}) {
+function openAirportDatabase(path, { Database = DatabaseSync, exists = existsSync } = {}) {
   const file = resolve(path || DEFAULT_PATH);
   if (!exists(file)) {
     if (path) throw new Error(`NASR database file not found: ${file}`);
@@ -13,3 +13,4 @@ export function openAirportDatabase(path, { Database = DatabaseSync, exists = ex
   }
   return new Database(file, { readOnly: true });
 }
+export default openAirportDatabase;

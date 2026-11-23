@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarGestures } from "../../../../../src/frontend/create/canvas/radar/gestures.mjs";
+import { default as createCanvasRadarGestures } from "../../../../../src/frontend/create/canvas/radar/gestures.mjs";
 
 test("zooms and rotates the Canvas view after direct gestures", () => {
   const state = { autoZoom: true, range: 20, rotation: 0 };

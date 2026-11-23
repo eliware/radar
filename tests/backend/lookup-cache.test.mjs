@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createLookupCache } from "../../src/backend/lookup-cache.mjs";
+import { default as createLookupCache } from "../../src/backend/lookup-cache.mjs";
 
 const ttls = { successTtlMs: 10, missingTtlMs: 3, failureTtlMs: 2 };
 

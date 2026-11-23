@@ -1,8 +1,8 @@
-import { decodeWaterTile } from "./decoder.mjs";
-import { createWaterTileRequest } from "./request.mjs";
-import { createWaterTileStore } from "./store.mjs";
+import { default as decodeWaterTile } from "./decoder.mjs";
+import { default as createWaterTileRequest } from "./request.mjs";
+import { default as createWaterTileStore } from "./store.mjs";
 
-export function createWaterTileCache(fetchRef) {
+function createWaterTileCache(fetchRef) {
   const cache = createWaterTileStore();
   const request = createWaterTileRequest(fetchRef);
 
@@ -25,3 +25,4 @@ export function createWaterTileCache(fetchRef) {
 
   return { load, retain, pathsFor };
 }
+export default createWaterTileCache;

@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import Fastify from "fastify";
-import { registerStaticRoutes } from "../../src/backend/static-routes.mjs";
+import { default as registerStaticRoutes } from "../../src/backend/static-routes.mjs";
 
 test("serves the page and browser bundle", async () => {
   const app = Fastify();

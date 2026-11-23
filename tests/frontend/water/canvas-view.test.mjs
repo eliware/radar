@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { calculateCanvasWaterView } from "../../../src/frontend/water/canvas-view.mjs";
+import { default as calculateCanvasWaterView } from "../../../src/frontend/water/canvas-view.mjs";
 
 test("calculates a north-up center and stable request key", () => {
   const view = calculateCanvasWaterView(

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { tilePointToCoordinate } from "../../../src/frontend/clip/tile-coordinate.mjs";
+import { default as tilePointToCoordinate } from "../../../src/frontend/clip/tile-coordinate.mjs";
 
 test("converts tile corners to geographic coordinates", () => {
   expect(tilePointToCoordinate({ x: 0, y: 0 }, { z: 0, x: 0, y: 0 }, 256)).toEqual({

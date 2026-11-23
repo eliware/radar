@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { reportScreenshotResults } from "../../../../src/frontend/responsive/screenshot/report.mjs";
+import { default as reportScreenshotResults } from "../../../../src/frontend/responsive/screenshot/report.mjs";
 
 test("reports and returns the screenshot count and output directory", () => {
   const report = jest.fn();

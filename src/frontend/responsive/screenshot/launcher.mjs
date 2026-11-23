@@ -1,6 +1,6 @@
-import { selectScreenshotOptions } from "./selection.mjs";
+import { default as selectScreenshotOptions } from "./selection.mjs";
 
-export function createScreenshotLaunchOptions(args = [], environment = process.env) {
+function createScreenshotLaunchOptions(args = [], environment = process.env) {
   const selection = selectScreenshotOptions(args, environment);
   return {
     baseUrl: environment.RADAR_SCREENSHOT_URL ?? "http://127.0.0.1:1390",
@@ -8,3 +8,4 @@ export function createScreenshotLaunchOptions(args = [], environment = process.e
     ...selection,
   };
 }
+export default createScreenshotLaunchOptions;

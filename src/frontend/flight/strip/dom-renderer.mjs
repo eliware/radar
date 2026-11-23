@@ -1,7 +1,7 @@
-import { buildFlightStripData } from "./data.mjs";
-import { renderFlightStripMarkup } from "./renderer.mjs";
+import { default as buildFlightStripData } from "./data.mjs";
+import { default as renderFlightStripMarkup } from "./renderer.mjs";
 
-export function renderFlightStrips(container, aircraft, width, now = Date.now()) {
+function renderFlightStrips(container, aircraft, width, now = Date.now()) {
   if (!container) return;
   const scrollTop = container.querySelector?.(".flight-strip-list")?.scrollTop ?? 0;
   const data = buildFlightStripData(aircraft, width);
@@ -9,3 +9,4 @@ export function renderFlightStrips(container, aircraft, width, now = Date.now())
   const nextList = container.querySelector?.(".flight-strip-list");
   if (nextList) nextList.scrollTop = scrollTop;
 }
+export default renderFlightStrips;

@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import * as THREE from "three";
-import { createOverlayDrawer } from "../../../src/frontend/aircraft/overlay-draw.mjs";
+import { default as createOverlayDrawer } from "../../../src/frontend/aircraft/overlay-draw.mjs";
 
 test("creates a callable aircraft overlay renderer", () => {
   const draw = createOverlayDrawer({

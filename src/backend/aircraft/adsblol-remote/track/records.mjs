@@ -1,6 +1,6 @@
 const AIRCRAFT_MAX_AGE_MS = 120_000;
 
-export function createAdsbLolTrackRecords({ clock = Date.now } = {}) {
+function createAdsbLolTrackRecords({ clock = Date.now } = {}) {
   const records = new Map();
   function list() {
     const now = clock();
@@ -17,3 +17,4 @@ export function createAdsbLolTrackRecords({ clock = Date.now } = {}) {
     clear: () => records.clear(),
   };
 }
+export default createAdsbLolTrackRecords;

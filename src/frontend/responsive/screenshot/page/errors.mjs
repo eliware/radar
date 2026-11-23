@@ -1,4 +1,4 @@
-export function createScreenshotPageErrors() {
+function createScreenshotPageErrors() {
   const errors = [];
   return {
     record(name, error) {
@@ -9,3 +9,4 @@ export function createScreenshotPageErrors() {
     },
   };
 }
+export default createScreenshotPageErrors;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { disposeRadarLayerVisibility } from "../../../../../src/frontend/create/radar/layer/dispose.mjs";
+import { default as disposeRadarLayerVisibility } from "../../../../../src/frontend/create/radar/layer/dispose.mjs";
 
 test("disposes layer controllers and attached shortcuts", () => {
   const ils = { destroy: jest.fn() };

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createMetarResponse } from "../../../src/backend/metar/response.mjs";
+import { default as createMetarResponse } from "../../../src/backend/metar/response.mjs";
 
 test("decodes reports and retains the configured station list", () => {
   const response = createMetarResponse(

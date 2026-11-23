@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseAdsbLolRetryAfter } from "../../../../../src/backend/aircraft/adsblol-remote/request/retry-after.mjs";
+import { default as parseAdsbLolRetryAfter } from "../../../../../src/backend/aircraft/adsblol-remote/request/retry-after.mjs";
 
 test("parses Retry-After delta seconds", () => {
   expect(parseAdsbLolRetryAfter("45")).toBe(45000);

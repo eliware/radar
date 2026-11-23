@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftClientState } from "../../../src/backend/aircraft/client-state.mjs";
+import { default as createAircraftClientState } from "../../../src/backend/aircraft/client-state.mjs";
 
 test("tracks client settings, preserves senders on reconnect, and filters snapshots", () => {
   const clients = createAircraftClientState(10);

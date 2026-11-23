@@ -1,23 +1,23 @@
-import { getAircraftSceneRendererDependencies } from "./renderer-dependencies.mjs";
-import { createRadarControls } from "../../create/radar/controls.mjs";
-import { createRadarStage } from "../../create/radar/stage.mjs";
-import { createRadarCamera } from "../../radar/camera.mjs";
+import { default as getAircraftSceneRendererDependencies } from "./renderer-dependencies.mjs";
+import { default as createRadarControls } from "../../create/radar/controls.mjs";
+import { default as createRadarStage } from "../../create/radar/stage.mjs";
+import { default as createRadarCamera } from "../../radar/camera.mjs";
 import { DEFAULT_RADAR_RANGE } from "../../radar/range.mjs";
-import { createRadarTargets } from "../../radar/targets.mjs";
-import { createRadarSceneOverlays } from "../../radar/scene-overlays.mjs";
-import { createAircraftTrails } from "../trails.mjs";
-import { createAircraftReceiveTimes } from "../receive-times.mjs";
-import { createAircraftDisplayOverlay } from "../display-overlay.mjs";
-import { createRadarHome } from "../../create/radar/home.mjs";
-import { createAirspaceVolumes } from "../../create/airspace-volumes.mjs";
-import { createRadarLayerVisibility } from "../../create/radar/layer/visibility.mjs";
-import { createSceneWater } from "../../create/scene-water.mjs";
-import { createAircraftRadarCamera } from "../../create/aircraft/radar/camera.mjs";
-import { createRadarConnectionState } from "../../create/radar/connection-state.mjs";
-import { createOrbitRadarState } from "../../create/orbit-radar-state.mjs";
-import { disposeAircraftSceneResources } from "./dispose.mjs";
+import { default as createRadarTargets } from "../../radar/targets.mjs";
+import { default as createRadarSceneOverlays } from "../../radar/scene-overlays.mjs";
+import { default as createAircraftTrails } from "../trails.mjs";
+import { default as createAircraftReceiveTimes } from "../receive-times.mjs";
+import { default as createAircraftDisplayOverlay } from "../display-overlay.mjs";
+import { default as createRadarHome } from "../../create/radar/home.mjs";
+import { default as createAirspaceVolumes } from "../../create/airspace-volumes.mjs";
+import { default as createRadarLayerVisibility } from "../../create/radar/layer/visibility.mjs";
+import { default as createSceneWater } from "../../create/scene-water.mjs";
+import { default as createAircraftRadarCamera } from "../../create/aircraft/radar/camera.mjs";
+import { default as createRadarConnectionState } from "../../create/radar/connection-state.mjs";
+import { default as createOrbitRadarState } from "../../create/orbit-radar-state.mjs";
+import { default as disposeAircraftSceneResources } from "./dispose.mjs";
 
-export function createAircraftSceneResources({
+function createAircraftSceneResources({
   container,
   location,
   elevationFeet,
@@ -117,3 +117,4 @@ export function createAircraftSceneResources({
     },
   };
 }
+export default createAircraftSceneResources;

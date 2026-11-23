@@ -1,4 +1,4 @@
-export function createAdsbLolPollingRetryPolicy(intervalMs, maxBackoffMs = 300_000) {
+function createAdsbLolPollingRetryPolicy(intervalMs, maxBackoffMs = 300_000) {
   let failures = 0;
   return {
     recordFailure() {
@@ -12,3 +12,4 @@ export function createAdsbLolPollingRetryPolicy(intervalMs, maxBackoffMs = 300_0
     },
   };
 }
+export default createAdsbLolPollingRetryPolicy;

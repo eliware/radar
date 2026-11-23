@@ -1,4 +1,4 @@
-export async function finalizeScreenshotSession(session, capture) {
+async function finalizeScreenshotSession(session, capture) {
   try {
     await capture();
   } finally {
@@ -6,3 +6,4 @@ export async function finalizeScreenshotSession(session, capture) {
   }
   session.assertNoPageErrors();
 }
+export default finalizeScreenshotSession;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createDefaultScreenshotCliDependencies } from "../../../../../src/frontend/responsive/screenshot/cli/defaults.mjs";
+import { default as createDefaultScreenshotCliDependencies } from "../../../../../src/frontend/responsive/screenshot/cli/defaults.mjs";
 
 test("constructs the concrete screenshot CLI defaults", () => {
   expect(createDefaultScreenshotCliDependencies()).toEqual(

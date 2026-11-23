@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
-import { getAdsbLolPollingPolicy } from "../../../../src/backend/aircraft/adsblol-remote/policy.mjs";
+import { default as createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
+import { default as getAdsbLolPollingPolicy } from "../../../../src/backend/aircraft/adsblol-remote/policy.mjs";
 
 test("aggregates active remote client demand into polling policy", () => {
   const clients = createAircraftClientState(20, 300);

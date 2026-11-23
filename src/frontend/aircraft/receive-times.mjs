@@ -1,4 +1,4 @@
-export function createAircraftReceiveTimes(clock = Date.now) {
+function createAircraftReceiveTimes(clock = Date.now) {
   const receivedAt = new Map();
   return {
     set(icao, observedAt) {
@@ -20,3 +20,4 @@ export function createAircraftReceiveTimes(clock = Date.now) {
     },
   };
 }
+export default createAircraftReceiveTimes;

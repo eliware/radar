@@ -1,5 +1,6 @@
-import { destroyDashboardResources } from "../destroy/dashboard-resources.mjs";
+import { default as destroyDashboardResources } from "../destroy/dashboard-resources.mjs";
 
-export function cleanupDashboardSetup(resources) {
+function cleanupDashboardSetup(resources) {
   destroyDashboardResources(resources);
 }
+export default cleanupDashboardSetup;

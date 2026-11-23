@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createMergedAircraftSourceState } from "../../../../../../src/backend/aircraft/merged/aircraft/source/state.mjs";
+import { default as createMergedAircraftSourceState } from "../../../../../../src/backend/aircraft/merged/aircraft/source/state.mjs";
 
 test("normalizes and assigns valid aircraft source records", () => {
   const entries = new Map();

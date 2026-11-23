@@ -1,6 +1,6 @@
-import { tilePointToCoordinate } from "./tile-coordinate.mjs";
+import { default as tilePointToCoordinate } from "./tile-coordinate.mjs";
 
-export function clipWaterTileRing(ring, tile, extent) {
+function clipWaterTileRing(ring, tile, extent) {
   if (ring.length < 3) return [];
   const paths = [];
   let path = [];
@@ -25,3 +25,4 @@ function isTileEdge(start, end, extent) {
     (start.y === end.y && (start.y <= 0 || start.y >= extent))
   );
 }
+export default clipWaterTileRing;

@@ -1,8 +1,8 @@
-import { formatAircraftName } from "../name.mjs";
-import { formatAircraftSpeed } from "../speed.mjs";
-import { formatAircraftAltitude } from "./altitude.mjs";
+import { default as formatAircraftName } from "../name.mjs";
+import { default as formatAircraftSpeed } from "../speed.mjs";
+import { default as formatAircraftAltitude } from "./altitude.mjs";
 
-export function formatAircraftTag(aircraft) {
+function formatAircraftTag(aircraft) {
   const altitudeLine = formatAircraftAltitude(aircraft);
   const speed = formatAircraftSpeed(aircraft);
   const typeCode = aircraft.aircraftTypeCode?.trim();
@@ -13,3 +13,4 @@ export function formatAircraftTag(aircraft) {
   ];
   return lines;
 }
+export default formatAircraftTag;

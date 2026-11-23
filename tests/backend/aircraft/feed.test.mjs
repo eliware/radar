@@ -1,8 +1,6 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import {
-  aircraftFeedDependencies,
-  createAircraftFeed,
-} from "../../../src/backend/aircraft/feed.mjs";
+import { aircraftFeedDependencies } from "../../../src/backend/aircraft/feed.mjs";
+import { default as createAircraftFeed } from "../../../src/backend/aircraft/feed.mjs";
 
 afterEach(() => {
   delete process.env.ADSB_HOST;

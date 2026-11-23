@@ -1,6 +1,6 @@
-import { persistLayerVisibilityChanges } from "./write.mjs";
+import { default as persistLayerVisibilityChanges } from "./write.mjs";
 
-export function createLayerVisibilityChanges(onChange, onReferenceChange) {
+function createLayerVisibilityChanges(onChange, onReferenceChange) {
   let restoring = true;
   function changed(key, value, callback = onChange) {
     if (restoring) return;
@@ -45,3 +45,4 @@ export function createLayerVisibilityChanges(onChange, onReferenceChange) {
     },
   };
 }
+export default createLayerVisibilityChanges;

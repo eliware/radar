@@ -1,7 +1,7 @@
-import { attachMobileRadarGestures } from "./attach/mobile/radar-gestures.mjs";
-import { hasCoarsePointer } from "./has-coarse-pointer.mjs";
+import { default as attachMobileRadarGestures } from "./attach/mobile/radar-gestures.mjs";
+import { default as hasCoarsePointer } from "./has-coarse-pointer.mjs";
 
-export function configureMobileRadarControls(controls, element, windowRef, onZoom = () => {}) {
+function configureMobileRadarControls(controls, element, windowRef, onZoom = () => {}) {
   if (!hasCoarsePointer(windowRef)) return () => {};
   controls.enablePan = false;
   controls.enableRotate = false;
@@ -14,3 +14,4 @@ export function configureMobileRadarControls(controls, element, windowRef, onZoo
     },
   });
 }
+export default configureMobileRadarControls;

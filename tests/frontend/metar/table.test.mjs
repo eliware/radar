@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderMetarTable } from "../../../src/frontend/metar/table.mjs";
+import { default as renderMetarTable } from "../../../src/frontend/metar/table.mjs";
 
 const decoded = {
   automated: true,

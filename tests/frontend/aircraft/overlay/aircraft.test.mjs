@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftOverlayTargets } from "../../../../src/frontend/aircraft/overlay/aircraft.mjs";
+import { default as drawAircraftOverlayTargets } from "../../../../src/frontend/aircraft/overlay/aircraft.mjs";
 
 test("projects and draws aircraft display items", () => {
   const context = Object.fromEntries(

@@ -17,9 +17,7 @@ services:
       - radar
 
   readsb:
-    build:
-      context: .
-      dockerfile: Dockerfile.readsb
+    image: ghcr.io/wiedehopf/readsb:latest
     command:
       [
         "--device-type",

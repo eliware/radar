@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectScaleDistance } from "../../../../src/frontend/draw/radar/select-scale-distance.mjs";
+import { default as selectScaleDistance } from "../../../../src/frontend/draw/radar/select-scale-distance.mjs";
 
 test.each([
   [20, 475.2, 120, 5],

@@ -1,6 +1,6 @@
-import { createAircraftRadarLoop } from "../create/aircraft/radar/loop.mjs";
+import { default as createAircraftRadarLoop } from "../create/aircraft/radar/loop.mjs";
 
-export function startAircraftSceneLoop(options, createLoop = createAircraftRadarLoop) {
+function startAircraftSceneLoop(options, createLoop = createAircraftRadarLoop) {
   return createLoop({
     ...options,
     isIlsVisible: options.layers.ils.isVisible,
@@ -31,3 +31,4 @@ export function startAircraftSceneLoop(options, createLoop = createAircraftRadar
     airways: options.references.airways,
   });
 }
+export default startAircraftSceneLoop;

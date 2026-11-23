@@ -1,4 +1,4 @@
-export function createAirportDatabaseGuard(database, queries) {
+function createAirportDatabaseGuard(database, queries) {
   let closed = false;
   const guard =
     (query) =>
@@ -20,3 +20,4 @@ export function createAirportDatabaseGuard(database, queries) {
     },
   };
 }
+export default createAirportDatabaseGuard;

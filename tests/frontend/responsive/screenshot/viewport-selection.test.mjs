@@ -1,8 +1,6 @@
 import { expect, test } from "@jest/globals";
-import {
-  DEFAULT_SCREENSHOT_VIEWPORT_SELECTION,
-  selectScreenshotViewports,
-} from "../../../../src/frontend/responsive/screenshot/viewport-selection.mjs";
+import { DEFAULT_SCREENSHOT_VIEWPORT_SELECTION } from "../../../../src/frontend/responsive/screenshot/viewport-selection.mjs";
+import { default as selectScreenshotViewports } from "../../../../src/frontend/responsive/screenshot/viewport-selection.mjs";
 
 test("selects the default, named, and landscape viewports", () => {
   expect(DEFAULT_SCREENSHOT_VIEWPORT_SELECTION).toBe("all");

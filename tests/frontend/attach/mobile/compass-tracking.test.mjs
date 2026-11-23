@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachMobileCompassTracking } from "../../../../src/frontend/attach/mobile/compass-tracking.mjs";
+import { default as attachMobileCompassTracking } from "../../../../src/frontend/attach/mobile/compass-tracking.mjs";
 
 function setup({ secure = true, sensor = {}, view = { setRotation: jest.fn() } } = {}) {
   const listeners = new Map();

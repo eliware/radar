@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftTypeService } from "../../../../src/backend/lookup/aircraft/type-service.mjs";
+import { default as createAircraftTypeService } from "../../../../src/backend/lookup/aircraft/type-service.mjs";
 
 const response = (code) => ({
   ok: true,

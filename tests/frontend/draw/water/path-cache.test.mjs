@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getProjectedWaterPaths } from "../../../../src/frontend/draw/water/path-cache.mjs";
+import { default as getProjectedWaterPaths } from "../../../../src/frontend/draw/water/path-cache.mjs";
 
 test("caches projected paths for the same paths and location", () => {
   const paths = [

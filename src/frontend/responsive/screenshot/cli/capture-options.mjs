@@ -1,8 +1,9 @@
-import { createScreenshotLaunchOptions } from "../launcher.mjs";
+import { default as createScreenshotLaunchOptions } from "../launcher.mjs";
 
-export function createScreenshotCliCaptureOptions(args, environment, dependencies) {
+function createScreenshotCliCaptureOptions(args, environment, dependencies) {
   return {
     ...createScreenshotLaunchOptions(args, environment),
     ...dependencies,
   };
 }
+export default createScreenshotCliCaptureOptions;

@@ -1,6 +1,6 @@
-import { reconcileAircraftSource } from "../reconcile.mjs";
+import { default as reconcileAircraftSource } from "../reconcile.mjs";
 
-export function createMergedAircraftSourceState(entries) {
+function createMergedAircraftSourceState(entries) {
   function set(source, item) {
     if (typeof item?.icao !== "string" || !item.icao.trim()) return undefined;
     const icao = item.icao.trim().toUpperCase();
@@ -15,3 +15,4 @@ export function createMergedAircraftSourceState(entries) {
     replace: (source, items) => reconcileAircraftSource(entries, source, items, set),
   };
 }
+export default createMergedAircraftSourceState;

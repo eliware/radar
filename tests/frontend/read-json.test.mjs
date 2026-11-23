@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { readJson } from "../../src/frontend/read-json.mjs";
+import { default as readJson } from "../../src/frontend/read-json.mjs";
 
 test("returns JSON from a successful response", async () => {
   const data = { configured: true };

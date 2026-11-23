@@ -1,7 +1,7 @@
 import { MAX_RADAR_RANGE } from "../range.mjs";
-import { getFrustumPlaneIntersections } from "./intersections.mjs";
+import { default as getFrustumPlaneIntersections } from "./intersections.mjs";
 
-export function getRadarViewportBounds(THREE, camera, width, height, groundY = 0) {
+function getRadarViewportBounds(THREE, camera, width, height, groundY = 0) {
   if (!camera || width <= 0 || height <= 0) return emptyBounds();
   const points = getFrustumPlaneIntersections(THREE, camera, groundY);
   return points.length ? boundsFor(points) : emptyBounds();
@@ -44,3 +44,4 @@ function emptyBounds() {
     visibleRadiusNm: 0,
   };
 }
+export default getRadarViewportBounds;

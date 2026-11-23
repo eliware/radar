@@ -1,4 +1,4 @@
-export function createAdsbLolRemoteSourceApi({ aircraft, subscribers, clients }) {
+function createAdsbLolRemoteSourceApi({ aircraft, subscribers, clients }) {
   const publish = () => subscribers.publish();
   return {
     publish,
@@ -22,3 +22,4 @@ export function createAdsbLolRemoteSourceApi({ aircraft, subscribers, clients })
     },
   };
 }
+export default createAdsbLolRemoteSourceApi;

@@ -1,4 +1,4 @@
-export function parseDashboardFeedMessage(data) {
+function parseDashboardFeedMessage(data) {
   let message;
   try {
     message = JSON.parse(data);
@@ -7,3 +7,4 @@ export function parseDashboardFeedMessage(data) {
   }
   return message?.event === "aircraft-snapshot" ? message : null;
 }
+export default parseDashboardFeedMessage;

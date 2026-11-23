@@ -1,6 +1,6 @@
-import { createAircraftEnrichmentCoordinator } from "./coordinator.mjs";
+import { default as createAircraftEnrichmentCoordinator } from "./coordinator.mjs";
 
-export function createAircraftEnrichmentFeed(feed, lookup) {
+function createAircraftEnrichmentFeed(feed, lookup) {
   const subscribers = new Set();
   const coordinator = createAircraftEnrichmentCoordinator(lookup);
   let closed = false;
@@ -32,3 +32,4 @@ export function createAircraftEnrichmentFeed(feed, lookup) {
     },
   };
 }
+export default createAircraftEnrichmentFeed;

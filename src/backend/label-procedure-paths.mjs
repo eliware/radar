@@ -1,4 +1,4 @@
-export function labelProcedurePaths(paths) {
+function labelProcedurePaths(paths) {
   labelSidEnds(paths.filter((path) => path.type === "SID"));
   labelStarEntryFixes(paths.filter((path) => path.type === "STAR"));
 }
@@ -36,3 +36,4 @@ function commonMainFix(paths) {
   const first = [...counts].sort((left, right) => right[1] - left[1])[0];
   return first ? first[0] : null;
 }
+export default labelProcedurePaths;

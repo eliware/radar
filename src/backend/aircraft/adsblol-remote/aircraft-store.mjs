@@ -1,7 +1,7 @@
-import { createAdsbLolRouteStore } from "./route/store.mjs";
-import { createAdsbLolTrackStore } from "./track-store.mjs";
+import { default as createAdsbLolRouteStore } from "./route/store.mjs";
+import { default as createAdsbLolTrackStore } from "./track-store.mjs";
 
-export function createAdsbLolAircraftStore({
+function createAdsbLolAircraftStore({
   location,
   lookup,
   clock = Date.now,
@@ -17,3 +17,4 @@ export function createAdsbLolAircraftStore({
     setRouteLookupsEnabled: routes.setEnabled,
   };
 }
+export default createAdsbLolAircraftStore;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getRadarLegendVisibility } from "../../../../../src/frontend/draw/radar/legend/visibility.mjs";
+import { default as getRadarLegendVisibility } from "../../../../../src/frontend/draw/radar/legend/visibility.mjs";
 
 test("resolves aircraft and layer visibility from the supplied state", () => {
   expect(getRadarLegendVisibility("aircraftVisible", { aircraftVisible: false })).toBe(true);

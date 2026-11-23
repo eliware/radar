@@ -1,4 +1,4 @@
-export function createCanvasRadarProjector(centerX, centerY, radius, range, rotation) {
+function createCanvasRadarProjector(centerX, centerY, radius, range, rotation) {
   const cosine = Math.cos(rotation);
   const sine = Math.sin(rotation);
   return (point) => ({
@@ -6,3 +6,4 @@ export function createCanvasRadarProjector(centerX, centerY, radius, range, rota
     y: centerY + (point.x / range) * radius * sine + (point.z / range) * radius * cosine,
   });
 }
+export default createCanvasRadarProjector;

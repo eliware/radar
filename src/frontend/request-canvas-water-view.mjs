@@ -1,6 +1,6 @@
-import { calculateCanvasWaterView } from "./water/canvas-view.mjs";
+import { default as calculateCanvasWaterView } from "./water/canvas-view.mjs";
 
-export function createCanvasWaterViewRequester(location, canvas, state, loader, data, redraw) {
+function createCanvasWaterViewRequester(location, canvas, state, loader, data, redraw) {
   let requestedView = "";
   return {
     update() {
@@ -15,3 +15,4 @@ export function createCanvasWaterViewRequester(location, canvas, state, loader, 
     },
   };
 }
+export default createCanvasWaterViewRequester;

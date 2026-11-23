@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { resolveWebServiceConfiguration } from "../../../src/backend/config/services.mjs";
+import { default as resolveWebServiceConfiguration } from "../../../src/backend/config/services.mjs";
 
 test("resolves NASR, METAR, logging, and ADSB.lol polling settings", () => {
   const parseMetarStations = jest.fn((value) => value.split(","));

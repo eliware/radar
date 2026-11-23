@@ -1,4 +1,4 @@
-export function createViewportReporter(scene, documentRef) {
+function createViewportReporter(scene, documentRef) {
   let lastReportedRadius;
   let lastSocket;
   const send = (socket, force = false) => {
@@ -21,3 +21,4 @@ export function createViewportReporter(scene, documentRef) {
   send.destroy = () => documentRef?.removeEventListener?.("keydown", onKeyDown);
   return send;
 }
+export default createViewportReporter;

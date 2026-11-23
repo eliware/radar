@@ -1,5 +1,6 @@
-import { importNasrDatabaseLifecycle } from "./import/database.mjs";
+import { default as importNasrDatabaseLifecycle } from "./import/database.mjs";
 
-export function importNasrDatabase(...args) {
+function importNasrDatabase(...args) {
   return importNasrDatabaseLifecycle(...args);
 }
+export default importNasrDatabase;

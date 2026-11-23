@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createMetarLookup } from "../../../src/backend/metar/lookup.mjs";
+import { default as createMetarLookup } from "../../../src/backend/metar/lookup.mjs";
 
 test("returns no reports and makes no request when no stations are set", async () => {
   const fetchData = jest.fn();

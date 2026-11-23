@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatMetarAge } from "../../../src/shared/metar/age-format.mjs";
+import { default as formatMetarAge } from "../../../src/shared/metar/age-format.mjs";
 
 test("formats minute and hour METAR ages", () => {
   const now = new Date("2026-10-13T18:00:00Z");

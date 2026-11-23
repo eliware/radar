@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawRadarLegendTable } from "../../../../../src/frontend/draw/radar/legend/table.mjs";
+import { default as drawRadarLegendTable } from "../../../../../src/frontend/draw/radar/legend/table.mjs";
 
 function createContext() {
   return {

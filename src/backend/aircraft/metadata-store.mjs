@@ -1,6 +1,6 @@
 const MAX_ENTRIES = 256;
 
-export function createAircraftMetadataStore(limit = MAX_ENTRIES) {
+function createAircraftMetadataStore(limit = MAX_ENTRIES) {
   const typesByIcao = new Map();
   const routesByCallsign = new Map();
 
@@ -38,3 +38,4 @@ function sameLookupData(before, after) {
     before.destination === after.destination
   );
 }
+export default createAircraftMetadataStore;

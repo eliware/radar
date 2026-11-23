@@ -1,9 +1,9 @@
-import { runwayDestination } from "../../../runway-destination.mjs";
+import { default as runwayDestination } from "../../../runway-destination.mjs";
 
 const EXTENSION_NM = 10;
 const EXTENSION_ALTITUDE_FEET = 3000;
 
-export function createRunwayGuidePoints(end) {
+function createRunwayGuidePoints(end) {
   const outward = (end.alignmentDegrees + 180) % 360;
   const farEnd = runwayDestination(end, outward, EXTENSION_NM);
   const baseElevation = Number.isFinite(end.elevationFeet) ? end.elevationFeet : 0;
@@ -18,3 +18,4 @@ export function createRunwayGuidePoints(end) {
     ],
   };
 }
+export default createRunwayGuidePoints;

@@ -1,4 +1,4 @@
-export function intersectsViewport(item, bounds, location, padding = 0) {
+function intersectsViewport(item, bounds, location, padding = 0) {
   const box = expand(bounds, padding);
   const points = item.points?.map((point) => localPoint(point, location)).filter(Boolean) ?? [];
   if (points.length)
@@ -53,3 +53,4 @@ function segmentIntersects(from, to, box) {
   }
   return true;
 }
+export default intersectsViewport;

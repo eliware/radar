@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarView } from "../../../src/frontend/canvas-radar/view.mjs";
+import { default as createCanvasRadarView } from "../../../src/frontend/canvas-radar/view.mjs";
 
 function setup(context = makeContext()) {
   const listeners = new Map();

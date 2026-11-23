@@ -1,6 +1,6 @@
 const EDITABLE_TAGS = new Set(["input", "textarea", "select"]);
 
-export function attachProcedureToggleKey(documentRef, toggleSid, toggleStar) {
+function attachProcedureToggleKey(documentRef, toggleSid, toggleStar) {
   if (!documentRef?.addEventListener) return () => {};
   const onKeyDown = (event) => {
     const key = event.key?.toLowerCase();
@@ -13,3 +13,4 @@ export function attachProcedureToggleKey(documentRef, toggleSid, toggleStar) {
   documentRef.addEventListener("keydown", onKeyDown);
   return () => documentRef.removeEventListener?.("keydown", onKeyDown);
 }
+export default attachProcedureToggleKey;

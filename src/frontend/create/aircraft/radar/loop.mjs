@@ -1,10 +1,10 @@
-import { selectDefaultRadarRange } from "../../../radar/default-range.mjs";
-import { watchRadarTargets } from "../../../watch-radar-targets.mjs";
-import { createRadarRenderLoop } from "../../../radar/render-loop.mjs";
+import { default as selectDefaultRadarRange } from "../../../radar/default-range.mjs";
+import { default as watchRadarTargets } from "../../../watch-radar-targets.mjs";
+import { default as createRadarRenderLoop } from "../../../radar/render-loop.mjs";
 
 const OVERLAY_REFRESH_MS = 100;
 
-export function createAircraftRadarLoop({
+function createAircraftRadarLoop({
   targets,
   trails,
   receiveTimes,
@@ -101,3 +101,4 @@ export function createAircraftRadarLoop({
     controls?.removeEventListener("change", onCameraChange);
   };
 }
+export default createAircraftRadarLoop;

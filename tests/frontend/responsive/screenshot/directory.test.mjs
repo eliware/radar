@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { prepareScreenshotOutput } from "../../../../src/frontend/responsive/screenshot/directory.mjs";
+import { default as prepareScreenshotOutput } from "../../../../src/frontend/responsive/screenshot/directory.mjs";
 
 test("creates an absolute screenshot output directory", async () => {
   const files = { mkdir: jest.fn() };

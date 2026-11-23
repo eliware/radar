@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarReferenceViewLoader } from "../../../../../src/frontend/radar/reference/view/loader.mjs";
+import { default as createRadarReferenceViewLoader } from "../../../../../src/frontend/radar/reference/view/loader.mjs";
 
 function setup(loadedThrough = 0) {
   const session = {

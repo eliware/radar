@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerNavaidRoutes } from "../../src/backend/navaid-routes.mjs";
+import { default as registerNavaidRoutes } from "../../src/backend/navaid-routes.mjs";
 
 function route(database, location = { latitude: 43, longitude: -70 }) {
   const routes = new Map();

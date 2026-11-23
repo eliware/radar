@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftOverlayReferences } from "../../../../src/frontend/aircraft/overlay/references.mjs";
+import { default as drawAircraftOverlayReferences } from "../../../../src/frontend/aircraft/overlay/references.mjs";
 
 test("draws reference markers using the prepared scene projection", () => {
   const context = Object.fromEntries(

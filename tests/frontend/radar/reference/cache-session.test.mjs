@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { createRadarReferenceCacheSession } from "../../../../src/frontend/radar/reference/cache-session.mjs";
+import { default as createRadarReferenceCacheSession } from "../../../../src/frontend/radar/reference/cache-session.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 const collections = (airways = []) => [[], [], [], [], [], airways];

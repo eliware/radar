@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftTrails } from "../../../src/frontend/aircraft/trails.mjs";
+import { default as createAircraftTrails } from "../../../src/frontend/aircraft/trails.mjs";
 
 test("stores distinct recent points and removes expired aircraft", () => {
   let now = 0;

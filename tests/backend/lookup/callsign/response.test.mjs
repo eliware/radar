@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseCallsignRouteResponse } from "../../../../src/backend/lookup/callsign/response.mjs";
+import { default as parseCallsignRouteResponse } from "../../../../src/backend/lookup/callsign/response.mjs";
 
 test("handles missing, failed, and unusable route responses", async () => {
   expect(await parseCallsignRouteResponse({ status: 404, ok: false })).toBeNull();

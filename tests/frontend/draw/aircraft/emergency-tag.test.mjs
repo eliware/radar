@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftEmergencyTag } from "../../../../src/frontend/draw/aircraft/emergency-tag.mjs";
+import { default as drawAircraftEmergencyTag } from "../../../../src/frontend/draw/aircraft/emergency-tag.mjs";
 
 test("places emergency status beside the three primary aircraft label lines", () => {
   const context = { fillText: jest.fn(), measureText: (text) => ({ width: text.length * 8 }) };

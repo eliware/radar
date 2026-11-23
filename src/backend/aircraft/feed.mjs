@@ -1,9 +1,9 @@
-import { handleAircraftRecord } from "./record-handler.mjs";
-import { calculateAircraftRange } from "../../shared/aircraft/range.mjs";
-import { createAircraftList } from "../../shared/aircraft/list.mjs";
-import { parseAdsbLocation } from "../../shared/adsb-location.mjs";
-import { parseSbsMessage } from "../../shared/sbs-message.mjs";
-import { connectSbsFeed } from "../../shared/tcp-feed.mjs";
+import { default as handleAircraftRecord } from "./record-handler.mjs";
+import { default as calculateAircraftRange } from "../../shared/aircraft/range.mjs";
+import { default as createAircraftList } from "../../shared/aircraft/list.mjs";
+import { default as parseAdsbLocation } from "../../shared/adsb-location.mjs";
+import { default as parseSbsMessage } from "../../shared/sbs-message.mjs";
+import { default as connectSbsFeed } from "../../shared/tcp-feed.mjs";
 
 export const aircraftFeedDependencies = {
   calculateAircraftRange,
@@ -13,7 +13,7 @@ export const aircraftFeedDependencies = {
   connectSbsFeed,
 };
 
-export function createAircraftFeed({
+function createAircraftFeed({
   host,
   port,
   locationLatitude,
@@ -50,3 +50,4 @@ export function createAircraftFeed({
     close: () => connection.close(),
   };
 }
+export default createAircraftFeed;

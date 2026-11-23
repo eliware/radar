@@ -1,7 +1,7 @@
-import { createNasrImportSetup } from "./setup.mjs";
-import { completeNasrImportLifecycle } from "./lifecycle.mjs";
+import { default as createNasrImportSetup } from "./setup.mjs";
+import { default as completeNasrImportLifecycle } from "./lifecycle.mjs";
 
-export function importNasrDatabaseLifecycle(
+function importNasrDatabaseLifecycle(
   inputPath,
   outputPath,
   { Database, exists, copy, mkdir, rename, remove } = {},
@@ -13,3 +13,4 @@ export function importNasrDatabaseLifecycle(
   );
   return completeNasrImportLifecycle(DatabaseConstructor, filesystem, input, output);
 }
+export default importNasrDatabaseLifecycle;

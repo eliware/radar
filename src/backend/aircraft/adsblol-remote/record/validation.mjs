@@ -1,6 +1,6 @@
 const MAX_OBSERVATION_AGE_MS = 120_000;
 
-export function validateRemoteAircraftRecord(item) {
+function validateRemoteAircraftRecord(item) {
   const icao = typeof item?.hex === "string" ? item.hex.trim().toUpperCase() : "";
   const latitude = item?.lat;
   const longitude = item?.lon;
@@ -20,3 +20,4 @@ export function validateRemoteAircraftRecord(item) {
     return null;
   return { icao, latitude, longitude, ageSeconds };
 }
+export default validateRemoteAircraftRecord;

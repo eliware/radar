@@ -1,9 +1,9 @@
 import { RADAR_RING_LABEL_ANGLE } from "../../radar/range.mjs";
-import { getRadarLabelGapAngle } from "../../radar/label-gap-angle.mjs";
-import { getRadarRingRanges } from "../../radar/ring/ranges.mjs";
-import { getRadarRingSpacing } from "../../radar/ring/spacing.mjs";
+import { default as getRadarLabelGapAngle } from "../../radar/label-gap-angle.mjs";
+import { default as getRadarRingRanges } from "../../radar/ring/ranges.mjs";
+import { default as getRadarRingSpacing } from "../../radar/ring/spacing.mjs";
 
-export function drawCanvasRings(context, x, y, radius, range, palette, rotation = 0) {
+function drawCanvasRings(context, x, y, radius, range, palette, rotation = 0) {
   const majorStep = getRadarRingSpacing(range);
   context.textAlign = "left";
   context.font = '11px Consolas, "Courier New", monospace';
@@ -50,3 +50,4 @@ function drawRingLabel(context, x, y, ringRadius, nm, color, rotation) {
   context.restore();
   context.textAlign = "left";
 }
+export default drawCanvasRings;

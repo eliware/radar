@@ -1,9 +1,9 @@
 import { RADAR_SCOPE_RADIUS_RATIO } from "../../radar/range.mjs";
-import { drawRadarScale } from "../../draw/radar/scale.mjs";
-import { drawRadarScaleLegend } from "../../draw/radar/legend/draw-scale-legend.mjs";
-import { drawCameraReadout } from "../overlay/readout.mjs";
+import { default as drawRadarScale } from "../../draw/radar/scale.mjs";
+import { default as drawRadarScaleLegend } from "../../draw/radar/legend/draw-scale-legend.mjs";
+import { default as drawCameraReadout } from "../overlay/readout.mjs";
 
-export function drawAircraftOverlayScope(
+function drawAircraftOverlayScope(
   context,
   camera,
   location,
@@ -29,3 +29,4 @@ export function drawAircraftOverlayScope(
   drawRadarScale(context, range, Math.min(width, height) * RADAR_SCOPE_RADIUS_RATIO, height);
   drawCameraReadout(context, camera, location, elevationFeet, width);
 }
+export default drawAircraftOverlayScope;

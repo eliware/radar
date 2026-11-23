@@ -1,5 +1,6 @@
-import { drawWaterOutlines } from "./outlines.mjs";
+import { default as drawWaterOutlines } from "./outlines.mjs";
 
-export function drawCanvasRadarWater(ctx, visible, paths, project, location, width, height) {
+function drawCanvasRadarWater(ctx, visible, paths, project, location, width, height) {
   if (visible) drawWaterOutlines(ctx, paths, project, location, width, height);
 }
+export default drawCanvasRadarWater;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { notifyRadarViewMode } from "../../../../src/frontend/create/radar/mode-notifier.mjs";
+import { default as notifyRadarViewMode } from "../../../../src/frontend/create/radar/mode-notifier.mjs";
 
 test("notifies callers of the selected radar view mode", () => {
   const onMode = jest.fn();

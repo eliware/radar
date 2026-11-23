@@ -1,6 +1,7 @@
-export function disposeRadarLayerVisibility({ ils, procedures, aircraft, detachShortcuts }) {
+function disposeRadarLayerVisibility({ ils, procedures, aircraft, detachShortcuts }) {
   ils.destroy();
   procedures.destroy();
   detachShortcuts();
   aircraft.destroy();
 }
+export default disposeRadarLayerVisibility;

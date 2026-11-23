@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createRadarReferenceRetryPolicy } from "../../../../src/frontend/radar/reference/retry-policy.mjs";
+import { default as createRadarReferenceRetryPolicy } from "../../../../src/frontend/radar/reference/retry-policy.mjs";
 
 test("increases reference retry delays exponentially and resets after success", () => {
   const retry = createRadarReferenceRetryPolicy(180, 30_000);

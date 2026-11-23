@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createArtccBoundaryQuery } from "../../src/backend/artcc-boundary-query.mjs";
+import { default as createArtccBoundaryQuery } from "../../src/backend/artcc-boundary-query.mjs";
 
 const home = { latitude: 43, longitude: -70 };
 const row = (sequence, latitude, longitude, locationId = "ZBW", altitude = "LOW") => ({

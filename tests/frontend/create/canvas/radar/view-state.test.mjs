@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createCanvasRadarViewState } from "../../../../../src/frontend/create/canvas/radar/view-state.mjs";
+import { default as createCanvasRadarViewState } from "../../../../../src/frontend/create/canvas/radar/view-state.mjs";
 
 test("sets the configured range and rotation alongside view defaults", () => {
   expect(createCanvasRadarViewState(25, -Math.PI / 2)).toEqual({

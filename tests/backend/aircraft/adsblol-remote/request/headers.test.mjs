@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAdsbLolRequestHeaders } from "../../../../../src/backend/aircraft/adsblol-remote/request/headers.mjs";
+import { default as createAdsbLolRequestHeaders } from "../../../../../src/backend/aircraft/adsblol-remote/request/headers.mjs";
 
 test("resolves the environment API key when building request headers", () => {
   expect(createAdsbLolRequestHeaders("explicit-key")["x-api-key"]).toBe("explicit-key");

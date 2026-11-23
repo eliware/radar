@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAdsbLolTrackRecords } from "../../../../../src/backend/aircraft/adsblol-remote/track/records.mjs";
+import { default as createAdsbLolTrackRecords } from "../../../../../src/backend/aircraft/adsblol-remote/track/records.mjs";
 
 test("stores and retrieves records in insertion order", () => {
   const records = createAdsbLolTrackRecords({ clock: () => 1_000 });

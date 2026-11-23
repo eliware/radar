@@ -1,6 +1,6 @@
-import { parseRangeQuery } from "./reference/range/parameters.mjs";
+import { default as parseRangeQuery } from "./reference/range/parameters.mjs";
 
-export function registerNavaidRoutes(app, database, location) {
+function registerNavaidRoutes(app, database, location) {
   app.get("/api/navaids", async (request, reply) => {
     if (!database) return reply.code(503).send({ error: "NASR database is not available." });
     if (!location) return reply.code(503).send({ error: "Home location is not configured." });
@@ -10,3 +10,4 @@ export function registerNavaidRoutes(app, database, location) {
     return database.findNavaidsBetween(location, minRangeNm, maxRangeNm);
   });
 }
+export default registerNavaidRoutes;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolTypeService } from "../../../../src/backend/lookup/adsblol/type-service.mjs";
+import { default as createAdsbLolTypeService } from "../../../../src/backend/lookup/adsblol/type-service.mjs";
 
 test("creates the ADSB.lol aircraft type lookup service", async () => {
   const request = jest.fn().mockResolvedValue({

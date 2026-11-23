@@ -1,3 +1,4 @@
-export function selectScreenshotBrowserArgs(uid = process.getuid?.()) {
+function selectScreenshotBrowserArgs(uid = process.getuid?.()) {
   return uid === 0 ? ["--no-sandbox", "--disable-setuid-sandbox"] : [];
 }
+export default selectScreenshotBrowserArgs;

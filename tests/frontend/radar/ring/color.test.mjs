@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getRadarRingColor } from "../../../../src/frontend/radar/ring/color.mjs";
+import { default as getRadarRingColor } from "../../../../src/frontend/radar/ring/color.mjs";
 
 test("selects ring colors based on connection and ring importance", () => {
   expect(getRadarRingColor(true, true)).toBe(0x006b26);

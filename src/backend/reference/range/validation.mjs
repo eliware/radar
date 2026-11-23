@@ -1,4 +1,4 @@
-export function isValidRangeBand(minRangeNm, maxRangeNm) {
+function isValidRangeBand(minRangeNm, maxRangeNm) {
   return (
     Number.isFinite(minRangeNm) &&
     Number.isFinite(maxRangeNm) &&
@@ -7,3 +7,4 @@ export function isValidRangeBand(minRangeNm, maxRangeNm) {
     maxRangeNm <= 300
   );
 }
+export default isValidRangeBand;

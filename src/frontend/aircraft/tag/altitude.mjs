@@ -1,4 +1,4 @@
-export function formatAircraftAltitude(aircraft) {
+function formatAircraftAltitude(aircraft) {
   const altitude = Number.isFinite(aircraft.altitudeFeet)
     ? Math.round(aircraft.altitudeFeet / 100)
     : null;
@@ -15,3 +15,4 @@ function formatAltitude(altitude, rate) {
   const change = String(Math.round(Math.abs(rate) / 100)).padStart(2, "0");
   return `${value}${rate > 0 ? "+" : "-"}${change}`;
 }
+export default formatAircraftAltitude;

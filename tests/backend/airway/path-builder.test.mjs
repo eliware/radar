@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildAirways } from "../../../src/backend/airway/path-builder.mjs";
+import { default as buildAirways } from "../../../src/backend/airway/path-builder.mjs";
 
 const row = (fix, longitude, nextFix = "") => ({
   name: "Q12",

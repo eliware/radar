@@ -1,7 +1,7 @@
-import { validateNasrSource } from "./source/validation.mjs";
-import { prepareNasrImportInstallation } from "./prepare/install.mjs";
+import { default as validateNasrSource } from "./source/validation.mjs";
+import { default as prepareNasrImportInstallation } from "./prepare/install.mjs";
 
-export function completeNasrImportLifecycle(
+function completeNasrImportLifecycle(
   DatabaseConstructor,
   filesystem,
   input,
@@ -12,3 +12,4 @@ export function completeNasrImportLifecycle(
   const indexes = prepareInstallation(filesystem, DatabaseConstructor, input, output);
   return { output, indexes };
 }
+export default completeNasrImportLifecycle;

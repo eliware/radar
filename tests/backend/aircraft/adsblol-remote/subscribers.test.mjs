@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolSubscribers } from "../../../../src/backend/aircraft/adsblol-remote/subscribers.mjs";
+import { default as createAdsbLolSubscribers } from "../../../../src/backend/aircraft/adsblol-remote/subscribers.mjs";
 
 test("publishes the current aircraft list and supports unsubscribe and clear", () => {
   let aircraft = [{ icao: "ABC123" }];

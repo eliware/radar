@@ -1,6 +1,6 @@
-import { hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
+import { default as hasUsefulCallsign } from "../../../shared/aircraft/callsign.mjs";
 
-export function createAircraftRouteLookup(
+function createAircraftRouteLookup(
   lookup,
   metadata,
   publishIfChanged,
@@ -31,3 +31,4 @@ export function createAircraftRouteLookup(
     },
   };
 }
+export default createAircraftRouteLookup;

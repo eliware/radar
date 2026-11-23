@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { syncCanvasRadarVisibility } from "../../src/frontend/sync-canvas-radar-visibility.mjs";
+import { default as syncCanvasRadarVisibility } from "../../src/frontend/sync-canvas-radar-visibility.mjs";
 
 test("copies each active layer visibility into canvas state", () => {
   const state = {};

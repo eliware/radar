@@ -1,8 +1,8 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
-import { selectCanvasLabelSize } from "./label-size.mjs";
+import { default as selectCanvasLabelSize } from "./label-size.mjs";
 const NAVAID_COLOR = "#4da3ff";
 
-export function drawNavaidMarkers(context, navaids, project) {
+function drawNavaidMarkers(context, navaids, project) {
   context.save();
   context.strokeStyle = NAVAID_COLOR;
   context.fillStyle = NAVAID_COLOR;
@@ -26,3 +26,4 @@ export function drawNavaidMarkers(context, navaids, project) {
   }
   context.restore();
 }
+export default drawNavaidMarkers;

@@ -1,7 +1,7 @@
-import { installNasrTemporaryCopy } from "../temporary/install.mjs";
-import { prepareNasrTemporaryDatabase } from "./database.mjs";
+import { default as installNasrTemporaryCopy } from "../temporary/install.mjs";
+import { default as prepareNasrTemporaryDatabase } from "./database.mjs";
 
-export function prepareNasrImportInstallation(
+function prepareNasrImportInstallation(
   files,
   Database,
   input,
@@ -12,3 +12,4 @@ export function prepareNasrImportInstallation(
     prepareTemporaryDatabase(Database, temporary),
   );
 }
+export default prepareNasrImportInstallation;

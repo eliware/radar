@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectWaterZoom } from "../../../../src/frontend/water/tile/zoom.mjs";
+import { default as selectWaterZoom } from "../../../../src/frontend/water/tile/zoom.mjs";
 
 test("selects water tile zoom levels for the current range", () => {
   expect(selectWaterZoom(43.8, 20)).toBeGreaterThan(selectWaterZoom(43.8, 300));

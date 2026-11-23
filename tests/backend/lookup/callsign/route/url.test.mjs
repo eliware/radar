@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildCallsignRouteUrl } from "../../../../../src/backend/lookup/callsign/route/url.mjs";
+import { default as buildCallsignRouteUrl } from "../../../../../src/backend/lookup/callsign/route/url.mjs";
 
 test("builds encoded ADSB.lol route URLs", () => {
   expect(buildCallsignRouteUrl("BAW183")).toBe(

@@ -7,23 +7,23 @@ jest.unstable_mockModule("@eliware/common", () => ({
 }));
 jest.unstable_mockModule("dotenv", () => ({ config: jest.fn() }));
 jest.unstable_mockModule("../../src/backend/aircraft/feed.mjs", () => ({
-  createAircraftFeed: jest.fn(),
+  default: jest.fn(),
 }));
-jest.unstable_mockModule("../../src/backend/server.mjs", () => ({ createRadarServer: jest.fn() }));
+jest.unstable_mockModule("../../src/backend/server.mjs", () => ({ default: jest.fn() }));
 jest.unstable_mockModule("../../src/backend/airport/database.mjs", () => ({
-  createAirportDatabase: jest.fn(),
+  default: jest.fn(),
 }));
 jest.unstable_mockModule("../../src/shared/adsb-location.mjs", () => ({
-  parseAdsbLocation: jest.fn(),
+  default: jest.fn(),
 }));
 jest.unstable_mockModule("../../src/backend/adsblol-lookup.mjs", () => ({
-  createAdsbLolLookup: jest.fn(),
+  default: jest.fn(),
 }));
 jest.unstable_mockModule("../../src/backend/aircraft/enrichment/feed.mjs", () => ({
-  createAircraftEnrichmentFeed: jest.fn(),
+  default: jest.fn(),
 }));
 jest.unstable_mockModule("../../src/backend/metar/lookup.mjs", () => ({
-  createMetarLookup: jest.fn(),
+  default: jest.fn(),
   parseMetarStations: jest.fn(),
 }));
 

@@ -2,9 +2,10 @@ import { expect, jest, test } from "@jest/globals";
 
 const createCanvasRadarView = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/canvas-radar/view.mjs", () => ({
-  createCanvasRadarView,
+  default: createCanvasRadarView,
 }));
-const { createRadarFallback } = await import("../../../../src/frontend/create/radar/fallback.mjs");
+const { default: createRadarFallback } =
+  await import("../../../../src/frontend/create/radar/fallback.mjs");
 
 test("creates a Canvas view when WebGL is unavailable", () => {
   const options = { container: {}, location: null, elevationFeet: 300 };

@@ -1,8 +1,8 @@
-import { parseRadarViewSettings } from "../../shared/parse-radar-view-settings.mjs";
-import { parseElevation } from "./elevation.mjs";
-import { parsePort } from "./port.mjs";
+import { default as parseRadarViewSettings } from "../../shared/parse-radar-view-settings.mjs";
+import { default as parseElevation } from "./elevation.mjs";
+import { default as parsePort } from "./port.mjs";
 
-export function resolveWebNetworkConfiguration(environment, parseAdsbLocation) {
+function resolveWebNetworkConfiguration(environment, parseAdsbLocation) {
   return {
     port: parsePort(environment.PORT ?? "1390", "PORT"),
     feedPort: parsePort(environment.ADSB_PORT ?? "30003", "ADSB_PORT"),
@@ -12,3 +12,4 @@ export function resolveWebNetworkConfiguration(environment, parseAdsbLocation) {
     radarViewSettings: parseRadarViewSettings(environment),
   };
 }
+export default resolveWebNetworkConfiguration;

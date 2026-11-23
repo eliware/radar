@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { removeRadarLabel } from "../../../src/frontend/radar/remove-label.mjs";
+import { default as removeRadarLabel } from "../../../src/frontend/radar/remove-label.mjs";
 
 test("removes a radar label and disposes of its resources", () => {
   const label = { material: { map: { dispose: jest.fn() }, dispose: jest.fn() } };

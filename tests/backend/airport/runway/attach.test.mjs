@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachAirportRunways } from "../../../../src/backend/airport/runway/attach.mjs";
+import { default as attachAirportRunways } from "../../../../src/backend/airport/runway/attach.mjs";
 
 test("loads runway ends for selected airports and attaches grouped results", () => {
   const airports = [{ faaId: "PWM" }, { faaId: "BID" }];

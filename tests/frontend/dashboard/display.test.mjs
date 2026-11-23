@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createDashboardDisplay } from "../../../src/frontend/dashboard/display.mjs";
+import { default as createDashboardDisplay } from "../../../src/frontend/dashboard/display.mjs";
 
 test("connects display toggles to METAR refresh and starts the refresh timer", async () => {
   const listeners = [];

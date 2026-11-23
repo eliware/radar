@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachCanvasPan } from "../../../src/frontend/canvas-radar/pan.mjs";
+import { default as attachCanvasPan } from "../../../src/frontend/canvas-radar/pan.mjs";
 
 test("pans with mouse and ignores touch drag", () => {
   const listeners = new Map();

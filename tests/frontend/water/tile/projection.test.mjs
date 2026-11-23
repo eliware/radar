@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { projectWaterTileRange } from "../../../../src/frontend/water/tile/projection.mjs";
+import { default as projectWaterTileRange } from "../../../../src/frontend/water/tile/projection.mjs";
 
 test("projects geographic ranges into tile indices", () => {
   expect(projectWaterTileRange(-10, 10, -10, 10, 2)).toEqual({

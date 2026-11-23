@@ -1,3 +1,4 @@
-export function preserveRouteData(mapped, previous) {
+function preserveRouteData(mapped, previous) {
   return previous?.callsign === mapped.callsign ? previous : {};
 }
+export default preserveRouteData;

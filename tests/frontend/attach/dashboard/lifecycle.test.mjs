@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachDashboardLifecycle } from "../../../../src/frontend/attach/dashboard/lifecycle.mjs";
+import { default as attachDashboardLifecycle } from "../../../../src/frontend/attach/dashboard/lifecycle.mjs";
 
 test("closes dashboard resources on pagehide and explicit destroy", () => {
   const listeners = new Map();

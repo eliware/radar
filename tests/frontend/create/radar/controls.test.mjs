@@ -19,7 +19,8 @@ jest.unstable_mockModule("three/addons/controls/OrbitControls.js", () => ({
   },
 }));
 
-const { createRadarControls } = await import("../../../../src/frontend/create/radar/controls.mjs");
+const { default: createRadarControls } =
+  await import("../../../../src/frontend/create/radar/controls.mjs");
 
 beforeEach(() => {
   controls.update = update;

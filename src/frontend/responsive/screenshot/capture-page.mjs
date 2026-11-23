@@ -1,7 +1,7 @@
-import { createScreenshotPageSession } from "./page/session.mjs";
-import { createScreenshotPageErrors } from "./page/errors.mjs";
+import { default as createScreenshotPageSession } from "./page/session.mjs";
+import { default as createScreenshotPageErrors } from "./page/errors.mjs";
 
-export function createScreenshotPageCapture(browser) {
+function createScreenshotPageCapture(browser) {
   const errors = createScreenshotPageErrors();
   const pageSession = createScreenshotPageSession(browser);
 
@@ -20,3 +20,4 @@ export function createScreenshotPageCapture(browser) {
     assertNoPageErrors: errors.assertNone,
   };
 }
+export default createScreenshotPageCapture;

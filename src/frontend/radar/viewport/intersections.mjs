@@ -16,7 +16,7 @@ const EDGES = [
   [3, 7],
 ];
 
-export function getFrustumPlaneIntersections(THREE, camera, groundY = 0) {
+function getFrustumPlaneIntersections(THREE, camera, groundY = 0) {
   camera.updateMatrixWorld();
   const corners = [];
   for (const depth of [-1, 1])
@@ -38,3 +38,4 @@ function addPlaneIntersection(from, to, y, points) {
   if (amount < 0 || amount > 1) return;
   points.push({ x: from.x + amount * (to.x - from.x), z: from.z + amount * (to.z - from.z) });
 }
+export default getFrustumPlaneIntersections;

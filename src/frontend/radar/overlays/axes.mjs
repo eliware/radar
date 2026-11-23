@@ -1,4 +1,4 @@
-export function createRadarAxes(THREE, scene) {
+function createRadarAxes(THREE, scene) {
   const axes = [createAxis("x"), createAxis("z")];
   function updateRange(range) {
     for (const axis of axes) axis.scale.set(1, range / 300, 1);
@@ -20,3 +20,4 @@ export function createRadarAxes(THREE, scene) {
     return line;
   }
 }
+export default createRadarAxes;

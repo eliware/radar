@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { checkScreenshotHealth } from "../../../../src/frontend/responsive/screenshot/health.mjs";
+import { default as checkScreenshotHealth } from "../../../../src/frontend/responsive/screenshot/health.mjs";
 
 test("reports an unhealthy radar endpoint", async () => {
   await expect(

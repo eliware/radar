@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatAircraftStripSpeed } from "../../../../src/shared/aircraft/strip/speed.mjs";
+import { default as formatAircraftStripSpeed } from "../../../../src/shared/aircraft/strip/speed.mjs";
 
 test("formats shared flight strip speed", () => {
   expect(formatAircraftStripSpeed({ groundSpeedKnots: 123.6 })).toBe("124");

@@ -1,6 +1,6 @@
 export const REFERENCE_MARGIN_NM = 35;
 
-export function createRadarViewport(width, height, range, panX, panY, rotation) {
+function createRadarViewport(width, height, range, panX, panY, rotation) {
   const radius = Math.max(1, Math.min(width, height) * 0.44);
   const cosine = Math.cos(rotation);
   const sine = Math.sin(rotation);
@@ -32,3 +32,4 @@ export function createRadarViewport(width, height, range, panX, panY, rotation) 
     maxRangeNm: Math.min(300, visibleRadiusNm + REFERENCE_MARGIN_NM),
   };
 }
+export default createRadarViewport;

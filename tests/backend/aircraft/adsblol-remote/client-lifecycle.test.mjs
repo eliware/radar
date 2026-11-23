@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolClientLifecycle } from "../../../../src/backend/aircraft/adsblol-remote/client-lifecycle.mjs";
-import { createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
-import { getAdsbLolPollingPolicy } from "../../../../src/backend/aircraft/adsblol-remote/policy.mjs";
+import { default as createAdsbLolClientLifecycle } from "../../../../src/backend/aircraft/adsblol-remote/client-lifecycle.mjs";
+import { default as createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
+import { default as getAdsbLolPollingPolicy } from "../../../../src/backend/aircraft/adsblol-remote/policy.mjs";
 
 function setup() {
   const clients = createAircraftClientState(25, 300);

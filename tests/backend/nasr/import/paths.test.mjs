@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
 import { expect, jest, test } from "@jest/globals";
-import { validateNasrImportPaths } from "../../../../src/backend/nasr/import/paths.mjs";
+import { default as validateNasrImportPaths } from "../../../../src/backend/nasr/import/paths.mjs";
 
 test("resolves existing input and output paths", () => {
   const exists = jest.fn(() => true);

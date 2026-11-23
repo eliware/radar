@@ -1,6 +1,6 @@
-import { createLookupCacheEntries } from "./lookup-cache/entries.mjs";
+import { default as createLookupCacheEntries } from "./lookup-cache/entries.mjs";
 
-export function createLookupCache({ clock = Date.now, maxEntries = 256 } = {}) {
+function createLookupCache({ clock = Date.now, maxEntries = 256 } = {}) {
   const entries = createLookupCacheEntries(maxEntries);
 
   function lookup(key, load, { successTtlMs, missingTtlMs, failureTtlMs }) {
@@ -26,3 +26,4 @@ export function createLookupCache({ clock = Date.now, maxEntries = 256 } = {}) {
 
   return { lookup };
 }
+export default createLookupCache;

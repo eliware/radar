@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { destroyDashboardResources } from "../../../src/frontend/destroy/dashboard-resources.mjs";
+import { default as destroyDashboardResources } from "../../../src/frontend/destroy/dashboard-resources.mjs";
 
 test("destroys resources that exist after partial dashboard setup", () => {
   const resources = {

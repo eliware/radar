@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { NASR_QUERY_PLAN_CASES } from "../../../../src/backend/nasr/query/plan/cases.mjs";
-import { verifyNasrQueryPlans } from "../../../../src/backend/nasr/query/plans.mjs";
+import { default as verifyNasrQueryPlans } from "../../../../src/backend/nasr/query/plans.mjs";
 
 test("checks every query plan case", () => {
   const prepare = jest.fn((sql) => {

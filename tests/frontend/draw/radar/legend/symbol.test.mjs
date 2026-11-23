@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawRadarLegendSymbol } from "../../../../../src/frontend/draw/radar/legend/symbol.mjs";
+import { default as drawRadarLegendSymbol } from "../../../../../src/frontend/draw/radar/legend/symbol.mjs";
 
 function context() {
   return Object.fromEntries(

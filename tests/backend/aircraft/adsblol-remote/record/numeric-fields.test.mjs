@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { mapRemoteAircraftNumericFields } from "../../../../../src/backend/aircraft/adsblol-remote/record/numeric-fields.mjs";
+import { default as mapRemoteAircraftNumericFields } from "../../../../../src/backend/aircraft/adsblol-remote/record/numeric-fields.mjs";
 
 test("maps numeric ADS-B fields and their supported alternatives", () => {
   expect(

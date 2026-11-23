@@ -1,11 +1,11 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
-import { airportAirspaceBands } from "../airport-airspace/bands.mjs";
-import { airportAirspaceEdges } from "../airport-airspace/edges.mjs";
-import { runwayDestination } from "../runway-destination.mjs";
+import { default as airportAirspaceBands } from "../airport-airspace/bands.mjs";
+import { default as airportAirspaceEdges } from "../airport-airspace/edges.mjs";
+import { default as runwayDestination } from "../runway-destination.mjs";
 
 const RING_COLOR = "#777777";
 
-export function drawAirspaceRings(context, airports, project) {
+function drawAirspaceRings(context, airports, project) {
   context.strokeStyle = RING_COLOR;
   context.lineWidth = 1;
   context.setLineDash([]);
@@ -33,3 +33,4 @@ function drawRing(context, airport, radius, project) {
   }
   context.stroke();
 }
+export default drawAirspaceRings;

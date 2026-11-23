@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createLayerVisibilityChanges } from "../../../../../../src/frontend/create/radar/layer/storage/changes.mjs";
+import { default as createLayerVisibilityChanges } from "../../../../../../src/frontend/create/radar/layer/storage/changes.mjs";
 
 test("guards change callbacks until restoration finishes", () => {
   const changed = jest.fn();

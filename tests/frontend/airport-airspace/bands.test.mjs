@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { airportAirspaceBands } from "../../../src/frontend/airport-airspace/bands.mjs";
+import { default as airportAirspaceBands } from "../../../src/frontend/airport-airspace/bands.mjs";
 
 test("builds approximate Class B, C, and D altitude shelves", () => {
   const airport = { elevationFeet: 100, classB: "Y", classC: "Y", classD: "Y" };

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftTags } from "../../../../src/frontend/draw/aircraft/tags.mjs";
+import { default as drawAircraftTags } from "../../../../src/frontend/draw/aircraft/tags.mjs";
 
 test("places aircraft labels, draws their leader lines, and writes each line", () => {
   const context = {

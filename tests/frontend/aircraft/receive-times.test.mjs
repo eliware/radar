@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftReceiveTimes } from "../../../src/frontend/aircraft/receive-times.mjs";
+import { default as createAircraftReceiveTimes } from "../../../src/frontend/aircraft/receive-times.mjs";
 
 test("tracks observed timestamps and falls back to item timestamps", () => {
   const received = createAircraftReceiveTimes(() => 1000);

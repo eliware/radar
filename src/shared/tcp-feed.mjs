@@ -1,7 +1,7 @@
 import { createConnection } from "node:net";
 import { createInterface } from "node:readline";
 
-export function connectSbsFeed({
+function connectSbsFeed({
   host,
   port,
   onLine,
@@ -76,3 +76,4 @@ export function connectSbsFeed({
     isConnected: () => connected,
   };
 }
+export default connectSbsFeed;

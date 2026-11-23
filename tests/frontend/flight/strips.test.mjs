@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createFlightStripView } from "../../../src/frontend/flight/strips.mjs";
+import { default as createFlightStripView } from "../../../src/frontend/flight/strips.mjs";
 
 function aircraft(icao, distance) {
   return { icao, callsign: "TEST", distanceNauticalMiles: distance, lastSeen: 1000 };

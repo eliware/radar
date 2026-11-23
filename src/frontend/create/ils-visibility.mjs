@@ -1,6 +1,6 @@
-import { attachIlsToggleKey } from "../attach/ils-toggle-key.mjs";
+import { default as attachIlsToggleKey } from "../attach/ils-toggle-key.mjs";
 
-export function createIlsVisibility(documentRef, onChange = () => {}) {
+function createIlsVisibility(documentRef, onChange = () => {}) {
   let visible = true;
   const detach = attachIlsToggleKey(documentRef, () => {
     visible = !visible;
@@ -15,3 +15,4 @@ export function createIlsVisibility(documentRef, onChange = () => {}) {
     destroy: detach,
   };
 }
+export default createIlsVisibility;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { parseRangeQuery } from "../../../../src/backend/reference/range/parameters.mjs";
+import { default as parseRangeQuery } from "../../../../src/backend/reference/range/parameters.mjs";
 
 function reply() {
   const response = { sent: true };

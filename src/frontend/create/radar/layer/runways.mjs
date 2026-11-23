@@ -1,4 +1,4 @@
-export function createRunwayVisibility(onChange = () => {}) {
+function createRunwayVisibility(onChange = () => {}) {
   const state = { runwaysVisible: true, extensionsVisible: true, baseLegsVisible: true };
   function setVisible(layer, value) {
     if (!(layer in state)) return;
@@ -15,3 +15,4 @@ export function createRunwayVisibility(onChange = () => {}) {
     setBaseLegsVisible: (value) => setVisible("baseLegsVisible", value),
   };
 }
+export default createRunwayVisibility;

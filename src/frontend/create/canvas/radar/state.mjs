@@ -1,7 +1,7 @@
-import { clampRadarRange } from "../../../radar/clamp-range.mjs";
-import { resetCanvasRadarView } from "./reset.mjs";
+import { default as clampRadarRange } from "../../../radar/clamp-range.mjs";
+import { default as resetCanvasRadarView } from "./reset.mjs";
 
-export function createCanvasRadarState(state, draw, distances, viewChanges) {
+function createCanvasRadarState(state, draw, distances, viewChanges) {
   return {
     northAngle: () => state.rotation,
     reset: () => resetCanvasRadarView(state, draw, distances),
@@ -22,3 +22,4 @@ export function createCanvasRadarState(state, draw, distances, viewChanges) {
     onViewChange: (listener) => viewChanges.subscribe(listener),
   };
 }
+export default createCanvasRadarState;

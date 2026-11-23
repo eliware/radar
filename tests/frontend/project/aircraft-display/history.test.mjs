@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { projectAircraftHistory } from "../../../../src/frontend/project/aircraft-display/history.mjs";
+import { default as projectAircraftHistory } from "../../../../src/frontend/project/aircraft-display/history.mjs";
 
 test("projects only history points visible to the camera", () => {
   const history = new Map([

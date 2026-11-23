@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftRouteLookup } from "../../../../src/backend/aircraft/enrichment/route-lookup.mjs";
+import { default as createAircraftRouteLookup } from "../../../../src/backend/aircraft/enrichment/route-lookup.mjs";
 
 function setup(getCallsignRoute = jest.fn(async () => ({ origin: "EGLL" }))) {
   const metadata = { updateRoute: jest.fn(() => true) };

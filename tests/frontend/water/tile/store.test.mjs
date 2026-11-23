@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createWaterTileStore } from "../../../../src/frontend/water/tile/store.mjs";
+import { default as createWaterTileStore } from "../../../../src/frontend/water/tile/store.mjs";
 
 test("retains decoded paths and looks them up in tile order", () => {
   const store = createWaterTileStore();

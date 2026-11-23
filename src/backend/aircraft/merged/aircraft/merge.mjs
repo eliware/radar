@@ -1,6 +1,6 @@
-import { selectAircraftRecordSources } from "./source/selection.mjs";
+import { default as selectAircraftRecordSources } from "./source/selection.mjs";
 
-export function mergeAircraftRecord({ local, remote }, now, localFreshnessMs) {
+function mergeAircraftRecord({ local, remote }, now, localFreshnessMs) {
   const { primary, fallback, remoteOnly } = selectAircraftRecordSources(
     local,
     remote,
@@ -16,3 +16,4 @@ export function mergeAircraftRecord({ local, remote }, now, localFreshnessMs) {
   combined.remoteOnly = remoteOnly;
   return combined;
 }
+export default mergeAircraftRecord;

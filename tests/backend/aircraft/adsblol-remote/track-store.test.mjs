@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAdsbLolTrackStore } from "../../../../src/backend/aircraft/adsblol-remote/track-store.mjs";
+import { default as createAdsbLolTrackStore } from "../../../../src/backend/aircraft/adsblol-remote/track-store.mjs";
 
 const location = { latitude: 43.8, longitude: -70.4 };
 const record = (hex = "ABC123") => ({

@@ -1,7 +1,7 @@
-import { distanceNauticalMiles } from "../../../shared/distance-nautical-miles.mjs";
-import { ilsSystemKey } from "../system-key.mjs";
+import { default as distanceNauticalMiles } from "../../../shared/distance-nautical-miles.mjs";
+import { default as ilsSystemKey } from "../system-key.mjs";
 
-export function mapIlsApproachRows(rows, location, minRangeNm, maxRangeNm, markersBySystem) {
+function mapIlsApproachRows(rows, location, minRangeNm, maxRangeNm, markersBySystem) {
   return rows.flatMap((row) => {
     if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude)) return [];
     const rangeNm = distanceNauticalMiles(location, row);
@@ -10,3 +10,4 @@ export function mapIlsApproachRows(rows, location, minRangeNm, maxRangeNm, marke
     return [{ ...row, rangeNm, markers: markersBySystem.get(ilsSystemKey(row)) ?? [] }];
   });
 }
+export default mapIlsApproachRows;

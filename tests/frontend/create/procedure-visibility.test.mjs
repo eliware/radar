@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createProcedureVisibility } from "../../../src/frontend/create/procedure-visibility.mjs";
+import { default as createProcedureVisibility } from "../../../src/frontend/create/procedure-visibility.mjs";
 
 test("starts visible and toggles SID and STAR visibility independently", () => {
   let listener;

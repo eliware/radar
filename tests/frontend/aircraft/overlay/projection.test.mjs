@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import * as THREE from "three";
-import { createOverlayProjection } from "../../../../src/frontend/aircraft/overlay/projection.mjs";
+import { default as createOverlayProjection } from "../../../../src/frontend/aircraft/overlay/projection.mjs";
 
 test("prepares a resized camera projector for aircraft and references", () => {
   const context = { setTransform: jest.fn() };

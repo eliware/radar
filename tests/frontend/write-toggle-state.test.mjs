@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { writeToggleState } from "../../src/frontend/write-toggle-state.mjs";
+import { default as writeToggleState } from "../../src/frontend/write-toggle-state.mjs";
 
 test("stores radar toggle state", () => {
   const originalStorage = Object.getOwnPropertyDescriptor(globalThis, "localStorage");

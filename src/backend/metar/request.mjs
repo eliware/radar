@@ -1,7 +1,7 @@
-import { createMetarCache } from "./cache.mjs";
-import { fetchMetarReports } from "./fetch.mjs";
+import { default as createMetarCache } from "./cache.mjs";
+import { default as fetchMetarReports } from "./fetch.mjs";
 
-export function createMetarRequest(stations, { fetchData = fetch, now = Date.now } = {}) {
+function createMetarRequest(stations, { fetchData = fetch, now = Date.now } = {}) {
   const cache = createMetarCache({ now });
   return async function requestMetarReports() {
     const cached = cache.get();
@@ -11,3 +11,4 @@ export function createMetarRequest(stations, { fetchData = fetch, now = Date.now
     return filtered;
   };
 }
+export default createMetarRequest;

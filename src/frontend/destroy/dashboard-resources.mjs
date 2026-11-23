@@ -1,4 +1,4 @@
-export function destroyDashboardResources(resources) {
+function destroyDashboardResources(resources) {
   resources.detachFlightStripsToggle?.();
   resources.detachMetarDisplayToggle?.();
   resources.detachCompass?.();
@@ -13,3 +13,4 @@ export function destroyDashboardResources(resources) {
   resources.flightStrips?.destroy();
   resources.scene?.destroy?.();
 }
+export default destroyDashboardResources;

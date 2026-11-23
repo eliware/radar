@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createIlsApproachQuery } from "../../../../src/backend/ils/approach/query.mjs";
+import { default as createIlsApproachQuery } from "../../../../src/backend/ils/approach/query.mjs";
 import { ILS_APPROACH_QUERY, ILS_MARKER_QUERY } from "../../../../src/backend/ils/approach/sql.mjs";
 
 test("prepares both query statements and runs them with geographic bounds", () => {

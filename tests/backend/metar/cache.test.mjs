@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createMetarCache, METAR_CACHE_MS } from "../../../src/backend/metar/cache.mjs";
+import { METAR_CACHE_MS } from "../../../src/backend/metar/cache.mjs";
+import { default as createMetarCache } from "../../../src/backend/metar/cache.mjs";
 
 test("returns cached values until their lifetime expires", () => {
   let time = 100;

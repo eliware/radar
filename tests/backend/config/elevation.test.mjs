@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseElevation } from "../../../src/backend/config/elevation.mjs";
+import { default as parseElevation } from "../../../src/backend/config/elevation.mjs";
 
 test("parses finite elevation values", () => {
   expect(parseElevation("300")).toBe(300);

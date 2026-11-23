@@ -1,7 +1,7 @@
-import { createAircraftSceneDashboardBindings } from "./dashboard-bindings.mjs";
-import { createAircraftSceneResources } from "./resources.mjs";
+import { default as createAircraftSceneDashboardBindings } from "./dashboard-bindings.mjs";
+import { default as createAircraftSceneResources } from "./resources.mjs";
 
-export function createAircraftSceneSetup(options) {
+function createAircraftSceneSetup(options) {
   const resources = createAircraftSceneResources(options);
   const dashboard = createAircraftSceneDashboardBindings(resources.dashboardOptions);
   return {
@@ -16,3 +16,4 @@ export function createAircraftSceneSetup(options) {
     destroy: () => resources.destroy(dashboard.workflow),
   };
 }
+export default createAircraftSceneSetup;

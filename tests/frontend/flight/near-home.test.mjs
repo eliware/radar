@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { classifyFlightAircraftNearHome } from "../../../src/frontend/flight/near-home.mjs";
+import { default as classifyFlightAircraftNearHome } from "../../../src/frontend/flight/near-home.mjs";
 
 test("adds near-home classification without changing stored aircraft", () => {
   const aircraft = [{ icao: "TEST", altitudeFeet: 1000 }];

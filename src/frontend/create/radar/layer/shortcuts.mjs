@@ -1,6 +1,6 @@
 const EDITABLE = new Set(["input", "textarea", "select"]);
 
-export function attachRadarLayerShortcuts(documentRef, { airways, references, runways }) {
+function attachRadarLayerShortcuts(documentRef, { airways, references, runways }) {
   const actions = {
     q: () => airways.setVisible("Q", !airways.isVisible("Q")),
     j: () => airways.setVisible("J", !airways.isVisible("J")),
@@ -22,3 +22,4 @@ export function attachRadarLayerShortcuts(documentRef, { airways, references, ru
   documentRef?.addEventListener?.("keydown", onKeyDown);
   return () => documentRef?.removeEventListener?.("keydown", onKeyDown);
 }
+export default attachRadarLayerShortcuts;

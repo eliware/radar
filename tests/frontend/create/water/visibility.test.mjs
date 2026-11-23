@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWaterVisibility } from "../../../../src/frontend/create/water/visibility.mjs";
+import { default as createWaterVisibility } from "../../../../src/frontend/create/water/visibility.mjs";
 
 test("starts visible and reports each W key change", () => {
   let listener;

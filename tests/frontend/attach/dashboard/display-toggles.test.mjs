@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachDashboardDisplayToggles } from "../../../../src/frontend/attach/dashboard/display-toggles.mjs";
+import { default as attachDashboardDisplayToggles } from "../../../../src/frontend/attach/dashboard/display-toggles.mjs";
 
 test("attaches strip and METAR toggles and notifies their controllers", () => {
   const listeners = [];

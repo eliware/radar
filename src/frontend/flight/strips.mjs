@@ -1,8 +1,8 @@
-import { createFlightStripAircraftStore } from "./aircraft-store.mjs";
-import { renderFlightStrips } from "./strip/dom-renderer.mjs";
-import { scheduleFlightStripRefresh } from "./strip/scheduling.mjs";
+import { default as createFlightStripAircraftStore } from "./aircraft-store.mjs";
+import { default as renderFlightStrips } from "./strip/dom-renderer.mjs";
+import { default as scheduleFlightStripRefresh } from "./strip/scheduling.mjs";
 
-export function createFlightStripView(container, windowRef, clock = Date.now) {
+function createFlightStripView(container, windowRef, clock = Date.now) {
   const aircraft = createFlightStripAircraftStore(clock);
   let location = null;
   let elevationFeet = 0;
@@ -49,3 +49,4 @@ function availableWidth(container, windowRef) {
     Number.parseFloat(style.paddingLeft || 0) + Number.parseFloat(style.paddingRight || 0);
   return Math.max(0, width - padding - 6);
 }
+export default createFlightStripView;

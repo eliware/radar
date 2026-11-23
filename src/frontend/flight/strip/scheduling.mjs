@@ -1,4 +1,4 @@
-export function scheduleFlightStripRefresh(windowRef, refresh) {
+function scheduleFlightStripRefresh(windowRef, refresh) {
   windowRef?.addEventListener?.("resize", refresh);
   const timer = windowRef?.setInterval?.(refresh, 500);
   return () => {
@@ -6,3 +6,4 @@ export function scheduleFlightStripRefresh(windowRef, refresh) {
     if (timer !== undefined) windowRef?.clearInterval?.(timer);
   };
 }
+export default scheduleFlightStripRefresh;

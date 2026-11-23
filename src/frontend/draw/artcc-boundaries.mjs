@@ -1,6 +1,6 @@
 const BOUNDARY_COLOR = "#777777";
 
-export function drawArtccBoundaries(context, boundaries, project) {
+function drawArtccBoundaries(context, boundaries, project) {
   context.save();
   context.strokeStyle = BOUNDARY_COLOR;
   context.lineWidth = 1;
@@ -20,3 +20,4 @@ export function drawArtccBoundaries(context, boundaries, project) {
 function validPoint(point) {
   return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }
+export default drawArtccBoundaries;

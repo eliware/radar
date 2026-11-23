@@ -1,5 +1,6 @@
-import { createAdsbLolTrackStore as createTrackStore } from "./track/store.mjs";
+import { default as createTrackStore } from "./track/store.mjs";
 
-export function createAdsbLolTrackStore(options) {
+function createAdsbLolTrackStore(options) {
   return createTrackStore(options);
 }
+export default createAdsbLolTrackStore;

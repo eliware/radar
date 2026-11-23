@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerApplicationShutdown } from "../../../src/backend/lifecycle/shutdown.mjs";
+import { default as registerApplicationShutdown } from "../../../src/backend/lifecycle/shutdown.mjs";
 
 test("registers an idempotent shutdown that closes resources before the app", async () => {
   const order = [];

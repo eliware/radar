@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarSurface } from "../../../src/frontend/canvas-radar/surface.mjs";
+import { default as createCanvasRadarSurface } from "../../../src/frontend/canvas-radar/surface.mjs";
 
 function setup(context = {}) {
   const canvas = {

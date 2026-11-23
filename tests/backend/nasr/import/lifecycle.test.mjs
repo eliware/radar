@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { completeNasrImportLifecycle } from "../../../../src/backend/nasr/import/lifecycle.mjs";
+import { default as completeNasrImportLifecycle } from "../../../../src/backend/nasr/import/lifecycle.mjs";
 
 test("validates the source before preparing and installing output", () => {
   const Database = jest.fn();

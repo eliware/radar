@@ -1,4 +1,4 @@
-export function createWaterViewLoader({ loadView, cache }) {
+function createWaterViewLoader({ loadView, cache }) {
   let generation = 0;
   let requestedKeys = new Set();
   return {
@@ -24,3 +24,4 @@ export function createWaterViewLoader({ loadView, cache }) {
     },
   };
 }
+export default createWaterViewLoader;

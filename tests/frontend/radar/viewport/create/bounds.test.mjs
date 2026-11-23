@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import * as THREE from "three";
-import { createRadarViewportBounds } from "../../../../../src/frontend/radar/viewport/create/bounds.mjs";
+import { default as createRadarViewportBounds } from "../../../../../src/frontend/radar/viewport/create/bounds.mjs";
 
 test("creates live bounds from viewport dimensions and home elevation", () => {
   const camera = new THREE.PerspectiveCamera(48, 16 / 9, 0.05, 1000);

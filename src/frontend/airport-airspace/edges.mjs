@@ -1,4 +1,4 @@
-export function airportAirspaceEdges(bands, groundFeet) {
+function airportAirspaceEdges(bands, groundFeet) {
   const radii = [
     ...new Set(bands.flatMap(({ innerRadiusNm, outerRadiusNm }) => [innerRadiusNm, outerRadiusNm])),
   ].sort((a, b) => a - b);
@@ -58,3 +58,4 @@ function covered(radius, altitude, bands) {
       altitude < band.ceilingFeet,
   );
 }
+export default airportAirspaceEdges;

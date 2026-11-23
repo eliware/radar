@@ -1,4 +1,4 @@
-export function createLookupCacheEntries(maxEntries) {
+function createLookupCacheEntries(maxEntries) {
   const entries = new Map();
 
   function set(key, entry) {
@@ -12,3 +12,4 @@ export function createLookupCacheEntries(maxEntries) {
     delete: (key) => entries.delete(key),
   };
 }
+export default createLookupCacheEntries;

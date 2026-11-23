@@ -1,8 +1,8 @@
-import { getProjectedWaterPaths } from "./path-cache.mjs";
-import { waterPathIntersectsView } from "./viewport-intersection.mjs";
+import { default as getProjectedWaterPaths } from "./path-cache.mjs";
+import { default as waterPathIntersectsView } from "./viewport-intersection.mjs";
 const MIN_POINT_DISTANCE_SQUARED = 0.36;
 
-export function drawWaterOutlines(context, paths, project, location, width, height) {
+function drawWaterOutlines(context, paths, project, location, width, height) {
   if (!Array.isArray(paths) || !location) return;
   const projected = getProjectedWaterPaths(paths, location);
   context.save();
@@ -35,3 +35,4 @@ function drawPath(context, coordinates, project) {
 function distanceSquared(first, second) {
   return (first.x - second.x) ** 2 + (first.y - second.y) ** 2;
 }
+export default drawWaterOutlines;

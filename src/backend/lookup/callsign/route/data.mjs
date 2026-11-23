@@ -1,4 +1,4 @@
-export function parseRoute(route) {
+function parseRoute(route) {
   if (!route) return null;
   const codes = typeof route.airport_codes === "string" ? route.airport_codes.split("-") : [];
   const airports = route._airports ?? [];
@@ -15,3 +15,4 @@ function airportCode(value) {
   const code = typeof value === "string" ? value.trim().toUpperCase() : "";
   return /^[A-Z0-9]{3,4}$/.test(code) ? code : null;
 }
+export default parseRoute;

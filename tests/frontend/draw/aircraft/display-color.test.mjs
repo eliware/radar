@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { displayColor } from "../../../../src/frontend/draw/aircraft/display-color.mjs";
+import { default as displayColor } from "../../../../src/frontend/draw/aircraft/display-color.mjs";
 
 test("prioritizes emergency red and remote amber over the normal color", () => {
   expect(displayColor({ squawk: "7500", remoteOnly: true }, "white", 0)).toBe("#ff0000");

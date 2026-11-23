@@ -1,8 +1,8 @@
-import { decodedFields } from "../../shared/metar/fields.mjs";
-import { parseMetarReport } from "./parser.mjs";
-import { enrichMetarReport } from "./report-enrichment.mjs";
+import { default as decodedFields } from "../../shared/metar/fields.mjs";
+import { default as parseMetarReport } from "./parser.mjs";
+import { default as enrichMetarReport } from "./report-enrichment.mjs";
 
-export function decodeMetarReport(report, parse = undefined) {
+function decodeMetarReport(report, parse = undefined) {
   try {
     const data = parseMetarReport(report, parse);
     return enrichMetarReport(report, decodedFields(data));
@@ -10,3 +10,4 @@ export function decodeMetarReport(report, parse = undefined) {
     return enrichMetarReport(report, null);
   }
 }
+export default decodeMetarReport;

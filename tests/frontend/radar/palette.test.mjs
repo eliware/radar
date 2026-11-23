@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getRadarPalette } from "../../../src/frontend/radar/palette.mjs";
+import { default as getRadarPalette } from "../../../src/frontend/radar/palette.mjs";
 
 test("uses green for connected radar and gray for disconnected radar", () => {
   expect(getRadarPalette(true).bright).toBe("#00ff41");

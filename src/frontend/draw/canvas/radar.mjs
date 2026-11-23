@@ -1,5 +1,6 @@
-import { drawCanvasRadarCoordinator } from "./coordinator.mjs";
+import { default as drawCanvasRadarCoordinator } from "./coordinator.mjs";
 
-export function drawCanvasRadar(...options) {
+function drawCanvasRadar(...options) {
   return drawCanvasRadarCoordinator(...options);
 }
+export default drawCanvasRadar;

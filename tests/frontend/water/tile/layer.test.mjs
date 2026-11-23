@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { decodeWaterLayer } from "../../../../src/frontend/water/tile/layer.mjs";
+import { default as decodeWaterLayer } from "../../../../src/frontend/water/tile/layer.mjs";
 
 test("selects ocean and lake features and converts their rings", () => {
   const lake = feature("lake", [

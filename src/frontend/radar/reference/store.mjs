@@ -1,4 +1,4 @@
-export function createRadarReferenceStore() {
+function createRadarReferenceStore() {
   const airports = new Map();
   const navaids = new Map();
   const boundaries = new Map();
@@ -66,3 +66,4 @@ function replace(map, items, identity) {
   map.clear();
   for (const item of items) map.set(identity(item), item);
 }
+export default createRadarReferenceStore;

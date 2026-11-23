@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarAxes } from "../../../../src/frontend/radar/overlays/axes.mjs";
+import { default as createRadarAxes } from "../../../../src/frontend/radar/overlays/axes.mjs";
 
 test("creates, scales, and colors the two center axes", () => {
   const scene = {

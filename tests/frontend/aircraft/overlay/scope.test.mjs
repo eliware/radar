@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftOverlayScope } from "../../../../src/frontend/aircraft/overlay/scope.mjs";
+import { default as drawAircraftOverlayScope } from "../../../../src/frontend/aircraft/overlay/scope.mjs";
 
 test("draws the scale, layer legend, and readout group for the overlay", () => {
   const context = Object.fromEntries(

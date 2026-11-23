@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createCanvasRadarProjector } from "../../../../../src/frontend/create/canvas/radar/projector.mjs";
+import { default as createCanvasRadarProjector } from "../../../../../src/frontend/create/canvas/radar/projector.mjs";
 
 test("projects radar coordinates around the canvas center and rotation", () => {
   const project = createCanvasRadarProjector(100, 100, 50, 10, 0);

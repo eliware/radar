@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createProcedurePaths } from "../../../src/backend/procedure/paths.mjs";
+import { default as createProcedurePaths } from "../../../src/backend/procedure/paths.mjs";
 
 function row(type, routeName, sequence, fix, options = {}) {
   return {

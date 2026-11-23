@@ -1,4 +1,4 @@
-export function attachCanvasRefresh(canvas, windowRef, draw, onWheel) {
+function attachCanvasRefresh(canvas, windowRef, draw, onWheel) {
   const wheel = (event) => {
     event.preventDefault();
     onWheel(event);
@@ -14,3 +14,4 @@ export function attachCanvasRefresh(canvas, windowRef, draw, onWheel) {
     resizeObserver?.disconnect();
   };
 }
+export default attachCanvasRefresh;

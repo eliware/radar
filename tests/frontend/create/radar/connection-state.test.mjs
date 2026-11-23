@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarConnectionState } from "../../../../src/frontend/create/radar/connection-state.mjs";
+import { default as createRadarConnectionState } from "../../../../src/frontend/create/radar/connection-state.mjs";
 
 test("tracks and forwards the radar feed state", () => {
   const onChange = jest.fn();

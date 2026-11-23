@@ -1,4 +1,4 @@
-export function withAircraftDrawingStyle(context, draw) {
+function withAircraftDrawingStyle(context, draw) {
   const previousStyle = {
     fillStyle: context.fillStyle,
     strokeStyle: context.strokeStyle,
@@ -14,3 +14,4 @@ export function withAircraftDrawingStyle(context, draw) {
     context.globalAlpha = previousStyle.globalAlpha;
   }
 }
+export default withAircraftDrawingStyle;

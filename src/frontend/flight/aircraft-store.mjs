@@ -1,4 +1,4 @@
-import { classifyFlightAircraftNearHome } from "./near-home.mjs";
+import { default as classifyFlightAircraftNearHome } from "./near-home.mjs";
 
 const AIRCRAFT_EXPIRY_MS = 120000;
 
@@ -8,7 +8,7 @@ function pruneExpiredAircraft(aircraft, now) {
       aircraft.delete(icao);
 }
 
-export function createFlightStripAircraftStore(clock = Date.now) {
+function createFlightStripAircraftStore(clock = Date.now) {
   const aircraft = new Map();
   return {
     update(items) {
@@ -32,3 +32,4 @@ export function createFlightStripAircraftStore(clock = Date.now) {
     },
   };
 }
+export default createFlightStripAircraftStore;

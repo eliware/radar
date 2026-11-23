@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachRadarLegendRedraw } from "../../../../src/frontend/attach/radar-legend/redraw.mjs";
+import { default as attachRadarLegendRedraw } from "../../../../src/frontend/attach/radar-legend/redraw.mjs";
 
 test("redraws when legend toggle keys are pressed and detaches cleanly", () => {
   const listeners = new Set();

@@ -1,4 +1,4 @@
-export function attachMobileRadarGestures(element, { onZoom, onRotate }) {
+function attachMobileRadarGestures(element, { onZoom, onRotate }) {
   const pointers = new Map();
   let previous = null;
   const point = (event) => ({ x: event.clientX, y: event.clientY });
@@ -45,3 +45,4 @@ function normalizeAngle(angle) {
   if (angle < -Math.PI) return angle + 2 * Math.PI;
   return angle;
 }
+export default attachMobileRadarGestures;

@@ -1,7 +1,7 @@
 const FEET_PER_NM = 6076.12;
 const EARTH_RADIUS_NM = 3440.065;
 
-export function cameraReadoutRows(camera, location, elevationFeet, width) {
+function cameraReadoutRows(camera, location, elevationFeet, width) {
   const position = camera?.position;
   if (
     !position ||
@@ -41,3 +41,4 @@ export function cameraReadoutRows(camera, location, elevationFeet, width) {
 function formatCoordinate(value) {
   return value.toFixed(4).padStart(9);
 }
+export default cameraReadoutRows;

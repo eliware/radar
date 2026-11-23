@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { createViewChangeListeners } from "../../../../../src/frontend/create/view-change-listeners.mjs";
-import { createCanvasRadarState } from "../../../../../src/frontend/create/canvas/radar/state.mjs";
+import { default as createViewChangeListeners } from "../../../../../src/frontend/create/view-change-listeners.mjs";
+import { default as createCanvasRadarState } from "../../../../../src/frontend/create/canvas/radar/state.mjs";
 
 test("reports Canvas view state and subscribes to view changes", () => {
   const state = { range: 20, autoZoom: false, offsetX: 8, offsetY: 4, rotation: 1 };

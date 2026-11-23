@@ -1,6 +1,6 @@
-import { distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
+import { default as distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
 
-export function buildAirways(rows, location) {
+function buildAirways(rows, location) {
   const groups = new Map();
   const cosine = Math.cos((location.latitude * Math.PI) / 180);
   for (const row of rows) {
@@ -48,3 +48,4 @@ function flush(group) {
   group.current = null;
   group.previous = null;
 }
+export default buildAirways;

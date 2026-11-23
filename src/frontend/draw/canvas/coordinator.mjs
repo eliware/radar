@@ -1,12 +1,12 @@
-import { projectAircraftDisplayItems } from "../../project/aircraft-display-items.mjs";
-import { drawAircraftDisplay } from "../aircraft/display.mjs";
-import { drawRadarScale } from "../radar/scale.mjs";
-import { drawRadarScaleLegend } from "../radar/legend/draw-scale-legend.mjs";
-import { drawCanvasRadarReferences } from "./radar-references.mjs";
-import { drawCanvasRadarWater } from "../water/canvas.mjs";
-import { createCanvasRadarScope } from "./scope.mjs";
-import { drawHomeMarker } from "./home.mjs";
-export function drawCanvasRadarCoordinator(
+import { default as projectAircraftDisplayItems } from "../../project/aircraft-display-items.mjs";
+import { default as drawAircraftDisplay } from "../aircraft/display.mjs";
+import { default as drawRadarScale } from "../radar/scale.mjs";
+import { default as drawRadarScaleLegend } from "../radar/legend/draw-scale-legend.mjs";
+import { default as drawCanvasRadarReferences } from "./radar-references.mjs";
+import { default as drawCanvasRadarWater } from "../water/canvas.mjs";
+import { default as createCanvasRadarScope } from "./scope.mjs";
+import { default as drawHomeMarker } from "./home.mjs";
+function drawCanvasRadarCoordinator(
   ctx,
   canvas,
   aircraft,
@@ -91,3 +91,4 @@ export function drawCanvasRadarCoordinator(
   );
   drawRadarScale(ctx, range, radius, height);
 }
+export default drawCanvasRadarCoordinator;

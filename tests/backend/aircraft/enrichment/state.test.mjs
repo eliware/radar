@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftEnrichmentState } from "../../../../src/backend/aircraft/enrichment/state.mjs";
+import { default as createAircraftEnrichmentState } from "../../../../src/backend/aircraft/enrichment/state.mjs";
 
 test("normalizes aircraft metadata keys while preparing enriched state", () => {
   const state = createAircraftEnrichmentState();

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { clipPolylineToViewport } from "../../../../src/frontend/radar/reference/clip-polyline.mjs";
+import { default as clipPolylineToViewport } from "../../../../src/frontend/radar/reference/clip-polyline.mjs";
 
 const box = { minX: -10, maxX: 10, minZ: -10, maxZ: 10 };
 const home = { latitude: 43, longitude: -70 };

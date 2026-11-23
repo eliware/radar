@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectCanvasLabelSize } from "../../../src/frontend/draw/label-size.mjs";
+import { default as selectCanvasLabelSize } from "../../../src/frontend/draw/label-size.mjs";
 
 test("reduces canvas labels on narrow screens without enlarging smaller labels", () => {
   const context = { canvas: { clientWidth: 600 } };

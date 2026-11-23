@@ -1,9 +1,9 @@
-import { createRadarReferenceCacheSession } from "./cache-session.mjs";
-import { fetchRadarReferenceLayers } from "./layer-requests.mjs";
-import { createRadarReferenceRequestScheduler } from "./request-scheduler.mjs";
-import { createRadarReferenceViewLoader } from "./view/loader.mjs";
+import { default as createRadarReferenceCacheSession } from "./cache-session.mjs";
+import { default as fetchRadarReferenceLayers } from "./layer-requests.mjs";
+import { default as createRadarReferenceRequestScheduler } from "./request-scheduler.mjs";
+import { default as createRadarReferenceViewLoader } from "./view/loader.mjs";
 
-export function createRadarReferenceLoader(fetchData, scene, location) {
+function createRadarReferenceLoader(fetchData, scene, location) {
   const session = createRadarReferenceCacheSession(scene, location);
   const scheduler = createRadarReferenceRequestScheduler(
     (minimum, maximum) => fetchRadarReferenceLayers(fetchData, minimum, maximum),
@@ -12,3 +12,4 @@ export function createRadarReferenceLoader(fetchData, scene, location) {
 
   return createRadarReferenceViewLoader(session, scheduler);
 }
+export default createRadarReferenceLoader;

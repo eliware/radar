@@ -1,4 +1,4 @@
-export function drawAircraftTagLabel(context, tag, fontSize) {
+function drawAircraftTagLabel(context, tag, fontSize) {
   const anchorX = Math.max(tag.x, Math.min(tag.item.x, tag.x + tag.width));
   const anchorY = Math.max(tag.y, Math.min(tag.item.y, tag.y + tag.height));
   const dx = anchorX - tag.item.x;
@@ -14,3 +14,4 @@ export function drawAircraftTagLabel(context, tag, fontSize) {
     context.fillText(line, tag.x + 7, tag.y + fontSize + index * fontSize * 1.15);
   });
 }
+export default drawAircraftTagLabel;

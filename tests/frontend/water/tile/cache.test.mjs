@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWaterTileCache } from "../../../../src/frontend/water/tile/cache.mjs";
+import { default as createWaterTileCache } from "../../../../src/frontend/water/tile/cache.mjs";
 
 const tile = { key: "1/2/3", z: 1, x: 2, y: 3 };
 const tileJson = { tiles: ["https://tiles/{z}/{x}/{y}"] };

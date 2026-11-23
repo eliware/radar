@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { startWebApplication } from "../src/backend/main.mjs";
+import { default as startWebApplication } from "../src/backend/main.mjs";
 import { runtimeDependencies } from "../src/backend/runtime-dependencies.mjs";
 
 startWebApplication(runtimeDependencies).catch((error) => {

@@ -3,15 +3,15 @@ import { expect, jest, test } from "@jest/globals";
 const createAircraftScene = jest.fn();
 const createRadarFallback = jest.fn();
 jest.unstable_mockModule("../../../../src/frontend/aircraft/scene.mjs", () => ({
-  createAircraftScene,
+  default: createAircraftScene,
 }));
 jest.unstable_mockModule("../../../../src/frontend/create/radar/scene-loader.mjs", () => ({
-  loadAircraftScene: (...args) => createAircraftScene(...args),
+  default: (...args) => createAircraftScene(...args),
 }));
 jest.unstable_mockModule("../../../../src/frontend/create/radar/fallback.mjs", () => ({
-  createRadarFallback,
+  default: createRadarFallback,
 }));
-const { createRadarView } = await import("../../../../src/frontend/create/radar/view.mjs");
+const { default: createRadarView } = await import("../../../../src/frontend/create/radar/view.mjs");
 
 test("uses Three.js when WebGL starts", async () => {
   const view = { mode: "3D" };

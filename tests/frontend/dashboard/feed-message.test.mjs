@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseDashboardFeedMessage } from "../../../src/frontend/dashboard/feed-message.mjs";
+import { default as parseDashboardFeedMessage } from "../../../src/frontend/dashboard/feed-message.mjs";
 
 test("accepts aircraft snapshot messages", () => {
   const snapshot = { event: "aircraft-snapshot", aircraft: [{ icao: "ABC123" }] };

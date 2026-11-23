@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftTrails } from "../../../../../src/frontend/aircraft/trails.mjs";
-import { createRadarTargets } from "../../../../../src/frontend/radar/targets.mjs";
-import { updateCanvasRadarRemoteTargets } from "../../../../../src/frontend/create/canvas/radar/remote-targets.mjs";
+import { default as createAircraftTrails } from "../../../../../src/frontend/aircraft/trails.mjs";
+import { default as createRadarTargets } from "../../../../../src/frontend/radar/targets.mjs";
+import { default as updateCanvasRadarRemoteTargets } from "../../../../../src/frontend/create/canvas/radar/remote-targets.mjs";
 
 test("updates a remote aircraft without creating a trail", () => {
   const targets = createRadarTargets();

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateNasrImportQueryPlans } from "../../../../src/backend/nasr/import/query-plan-validation.mjs";
+import { default as validateNasrImportQueryPlans } from "../../../../src/backend/nasr/import/query-plan-validation.mjs";
 
 test("reports a required index missing from a query plan", () => {
   const database = { prepare: () => ({ all: () => [] }) };

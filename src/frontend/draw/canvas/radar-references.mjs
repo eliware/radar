@@ -1,7 +1,7 @@
-import { drawRadarReferences } from "../radar/references.mjs";
-import { projectRadarReference } from "../../project/radar-reference.mjs";
+import { default as drawRadarReferences } from "../radar/references.mjs";
+import { default as projectRadarReference } from "../../project/radar-reference.mjs";
 
-export function drawCanvasRadarReferences(options) {
+function drawCanvasRadarReferences(options) {
   const {
     ctx,
     location,
@@ -29,3 +29,4 @@ export function drawCanvasRadarReferences(options) {
     referenceVisibility,
   );
 }
+export default drawCanvasRadarReferences;

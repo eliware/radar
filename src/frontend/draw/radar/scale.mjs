@@ -1,6 +1,6 @@
-import { selectScaleDistance } from "./select-scale-distance.mjs";
+import { default as selectScaleDistance } from "./select-scale-distance.mjs";
 
-export function drawRadarScale(context, range, radius, height) {
+function drawRadarScale(context, range, radius, height) {
   context.fillStyle = "#ffffff";
   context.strokeStyle = "#ffffff";
   const scaleNm = selectScaleDistance(range, radius, 120);
@@ -17,3 +17,4 @@ export function drawRadarScale(context, range, radius, height) {
   context.lineTo(x + length, y + 4);
   context.stroke();
 }
+export default drawRadarScale;

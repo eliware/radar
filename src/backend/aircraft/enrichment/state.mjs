@@ -1,8 +1,8 @@
-import { createAircraftMetadataStore } from "../metadata-store.mjs";
-import { createAircraftState } from "./aircraft-state.mjs";
-import { normalizeAircraftMetadataKey } from "./metadata-key.mjs";
+import { default as createAircraftMetadataStore } from "../metadata-store.mjs";
+import { default as createAircraftState } from "./aircraft-state.mjs";
+import { default as normalizeAircraftMetadataKey } from "./metadata-key.mjs";
 
-export function createAircraftEnrichmentState() {
+function createAircraftEnrichmentState() {
   const metadata = createAircraftMetadataStore();
   const aircraftState = createAircraftState();
 
@@ -33,3 +33,4 @@ export function createAircraftEnrichmentState() {
     clear: aircraftState.clear,
   };
 }
+export default createAircraftEnrichmentState;

@@ -1,6 +1,6 @@
-import { requestAdsbLolCircle } from "../request/circle.mjs";
+import { default as requestAdsbLolCircle } from "../request/circle.mjs";
 
-export async function requestAndApplyAdsbLolCircle({
+async function requestAndApplyAdsbLolCircle({
   request,
   location,
   radiusNm,
@@ -14,3 +14,4 @@ export async function requestAndApplyAdsbLolCircle({
   records.forEach((item) => aircraft.update(item));
   publish();
 }
+export default requestAndApplyAdsbLolCircle;

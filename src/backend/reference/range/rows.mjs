@@ -1,4 +1,4 @@
-export function rowsWithinBounds(statement, location, maxRangeNm) {
+function rowsWithinBounds(statement, location, maxRangeNm) {
   const latitudeDelta = maxRangeNm / 60;
   const longitudeDelta =
     maxRangeNm / (60 * Math.max(0.01, Math.cos((location.latitude * Math.PI) / 180)));
@@ -9,3 +9,4 @@ export function rowsWithinBounds(statement, location, maxRangeNm) {
     Math.min(180, location.longitude + longitudeDelta),
   );
 }
+export default rowsWithinBounds;

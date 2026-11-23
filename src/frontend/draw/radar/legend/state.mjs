@@ -1,4 +1,4 @@
-export function createRadarLegendState(
+function createRadarLegendState(
   ilsVisible,
   procedureVisibility,
   waterVisible,
@@ -22,3 +22,4 @@ export function createRadarLegendState(
     waterVisible,
   };
 }
+export default createRadarLegendState;

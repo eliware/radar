@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { isValidRangeBand } from "../../../../src/backend/reference/range/validation.mjs";
+import { default as isValidRangeBand } from "../../../../src/backend/reference/range/validation.mjs";
 
 test.each([
   [0, 300],

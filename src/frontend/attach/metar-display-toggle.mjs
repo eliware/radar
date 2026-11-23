@@ -1,6 +1,6 @@
 const EDITABLE_TAGS = new Set(["input", "textarea", "select"]);
 
-export function attachMetarDisplayToggle(documentRef, panel, onEnabledChange = () => {}) {
+function attachMetarDisplayToggle(documentRef, panel, onEnabledChange = () => {}) {
   if (!documentRef?.addEventListener || !panel) return () => {};
   const onKeyDown = (event) => {
     if (event.key?.toLowerCase() !== "m" || event.altKey || event.ctrlKey || event.metaKey) return;
@@ -13,3 +13,4 @@ export function attachMetarDisplayToggle(documentRef, panel, onEnabledChange = (
   documentRef.addEventListener("keydown", onKeyDown);
   return () => documentRef.removeEventListener?.("keydown", onKeyDown);
 }
+export default attachMetarDisplayToggle;

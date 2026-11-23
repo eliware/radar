@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { listCanvasRadarTargets } from "../../../../../src/frontend/create/canvas/radar/list-targets.mjs";
+import { default as listCanvasRadarTargets } from "../../../../../src/frontend/create/canvas/radar/list-targets.mjs";
 
 test("returns aircraft targets with their received timestamps", () => {
   const items = new Map([["ABC123", { icao: "ABC123" }]]);

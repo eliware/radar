@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { mapRemoteAircraftFieldValues } from "../../../../../src/backend/aircraft/adsblol-remote/record/field-values.mjs";
+import { default as mapRemoteAircraftFieldValues } from "../../../../../src/backend/aircraft/adsblol-remote/record/field-values.mjs";
 
 test("maps trimmed text fields from a remote record", () => {
   expect(

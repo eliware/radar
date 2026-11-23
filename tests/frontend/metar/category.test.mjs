@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { isMetarCategory } from "../../../src/frontend/metar/category.mjs";
+import { default as isMetarCategory } from "../../../src/frontend/metar/category.mjs";
 
 test("recognizes the supported flight categories", () => {
   expect(isMetarCategory("VFR")).toBe(true);

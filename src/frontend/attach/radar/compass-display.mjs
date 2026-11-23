@@ -1,4 +1,4 @@
-export function attachRadarCompassDisplay(documentRef, view) {
+function attachRadarCompassDisplay(documentRef, view) {
   const compass = documentRef?.querySelector?.("[data-radar-compass]");
   const rose = documentRef?.querySelector?.("[data-compass-rose]");
   const heading = documentRef?.querySelector?.("[data-compass-heading]");
@@ -23,3 +23,4 @@ export function attachRadarCompassDisplay(documentRef, view) {
   render();
   return unsubscribe;
 }
+export default attachRadarCompassDisplay;

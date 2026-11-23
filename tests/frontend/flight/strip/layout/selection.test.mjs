@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectFlightStripLayout } from "../../../../../src/frontend/flight/strip/layout/selection.mjs";
+import { default as selectFlightStripLayout } from "../../../../../src/frontend/flight/strip/layout/selection.mjs";
 
 const labels = ["A", "B", "C", "D", "E", "", "G", "H", "I"];
 const values = [["RADAR123", "125-06", "B738", "009°200", "1200", "", "007°4", "KPWM", "KBOS"]];

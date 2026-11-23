@@ -1,6 +1,6 @@
 const FEET_PER_NAUTICAL_MILE = 6076.12;
 
-export function predictAircraftPosition(position, aircraft) {
+function predictAircraftPosition(position, aircraft) {
   const { trackDegrees, groundSpeedKnots } = aircraft;
   if (!Number.isFinite(trackDegrees) || !Number.isFinite(groundSpeedKnots)) return null;
   const predictionSeconds = 60;
@@ -15,3 +15,4 @@ export function predictAircraftPosition(position, aircraft) {
     z: position.z - distance * Math.cos(track),
   };
 }
+export default predictAircraftPosition;

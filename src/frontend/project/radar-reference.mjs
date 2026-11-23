@@ -1,6 +1,6 @@
-import { projectAircraftPosition } from "../aircraft/space-position.mjs";
+import { default as projectAircraftPosition } from "../aircraft/space-position.mjs";
 
-export function projectRadarReference(item, location, elevationFeet, project) {
+function projectRadarReference(item, location, elevationFeet, project) {
   const position = projectAircraftPosition(
     { ...item, altitudeFeet: Number.isFinite(item.elevationFeet) ? item.elevationFeet : 0 },
     location,
@@ -8,3 +8,4 @@ export function projectRadarReference(item, location, elevationFeet, project) {
   );
   return position ? project(position) : null;
 }
+export default projectRadarReference;

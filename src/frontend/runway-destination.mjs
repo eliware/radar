@@ -1,4 +1,4 @@
-export function runwayDestination(point, bearingDegrees, rangeNm) {
+function runwayDestination(point, bearingDegrees, rangeNm) {
   const angularDistance = rangeNm / 3440.065;
   const bearing = (bearingDegrees * Math.PI) / 180;
   const latitude = (point.latitude * Math.PI) / 180;
@@ -15,3 +15,4 @@ export function runwayDestination(point, bearingDegrees, rangeNm) {
     );
   return { latitude: (nextLatitude * 180) / Math.PI, longitude: (nextLongitude * 180) / Math.PI };
 }
+export default runwayDestination;

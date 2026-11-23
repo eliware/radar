@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import * as THREE from "three";
-import { getRadarViewportRadius } from "../../../../src/frontend/radar/viewport/radius.mjs";
+import { default as getRadarViewportRadius } from "../../../../src/frontend/radar/viewport/radius.mjs";
 
 function cameraAt(polarDegrees, distance = 64) {
   const camera = new THREE.PerspectiveCamera(48, 16 / 9, 0.05, 1000);

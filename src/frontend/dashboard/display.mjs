@@ -1,7 +1,7 @@
-import { attachDashboardDisplayToggles } from "../attach/dashboard/display-toggles.mjs";
-import { startMetarRefresh } from "../start/metar-refresh.mjs";
+import { default as attachDashboardDisplayToggles } from "../attach/dashboard/display-toggles.mjs";
+import { default as startMetarRefresh } from "../start/metar-refresh.mjs";
 
-export function createDashboardDisplay({ document, fetchData, windowRef, onMetarEnabled }) {
+function createDashboardDisplay({ document, fetchData, windowRef, onMetarEnabled }) {
   const toggles = attachDashboardDisplayToggles(document, fetchData, onMetarEnabled);
 
   return {
@@ -17,3 +17,4 @@ export function createDashboardDisplay({ document, fetchData, windowRef, onMetar
     },
   };
 }
+export default createDashboardDisplay;

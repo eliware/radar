@@ -1,6 +1,6 @@
 const labels = ["VFR", "MVFR", "IFR", "LIFR"];
 
-export function metarFlightCategory(data) {
+function metarFlightCategory(data) {
   const visibility = Number.isFinite(data.visibility?.value)
     ? categoryForVisibility(data.visibility.value)
     : data.cavok
@@ -33,3 +33,4 @@ function lowestCeiling(clouds = []) {
     .filter(Number.isFinite);
   return heights.length ? Math.min(...heights) : null;
 }
+export default metarFlightCategory;

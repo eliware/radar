@@ -1,4 +1,4 @@
-export function drawRadarLegendSymbol(context, icon, x, y) {
+function drawRadarLegendSymbol(context, icon, x, y) {
   context.beginPath();
   if (icon === "diamond") {
     context.moveTo(x, y - 4);
@@ -35,3 +35,4 @@ export function drawRadarLegendSymbol(context, icon, x, y) {
   context.stroke();
   context.setLineDash([]);
 }
+export default drawRadarLegendSymbol;

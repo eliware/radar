@@ -1,4 +1,4 @@
-export function createProcedurePaths(rows) {
+function createProcedurePaths(rows) {
   const paths = new Map();
   for (const row of rows) {
     const id = pathId(row);
@@ -46,3 +46,4 @@ function pointFromRow(row) {
     label: false,
   };
 }
+export default createProcedurePaths;

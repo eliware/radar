@@ -1,5 +1,6 @@
-import { calculateAircraftRange } from "../../../shared/aircraft/range.mjs";
+import { default as calculateAircraftRange } from "../../../shared/aircraft/range.mjs";
 
-export function enrichRemoteAircraftRange(aircraft, location) {
+function enrichRemoteAircraftRange(aircraft, location) {
   return { ...aircraft, ...calculateAircraftRange(location, aircraft) };
 }
+export default enrichRemoteAircraftRange;

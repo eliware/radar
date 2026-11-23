@@ -1,5 +1,6 @@
-import { decodeMetarReport } from "./decoder.mjs";
+import { default as decodeMetarReport } from "./decoder.mjs";
 
-export function createMetarResponse(stations, reports) {
+function createMetarResponse(stations, reports) {
   return { stations, reports: reports.map((report) => decodeMetarReport(report)) };
 }
+export default createMetarResponse;

@@ -1,4 +1,4 @@
-export function registerRouteLookupControl(app, feed) {
+function registerRouteLookupControl(app, feed) {
   app.post("/api/route-lookups", async (request, reply) => {
     const enabled = request.body?.enabled;
     if (typeof enabled !== "boolean")
@@ -9,3 +9,4 @@ export function registerRouteLookupControl(app, feed) {
     return { enabled };
   });
 }
+export default registerRouteLookupControl;

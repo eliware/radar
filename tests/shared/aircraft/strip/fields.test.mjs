@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatAircraftStripCallsign } from "../../../../src/shared/aircraft/strip/fields.mjs";
+import { default as formatAircraftStripCallsign } from "../../../../src/shared/aircraft/strip/fields.mjs";
 
 test("formats shared flight strip callsign", () => {
   expect(formatAircraftStripCallsign({ callsign: " TEST1 " })).toBe("TEST1");

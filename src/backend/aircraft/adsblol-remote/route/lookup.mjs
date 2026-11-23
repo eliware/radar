@@ -1,6 +1,6 @@
-import { createAdsbLolRouteLookupControl } from "./lookup-control.mjs";
+import { default as createAdsbLolRouteLookupControl } from "./lookup-control.mjs";
 
-export function createAdsbLolRouteLookup(lookup) {
+function createAdsbLolRouteLookup(lookup) {
   const control = createAdsbLolRouteLookupControl();
 
   function request(mapped, aircraft, onResult) {
@@ -25,3 +25,4 @@ export function createAdsbLolRouteLookup(lookup) {
     setEnabled: control.setEnabled,
   };
 }
+export default createAdsbLolRouteLookup;

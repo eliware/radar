@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachRadarCompassDisplay } from "../../../../src/frontend/attach/radar/compass-display.mjs";
+import { default as attachRadarCompassDisplay } from "../../../../src/frontend/attach/radar/compass-display.mjs";
 
 function makeDocument(missing) {
   const compass = { setAttribute: jest.fn() };

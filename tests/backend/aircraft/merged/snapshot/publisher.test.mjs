@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createMergedAircraftSnapshotPublisher } from "../../../../../src/backend/aircraft/merged/snapshot/publisher.mjs";
+import { default as createMergedAircraftSnapshotPublisher } from "../../../../../src/backend/aircraft/merged/snapshot/publisher.mjs";
 
 test("starts one periodic snapshot task and stops it once", () => {
   const publish = jest.fn();

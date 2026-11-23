@@ -1,13 +1,13 @@
-import { createRadarTargets } from "../../../radar/targets.mjs";
-import { createAircraftTrails } from "../../../aircraft/trails.mjs";
-import { createAircraftReceiveTimes } from "../../../aircraft/receive-times.mjs";
-import { updateCanvasRadarAutoZoom } from "./auto-zoom.mjs";
-import { updateCanvasRadarTarget } from "./targets.mjs";
-import { updateCanvasRadarRemoteTargets } from "./remote-targets.mjs";
-import { listCanvasRadarTargets } from "./list-targets.mjs";
-import { reconcileCanvasRadarSnapshot } from "./snapshots.mjs";
+import { default as createRadarTargets } from "../../../radar/targets.mjs";
+import { default as createAircraftTrails } from "../../../aircraft/trails.mjs";
+import { default as createAircraftReceiveTimes } from "../../../aircraft/receive-times.mjs";
+import { default as updateCanvasRadarAutoZoom } from "./auto-zoom.mjs";
+import { default as updateCanvasRadarTarget } from "./targets.mjs";
+import { default as updateCanvasRadarRemoteTargets } from "./remote-targets.mjs";
+import { default as listCanvasRadarTargets } from "./list-targets.mjs";
+import { default as reconcileCanvasRadarSnapshot } from "./snapshots.mjs";
 
-export function createCanvasRadarAircraftState(location, state, draw) {
+function createCanvasRadarAircraftState(location, state, draw) {
   const targets = createRadarTargets();
   const trails = createAircraftTrails();
   const receiveTimes = createAircraftReceiveTimes();
@@ -36,3 +36,4 @@ export function createCanvasRadarAircraftState(location, state, draw) {
     },
   };
 }
+export default createCanvasRadarAircraftState;

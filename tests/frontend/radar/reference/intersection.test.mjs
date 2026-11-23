@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { intersectsViewport } from "../../../../src/frontend/radar/reference/intersection.mjs";
+import { default as intersectsViewport } from "../../../../src/frontend/radar/reference/intersection.mjs";
 
 const home = { latitude: 43, longitude: -70 };
 const bounds = { minX: -10, maxX: 10, minZ: -10, maxZ: 10 };

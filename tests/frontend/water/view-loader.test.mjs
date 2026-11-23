@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWaterViewLoader } from "../../../src/frontend/water/view-loader.mjs";
+import { default as createWaterViewLoader } from "../../../src/frontend/water/view-loader.mjs";
 
 function setup({ loadView = async () => ({ tileJson: {}, tiles: [] }) } = {}) {
   const cache = {

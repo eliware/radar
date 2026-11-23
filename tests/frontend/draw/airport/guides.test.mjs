@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawRunwayGuides } from "../../../../src/frontend/draw/airport/guides.mjs";
+import { default as drawRunwayGuides } from "../../../../src/frontend/draw/airport/guides.mjs";
 
 function setup() {
   return {

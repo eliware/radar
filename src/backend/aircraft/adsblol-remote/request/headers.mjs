@@ -1,6 +1,7 @@
-import { getAdsbLolApiKey } from "../api-key.mjs";
-import { createAdsbLolHeaders } from "../headers.mjs";
+import { default as getAdsbLolApiKey } from "../api-key.mjs";
+import { default as createAdsbLolHeaders } from "../headers.mjs";
 
-export function createAdsbLolRequestHeaders(apiKey) {
+function createAdsbLolRequestHeaders(apiKey) {
   return createAdsbLolHeaders(apiKey ?? getAdsbLolApiKey());
 }
+export default createAdsbLolRequestHeaders;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderMetarDisplay } from "../../../src/frontend/metar/display.mjs";
+import { default as renderMetarDisplay } from "../../../src/frontend/metar/display.mjs";
 
 function elements() {
   return {

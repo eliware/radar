@@ -1,4 +1,4 @@
-export function airportAirspaceBands(airport) {
+function airportAirspaceBands(airport) {
   const elevation = Number.isFinite(airport.elevationFeet) ? airport.elevationFeet : 0;
   const bands = [];
   if (airport.classB === "Y") {
@@ -29,3 +29,4 @@ export function airportAirspaceBands(airport) {
   }
   return bands;
 }
+export default airportAirspaceBands;

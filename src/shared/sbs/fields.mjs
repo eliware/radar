@@ -1,6 +1,6 @@
 import { SBS_FIELD_NAMES, SBS_NUMERIC_FIELDS } from "./schema.mjs";
 
-export function parseSbsFields(values) {
+function parseSbsFields(values) {
   return Object.fromEntries(
     SBS_FIELD_NAMES.map((name, index) => [name, fieldValue(values[index], name)]),
   );
@@ -14,3 +14,4 @@ function fieldValue(value, name) {
   const number = Number(cleanValue);
   return Number.isFinite(number) ? number : cleanValue;
 }
+export default parseSbsFields;

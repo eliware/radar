@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { mapReferenceInRange } from "../../../../src/backend/reference/range/query.mjs";
+import { default as mapReferenceInRange } from "../../../../src/backend/reference/range/query.mjs";
 
 test("maps valid references and rejects invalid or out-of-range coordinates", () => {
   const location = { latitude: 0, longitude: 0 };

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { waterPathIntersectsView } from "../../../../src/frontend/draw/water/viewport-intersection.mjs";
+import { default as waterPathIntersectsView } from "../../../../src/frontend/draw/water/viewport-intersection.mjs";
 
 const path = { bounds: { minX: 0, maxX: 10, minZ: 0, maxZ: 10 } };
 

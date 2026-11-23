@@ -1,6 +1,6 @@
-import { shiftWaterCenter } from "../shift-water-center.mjs";
+import { default as shiftWaterCenter } from "../shift-water-center.mjs";
 
-export function calculateCanvasWaterView(location, canvas, state) {
+function calculateCanvasWaterView(location, canvas, state) {
   const width = canvas.clientWidth || 1;
   const height = canvas.clientHeight || 1;
   const radius = Math.max(1, Math.min(width, height) * 0.44);
@@ -11,3 +11,4 @@ export function calculateCanvasWaterView(location, canvas, state) {
   const center = shiftWaterCenter(location, east, north);
   return { center, key: JSON.stringify([center, state.range]) };
 }
+export default calculateCanvasWaterView;

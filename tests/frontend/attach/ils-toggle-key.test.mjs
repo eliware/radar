@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachIlsToggleKey } from "../../../src/frontend/attach/ils-toggle-key.mjs";
-import { createIlsVisibility } from "../../../src/frontend/create/ils-visibility.mjs";
+import { default as attachIlsToggleKey } from "../../../src/frontend/attach/ils-toggle-key.mjs";
+import { default as createIlsVisibility } from "../../../src/frontend/create/ils-visibility.mjs";
 
 function setup() {
   const listeners = new Map();

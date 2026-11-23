@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAirportReferenceQuery } from "../../../src/backend/airport/reference-query.mjs";
+import { default as createAirportReferenceQuery } from "../../../src/backend/airport/reference-query.mjs";
 
 function createQuery({ airports = [], runways = [] } = {}) {
   const airportStatement = { all: jest.fn(() => airports) };

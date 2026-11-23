@@ -1,10 +1,10 @@
-import { createIlsMarkerIndex } from "../marker-groups.mjs";
-import { mapIlsApproachRows } from "./mapper.mjs";
+import { default as createIlsMarkerIndex } from "../marker-groups.mjs";
+import { default as mapIlsApproachRows } from "./mapper.mjs";
 import { ILS_APPROACH_QUERY, ILS_MARKER_QUERY } from "./sql.mjs";
 
 export { ILS_APPROACH_QUERY, ILS_MARKER_QUERY };
 
-export function createIlsApproachQuery(database) {
+function createIlsApproachQuery(database) {
   const statement = database.prepare(ILS_APPROACH_QUERY);
   const markerStatement = database.prepare(ILS_MARKER_QUERY);
   return (location, minRangeNm, maxRangeNm) => {
@@ -31,3 +31,4 @@ function selectBounds(location, maxRangeNm) {
     Math.min(180, location.longitude + lonDelta),
   ];
 }
+export default createIlsApproachQuery;

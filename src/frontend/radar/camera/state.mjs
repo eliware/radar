@@ -1,9 +1,9 @@
 import { DEFAULT_RADAR_RANGE, MAX_RADAR_RANGE, MIN_RADAR_RANGE } from "../range.mjs";
-import { clampRadarRange } from "../clamp-range.mjs";
-import { cameraDistanceToRange } from "../distance-to-range.mjs";
-import { rangeToCameraDistance } from "../range-to-distance.mjs";
+import { default as clampRadarRange } from "../clamp-range.mjs";
+import { default as cameraDistanceToRange } from "../distance-to-range.mjs";
+import { default as rangeToCameraDistance } from "../range-to-distance.mjs";
 
-export function createRadarCameraState({
+function createRadarCameraState({
   camera,
   controls,
   onManualZoom,
@@ -68,3 +68,4 @@ export function createRadarCameraState({
     },
   };
 }
+export default createRadarCameraState;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createRadarLegendState } from "../../../../../src/frontend/draw/radar/legend/state.mjs";
+import { default as createRadarLegendState } from "../../../../../src/frontend/draw/radar/legend/state.mjs";
 
 test("adapts visibility settings to the legend's layer keys", () => {
   expect(

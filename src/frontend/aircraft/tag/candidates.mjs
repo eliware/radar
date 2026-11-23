@@ -1,4 +1,4 @@
-export function createAircraftTagCandidates(item, width, height) {
+function createAircraftTagCandidates(item, width, height) {
   const gap = 12;
   return [
     { x: item.x + gap, y: item.y - height - gap },
@@ -9,3 +9,4 @@ export function createAircraftTagCandidates(item, width, height) {
     { x: item.x - width / 2, y: item.y + gap },
   ];
 }
+export default createAircraftTagCandidates;

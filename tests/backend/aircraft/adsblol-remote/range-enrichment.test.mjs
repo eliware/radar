@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { enrichRemoteAircraftRange } from "../../../../src/backend/aircraft/adsblol-remote/range-enrichment.mjs";
+import { default as enrichRemoteAircraftRange } from "../../../../src/backend/aircraft/adsblol-remote/range-enrichment.mjs";
 
 test("adds local distance and bearing to a normalized remote aircraft", () => {
   const aircraft = { icao: "ABC123", latitude: 43.1, longitude: -70.2 };

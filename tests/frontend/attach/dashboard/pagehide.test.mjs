@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachDashboardPagehide } from "../../../../src/frontend/attach/dashboard/pagehide.mjs";
+import { default as attachDashboardPagehide } from "../../../../src/frontend/attach/dashboard/pagehide.mjs";
 
 test("runs cleanup once on page hide or an explicit close", () => {
   const handlers = new Map();

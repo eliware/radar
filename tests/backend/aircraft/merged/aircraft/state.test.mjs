@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createMergedAircraftState } from "../../../../../src/backend/aircraft/merged/aircraft/state.mjs";
+import { default as createMergedAircraftState } from "../../../../../src/backend/aircraft/merged/aircraft/state.mjs";
 
 test("coordinates source updates and reconciles replaced entries", () => {
   const state = createMergedAircraftState();

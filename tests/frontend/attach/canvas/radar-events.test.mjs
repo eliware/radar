@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachCanvasRadarEvents } from "../../../../src/frontend/attach/canvas/radar-events.mjs";
+import { default as attachCanvasRadarEvents } from "../../../../src/frontend/attach/canvas/radar-events.mjs";
 
 test("wires pan, zoom, expiry, refresh, and cleanup to the Canvas view", () => {
   const listeners = new Map();

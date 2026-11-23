@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawIlsApproaches } from "../../../src/frontend/draw/ils-approaches.mjs";
+import { default as drawIlsApproaches } from "../../../src/frontend/draw/ils-approaches.mjs";
 
 function context() {
   return Object.fromEntries(

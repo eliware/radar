@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWaterOutlineLoader } from "../../../src/frontend/water/outline-loader.mjs";
+import { default as createWaterOutlineLoader } from "../../../src/frontend/water/outline-loader.mjs";
 
 test("loads visible tiles once and reuses cached tile data", async () => {
   const fetchRef = jest.fn(async (url) =>

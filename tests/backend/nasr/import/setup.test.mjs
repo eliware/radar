@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
 import { expect, jest, test } from "@jest/globals";
-import { createNasrImportSetup } from "../../../../src/backend/nasr/import/setup.mjs";
+import { default as createNasrImportSetup } from "../../../../src/backend/nasr/import/setup.mjs";
 import { DEFAULT_OUTPUT } from "../../../../src/backend/nasr/output-path.mjs";
 
 test("assembles database, filesystem, and default output path dependencies", () => {

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { openAirportDatabase } from "../../src/backend/open-airport-database.mjs";
+import { default as openAirportDatabase } from "../../src/backend/open-airport-database.mjs";
 
 test("opens an existing database in read-only mode", () => {
   const database = {};

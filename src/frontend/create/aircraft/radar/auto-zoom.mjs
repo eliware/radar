@@ -1,4 +1,4 @@
-export function createAircraftRadarAutoZoom() {
+function createAircraftRadarAutoZoom() {
   let enabled = true;
   return {
     disable: () => (enabled = false),
@@ -6,3 +6,4 @@ export function createAircraftRadarAutoZoom() {
     isEnabled: () => enabled,
   };
 }
+export default createAircraftRadarAutoZoom;

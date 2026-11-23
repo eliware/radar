@@ -19,7 +19,7 @@ const ENTRIES = [
   ["line", "F STRIPS", "strips", "flightStripsVisible", "f"],
 ];
 
-export function radarLegendLayout(width, height, topInset = 0) {
+function radarLegendLayout(width, height, topInset = 0) {
   const columns = width >= 640 ? 2 : 1;
   const rows = Math.ceil(ENTRIES.length / columns);
   const firstY = 24 + topInset;
@@ -30,3 +30,4 @@ export function radarLegendLayout(width, height, topInset = 0) {
     return { entry, x: 12 + column * 112, y: firstY + row * rowHeight };
   });
 }
+export default radarLegendLayout;

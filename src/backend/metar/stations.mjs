@@ -1,4 +1,4 @@
-export function parseMetarStations(value = "KLEW,KPWM,KBXM") {
+function parseMetarStations(value = "KLEW,KPWM,KBXM") {
   return [
     ...new Set(
       value
@@ -8,3 +8,4 @@ export function parseMetarStations(value = "KLEW,KPWM,KBXM") {
     ),
   ];
 }
+export default parseMetarStations;

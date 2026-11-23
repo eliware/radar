@@ -1,9 +1,9 @@
 import { mkdir, stat } from "node:fs/promises";
 import puppeteer from "puppeteer";
-import { captureResponsiveScreenshots } from "../../screenshots.mjs";
-import { selectScreenshotBrowserArgs } from "../browser/launch-options.mjs";
+import { default as captureResponsiveScreenshots } from "../../screenshots.mjs";
+import { default as selectScreenshotBrowserArgs } from "../browser/launch-options.mjs";
 
-export function createDefaultScreenshotCliDependencies() {
+function createDefaultScreenshotCliDependencies() {
   return {
     browserLauncher: puppeteer,
     browserArgs: selectScreenshotBrowserArgs(),
@@ -14,3 +14,4 @@ export function createDefaultScreenshotCliDependencies() {
     capture: captureResponsiveScreenshots,
   };
 }
+export default createDefaultScreenshotCliDependencies;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachFlightStripsToggle } from "../../../src/frontend/attach/flight-strips-toggle.mjs";
+import { default as attachFlightStripsToggle } from "../../../src/frontend/attach/flight-strips-toggle.mjs";
 
 function setup(hidden = false) {
   let listener;

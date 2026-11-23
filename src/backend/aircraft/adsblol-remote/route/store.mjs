@@ -1,6 +1,6 @@
-import { createAdsbLolRouteEnrichment } from "./enrichment.mjs";
+import { default as createAdsbLolRouteEnrichment } from "./enrichment.mjs";
 
-export function createAdsbLolRouteStore({ tracks, lookup, onRouteUpdate }) {
+function createAdsbLolRouteStore({ tracks, lookup, onRouteUpdate }) {
   const enrichment = createAdsbLolRouteEnrichment({ lookup, onRouteUpdate });
 
   return {
@@ -11,3 +11,4 @@ export function createAdsbLolRouteStore({ tracks, lookup, onRouteUpdate }) {
     setEnabled: enrichment.setEnabled,
   };
 }
+export default createAdsbLolRouteStore;

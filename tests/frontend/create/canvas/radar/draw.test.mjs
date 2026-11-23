@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createCanvasRadarDraw } from "../../../../../src/frontend/create/canvas/radar/draw.mjs";
+import { default as createCanvasRadarDraw } from "../../../../../src/frontend/create/canvas/radar/draw.mjs";
 
 test("draws the latest targets with view and connection state", () => {
   const context = Object.fromEntries(

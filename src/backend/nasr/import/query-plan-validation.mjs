@@ -1,5 +1,6 @@
-import { verifyNasrQueryPlans } from "../query/plans.mjs";
+import { default as verifyNasrQueryPlans } from "../query/plans.mjs";
 
-export function validateNasrImportQueryPlans(database) {
+function validateNasrImportQueryPlans(database) {
   verifyNasrQueryPlans(database);
 }
+export default validateNasrImportQueryPlans;

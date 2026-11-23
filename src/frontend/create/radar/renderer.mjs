@@ -1,4 +1,4 @@
-export function createRadarRenderer({ THREE, windowRef }) {
+function createRadarRenderer({ THREE, windowRef }) {
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -12,3 +12,4 @@ export function createRadarRenderer({ THREE, windowRef }) {
   renderer.setPixelRatio(Math.min(windowRef.devicePixelRatio || 1, 2));
   return renderer;
 }
+export default createRadarRenderer;

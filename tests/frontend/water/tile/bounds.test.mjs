@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { calculateWaterTileBounds } from "../../../../src/frontend/water/tile/bounds.mjs";
+import { default as calculateWaterTileBounds } from "../../../../src/frontend/water/tile/bounds.mjs";
 
 test("calculates tile bounds around a view center", () => {
   const bounds = calculateWaterTileBounds({ latitude: 43.8, longitude: -70.3 }, 20, 8);

@@ -1,6 +1,6 @@
-import { drawRadarReferences } from "../../draw/radar/references.mjs";
+import { default as drawRadarReferences } from "../../draw/radar/references.mjs";
 
-export function drawAircraftOverlayReferences(context, references, project, visibility) {
+function drawAircraftOverlayReferences(context, references, project, visibility) {
   drawRadarReferences(
     context,
     references,
@@ -14,3 +14,4 @@ export function drawAircraftOverlayReferences(context, references, project, visi
     false,
   );
 }
+export default drawAircraftOverlayReferences;

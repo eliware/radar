@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { projectPredictedAircraftPath } from "../../../../src/frontend/aircraft/near-home/aircraft-path.mjs";
+import { default as projectPredictedAircraftPath } from "../../../../src/frontend/aircraft/near-home/aircraft-path.mjs";
 
 const home = { latitude: 43, longitude: -70 };
 

@@ -1,6 +1,7 @@
-import { withNasrDatabaseConnection } from "./connection.mjs";
+import { default as withNasrDatabaseConnection } from "./connection.mjs";
 
-export function withNasrDatabase(Database, path, operation) {
+function withNasrDatabase(Database, path, operation) {
   const database = new Database(path);
   return withNasrDatabaseConnection(database, operation);
 }
+export default withNasrDatabase;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { getMetarAgeMinutes } from "../../../src/shared/metar/age.mjs";
+import { default as getMetarAgeMinutes } from "../../../src/shared/metar/age.mjs";
 
 test("calculates METAR age and handles invalid observations", () => {
   const now = new Date("2026-10-13T18:00:00Z");

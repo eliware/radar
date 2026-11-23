@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawCameraReadout } from "../../../../../src/frontend/aircraft/overlay/readout.mjs";
+import { default as drawCameraReadout } from "../../../../../src/frontend/aircraft/overlay/readout.mjs";
 
 test("draws formatted camera rows using the radar monospace font", () => {
   const context = { save: jest.fn(), restore: jest.fn(), fillText: jest.fn() };

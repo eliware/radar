@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawCanvasRadarCoordinator } from "../../../../src/frontend/draw/canvas/coordinator.mjs";
+import { default as drawCanvasRadarCoordinator } from "../../../../src/frontend/draw/canvas/coordinator.mjs";
 
 test("uses the connected palette for the home marker", () => {
   const fillStyles = [];

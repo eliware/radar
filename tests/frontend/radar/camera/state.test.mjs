@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarCameraState } from "../../../../src/frontend/radar/camera/state.mjs";
+import { default as createRadarCameraState } from "../../../../src/frontend/radar/camera/state.mjs";
 
 test("manages bounded range, camera rotation, and distance-derived range", () => {
   const vector = {

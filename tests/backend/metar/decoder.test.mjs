@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { decodeMetarReport } from "../../../src/backend/metar/decoder.mjs";
+import { default as decodeMetarReport } from "../../../src/backend/metar/decoder.mjs";
 
 test("decodes a VATSIM report with wind, weather, clouds, and pressure", () => {
   expect(

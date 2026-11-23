@@ -1,4 +1,5 @@
-export async function parseAdsbLolResponse(response) {
+async function parseAdsbLolResponse(response) {
   const body = await response.json();
   return Array.isArray(body?.aircraft) ? body.aircraft : [];
 }
+export default parseAdsbLolResponse;

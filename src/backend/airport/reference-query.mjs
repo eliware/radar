@@ -1,10 +1,10 @@
-import { attachAirportRunways } from "./runway/attach.mjs";
+import { default as attachAirportRunways } from "./runway/attach.mjs";
 import { RUNWAY_QUERY } from "./runway/query.mjs";
 import { AIRPORT_QUERY } from "../sql-query-rules.mjs";
-import { mapReferenceInRange } from "../reference/range/query.mjs";
-import { rowsWithinBounds } from "../reference/range/rows.mjs";
+import { default as mapReferenceInRange } from "../reference/range/query.mjs";
+import { default as rowsWithinBounds } from "../reference/range/rows.mjs";
 
-export function createAirportReferenceQuery(database) {
+function createAirportReferenceQuery(database) {
   const airportStatement = database.prepare(AIRPORT_QUERY);
   const runwayStatement = database.prepare(RUNWAY_QUERY);
   return (location, minRangeNm, maxRangeNm) => {
@@ -14,3 +14,4 @@ export function createAirportReferenceQuery(database) {
     return attachAirportRunways(airports, runwayStatement);
   };
 }
+export default createAirportReferenceQuery;

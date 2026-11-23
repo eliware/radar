@@ -1,6 +1,6 @@
 const SNAPSHOT_INTERVAL_MS = 1000;
 
-export function createMergedAircraftSnapshotPublisher(
+function createMergedAircraftSnapshotPublisher(
   publishSnapshots,
   setIntervalFn = setInterval,
   clearIntervalFn = clearInterval,
@@ -17,3 +17,4 @@ export function createMergedAircraftSnapshotPublisher(
     },
   };
 }
+export default createMergedAircraftSnapshotPublisher;

@@ -5,12 +5,13 @@ const axisView = { updateRange: jest.fn(), setConnected: jest.fn() };
 const createRadarRings = jest.fn(() => ringView);
 const createRadarAxes = jest.fn(() => axisView);
 jest.unstable_mockModule("../../../src/frontend/radar/overlays/rings.mjs", () => ({
-  createRadarRings,
+  default: createRadarRings,
 }));
 jest.unstable_mockModule("../../../src/frontend/radar/overlays/axes.mjs", () => ({
-  createRadarAxes,
+  default: createRadarAxes,
 }));
-const { createRadarSceneOverlays } = await import("../../../src/frontend/radar/scene-overlays.mjs");
+const { default: createRadarSceneOverlays } =
+  await import("../../../src/frontend/radar/scene-overlays.mjs");
 
 test("coordinates range and connection updates across ring and axis resources", () => {
   const THREE = {};

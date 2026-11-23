@@ -1,10 +1,4 @@
-export function createAdsbLolClientLifecycle({
-  clients,
-  pollingPolicy,
-  poller,
-  aircraft,
-  publish,
-}) {
+function createAdsbLolClientLifecycle({ clients, pollingPolicy, poller, aircraft, publish }) {
   function clearRemoteAircraft() {
     poller.stop();
     aircraft.clear();
@@ -36,3 +30,4 @@ export function createAdsbLolClientLifecycle({
     },
   };
 }
+export default createAdsbLolClientLifecycle;

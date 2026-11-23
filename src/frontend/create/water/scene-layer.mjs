@@ -1,6 +1,6 @@
-import { projectWaterPaths } from "../../project/water-paths.mjs";
+import { default as projectWaterPaths } from "../../project/water-paths.mjs";
 
-export function createWaterSceneLayer(THREE, scene, location, elevationFeet) {
+function createWaterSceneLayer(THREE, scene, location, elevationFeet) {
   const material = new THREE.LineBasicMaterial({
     color: 0x777777,
     transparent: true,
@@ -38,3 +38,4 @@ export function createWaterSceneLayer(THREE, scene, location, elevationFeet) {
     },
   };
 }
+export default createWaterSceneLayer;

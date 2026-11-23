@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { waitForScreenshotReadiness } from "../../../../../src/frontend/responsive/screenshot/page/wait.mjs";
+import { default as waitForScreenshotReadiness } from "../../../../../src/frontend/responsive/screenshot/page/wait.mjs";
 
 afterEach(() => jest.useRealTimers());
 

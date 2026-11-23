@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { prepareNasrImportInstallation } from "../../../../../src/backend/nasr/import/prepare/install.mjs";
+import { default as prepareNasrImportInstallation } from "../../../../../src/backend/nasr/import/prepare/install.mjs";
 
 test("installs a prepared temporary database into the requested output", () => {
   const files = {

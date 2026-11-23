@@ -1,8 +1,8 @@
-import { createRadarReferenceRetryPolicy } from "./retry-policy.mjs";
+import { default as createRadarReferenceRetryPolicy } from "./retry-policy.mjs";
 
 const NEXT_RANGE_DELAY_MS = 180;
 
-export function createRadarReferenceRequestScheduler(fetchRange, onLoaded) {
+function createRadarReferenceRequestScheduler(fetchRange, onLoaded) {
   let loadedThrough = 0;
   let requestedThrough = 0;
   let timer;
@@ -43,3 +43,4 @@ export function createRadarReferenceRequestScheduler(fetchRange, onLoaded) {
     },
   };
 }
+export default createRadarReferenceRequestScheduler;

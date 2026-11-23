@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildFlightStripData } from "../../../../src/frontend/flight/strip/data.mjs";
+import { default as buildFlightStripData } from "../../../../src/frontend/flight/strip/data.mjs";
 
 const fullAircraft = {
   icao: "ABC123",

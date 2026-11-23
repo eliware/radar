@@ -1,4 +1,4 @@
-export function drawAircraftTrack(context, item) {
+function drawAircraftTrack(context, item) {
   if (Number.isFinite(item.futureX) && Number.isFinite(item.futureY)) {
     context.beginPath();
     context.moveTo(item.x, item.y);
@@ -14,3 +14,4 @@ export function drawAircraftTrack(context, item) {
   context.closePath();
   context.stroke();
 }
+export default drawAircraftTrack;

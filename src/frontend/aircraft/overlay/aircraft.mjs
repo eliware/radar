@@ -1,7 +1,7 @@
-import { drawAircraftDisplay } from "../../draw/aircraft/display.mjs";
-import { projectAircraftDisplayItems } from "../../project/aircraft-display-items.mjs";
+import { default as drawAircraftDisplay } from "../../draw/aircraft/display.mjs";
+import { default as projectAircraftDisplayItems } from "../../project/aircraft-display-items.mjs";
 
-export function drawAircraftOverlayTargets(
+function drawAircraftOverlayTargets(
   context,
   aircraft,
   trails,
@@ -15,3 +15,4 @@ export function drawAircraftOverlayTargets(
   const items = projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project);
   drawAircraftDisplay(context, items, 18, width, height, connected);
 }
+export default drawAircraftOverlayTargets;

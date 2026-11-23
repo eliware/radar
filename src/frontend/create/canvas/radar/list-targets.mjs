@@ -1,3 +1,4 @@
-export function listCanvasRadarTargets(targets, receiveTimes) {
+function listCanvasRadarTargets(targets, receiveTimes) {
   return receiveTimes.withReceivedAt(targets.items());
 }
+export default listCanvasRadarTargets;

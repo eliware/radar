@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { configureRadarOrbitOrientation } from "../../../src/frontend/configure-radar/orbit-orientation.mjs";
+import { default as configureRadarOrbitOrientation } from "../../../src/frontend/configure-radar/orbit-orientation.mjs";
 
 function setup() {
   const lookUps = [];

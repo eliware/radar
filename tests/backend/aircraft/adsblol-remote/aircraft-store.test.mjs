@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolAircraftStore } from "../../../../src/backend/aircraft/adsblol-remote/aircraft-store.mjs";
+import { default as createAdsbLolAircraftStore } from "../../../../src/backend/aircraft/adsblol-remote/aircraft-store.mjs";
 
 const location = { latitude: 43.8, longitude: -70.4 };
 const record = {

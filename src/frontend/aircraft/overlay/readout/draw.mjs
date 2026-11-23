@@ -1,4 +1,4 @@
-export function drawCameraReadoutRows(context, rows) {
+function drawCameraReadoutRows(context, rows) {
   context.save();
   context.font = '12px Consolas, "Courier New", monospace';
   context.fillStyle = "#00a832";
@@ -11,3 +11,4 @@ export function drawCameraReadoutRows(context, rows) {
   }
   context.restore();
 }
+export default drawCameraReadoutRows;

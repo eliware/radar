@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { parseMetarReport } from "../../../src/backend/metar/parser.mjs";
+import { default as parseMetarReport } from "../../../src/backend/metar/parser.mjs";
 
 test("normalizes report input and delegates parsing", () => {
   const parse = jest.fn((message) => ({ message }));

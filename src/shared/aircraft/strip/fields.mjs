@@ -1,6 +1,7 @@
-import { hasUsefulCallsign } from "../callsign.mjs";
+import { default as hasUsefulCallsign } from "../callsign.mjs";
 
-export function formatAircraftStripCallsign(aircraft) {
+function formatAircraftStripCallsign(aircraft) {
   const callsign = aircraft.callsign?.trim();
   return hasUsefulCallsign(callsign) ? callsign : aircraft.icao || "-";
 }
+export default formatAircraftStripCallsign;

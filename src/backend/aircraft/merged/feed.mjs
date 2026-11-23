@@ -1,7 +1,7 @@
-import { setMergedClientLocalOnly } from "./client-locality.mjs";
-import { createMergedAircraftRuntime } from "./runtime.mjs";
+import { default as setMergedClientLocalOnly } from "./client-locality.mjs";
+import { default as createMergedAircraftRuntime } from "./runtime.mjs";
 
-export function createMergedAircraftFeed(
+function createMergedAircraftFeed(
   localFeed,
   remoteSource,
   { setIntervalFn = setInterval, clearIntervalFn = clearInterval } = {},
@@ -58,3 +58,4 @@ export function createMergedAircraftFeed(
     },
   };
 }
+export default createMergedAircraftFeed;

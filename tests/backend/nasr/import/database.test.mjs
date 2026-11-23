@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { importNasrDatabaseLifecycle } from "../../../../src/backend/nasr/import/database.mjs";
+import { default as importNasrDatabaseLifecycle } from "../../../../src/backend/nasr/import/database.mjs";
 import { NASR_INDEXES } from "../../../../src/backend/nasr/index/definitions.mjs";
 import { createNasrTestDatabase } from "../../../../test-fixtures/nasr-database.mjs";
 

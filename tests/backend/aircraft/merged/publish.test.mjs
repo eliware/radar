@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createMergedAircraftPublisher } from "../../../../src/backend/aircraft/merged/publish.mjs";
+import { default as createMergedAircraftPublisher } from "../../../../src/backend/aircraft/merged/publish.mjs";
 
 test("publishes the current aircraft and furthest local distance", () => {
   const aircraft = [{ icao: "ABC123" }];

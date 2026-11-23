@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseScreenshotArguments } from "../../../../../src/frontend/responsive/screenshot/selection/arguments.mjs";
+import { default as parseScreenshotArguments } from "../../../../../src/frontend/responsive/screenshot/selection/arguments.mjs";
 
 test("returns the supported primary screenshot selection", () => {
   expect(parseScreenshotArguments()).toEqual({ primary: false });

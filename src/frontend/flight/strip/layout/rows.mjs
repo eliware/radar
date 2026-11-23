@@ -1,4 +1,4 @@
-export function buildFlightStripRows(values, labels, groups) {
+function buildFlightStripRows(values, labels, groups) {
   const visibleGroups =
     groups.length === 3 ? groups : groups.map((group) => group.filter((index) => index !== 5));
   const columnCount = Math.max(...visibleGroups.map((group) => group.length));
@@ -18,3 +18,4 @@ export function buildFlightStripRows(values, labels, groups) {
     })),
   };
 }
+export default buildFlightStripRows;

@@ -1,4 +1,4 @@
-export function createClippedPointOperations() {
+function createClippedPointOperations() {
   return { interpolate: interpolateClippedPoint, same: areClippedPointsEqual };
 }
 
@@ -17,3 +17,4 @@ function interpolateClippedPoint(from, to, t) {
 function areClippedPointsEqual(a, b) {
   return Math.abs(a.x - b.x) < 1e-8 && Math.abs(a.z - b.z) < 1e-8;
 }
+export default createClippedPointOperations;

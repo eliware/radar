@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { normalizeProcedureVisibility } from "../../../../src/frontend/draw/radar/procedure-visibility.mjs";
+import { default as normalizeProcedureVisibility } from "../../../../src/frontend/draw/radar/procedure-visibility.mjs";
 
 test("normalizes boolean procedure visibility and defaults both types to visible", () => {
   expect(normalizeProcedureVisibility()).toEqual({ sidVisible: true, starVisible: true });

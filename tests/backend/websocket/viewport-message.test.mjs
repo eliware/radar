@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { dispatchViewportMessage } from "../../../src/backend/websocket/viewport-message.mjs";
+import { default as dispatchViewportMessage } from "../../../src/backend/websocket/viewport-message.mjs";
 
 test("validates and dispatches viewport options to the feed", () => {
   const socket = {};

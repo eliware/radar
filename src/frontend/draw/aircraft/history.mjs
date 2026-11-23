@@ -1,7 +1,7 @@
-import { drawAircraftTrack } from "./track.mjs";
-import { getAircraftHistoryMarks } from "./history-data.mjs";
+import { default as drawAircraftTrack } from "./track.mjs";
+import { default as getAircraftHistoryMarks } from "./history-data.mjs";
 
-export function drawAircraftHistory(context, aircraft, trailColor, now = Date.now()) {
+function drawAircraftHistory(context, aircraft, trailColor, now = Date.now()) {
   const previousAlpha = context.globalAlpha ?? 1;
   context.strokeStyle = trailColor;
   for (const { point, opacity } of getAircraftHistoryMarks(aircraft, now)) {
@@ -10,3 +10,4 @@ export function drawAircraftHistory(context, aircraft, trailColor, now = Date.no
   }
   context.globalAlpha = previousAlpha;
 }
+export default drawAircraftHistory;

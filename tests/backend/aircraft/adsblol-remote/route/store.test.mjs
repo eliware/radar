@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolRouteStore } from "../../../../../src/backend/aircraft/adsblol-remote/route/store.mjs";
+import { default as createAdsbLolRouteStore } from "../../../../../src/backend/aircraft/adsblol-remote/route/store.mjs";
 
 test("updates tracks before enriching mapped records and forwards enablement", async () => {
   const mapped = { icao: "ABC123", callsign: "RPA1" };

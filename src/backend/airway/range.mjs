@@ -1,4 +1,4 @@
-export function pathInRange(points, minRangeNm, maxRangeNm) {
+function pathInRange(points, minRangeNm, maxRangeNm) {
   if (points.length === 1)
     return points[0].rangeNm >= minRangeNm && points[0].rangeNm <= maxRangeNm;
   return points.slice(1).some((to, index) => {
@@ -10,3 +10,4 @@ export function pathInRange(points, minRangeNm, maxRangeNm) {
     return closest <= maxRangeNm && Math.max(from.rangeNm, to.rangeNm) >= minRangeNm;
   });
 }
+export default pathInRange;

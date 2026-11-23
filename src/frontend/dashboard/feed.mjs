@@ -1,14 +1,8 @@
-import { connectWebSocketFeed } from "../websocket/connection.mjs";
-import { dashboardWebSocketUrl } from "../dashboard-websocket-url.mjs";
-import { handleDashboardFeedUpdate } from "../handle-dashboard-feed-update.mjs";
+import { default as connectWebSocketFeed } from "../websocket/connection.mjs";
+import { default as dashboardWebSocketUrl } from "../dashboard-websocket-url.mjs";
+import { default as handleDashboardFeedUpdate } from "../handle-dashboard-feed-update.mjs";
 
-export function connectDashboardFeed({
-  WebSocketClass,
-  document,
-  scene,
-  flightStrips,
-  sendViewport,
-}) {
+function connectDashboardFeed({ WebSocketClass, document, scene, flightStrips, sendViewport }) {
   return connectWebSocketFeed({
     WebSocketClass,
     url: dashboardWebSocketUrl(document.location),
@@ -17,3 +11,4 @@ export function connectDashboardFeed({
     onOpen: (socket) => sendViewport(socket, true),
   });
 }
+export default connectDashboardFeed;

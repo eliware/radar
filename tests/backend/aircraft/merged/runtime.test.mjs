@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { createMergedAircraftRuntime } from "../../../../src/backend/aircraft/merged/runtime.mjs";
-import { createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
+import { default as createMergedAircraftRuntime } from "../../../../src/backend/aircraft/merged/runtime.mjs";
+import { default as createAircraftClientState } from "../../../../src/backend/aircraft/client-state.mjs";
 
 test("assembles merged state, clients, publishing, and snapshot timing", () => {
   let localItems = [{ icao: "LOCAL1", distanceNauticalMiles: 2 }];

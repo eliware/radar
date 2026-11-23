@@ -1,5 +1,5 @@
-import { escapeHtml } from "../../html/escape.mjs";
-import { getFlightStripStatus } from "./status.mjs";
+import { default as escapeHtml } from "../../html/escape.mjs";
+import { default as getFlightStripStatus } from "./status.mjs";
 
 function rowMarkup(values, weights, labels) {
   const columns = weights.map((weight) => `minmax(0, ${weight}fr)`).join(" ");
@@ -13,7 +13,7 @@ function rowMarkup(values, weights, labels) {
   return `<div class="flight-strip-row" style="grid-template-columns:${columns}">${cells}</div>`;
 }
 
-export function renderFlightStripMarkup(data, now = Date.now()) {
+function renderFlightStripMarkup(data, now = Date.now()) {
   const rows = data.aircraft
     .map((item) => {
       const body = item.groups
@@ -26,3 +26,4 @@ export function renderFlightStripMarkup(data, now = Date.now()) {
     .join("");
   return `<div class="flight-strip-frame"><div class="flight-strip-title"><span>FLIGHT STRIPS</span><span>${data.count} AIRCRAFT</span></div><div class="flight-strip-list rows-${data.rowCount}">${rows || '<p class="flight-strip-empty">Waiting for aircraft...</p>'}</div></div>`;
 }
+export default renderFlightStripMarkup;

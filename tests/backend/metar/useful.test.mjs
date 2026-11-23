@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { hasUsefulMetarData } from "../../../src/backend/metar/useful.mjs";
+import { default as hasUsefulMetarData } from "../../../src/backend/metar/useful.mjs";
 
 test("rejects decoded reports with no useful field values", () => {
   expect(hasUsefulMetarData({ wind: "—", category: null, automated: false })).toBe(false);

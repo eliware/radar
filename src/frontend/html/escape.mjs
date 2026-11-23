@@ -1,4 +1,4 @@
-export function escapeHtml(value) {
+function escapeHtml(value) {
   return String(value ?? "—").replace(/[&<>"']/g, (character) => {
     switch (character) {
       case "&":
@@ -14,3 +14,4 @@ export function escapeHtml(value) {
     }
   });
 }
+export default escapeHtml;

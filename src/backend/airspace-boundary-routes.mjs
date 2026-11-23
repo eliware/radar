@@ -1,6 +1,6 @@
-import { parseRangeQuery } from "./reference/range/parameters.mjs";
+import { default as parseRangeQuery } from "./reference/range/parameters.mjs";
 
-export function registerAirspaceBoundaryRoutes(app, database, location) {
+function registerAirspaceBoundaryRoutes(app, database, location) {
   app.get("/api/airspace-boundaries", async (request, reply) => {
     if (!database) return reply.code(503).send({ error: "NASR database is not available." });
     if (!location) return reply.code(503).send({ error: "Home location is not configured." });
@@ -10,3 +10,4 @@ export function registerAirspaceBoundaryRoutes(app, database, location) {
     return database.findBoundariesBetween(location, min, max);
   });
 }
+export default registerAirspaceBoundaryRoutes;

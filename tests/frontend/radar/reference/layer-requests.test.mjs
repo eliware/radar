@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { fetchRadarReferenceLayers } from "../../../../src/frontend/radar/reference/layer-requests.mjs";
+import { default as fetchRadarReferenceLayers } from "../../../../src/frontend/radar/reference/layer-requests.mjs";
 
 test("fetches each reference layer for the requested range", async () => {
   const fetchData = jest.fn(async (url) => ({

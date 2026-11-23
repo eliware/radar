@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createIlsMarkerIndex } from "../../../src/backend/ils/marker-groups.mjs";
+import { default as createIlsMarkerIndex } from "../../../src/backend/ils/marker-groups.mjs";
 
 const marker = (overrides = {}) => ({
   faaId: "PWM",

@@ -1,5 +1,6 @@
-import { validateNasrDatabase } from "../validation.mjs";
+import { default as validateNasrDatabase } from "../validation.mjs";
 
-export function validateNasrImportDatabase(database) {
+function validateNasrImportDatabase(database) {
   validateNasrDatabase(database);
 }
+export default validateNasrImportDatabase;

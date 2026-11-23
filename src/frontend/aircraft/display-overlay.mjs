@@ -1,8 +1,8 @@
-import { createAircraftOverlayCanvas } from "./overlay/canvas.mjs";
-import { createOverlayDrawer } from "./overlay-draw.mjs";
-import { attachAircraftOverlayLegendInteraction } from "./overlay/legend-interaction.mjs";
+import { default as createAircraftOverlayCanvas } from "./overlay/canvas.mjs";
+import { default as createOverlayDrawer } from "./overlay-draw.mjs";
+import { default as attachAircraftOverlayLegendInteraction } from "./overlay/legend-interaction.mjs";
 
-export function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
+function createAircraftDisplayOverlay({ THREE, container, windowRef, documentRef }) {
   const { canvas, context } = createAircraftOverlayCanvas(container, documentRef);
   const detachLegendClick = attachAircraftOverlayLegendInteraction({
     container,
@@ -20,3 +20,4 @@ export function createAircraftDisplayOverlay({ THREE, container, windowRef, docu
     },
   };
 }
+export default createAircraftDisplayOverlay;

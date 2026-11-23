@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createMetarRequest } from "../../../src/backend/metar/request.mjs";
+import { default as createMetarRequest } from "../../../src/backend/metar/request.mjs";
 
 test("caches fetched reports until expiry", async () => {
   let time = 100;

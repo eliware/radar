@@ -1,6 +1,7 @@
-import { isMetarCategory } from "./category.mjs";
+import { default as isMetarCategory } from "./category.mjs";
 
-export function metarCategoryLabel(category) {
+function metarCategoryLabel(category) {
   if (!isMetarCategory(category)) return "—";
   return `<span class="flight-category flight-category-${category.toLowerCase()}">${category}</span>`;
 }
+export default metarCategoryLabel;

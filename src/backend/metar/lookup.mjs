@@ -1,7 +1,7 @@
-import { createMetarRequest } from "./request.mjs";
-export { parseMetarStations } from "./stations.mjs";
+import { default as createMetarRequest } from "./request.mjs";
+export { default as parseMetarStations } from "./stations.mjs";
 
-export function createMetarLookup(stations, { fetchData = fetch, now = Date.now } = {}) {
+function createMetarLookup(stations, { fetchData = fetch, now = Date.now } = {}) {
   const request = createMetarRequest(stations, { fetchData, now });
   return {
     stations,
@@ -11,3 +11,4 @@ export function createMetarLookup(stations, { fetchData = fetch, now = Date.now 
     },
   };
 }
+export default createMetarLookup;

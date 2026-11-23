@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWaterSceneLayer } from "../../../../src/frontend/create/water/scene-layer.mjs";
+import { default as createWaterSceneLayer } from "../../../../src/frontend/create/water/scene-layer.mjs";
 
 test("creates and replaces geographic line geometry at ground elevation", () => {
   const scene = { add: jest.fn(), remove: jest.fn() };

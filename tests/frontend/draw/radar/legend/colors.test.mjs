@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { resolveRadarLegendColor } from "../../../../../src/frontend/draw/radar/legend/colors.mjs";
+import { default as resolveRadarLegendColor } from "../../../../../src/frontend/draw/radar/legend/colors.mjs";
 
 test("selects palette and fallback colors for enabled legend entries", () => {
   expect(resolveRadarLegendColor(["line", "AIRCRAFT", "bright"], true, {})).toEqual({

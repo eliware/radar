@@ -3,7 +3,7 @@ const ZOOM_FACTOR = 1.2;
 const ROTATION_STEP = Math.PI / 12;
 const TILT_STEP = Math.PI / 36;
 
-export function attachRadarArrowControls(documentRef, view) {
+function attachRadarArrowControls(documentRef, view) {
   if (!documentRef?.addEventListener) return () => {};
   const onKeyDown = (event) => {
     if (
@@ -33,3 +33,4 @@ export function attachRadarArrowControls(documentRef, view) {
   documentRef.addEventListener("keydown", onKeyDown);
   return () => documentRef.removeEventListener?.("keydown", onKeyDown);
 }
+export default attachRadarArrowControls;

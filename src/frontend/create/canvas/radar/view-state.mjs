@@ -1,4 +1,4 @@
-export function createCanvasRadarViewState(defaultRangeNm, defaultRotationRadians) {
+function createCanvasRadarViewState(defaultRangeNm, defaultRotationRadians) {
   return {
     range: defaultRangeNm,
     defaultRangeNm,
@@ -19,3 +19,4 @@ export function createCanvasRadarViewState(defaultRangeNm, defaultRotationRadian
     navaidsVisible: true,
   };
 }
+export default createCanvasRadarViewState;

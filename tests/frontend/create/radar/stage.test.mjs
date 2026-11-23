@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarStage } from "../../../../src/frontend/create/radar/stage.mjs";
+import { default as createRadarStage } from "../../../../src/frontend/create/radar/stage.mjs";
 
 test("creates the black radar scene, top-down camera, and renderer", () => {
   const scene = { background: null };

@@ -1,6 +1,6 @@
-import { createWebSocketRetry } from "./retry.mjs";
+import { default as createWebSocketRetry } from "./retry.mjs";
 
-export function createWebSocketReconnection({ setTimer, clearTimer, onReconnect, onState }) {
+function createWebSocketReconnection({ setTimer, clearTimer, onReconnect, onState }) {
   let retryPending = false;
   const retry = createWebSocketRetry({
     setTimer,
@@ -34,3 +34,4 @@ export function createWebSocketReconnection({ setTimer, clearTimer, onReconnect,
     },
   };
 }
+export default createWebSocketReconnection;

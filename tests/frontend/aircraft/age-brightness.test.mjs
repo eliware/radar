@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { getAircraftAgeBrightness } from "../../../src/frontend/aircraft/age-brightness.mjs";
+import { default as getAircraftAgeBrightness } from "../../../src/frontend/aircraft/age-brightness.mjs";
 
 test("fades from full brightness to invisible over the tracking timeout", () => {
   expect(getAircraftAgeBrightness(1000, 1000)).toBe(1);

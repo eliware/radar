@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachRadarResetControls } from "../../../../src/frontend/attach/radar/reset-controls.mjs";
+import { default as attachRadarResetControls } from "../../../../src/frontend/attach/radar/reset-controls.mjs";
 
 function setup() {
   const documentListeners = new Map();

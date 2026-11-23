@@ -1,4 +1,4 @@
-export function groupBoundaries(rows) {
+function groupBoundaries(rows) {
   const boundaries = new Map();
   for (const row of rows) {
     const id = `${row.locationId}:${row.altitude}:${row.type}`;
@@ -18,3 +18,4 @@ export function groupBoundaries(rows) {
   }
   return boundaries;
 }
+export default groupBoundaries;

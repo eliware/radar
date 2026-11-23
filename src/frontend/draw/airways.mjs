@@ -1,8 +1,8 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
-import { selectCanvasLabelSize } from "./label-size.mjs";
+import { default as selectCanvasLabelSize } from "./label-size.mjs";
 const COLORS = { Q: "#31534d", J: "#54394b", V: "#4f4d32" };
 
-export function drawAirways(context, airways, project, visibility) {
+function drawAirways(context, airways, project, visibility) {
   context.save();
   context.font = `${selectCanvasLabelSize(context, 10)}px Consolas, "Courier New", monospace`;
   context.textAlign = "center";
@@ -59,3 +59,4 @@ function drawFix(context, point) {
 function valid(point) {
   return Number.isFinite(point?.x) && Number.isFinite(point?.y);
 }
+export default drawAirways;

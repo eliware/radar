@@ -1,4 +1,4 @@
-export function clipProcedureSegment(from, to, range) {
+function clipProcedureSegment(from, to, range) {
   const fromInside = from.rangeNm <= range;
   const toInside = to.rangeNm <= range;
   if (fromInside && toInside) return { from: from.screen, to: to.screen };
@@ -10,3 +10,4 @@ export function clipProcedureSegment(from, to, range) {
   };
   return fromInside ? { from: from.screen, to: edge } : { from: edge, to: to.screen };
 }
+export default clipProcedureSegment;

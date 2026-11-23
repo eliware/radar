@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatAircraftTag } from "../../../../src/frontend/aircraft/tag/data.mjs";
+import { default as formatAircraftTag } from "../../../../src/frontend/aircraft/tag/data.mjs";
 
 test("formats flight level and speed without units", () => {
   expect(

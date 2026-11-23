@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { withNasrDatabase } from "../../../../../src/backend/nasr/import/connection/lifecycle.mjs";
+import { default as withNasrDatabase } from "../../../../../src/backend/nasr/import/connection/lifecycle.mjs";
 
 test("opens temporary databases with defaults and closes after operation errors", () => {
   const database = { close: jest.fn() };

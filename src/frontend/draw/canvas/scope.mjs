@@ -1,10 +1,10 @@
-import { createCanvasRadarProjector } from "../../create/canvas/radar/projector.mjs";
-import { getRadarPalette } from "../../radar/palette.mjs";
-import { prepareCanvasRadar } from "../../prepare-canvas-radar.mjs";
-import { drawCanvasBackground } from "./background.mjs";
-import { drawCanvasRings } from "./rings.mjs";
+import { default as createCanvasRadarProjector } from "../../create/canvas/radar/projector.mjs";
+import { default as getRadarPalette } from "../../radar/palette.mjs";
+import { default as prepareCanvasRadar } from "../../prepare-canvas-radar.mjs";
+import { default as drawCanvasBackground } from "./background.mjs";
+import { default as drawCanvasRings } from "./rings.mjs";
 
-export function createCanvasRadarScope(
+function createCanvasRadarScope(
   context,
   canvas,
   range,
@@ -38,3 +38,4 @@ export function createCanvasRadarScope(
     },
   };
 }
+export default createCanvasRadarScope;

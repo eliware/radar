@@ -1,6 +1,6 @@
 # Linux Compose deployment
 
-This guide runs Radar and readsb together on Linux with RTL-SDR receivers. Docker Compose builds Radar and readsb locally and starts dump978, ADSBX, FlightAware, ADSB.lol, and Flightradar24 in the default stack. The private Compose network carries decoded data. Radar listens on host TCP port `1390`.
+This guide runs Radar and readsb together on Linux with RTL-SDR receivers. Docker Compose builds Radar locally, pulls the upstream readsb image, and starts dump978, ADSBX, FlightAware, ADSB.lol, and Flightradar24. The private Compose network carries decoded data. Radar listens on host TCP port `1390`.
 
 ## Requirements
 
@@ -18,7 +18,7 @@ The ADSBX container reads readsb Beast data at private TCP endpoint `30005`. It 
 
 Radar, ADSBX, and ADSB.lol use these location values. Set `ADSBX_SITENAME` to label the receiver. Create a stable `ADSBX_UUID` with `uuidgen`. This UUID identifies the receiver. It is not an account key.
 
-Compose downloads the feeder images from GHCR. Radar and readsb build locally.
+Compose pulls the readsb and feeder images from GHCR. Radar builds locally. Compose pulls this image at each readsb start.
 
 The FlightAware PiAware container reads Beast data at private TCP endpoint `30005` and raw UAT from dump978 at `30978`. It receives data through network connections and does not access the receiver hardware. Its assigned `PIAWARE_FEEDER_ID` is in `.env`, keeping the site identity stable. Claim the receiver through FlightAware. Set its location and antenna altitude on the FlightAware stats page.
 

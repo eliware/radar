@@ -2,7 +2,7 @@ import { screenshotViewports } from "./viewports.mjs";
 
 export const DEFAULT_SCREENSHOT_VIEWPORT_SELECTION = "all";
 
-export function selectScreenshotViewports(selection = DEFAULT_SCREENSHOT_VIEWPORT_SELECTION) {
+function selectScreenshotViewports(selection = DEFAULT_SCREENSHOT_VIEWPORT_SELECTION) {
   const names = selection.split(",").map((name) => name.trim());
   const selected = names.includes("all")
     ? screenshotViewports
@@ -10,3 +10,4 @@ export function selectScreenshotViewports(selection = DEFAULT_SCREENSHOT_VIEWPOR
   if (!selected.length) throw new Error(`Unknown viewport selection: ${selection}`);
   return selected;
 }
+export default selectScreenshotViewports;

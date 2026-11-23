@@ -1,8 +1,8 @@
-import { createRadarUserAgent } from "../../user-agent.mjs";
+import { default as createRadarUserAgent } from "../../user-agent.mjs";
 
 const apiRoot = "https://api.adsb.lol";
 
-export function createAircraftTypeLookup(request, lookup) {
+function createAircraftTypeLookup(request, lookup) {
   return (value) => {
     const hex = normalize(value);
     if (!hex) return Promise.resolve(null);
@@ -23,3 +23,4 @@ export function createAircraftTypeLookup(request, lookup) {
 function normalize(value) {
   return typeof value === "string" ? value.trim().toUpperCase() : "";
 }
+export default createAircraftTypeLookup;

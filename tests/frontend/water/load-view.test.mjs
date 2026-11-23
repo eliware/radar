@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWaterViewSource } from "../../../src/frontend/water/load-view.mjs";
+import { default as createWaterViewSource } from "../../../src/frontend/water/load-view.mjs";
 
 test("loads tile metadata and selects tiles for a requested view", async () => {
   const tileJson = { tiles: ["https://tile/{z}/{x}/{y}"] };

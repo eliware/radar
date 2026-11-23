@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { orderFlightStripAircraft } from "../../../../src/frontend/flight/strip/order.mjs";
+import { default as orderFlightStripAircraft } from "../../../../src/frontend/flight/strip/order.mjs";
 
 test("orders aircraft by distance and preserves missing ranges last", () => {
   const aircraft = [

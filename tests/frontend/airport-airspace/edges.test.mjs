@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { airportAirspaceBands } from "../../../src/frontend/airport-airspace/bands.mjs";
-import { airportAirspaceEdges } from "../../../src/frontend/airport-airspace/edges.mjs";
+import { default as airportAirspaceBands } from "../../../src/frontend/airport-airspace/bands.mjs";
+import { default as airportAirspaceEdges } from "../../../src/frontend/airport-airspace/edges.mjs";
 
 test("draws only exposed shelf rings and walls for overlapping bands", () => {
   const bands = [

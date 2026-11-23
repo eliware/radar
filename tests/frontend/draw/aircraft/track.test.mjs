@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftTrack } from "../../../../src/frontend/draw/aircraft/track.mjs";
+import { default as drawAircraftTrack } from "../../../../src/frontend/draw/aircraft/track.mjs";
 
 test("draws a future vector and a hollow diamond marker", () => {
   const context = Object.fromEntries(

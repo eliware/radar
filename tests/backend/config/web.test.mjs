@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { resolveWebNetworkConfiguration } from "../../../src/backend/config/web.mjs";
+import { default as resolveWebNetworkConfiguration } from "../../../src/backend/config/web.mjs";
 
 const parseAdsbLocation = (latitude, longitude) => ({ latitude, longitude });
 

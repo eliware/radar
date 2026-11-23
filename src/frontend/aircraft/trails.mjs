@@ -4,7 +4,7 @@ const MAX_TRAIL_POINTS = 120;
 const MAX_TRAIL_AGE_MS = RADAR_TARGET_STALE_MS;
 const MIN_MOVEMENT_NM = 0.005;
 
-export function createAircraftTrails(clock = Date.now) {
+function createAircraftTrails(clock = Date.now) {
   const trails = new Map();
   return {
     add(icao, position) {
@@ -41,3 +41,4 @@ function recentPoints(points, now) {
 function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
 }
+export default createAircraftTrails;

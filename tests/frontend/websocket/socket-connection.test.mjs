@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createSocketConnection } from "../../../src/frontend/websocket/socket-connection.mjs";
+import { default as createSocketConnection } from "../../../src/frontend/websocket/socket-connection.mjs";
 
 test("constructs a socket with its URL", () => {
   const socket = {};

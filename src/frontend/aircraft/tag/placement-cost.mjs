@@ -1,4 +1,4 @@
-export function placementCost(rect, width, height, canvasWidth, canvasHeight, placed) {
+function placementCost(rect, width, height, canvasWidth, canvasHeight, placed) {
   const outside = Math.max(0, -rect.x) + Math.max(0, -rect.y);
   const right = Math.max(0, rect.x + width - canvasWidth);
   const bottom = Math.max(0, rect.y + height - canvasHeight);
@@ -15,3 +15,4 @@ export function placementCost(rect, width, height, canvasWidth, canvasHeight, pl
   }, 0);
   return (outside + right + bottom) * 1000 + overlap;
 }
+export default placementCost;

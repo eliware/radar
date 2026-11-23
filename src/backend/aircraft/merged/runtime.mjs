@@ -1,8 +1,8 @@
-import { createMergedAircraftState } from "./aircraft/state.mjs";
-import { createMergedAircraftSnapshotPublisher } from "./snapshot/publisher.mjs";
-import { createMergedAircraftPublisher } from "./publish.mjs";
+import { default as createMergedAircraftState } from "./aircraft/state.mjs";
+import { default as createMergedAircraftSnapshotPublisher } from "./snapshot/publisher.mjs";
+import { default as createMergedAircraftPublisher } from "./publish.mjs";
 
-export function createMergedAircraftRuntime(
+function createMergedAircraftRuntime(
   localFeed,
   remoteSource,
   { setIntervalFn = setInterval, clearIntervalFn = clearInterval } = {},
@@ -26,3 +26,4 @@ export function createMergedAircraftRuntime(
   );
   return { clients, state, refresh, publishSnapshots, snapshots };
 }
+export default createMergedAircraftRuntime;

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildIlsCourseGeometry } from "../../src/frontend/ils-course-geometry.mjs";
+import { default as buildIlsCourseGeometry } from "../../src/frontend/ils-course-geometry.mjs";
 
 const approach = {
   latitude: 43,

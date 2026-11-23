@@ -1,4 +1,4 @@
-export function createReferenceVisibility(onChange = () => {}) {
+function createReferenceVisibility(onChange = () => {}) {
   const state = { airportsVisible: true, navaidsVisible: true };
   function setVisible(layer, value) {
     if (!(layer in state)) return;
@@ -13,3 +13,4 @@ export function createReferenceVisibility(onChange = () => {}) {
     setNavaidsVisible: (value) => setVisible("navaidsVisible", value),
   };
 }
+export default createReferenceVisibility;

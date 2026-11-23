@@ -1,8 +1,8 @@
-import { projectAircraftPosition } from "../../aircraft/space-position.mjs";
+import { default as projectAircraftPosition } from "../../aircraft/space-position.mjs";
 
 const projectedCache = new WeakMap();
 
-export function getProjectedWaterPaths(paths, location) {
+function getProjectedWaterPaths(paths, location) {
   let locations = projectedCache.get(paths);
   if (!locations) projectedCache.set(paths, (locations = new WeakMap()));
   let projected = locations.get(location);
@@ -27,3 +27,4 @@ function projectPath(path, location) {
   }
   return { points, bounds };
 }
+export default getProjectedWaterPaths;

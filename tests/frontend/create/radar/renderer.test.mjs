@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarRenderer } from "../../../../src/frontend/create/radar/renderer.mjs";
+import { default as createRadarRenderer } from "../../../../src/frontend/create/radar/renderer.mjs";
 
 test("retries without antialiasing when the high quality context fails", () => {
   const renderer = { setPixelRatio: jest.fn() };

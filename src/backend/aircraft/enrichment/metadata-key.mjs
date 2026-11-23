@@ -1,3 +1,4 @@
-export function normalizeAircraftMetadataKey(value) {
+function normalizeAircraftMetadataKey(value) {
   return typeof value === "string" ? value.trim().toUpperCase() : "";
 }
+export default normalizeAircraftMetadataKey;

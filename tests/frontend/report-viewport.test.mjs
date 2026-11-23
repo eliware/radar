@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createViewportReporter } from "../../src/frontend/report-viewport.mjs";
+import { default as createViewportReporter } from "../../src/frontend/report-viewport.mjs";
 
 test("reports a clamped viewport radius only when it changes", () => {
   const scene = { visibleRadiusNm: jest.fn(() => 56.2) };

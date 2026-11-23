@@ -1,4 +1,4 @@
-export function registerCoreRoutes(
+function registerCoreRoutes(
   app,
   feed,
   { location = null, elevationFeet = 300, defaultRangeNm = 20, defaultRotationDegrees = 0 } = {},
@@ -17,3 +17,4 @@ export function registerCoreRoutes(
   }));
   app.get("/api/aircraft", async () => feed.list());
 }
+export default registerCoreRoutes;

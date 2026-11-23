@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { cloudText } from "../../../../src/shared/metar/fields/clouds.mjs";
+import { default as cloudText } from "../../../../src/shared/metar/fields/clouds.mjs";
 
 test("formats cloud layers, vertical visibility, and CAVOK", () => {
   expect(cloudText({ clouds: [{ quantity: "FEW", height: 1200 }] })).toBe("FEW012");

@@ -1,19 +1,19 @@
-import { createCanvasRadarDraw } from "../create/canvas/radar/draw.mjs";
+import { default as createCanvasRadarDraw } from "../create/canvas/radar/draw.mjs";
 import { DEFAULT_RADAR_RANGE } from "../radar/range.mjs";
-import { createCanvasRadarAircraftState } from "../create/canvas/radar/aircraft-state.mjs";
-import { createCanvasRadarState } from "../create/canvas/radar/state.mjs";
-import { createViewChangeListeners } from "../create/view-change-listeners.mjs";
-import { createRadarReferenceStore } from "../radar/reference/store.mjs";
-import { attachCanvasRadarEvents } from "../attach/canvas/radar-events.mjs";
-import { createRadarLayerVisibility } from "../create/radar/layer/visibility.mjs";
-import { createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
-import { syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
-import { createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
-import { radarLegendTopInset } from "../draw/radar/legend/top-inset.mjs";
-import { createCanvasRadarSurface } from "./surface.mjs";
-import { createCanvasRadarViewApi } from "./view/api.mjs";
-import { createCanvasRadarViewDraw } from "./view/draw.mjs";
-export function createCanvasRadarView({
+import { default as createCanvasRadarAircraftState } from "../create/canvas/radar/aircraft-state.mjs";
+import { default as createCanvasRadarState } from "../create/canvas/radar/state.mjs";
+import { default as createViewChangeListeners } from "../create/view-change-listeners.mjs";
+import { default as createRadarReferenceStore } from "../radar/reference/store.mjs";
+import { default as attachCanvasRadarEvents } from "../attach/canvas/radar-events.mjs";
+import { default as createRadarLayerVisibility } from "../create/radar/layer/visibility.mjs";
+import { default as createCanvasRadarWater } from "../create/canvas/radar/water.mjs";
+import { default as syncCanvasRadarVisibility } from "../sync-canvas-radar-visibility.mjs";
+import { default as createCanvasRadarViewState } from "../create/canvas/radar/view-state.mjs";
+import { default as radarLegendTopInset } from "../draw/radar/legend/top-inset.mjs";
+import { default as createCanvasRadarSurface } from "./surface.mjs";
+import { default as createCanvasRadarViewApi } from "./view/api.mjs";
+import { default as createCanvasRadarViewDraw } from "./view/draw.mjs";
+function createCanvasRadarView({
   container,
   location,
   elevationFeet = 0,
@@ -97,3 +97,4 @@ export function createCanvasRadarView({
     surface,
   });
 }
+export default createCanvasRadarView;

@@ -1,6 +1,6 @@
 import { RADAR_TARGET_STALE_MS } from "../../radar/range.mjs";
 
-export function getAircraftHistoryMarks(aircraft, now, staleAfterMs = RADAR_TARGET_STALE_MS) {
+function getAircraftHistoryMarks(aircraft, now, staleAfterMs = RADAR_TARGET_STALE_MS) {
   return aircraft.flatMap((item) =>
     (item.history ?? []).slice(0, -1).flatMap((point) => {
       const age = Number.isFinite(point.recordedAt) ? Math.max(0, now - point.recordedAt) : 0;
@@ -9,3 +9,4 @@ export function getAircraftHistoryMarks(aircraft, now, staleAfterMs = RADAR_TARG
     }),
   );
 }
+export default getAircraftHistoryMarks;

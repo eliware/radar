@@ -1,6 +1,6 @@
-import { dispatchViewportMessage } from "./websocket/viewport-message.mjs";
+import { default as dispatchViewportMessage } from "./websocket/viewport-message.mjs";
 
-export function registerWebSocketRoutes(app, feed) {
+function registerWebSocketRoutes(app, feed) {
   app.get("/ws", { websocket: true }, (socket) => {
     const unsubscribe = feed.subscribe((snapshot) => {
       if (socket.readyState === 1) socket.send(JSON.stringify(snapshot));
@@ -10,3 +10,4 @@ export function registerWebSocketRoutes(app, feed) {
     socket.on("error", unsubscribe);
   });
 }
+export default registerWebSocketRoutes;

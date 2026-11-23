@@ -1,7 +1,7 @@
 import { dirname } from "node:path";
-import { createNasrTemporaryPath } from "./path.mjs";
+import { default as createNasrTemporaryPath } from "./path.mjs";
 
-export function installNasrTemporaryCopy(files, input, output, prepare) {
+function installNasrTemporaryCopy(files, input, output, prepare) {
   files.mkdir(dirname(output), { recursive: true });
   const temporary = createNasrTemporaryPath(output);
   try {
@@ -14,3 +14,4 @@ export function installNasrTemporaryCopy(files, input, output, prepare) {
     throw error;
   }
 }
+export default installNasrTemporaryCopy;

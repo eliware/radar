@@ -2,7 +2,7 @@ function optionalNumber(name, value) {
   return Number.isFinite(value) ? { [name]: value } : {};
 }
 
-export function mapRemoteAircraftNumericFields(item) {
+function mapRemoteAircraftNumericFields(item) {
   return {
     ...optionalNumber("altitudeFeet", item.alt_baro ?? item.alt_geom),
     ...optionalNumber("groundSpeedKnots", item.gs),
@@ -10,3 +10,4 @@ export function mapRemoteAircraftNumericFields(item) {
     ...optionalNumber("verticalRateFeetPerMinute", item.baro_rate ?? item.geom_rate),
   };
 }
+export default mapRemoteAircraftNumericFields;

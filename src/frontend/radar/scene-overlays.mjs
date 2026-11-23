@@ -1,7 +1,7 @@
-import { createRadarRings } from "./overlays/rings.mjs";
-import { createRadarAxes } from "./overlays/axes.mjs";
+import { default as createRadarRings } from "./overlays/rings.mjs";
+import { default as createRadarAxes } from "./overlays/axes.mjs";
 
-export function createRadarSceneOverlays(THREE, scene, documentRef) {
+function createRadarSceneOverlays(THREE, scene, documentRef) {
   const rings = createRadarRings(THREE, scene, documentRef);
   const axes = createRadarAxes(THREE, scene);
   const updateRange = (range) => {
@@ -15,3 +15,4 @@ export function createRadarSceneOverlays(THREE, scene, documentRef) {
   updateRange.setConnected(false);
   return updateRange;
 }
+export default createRadarSceneOverlays;

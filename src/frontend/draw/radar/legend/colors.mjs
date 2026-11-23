@@ -1,5 +1,5 @@
-import { getRadarPalette } from "../../../radar/palette.mjs";
-import { getRadarLegendVisibility } from "./visibility.mjs";
+import { default as getRadarPalette } from "../../../radar/palette.mjs";
+import { default as getRadarLegendVisibility } from "./visibility.mjs";
 
 const COLORS = {
   airport: "#b8b8b8",
@@ -17,10 +17,11 @@ const COLORS = {
   strips: "#ffffff",
 };
 
-export function resolveRadarLegendColor(entry, connected, visibility) {
+function resolveRadarLegendColor(entry, connected, visibility) {
   const [, , color, toggle] = entry;
   const enabled = !toggle || getRadarLegendVisibility(toggle, visibility);
   const palette = getRadarPalette(connected);
   const ink = connected && enabled ? (palette[color] ?? COLORS[color]) : "#444444";
   return { enabled, ink };
 }
+export default resolveRadarLegendColor;

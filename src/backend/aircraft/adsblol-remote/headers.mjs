@@ -1,7 +1,8 @@
-import { createRadarUserAgent } from "../../user-agent.mjs";
+import { default as createRadarUserAgent } from "../../user-agent.mjs";
 
-export function createAdsbLolHeaders(apiKey) {
+function createAdsbLolHeaders(apiKey) {
   const headers = { "user-agent": createRadarUserAgent() };
   if (apiKey) headers["x-api-key"] = apiKey;
   return headers;
 }
+export default createAdsbLolHeaders;

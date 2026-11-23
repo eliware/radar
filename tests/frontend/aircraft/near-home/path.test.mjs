@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { isPredictedAircraftPathNearHome } from "../../../../src/frontend/aircraft/near-home/path.mjs";
+import { default as isPredictedAircraftPathNearHome } from "../../../../src/frontend/aircraft/near-home/path.mjs";
 
 const feetPerNauticalMile = 6076.12;
 const ceiling = 2000 / feetPerNauticalMile;

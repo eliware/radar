@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolRemoteSourceApi } from "../../../../../src/backend/aircraft/adsblol-remote/source/api.mjs";
+import { default as createAdsbLolRemoteSourceApi } from "../../../../../src/backend/aircraft/adsblol-remote/source/api.mjs";
 
 test("publishes subscriber updates and creates the source-facing lifecycle API", () => {
   const aircraft = { list: jest.fn(() => []), setRouteLookupsEnabled: jest.fn() };

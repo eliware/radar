@@ -1,7 +1,7 @@
 const earthRadiusNauticalMiles = 3440.065;
 const radians = (degrees) => (degrees * Math.PI) / 180;
 
-export function calculateAircraftRange(origin, aircraft) {
+function calculateAircraftRange(origin, aircraft) {
   if (!origin || !Number.isFinite(aircraft.latitude) || !Number.isFinite(aircraft.longitude)) {
     return null;
   }
@@ -24,3 +24,4 @@ export function calculateAircraftRange(origin, aircraft) {
     bearingDegrees: Math.round(bearing) % 360,
   };
 }
+export default calculateAircraftRange;

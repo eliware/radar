@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { placementCost } from "../../../../src/frontend/aircraft/tag/placement-cost.mjs";
+import { default as placementCost } from "../../../../src/frontend/aircraft/tag/placement-cost.mjs";
 
 test("scores viewport overflow and overlap", () => {
   const placed = [{ x: 10, y: 10, width: 10, height: 10 }];

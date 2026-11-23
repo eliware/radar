@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftRadarLoop } from "../../../../../src/frontend/create/aircraft/radar/loop.mjs";
+import { default as createAircraftRadarLoop } from "../../../../../src/frontend/create/aircraft/radar/loop.mjs";
 
 test("starts frame and expiry loops, then stops them", () => {
   const callbacks = [];

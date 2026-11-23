@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolRemotePolling } from "../../../../src/backend/aircraft/adsblol-remote/polling.mjs";
+import { default as createAdsbLolRemotePolling } from "../../../../src/backend/aircraft/adsblol-remote/polling.mjs";
 
 function setup(location = { latitude: 43.8, longitude: -70.4 }, requestOverride) {
   const timers = new Map();

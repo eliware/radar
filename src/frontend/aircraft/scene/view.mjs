@@ -1,4 +1,4 @@
-export function createAircraftSceneView({
+function createAircraftSceneView({
   connection,
   workflow,
   layers,
@@ -23,3 +23,4 @@ export function createAircraftSceneView({
     destroy,
   };
 }
+export default createAircraftSceneView;

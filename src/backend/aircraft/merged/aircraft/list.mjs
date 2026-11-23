@@ -1,9 +1,9 @@
-import { mergeAircraftRecord } from "./merge.mjs";
-import { compareAircraftDistance } from "./order.mjs";
+import { default as mergeAircraftRecord } from "./merge.mjs";
+import { default as compareAircraftDistance } from "./order.mjs";
 
 const LOCAL_FRESHNESS_MS = 8000;
 
-export function createMergedAircraftList(
+function createMergedAircraftList(
   entries,
   clock = Date.now,
   localFreshnessMs = LOCAL_FRESHNESS_MS,
@@ -25,3 +25,4 @@ export function createMergedAircraftList(
     },
   };
 }
+export default createMergedAircraftList;

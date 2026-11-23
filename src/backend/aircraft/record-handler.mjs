@@ -1,4 +1,4 @@
-export function handleAircraftRecord(
+function handleAircraftRecord(
   line,
   { parseSbsMessage, aircraftList, location, calculateAircraftRange, onAircraft },
 ) {
@@ -9,3 +9,4 @@ export function handleAircraftRecord(
   if (range) aircraft = aircraftList.update({ icao: message.icao, ...range });
   onAircraft(aircraft);
 }
+export default handleAircraftRecord;

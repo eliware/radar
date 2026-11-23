@@ -1,4 +1,4 @@
-export function selectMetarObservationDate(dayNumber, now) {
+function selectMetarObservationDate(dayNumber, now) {
   let month = now.getUTCMonth();
   let year = now.getUTCFullYear();
   if (dayNumber > now.getUTCDate()) {
@@ -17,3 +17,4 @@ export function selectMetarObservationDate(dayNumber, now) {
 function daysInMonth(year, month) {
   return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
 }
+export default selectMetarObservationDate;

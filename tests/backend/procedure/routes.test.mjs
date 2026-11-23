@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerProcedureRoutes } from "../../../src/backend/procedure/routes.mjs";
+import { default as registerProcedureRoutes } from "../../../src/backend/procedure/routes.mjs";
 
 function setup(
   database = { findProceduresBetween: jest.fn(() => [{ id: "route" }]) },

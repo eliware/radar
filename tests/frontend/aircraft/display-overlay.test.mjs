@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftDisplayOverlay } from "../../../src/frontend/aircraft/display-overlay.mjs";
+import { default as createAircraftDisplayOverlay } from "../../../src/frontend/aircraft/display-overlay.mjs";
 
 test("draws projected aircraft and history over the scene, then removes its canvas", () => {
   const measuredFonts = [];

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { hasUsefulCallsign } from "../../../src/shared/aircraft/callsign.mjs";
+import { default as hasUsefulCallsign } from "../../../src/shared/aircraft/callsign.mjs";
 
 test.each(["AD", "ok", " RM ", "unknown", "-", "", null, undefined])(
   "marks %s as unusable",

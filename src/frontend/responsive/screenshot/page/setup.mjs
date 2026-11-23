@@ -1,4 +1,5 @@
-export async function prepareScreenshotPage(page, baseUrl, viewport) {
+async function prepareScreenshotPage(page, baseUrl, viewport) {
   await page.setViewport(viewport);
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
 }
+export default prepareScreenshotPage;

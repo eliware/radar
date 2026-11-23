@@ -1,8 +1,9 @@
-import { hasUsefulMetarData } from "./useful.mjs";
+import { default as hasUsefulMetarData } from "./useful.mjs";
 
-export function enrichMetarReport(report, decoded) {
+function enrichMetarReport(report, decoded) {
   return {
     ...report,
     decoded: decoded && hasUsefulMetarData(decoded) ? decoded : null,
   };
 }
+export default enrichMetarReport;

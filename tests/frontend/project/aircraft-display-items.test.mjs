@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { projectAircraftDisplayItems } from "../../../src/frontend/project/aircraft-display-items.mjs";
+import { default as projectAircraftDisplayItems } from "../../../src/frontend/project/aircraft-display-items.mjs";
 
 test("projects aircraft labels, one-minute vectors, and history points", () => {
   const aircraft = new Map([

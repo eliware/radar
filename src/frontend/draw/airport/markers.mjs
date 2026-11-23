@@ -1,8 +1,8 @@
 import { MAX_RADAR_RANGE } from "../../radar/range.mjs";
-import { selectCanvasLabelSize } from "../label-size.mjs";
+import { default as selectCanvasLabelSize } from "../label-size.mjs";
 const AIRPORT_COLOR = "#b8b8b8";
 
-export function drawAirportMarkers(context, airports, project) {
+function drawAirportMarkers(context, airports, project) {
   context.save();
   context.fillStyle = AIRPORT_COLOR;
   context.strokeStyle = AIRPORT_COLOR;
@@ -20,3 +20,4 @@ export function drawAirportMarkers(context, airports, project) {
   }
   context.restore();
 }
+export default drawAirportMarkers;

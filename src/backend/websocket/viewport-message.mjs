@@ -1,4 +1,4 @@
-export function dispatchViewportMessage(message, socket, feed) {
+function dispatchViewportMessage(message, socket, feed) {
   try {
     const request = JSON.parse(message.toString());
     if (request.type !== "viewport") return;
@@ -6,3 +6,4 @@ export function dispatchViewportMessage(message, socket, feed) {
     feed.setClientLocalOnly?.(socket, request.localOnly);
   } catch {}
 }
+export default dispatchViewportMessage;

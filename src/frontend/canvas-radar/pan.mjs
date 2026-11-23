@@ -1,4 +1,4 @@
-export function attachCanvasPan(canvas, onPan) {
+function attachCanvasPan(canvas, onPan) {
   let drag = null;
   const down = (event) => {
     if (event.pointerType === "touch") return;
@@ -24,3 +24,4 @@ export function attachCanvasPan(canvas, onPan) {
     canvas.removeEventListener("pointercancel", end);
   };
 }
+export default attachCanvasPan;

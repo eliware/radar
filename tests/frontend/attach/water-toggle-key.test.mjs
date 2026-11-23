@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachWaterToggleKey } from "../../../src/frontend/attach/water-toggle-key.mjs";
+import { default as attachWaterToggleKey } from "../../../src/frontend/attach/water-toggle-key.mjs";
 
 function setup() {
   let listener;

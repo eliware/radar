@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolRouteEnrichment } from "../../../../../src/backend/aircraft/adsblol-remote/route/enrichment.mjs";
+import { default as createAdsbLolRouteEnrichment } from "../../../../../src/backend/aircraft/adsblol-remote/route/enrichment.mjs";
 
 const mapped = (callsign = "RPA1") => ({ icao: "ABC123", callsign });
 

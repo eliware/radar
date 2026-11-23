@@ -1,7 +1,7 @@
 import { FEET_PER_NM } from "../intersections.mjs";
-import { getRadarViewportBounds } from "../bounds.mjs";
+import { default as getRadarViewportBounds } from "../bounds.mjs";
 
-export function createRadarViewportBounds(THREE, camera, container, elevationFeet) {
+function createRadarViewportBounds(THREE, camera, container, elevationFeet) {
   return () =>
     getRadarViewportBounds(
       THREE,
@@ -11,3 +11,4 @@ export function createRadarViewportBounds(THREE, camera, container, elevationFee
       -elevationFeet / FEET_PER_NM,
     );
 }
+export default createRadarViewportBounds;

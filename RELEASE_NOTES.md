@@ -1,6 +1,6 @@
 # Release Notes
 
-## 15.1.1 — 2026-11-16
+## 15.2.0 — 2026-11-23
 
 ### Added
 
@@ -10,7 +10,7 @@
 
 ### Changed
 
-- Update the package version to 15.1.1.
+- Update the package version to 15.2.0.
 - Refresh the lockfile with newer transitive dependencies.
 - Document UAT receiver settings and the Compose deployment command.
 - Clarify which deployment targets start the Compose stack.

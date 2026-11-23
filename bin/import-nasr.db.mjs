@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { importNasrDatabase } from "../src/backend/nasr/database.mjs";
+import { default as importNasrDatabase } from "../src/backend/nasr/database.mjs";
 
 const input = process.argv[2];
 if (!input || process.argv.length !== 3) {

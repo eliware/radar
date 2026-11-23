@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { startMetarRefresh } from "../../../src/frontend/start/metar-refresh.mjs";
+import { default as startMetarRefresh } from "../../../src/frontend/start/metar-refresh.mjs";
 
 function elements() {
   return { panel: { textContent: "", innerHTML: "" }, ticker: { textContent: "" } };

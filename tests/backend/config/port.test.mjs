@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parsePort } from "../../../src/backend/config/port.mjs";
+import { default as parsePort } from "../../../src/backend/config/port.mjs";
 
 test.each(["1", "30004", "65535"])("parses valid port %s", (value) => {
   expect(parsePort(value, "PORT")).toBe(Number(value));

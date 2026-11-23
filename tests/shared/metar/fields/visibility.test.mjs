@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { visibilityText } from "../../../../src/shared/metar/fields/visibility.mjs";
+import { default as visibilityText } from "../../../../src/shared/metar/fields/visibility.mjs";
 
 test("formats visibility and vertical visibility", () => {
   expect(visibilityText({ visibility: { value: 6 } })).toBe("6");

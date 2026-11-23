@@ -1,6 +1,6 @@
-import { createRadarReferenceLoader } from "../radar/reference/loader.mjs";
+import { default as createRadarReferenceLoader } from "../radar/reference/loader.mjs";
 
-export function loadDashboardReferences(fetchData, scene, location) {
+function loadDashboardReferences(fetchData, scene, location) {
   const supportsReferences = [
     "updateAirports",
     "updateNavaids",
@@ -16,3 +16,4 @@ export function loadDashboardReferences(fetchData, scene, location) {
   loader.load(scene.getViewportBounds());
   return detach;
 }
+export default loadDashboardReferences;

@@ -1,7 +1,7 @@
-import { measureAircraftTag } from "./aircraft/tag/measure.mjs";
-import { placementCost } from "./aircraft/tag/placement-cost.mjs";
+import { default as measureAircraftTag } from "./aircraft/tag/measure.mjs";
+import { default as placementCost } from "./aircraft/tag/placement-cost.mjs";
 
-export function layoutAircraftTags(context, aircraft, fontSize, viewportWidth, viewportHeight) {
+function layoutAircraftTags(context, aircraft, fontSize, viewportWidth, viewportHeight) {
   const sorted = [...aircraft].sort((a, b) => a.y - b.y || a.x - b.x);
   const placed = [];
   for (const item of sorted) {
@@ -17,3 +17,4 @@ export function layoutAircraftTags(context, aircraft, fontSize, viewportWidth, v
   }
   return placed;
 }
+export default layoutAircraftTags;

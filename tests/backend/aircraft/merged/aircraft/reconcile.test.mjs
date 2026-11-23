@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { reconcileAircraftSource } from "../../../../../src/backend/aircraft/merged/aircraft/reconcile.mjs";
+import { default as reconcileAircraftSource } from "../../../../../src/backend/aircraft/merged/aircraft/reconcile.mjs";
 
 test("replaces one source while retaining other sources and pruning stale entries", () => {
   const entries = new Map([

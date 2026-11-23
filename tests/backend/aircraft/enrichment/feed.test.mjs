@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftEnrichmentFeed } from "../../../../src/backend/aircraft/enrichment/feed.mjs";
+import { default as createAircraftEnrichmentFeed } from "../../../../src/backend/aircraft/enrichment/feed.mjs";
 
 function setup(items = []) {
   let currentItems = items;

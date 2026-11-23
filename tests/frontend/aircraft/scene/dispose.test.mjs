@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { disposeAircraftSceneResources } from "../../../../src/frontend/aircraft/scene/dispose.mjs";
+import { default as disposeAircraftSceneResources } from "../../../../src/frontend/aircraft/scene/dispose.mjs";
 
 test("stops the workflow and releases every scene resource", () => {
   const resources = {

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAircraftList } from "../../../src/shared/aircraft/list.mjs";
+import { default as createAircraftList } from "../../../src/shared/aircraft/list.mjs";
 
 test("merges aircraft updates and sorts recent records first", () => {
   let now = 1000;

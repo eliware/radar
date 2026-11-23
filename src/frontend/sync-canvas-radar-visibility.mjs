@@ -1,4 +1,4 @@
-export function syncCanvasRadarVisibility(state, layers) {
+function syncCanvasRadarVisibility(state, layers) {
   state.ilsVisible = layers.ils.isVisible();
   state.sidVisible = layers.procedures.isSidVisible();
   state.starVisible = layers.procedures.isStarVisible();
@@ -11,3 +11,4 @@ export function syncCanvasRadarVisibility(state, layers) {
   state.airportsVisible = layers.references.isAirportsVisible();
   state.navaidsVisible = layers.references.isNavaidsVisible();
 }
+export default syncCanvasRadarVisibility;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { resizeCanvasBackingStore } from "../../../src/frontend/canvas/resize.mjs";
+import { default as resizeCanvasBackingStore } from "../../../src/frontend/canvas/resize.mjs";
 
 test("resizes the backing store and updates the pixel ratio transform", () => {
   const canvas = { width: 0, height: 0 };

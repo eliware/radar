@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatAircraftStripFields } from "../../../../src/frontend/flight/strip/fields.mjs";
+import { default as formatAircraftStripFields } from "../../../../src/frontend/flight/strip/fields.mjs";
 
 test("formats altitude, heading, speed, bearing, and route fields", () => {
   expect(

@@ -1,8 +1,8 @@
-import { createRadarFallback } from "./fallback.mjs";
-import { notifyRadarViewMode } from "./mode-notifier.mjs";
-import { loadAircraftScene } from "./scene-loader.mjs";
+import { default as createRadarFallback } from "./fallback.mjs";
+import { default as notifyRadarViewMode } from "./mode-notifier.mjs";
+import { default as loadAircraftScene } from "./scene-loader.mjs";
 
-export async function createRadarView({
+async function createRadarView({
   container,
   location,
   elevationFeet,
@@ -35,3 +35,4 @@ export async function createRadarView({
     return view;
   }
 }
+export default createRadarView;

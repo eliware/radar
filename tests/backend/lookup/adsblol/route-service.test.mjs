@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolRouteService } from "../../../../src/backend/lookup/adsblol/route-service.mjs";
+import { default as createAdsbLolRouteService } from "../../../../src/backend/lookup/adsblol/route-service.mjs";
 
 test("creates the ADSB.lol callsign route lookup service", async () => {
   const request = jest.fn().mockResolvedValue({

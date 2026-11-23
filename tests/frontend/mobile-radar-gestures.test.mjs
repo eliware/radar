@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { configureMobileRadarControls } from "../../src/frontend/mobile-radar-gestures.mjs";
+import { default as configureMobileRadarControls } from "../../src/frontend/mobile-radar-gestures.mjs";
 
 test("locks mobile controls and rotates the scene around home", () => {
   const listeners = new Map();

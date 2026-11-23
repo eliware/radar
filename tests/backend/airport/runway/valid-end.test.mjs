@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { isValidRunwayEnd } from "../../../../src/backend/airport/runway/valid-end.mjs";
+import { default as isValidRunwayEnd } from "../../../../src/backend/airport/runway/valid-end.mjs";
 
 const validEnd = { latitude: 43, longitude: -70, alignmentDegrees: 90 };
 

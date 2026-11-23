@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { createRadarReferenceLoader } from "../../../../src/frontend/radar/reference/loader.mjs";
+import { default as createRadarReferenceLoader } from "../../../../src/frontend/radar/reference/loader.mjs";
 
 const response = (rows = []) => ({ ok: true, json: async () => rows });
 const bounds = { minX: -20, maxX: 20, minZ: -20, maxZ: 20, minRangeNm: 0, maxRangeNm: 40 };

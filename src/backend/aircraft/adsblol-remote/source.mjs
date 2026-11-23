@@ -1,12 +1,12 @@
-import { createAdsbLolAircraftStore } from "./aircraft-store.mjs";
-import { createAircraftClientState } from "../client-state.mjs";
-import { getAdsbLolPollingPolicy } from "./policy.mjs";
-import { createAdsbLolSubscribers } from "./subscribers.mjs";
-import { createAdsbLolClientLifecycle } from "./client-lifecycle.mjs";
-import { createAdsbLolRemotePolling } from "./polling.mjs";
-import { createAdsbLolRemoteSourceApi } from "./source/api.mjs";
+import { default as createAdsbLolAircraftStore } from "./aircraft-store.mjs";
+import { default as createAircraftClientState } from "../client-state.mjs";
+import { default as getAdsbLolPollingPolicy } from "./policy.mjs";
+import { default as createAdsbLolSubscribers } from "./subscribers.mjs";
+import { default as createAdsbLolClientLifecycle } from "./client-lifecycle.mjs";
+import { default as createAdsbLolRemotePolling } from "./polling.mjs";
+import { default as createAdsbLolRemoteSourceApi } from "./source/api.mjs";
 import { MAX_RADIUS_NM, POLL_INTERVAL_MS } from "./settings.mjs";
-export function createAdsbLolRemoteSource({
+function createAdsbLolRemoteSource({
   location,
   defaultRangeNm = 20,
   enabled = true,
@@ -53,3 +53,4 @@ export function createAdsbLolRemoteSource({
   });
   return sourceApi.createPublicApi(clientLifecycle);
 }
+export default createAdsbLolRemoteSource;

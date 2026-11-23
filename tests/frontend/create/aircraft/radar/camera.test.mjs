@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftRadarCamera } from "../../../../../src/frontend/create/aircraft/radar/camera.mjs";
+import { default as createAircraftRadarCamera } from "../../../../../src/frontend/create/aircraft/radar/camera.mjs";
 
 test("configures camera defaults and tracks auto zoom state", () => {
   const camera = {

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAircraftTracks } from "../../../../src/frontend/draw/aircraft/tracks.mjs";
+import { default as drawAircraftTracks } from "../../../../src/frontend/draw/aircraft/tracks.mjs";
 
 function contextWithStrokeStyles() {
   const styles = [];

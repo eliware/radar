@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createFlightStripAircraftStore } from "../../../src/frontend/flight/aircraft-store.mjs";
+import { default as createFlightStripAircraftStore } from "../../../src/frontend/flight/aircraft-store.mjs";
 
 const item = (icao, options = {}) => ({ icao, distanceNauticalMiles: 1, ...options });
 

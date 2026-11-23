@@ -1,4 +1,4 @@
-import { startAircraftSceneLoop } from "../../../src/frontend/start/aircraft-scene-loop.mjs";
+import { default as startAircraftSceneLoop } from "../../../src/frontend/start/aircraft-scene-loop.mjs";
 import { expect, jest, test } from "@jest/globals";
 
 test("starts the scene loop with layer visibility and shared references", () => {

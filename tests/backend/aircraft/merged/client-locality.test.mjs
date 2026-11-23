@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { setMergedClientLocalOnly } from "../../../../src/backend/aircraft/merged/client-locality.mjs";
+import { default as setMergedClientLocalOnly } from "../../../../src/backend/aircraft/merged/client-locality.mjs";
 
 test("applies locality changes remotely and publishes a replacement snapshot", () => {
   const clients = { setLocalOnly: jest.fn(() => true) };

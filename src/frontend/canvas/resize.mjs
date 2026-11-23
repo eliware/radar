@@ -1,6 +1,6 @@
 const ratios = new WeakMap();
 
-export function resizeCanvasBackingStore(canvas, context, width, height, ratio) {
+function resizeCanvasBackingStore(canvas, context, width, height, ratio) {
   const pixelWidth = Math.round(width * ratio);
   const pixelHeight = Math.round(height * ratio);
   const changed = canvas.width !== pixelWidth || canvas.height !== pixelHeight;
@@ -10,3 +10,4 @@ export function resizeCanvasBackingStore(canvas, context, width, height, ratio) 
   ratios.set(canvas, ratio);
   return changed;
 }
+export default resizeCanvasBackingStore;

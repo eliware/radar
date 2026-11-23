@@ -7,15 +7,15 @@ const createAircraftSceneWorkflow = jest.fn(() => workflow);
 const createRadarViewport = jest.fn(() => viewport);
 const createRadarReferenceStore = jest.fn(() => references);
 jest.unstable_mockModule("../../../../src/frontend/create/aircraft/scene-workflow.mjs", () => ({
-  createAircraftSceneWorkflow,
+  default: createAircraftSceneWorkflow,
 }));
 jest.unstable_mockModule("../../../../src/frontend/radar/viewport/create/viewport.mjs", () => ({
-  createRadarViewport,
+  default: createRadarViewport,
 }));
 jest.unstable_mockModule("../../../../src/frontend/radar/reference/store.mjs", () => ({
-  createRadarReferenceStore,
+  default: createRadarReferenceStore,
 }));
-const { createAircraftSceneDashboardBindings } =
+const { default: createAircraftSceneDashboardBindings } =
   await import("../../../../src/frontend/aircraft/scene/dashboard-bindings.mjs");
 
 test("binds scene workflow, references, and viewport for dashboard use", () => {

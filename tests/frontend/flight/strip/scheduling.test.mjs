@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { scheduleFlightStripRefresh } from "../../../../src/frontend/flight/strip/scheduling.mjs";
+import { default as scheduleFlightStripRefresh } from "../../../../src/frontend/flight/strip/scheduling.mjs";
 
 test("schedules refreshes on resize and at the regular interval", () => {
   const windowRef = {

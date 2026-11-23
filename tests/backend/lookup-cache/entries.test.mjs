@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createLookupCacheEntries } from "../../../src/backend/lookup-cache/entries.mjs";
+import { default as createLookupCacheEntries } from "../../../src/backend/lookup-cache/entries.mjs";
 
 test("stores and removes cache entries", () => {
   const entries = createLookupCacheEntries(2);

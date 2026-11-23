@@ -1,6 +1,6 @@
-import { createRadarViewReset } from "../create/radar/view-reset.mjs";
+import { default as createRadarViewReset } from "../create/radar/view-reset.mjs";
 
-export function configureRadarViewDefaults(
+function configureRadarViewDefaults(
   radarCamera,
   targets,
   setAutoZoom,
@@ -18,3 +18,4 @@ export function configureRadarViewDefaults(
     defaultRotationRadians,
   );
 }
+export default configureRadarViewDefaults;

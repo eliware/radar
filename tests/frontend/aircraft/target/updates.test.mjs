@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { updateAircraftTargetAndTrail } from "../../../../src/frontend/aircraft/target/updates.mjs";
+import { default as updateAircraftTargetAndTrail } from "../../../../src/frontend/aircraft/target/updates.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 

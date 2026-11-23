@@ -1,7 +1,7 @@
-import { retainUsefulCallsign } from "../../../shared/aircraft/retain-useful-callsign.mjs";
-import { normalizeAircraftMetadataKey } from "./metadata-key.mjs";
+import { default as retainUsefulCallsign } from "../../../shared/aircraft/retain-useful-callsign.mjs";
+import { default as normalizeAircraftMetadataKey } from "./metadata-key.mjs";
 
-export function createAircraftState() {
+function createAircraftState() {
   const aircraftByIcao = new Map();
 
   function update(aircraft) {
@@ -28,3 +28,4 @@ export function createAircraftState() {
     clear: () => aircraftByIcao.clear(),
   };
 }
+export default createAircraftState;

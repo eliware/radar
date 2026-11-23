@@ -1,7 +1,7 @@
-import { createLookupCache } from "../../../lookup-cache.mjs";
-import { createCallsignRouteLookup } from "../route.mjs";
+import { default as createLookupCache } from "../../../lookup-cache.mjs";
+import { default as createCallsignRouteLookup } from "../route.mjs";
 
-export function createCallsignRouteService({
+function createCallsignRouteService({
   request,
   clock = Date.now,
   routeTtlMs = 60 * 60 * 1000,
@@ -18,3 +18,4 @@ export function createCallsignRouteService({
     });
   return createCallsignRouteLookup(request, lookup, routeTtlMs);
 }
+export default createCallsignRouteService;

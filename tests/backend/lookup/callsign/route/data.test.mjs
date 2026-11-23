@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseRoute } from "../../../../../src/backend/lookup/callsign/route/data.mjs";
+import { default as parseRoute } from "../../../../../src/backend/lookup/callsign/route/data.mjs";
 
 test("parses complete routes and prefers airport records", () => {
   expect(

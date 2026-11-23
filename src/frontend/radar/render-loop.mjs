@@ -1,4 +1,4 @@
-export function createRadarRenderLoop({ renderer, scene, camera, container, windowRef, onFrame }) {
+function createRadarRenderLoop({ renderer, scene, camera, container, windowRef, onFrame }) {
   const resize = () => {
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -23,3 +23,4 @@ export function createRadarRenderLoop({ renderer, scene, camera, container, wind
     resizeObserver?.disconnect();
   };
 }
+export default createRadarRenderLoop;

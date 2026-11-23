@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolLookup } from "../../src/backend/adsblol-lookup.mjs";
-import { createRadarUserAgent } from "../../src/backend/user-agent.mjs";
+import { default as createAdsbLolLookup } from "../../src/backend/adsblol-lookup.mjs";
+import { default as createRadarUserAgent } from "../../src/backend/user-agent.mjs";
 
 const response = (body) => ({ ok: true, status: 200, json: async () => body });
 const requestOptions = {

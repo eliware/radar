@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { groupBoundaries } from "../../../src/backend/artcc-boundary/group.mjs";
+import { default as groupBoundaries } from "../../../src/backend/artcc-boundary/group.mjs";
 
 test("groups points by boundary identity and keeps only point fields", () => {
   const first = {

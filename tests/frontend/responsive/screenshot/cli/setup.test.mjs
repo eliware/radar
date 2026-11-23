@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createScreenshotCliSetup } from "../../../../../src/frontend/responsive/screenshot/cli/setup.mjs";
+import { default as createScreenshotCliSetup } from "../../../../../src/frontend/responsive/screenshot/cli/setup.mjs";
 
 test("assembles default capture dependencies and screenshot settings", () => {
   const { capture, captureOptions } = createScreenshotCliSetup({ args: [], environment: {} });

@@ -1,6 +1,6 @@
-import { clipWaterTileRing } from "../../clip/water-tile-ring.mjs";
+import { default as clipWaterTileRing } from "../../clip/water-tile-ring.mjs";
 
-export function decodeWaterLayer(layer, tile) {
+function decodeWaterLayer(layer, tile) {
   const paths = [];
   for (let index = 0; index < layer.length; index += 1) {
     const feature = layer.feature(index);
@@ -15,3 +15,4 @@ export function decodeWaterLayer(layer, tile) {
 function isCoastOrLake(value) {
   return value === "ocean" || value === "lake";
 }
+export default decodeWaterLayer;

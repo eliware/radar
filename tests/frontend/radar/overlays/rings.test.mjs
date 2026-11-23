@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarRings } from "../../../../src/frontend/radar/overlays/rings.mjs";
+import { default as createRadarRings } from "../../../../src/frontend/radar/overlays/rings.mjs";
 import { RADAR_RING_LABEL_ANGLE } from "../../../../src/frontend/radar/range.mjs";
 
 test("shows and updates rings and their labels for the selected range", () => {

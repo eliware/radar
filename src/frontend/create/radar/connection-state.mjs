@@ -1,4 +1,4 @@
-export function createRadarConnectionState(onChange) {
+function createRadarConnectionState(onChange) {
   let connected = false;
   return {
     isConnected: () => connected,
@@ -8,3 +8,4 @@ export function createRadarConnectionState(onChange) {
     },
   };
 }
+export default createRadarConnectionState;

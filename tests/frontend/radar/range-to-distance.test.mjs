@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { rangeToCameraDistance } from "../../../src/frontend/radar/range-to-distance.mjs";
+import { default as rangeToCameraDistance } from "../../../src/frontend/radar/range-to-distance.mjs";
 
 test("converts nautical-mile ranges to perspective camera distance", () => {
   const expected = 20 / (2 * 0.44 * Math.tan((48 * Math.PI) / 360));

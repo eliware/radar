@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createAirspaceVertices } from "../../../../src/frontend/create/airspace/geometry.mjs";
+import { default as createAirspaceVertices } from "../../../../src/frontend/create/airspace/geometry.mjs";
 
 test("builds ring and wall vertices relative to the home elevation", () => {
   const vertices = createAirspaceVertices(

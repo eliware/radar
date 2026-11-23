@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { drawAirportRunways } from "../../../../src/frontend/draw/airport/runways.mjs";
+import { default as drawAirportRunways } from "../../../../src/frontend/draw/airport/runways.mjs";
 
 test("skips distant airports and unprojectable runway segments", () => {
   const context = {

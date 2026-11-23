@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { runDashboardStartup } from "../../../src/frontend/dashboard/startup.mjs";
+import { default as runDashboardStartup } from "../../../src/frontend/dashboard/startup.mjs";
 
 test("returns the completed dashboard startup result", async () => {
   const result = { scene: {} };

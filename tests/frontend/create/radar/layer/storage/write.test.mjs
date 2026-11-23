@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { persistLayerVisibilityChanges } from "../../../../../../src/frontend/create/radar/layer/storage/write.mjs";
+import { default as persistLayerVisibilityChanges } from "../../../../../../src/frontend/create/radar/layer/storage/write.mjs";
 
 test("persists each requested visibility change through the existing writer", () => {
   const original = Object.getOwnPropertyDescriptor(globalThis, "localStorage");

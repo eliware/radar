@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { registerAirspaceBoundaryRoutes } from "../../src/backend/airspace-boundary-routes.mjs";
+import { default as registerAirspaceBoundaryRoutes } from "../../src/backend/airspace-boundary-routes.mjs";
 
 function route(database, location = { latitude: 43, longitude: -70 }) {
   const routes = new Map();

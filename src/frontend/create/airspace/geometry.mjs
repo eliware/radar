@@ -1,6 +1,6 @@
 const FEET_PER_NM = 6076.12;
 
-export function createAirspaceVertices(edges, center, homeElevationFeet) {
+function createAirspaceVertices(edges, center, homeElevationFeet) {
   const vertices = [];
   for (const ring of edges.rings)
     addCircle(vertices, center, ring.radius, ring.altitude, homeElevationFeet);
@@ -33,3 +33,4 @@ function addVertical(vertices, center, radius, floor, ceiling, homeElevationFeet
 function point(center, radius, angle, height) {
   return [center.x + Math.cos(angle) * radius, height, center.z + Math.sin(angle) * radius];
 }
+export default createAirspaceVertices;

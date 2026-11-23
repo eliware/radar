@@ -1,4 +1,4 @@
-export function createWebSocketRetry({ setTimer, clearTimer, onRetry }) {
+function createWebSocketRetry({ setTimer, clearTimer, onRetry }) {
   let timer;
   let scheduled = false;
   let delay = 1000;
@@ -36,3 +36,4 @@ export function createWebSocketRetry({ setTimer, clearTimer, onRetry }) {
     },
   };
 }
+export default createWebSocketRetry;

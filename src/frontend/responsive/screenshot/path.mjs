@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 
-export function screenshotOutputPath(folder, name, mode) {
+function screenshotOutputPath(folder, name, mode) {
   return resolve(folder, `${name}-${mode}.png`);
 }
+export default screenshotOutputPath;

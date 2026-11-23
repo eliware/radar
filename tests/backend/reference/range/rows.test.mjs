@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { rowsWithinBounds } from "../../../../src/backend/reference/range/rows.mjs";
+import { default as rowsWithinBounds } from "../../../../src/backend/reference/range/rows.mjs";
 
 test("queries a bounded range and clamps latitude and longitude", () => {
   const statement = { all: jest.fn(() => []) };

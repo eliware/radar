@@ -1,4 +1,4 @@
-export function verifyNasrQueryPlan(database, [name, query, parameters, indexes]) {
+function verifyNasrQueryPlan(database, [name, query, parameters, indexes]) {
   const plan = database
     .prepare(`EXPLAIN QUERY PLAN ${query}`)
     .all(...parameters)
@@ -8,3 +8,4 @@ export function verifyNasrQueryPlan(database, [name, query, parameters, indexes]
     if (!plan.includes(index)) throw new Error(`NASR ${name} query plan does not use ${index}.`);
   }
 }
+export default verifyNasrQueryPlan;

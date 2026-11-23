@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachAircraftOverlayLegendInteraction } from "../../../../src/frontend/aircraft/overlay/legend-interaction.mjs";
+import { default as attachAircraftOverlayLegendInteraction } from "../../../../src/frontend/aircraft/overlay/legend-interaction.mjs";
 
 test("attaches and removes the legend click interaction", () => {
   let click;

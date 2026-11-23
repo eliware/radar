@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createOrbitRadarState } from "../../../src/frontend/create/orbit-radar-state.mjs";
+import { default as createOrbitRadarState } from "../../../src/frontend/create/orbit-radar-state.mjs";
 
 test("reports the view range and rotation, and notifies on camera changes", () => {
   const listeners = new Map();

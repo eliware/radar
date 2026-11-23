@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWaterTileMetadataLoader } from "../../../../src/frontend/water/tile/metadata.mjs";
+import { default as createWaterTileMetadataLoader } from "../../../../src/frontend/water/tile/metadata.mjs";
 
 test("fetches and shares tile metadata", async () => {
   const tileJson = { tiles: ["https://tile/{z}/{x}/{y}"] };

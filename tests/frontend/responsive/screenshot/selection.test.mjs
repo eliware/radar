@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectScreenshotOptions } from "../../../../src/frontend/responsive/screenshot/selection.mjs";
+import { default as selectScreenshotOptions } from "../../../../src/frontend/responsive/screenshot/selection.mjs";
 
 test("uses default options when no arguments or environment are supplied", () => {
   const previousViewports = process.env.RADAR_SCREENSHOT_VIEWPORTS;

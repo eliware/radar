@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectVisibleReferenceItem } from "../../../../../src/frontend/radar/reference/select-visible/item.mjs";
+import { default as selectVisibleReferenceItem } from "../../../../../src/frontend/radar/reference/select-visible/item.mjs";
 
 test("selects a point reference by viewport intersection", () => {
   const point = { id: "inside", latitude: 43, longitude: -70 };

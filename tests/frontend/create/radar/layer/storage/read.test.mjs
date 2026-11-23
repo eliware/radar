@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { readAndRestoreLayerVisibility } from "../../../../../../src/frontend/create/radar/layer/storage/read.mjs";
+import { default as readAndRestoreLayerVisibility } from "../../../../../../src/frontend/create/radar/layer/storage/read.mjs";
 
 test("restores saved visibility using the existing persistence readers", () => {
   const original = Object.getOwnPropertyDescriptor(globalThis, "localStorage");

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseSbsFields } from "../../../src/shared/sbs/fields.mjs";
+import { default as parseSbsFields } from "../../../src/shared/sbs/fields.mjs";
 
 test("maps empty columns and normalizes ICAO and numeric values", () => {
   const values = Array(22).fill("");

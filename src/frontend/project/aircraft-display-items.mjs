@@ -1,11 +1,11 @@
-import { projectAircraftPosition } from "../aircraft/space-position.mjs";
-import { predictAircraftPosition } from "../predict-aircraft-position.mjs";
-import { formatAircraftTag } from "../aircraft/tag/data.mjs";
-import { getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
-import { isAircraftProjectedNearHome } from "../aircraft/near-home/is-projected-near-home.mjs";
-import { projectAircraftHistory } from "./aircraft-display/history.mjs";
+import { default as projectAircraftPosition } from "../aircraft/space-position.mjs";
+import { default as predictAircraftPosition } from "../predict-aircraft-position.mjs";
+import { default as formatAircraftTag } from "../aircraft/tag/data.mjs";
+import { default as getAircraftEmergencyLabel } from "../../shared/aircraft/emergency.mjs";
+import { default as isAircraftProjectedNearHome } from "../aircraft/near-home/is-projected-near-home.mjs";
+import { default as projectAircraftHistory } from "./aircraft-display/history.mjs";
 
-export function projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project) {
+function projectAircraftDisplayItems(aircraft, trails, location, elevationFeet, project) {
   const display = [];
   for (const item of aircraft.values()) {
     const position = projectAircraftPosition(item, location, elevationFeet);
@@ -30,3 +30,4 @@ export function projectAircraftDisplayItems(aircraft, trails, location, elevatio
   }
   return display;
 }
+export default projectAircraftDisplayItems;

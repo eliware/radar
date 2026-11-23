@@ -1,7 +1,7 @@
-import { createWebSocketReconnection } from "./reconnection.mjs";
-import { createSocketConnection } from "./socket-connection.mjs";
+import { default as createWebSocketReconnection } from "./reconnection.mjs";
+import { default as createSocketConnection } from "./socket-connection.mjs";
 
-export function connectWebSocketFeed({
+function connectWebSocketFeed({
   WebSocketClass,
   url,
   onMessage,
@@ -57,3 +57,4 @@ export function connectWebSocketFeed({
     },
   };
 }
+export default connectWebSocketFeed;

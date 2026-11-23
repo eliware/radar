@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { drawRunwaySegment } from "../../../../../src/frontend/draw/airport/runway/segment.mjs";
+import { default as drawRunwaySegment } from "../../../../../src/frontend/draw/airport/runway/segment.mjs";
 
 const runway = [
   { latitude: 43, longitude: -70, elevationFeet: 50 },

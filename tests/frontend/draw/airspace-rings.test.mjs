@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
-import { airportAirspaceBands } from "../../../src/frontend/airport-airspace/bands.mjs";
-import { airportAirspaceEdges } from "../../../src/frontend/airport-airspace/edges.mjs";
-import { drawAirspaceRings } from "../../../src/frontend/draw/airspace-rings.mjs";
+import { default as airportAirspaceBands } from "../../../src/frontend/airport-airspace/bands.mjs";
+import { default as airportAirspaceEdges } from "../../../src/frontend/airport-airspace/edges.mjs";
+import { default as drawAirspaceRings } from "../../../src/frontend/draw/airspace-rings.mjs";
 
 test("draws a gray radial outline for flagged airspace", () => {
   const context = {

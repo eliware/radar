@@ -1,7 +1,7 @@
-import { createAdsbLolRouteLookup } from "./lookup.mjs";
-import { applyAdsbLolRouteResult } from "./apply.mjs";
+import { default as createAdsbLolRouteLookup } from "./lookup.mjs";
+import { default as applyAdsbLolRouteResult } from "./apply.mjs";
 
-export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} }) {
+function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} }) {
   const routeLookup = createAdsbLolRouteLookup(lookup);
 
   function enrich(mapped, aircraft) {
@@ -17,3 +17,4 @@ export function createAdsbLolRouteEnrichment({ lookup, onRouteUpdate = () => {} 
     setEnabled: routeLookup.setEnabled,
   };
 }
+export default createAdsbLolRouteEnrichment;

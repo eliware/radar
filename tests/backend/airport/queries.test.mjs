@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAirportQueries } from "../../../src/backend/airport/queries.mjs";
+import { default as createAirportQueries } from "../../../src/backend/airport/queries.mjs";
 
 test("assembles all airport reference query functions", () => {
   const statements = [];

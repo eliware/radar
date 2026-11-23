@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { connectWebSocketFeed } from "../../../src/frontend/websocket/connection.mjs";
+import { default as connectWebSocketFeed } from "../../../src/frontend/websocket/connection.mjs";
 
 test("uses default callbacks and delivers messages from the active socket", async () => {
   let socket;

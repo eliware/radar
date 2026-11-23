@@ -1,4 +1,4 @@
-export function getAdsbLolPollingPolicy(clients, maximumRangeNm) {
+function getAdsbLolPollingPolicy(clients, maximumRangeNm) {
   const remoteClients = clients.settings().filter((client) => !client.localOnly);
   return {
     hasRemoteClients: remoteClients.length > 0,
@@ -8,3 +8,4 @@ export function getAdsbLolPollingPolicy(clients, maximumRangeNm) {
     ),
   };
 }
+export default getAdsbLolPollingPolicy;

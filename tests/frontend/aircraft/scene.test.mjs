@@ -2,8 +2,9 @@ import { beforeEach, expect, jest, test } from "@jest/globals";
 import { registerAircraftSceneMocks } from "../../../test-fixtures/aircraft-scene-mocks.mjs";
 
 const mocks = registerAircraftSceneMocks(jest);
-const { createAircraftScene } = await import("../../../src/frontend/aircraft/scene.mjs");
-const { createAircraftSceneSetup } = await import("../../../src/frontend/aircraft/scene/setup.mjs");
+const { default: createAircraftScene } = await import("../../../src/frontend/aircraft/scene.mjs");
+const { default: createAircraftSceneSetup } =
+  await import("../../../src/frontend/aircraft/scene/setup.mjs");
 const container = { replaceChildren: jest.fn() };
 const windowRef = {};
 const location = { latitude: 43, longitude: -70 };

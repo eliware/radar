@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { attachCanvasRefresh } from "../../../../src/frontend/attach/canvas/refresh.mjs";
+import { default as attachCanvasRefresh } from "../../../../src/frontend/attach/canvas/refresh.mjs";
 
 test("draws after wheel input and detaches wheel and resize listeners", () => {
   const canvas = { addEventListener: jest.fn(), removeEventListener: jest.fn() };

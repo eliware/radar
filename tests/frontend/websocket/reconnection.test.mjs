@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { createWebSocketReconnection } from "../../../src/frontend/websocket/reconnection.mjs";
-import { connectWebSocketFeed } from "../../../src/frontend/websocket/connection.mjs";
+import { default as createWebSocketReconnection } from "../../../src/frontend/websocket/reconnection.mjs";
+import { default as connectWebSocketFeed } from "../../../src/frontend/websocket/connection.mjs";
 
 test("schedules one reconnect at a time and restores eligibility after retry", () => {
   let retry;

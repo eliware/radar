@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createRadarViewReset } from "../../../../src/frontend/create/radar/view-reset.mjs";
+import { default as createRadarViewReset } from "../../../../src/frontend/create/radar/view-reset.mjs";
 
 test("reset restores configured view and auto zoom", () => {
   const radarCamera = { setRange: jest.fn(), setRotation: jest.fn() };

@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { buildFlightStripData } from "../../../../src/frontend/flight/strip/data.mjs";
-import { renderFlightStripMarkup } from "../../../../src/frontend/flight/strip/renderer.mjs";
+import { default as buildFlightStripData } from "../../../../src/frontend/flight/strip/data.mjs";
+import { default as renderFlightStripMarkup } from "../../../../src/frontend/flight/strip/renderer.mjs";
 
 test("renders flight strip data as escaped aircraft markup", () => {
   const data = buildFlightStripData(

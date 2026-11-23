@@ -2,7 +2,7 @@ const FEET_PER_NAUTICAL_MILE = 6076.12;
 const MAX_DISTANCE_NM = 1;
 const MAX_AGL_NM = 2000 / FEET_PER_NAUTICAL_MILE;
 
-export function isPredictedAircraftPathNearHome(start, end) {
+function isPredictedAircraftPathNearHome(start, end) {
   let minT = 0;
   let maxT = 1;
   if (start.y > MAX_AGL_NM && end.y > MAX_AGL_NM) return false;
@@ -22,3 +22,4 @@ export function isPredictedAircraftPathNearHome(start, end) {
   const z = start.z + closestT * dz;
   return x * x + z * z <= MAX_DISTANCE_NM ** 2;
 }
+export default isPredictedAircraftPathNearHome;

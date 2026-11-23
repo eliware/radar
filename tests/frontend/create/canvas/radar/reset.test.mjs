@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
-import { createViewChangeListeners } from "../../../../../src/frontend/create/view-change-listeners.mjs";
-import { resetCanvasRadarView } from "../../../../../src/frontend/create/canvas/radar/reset.mjs";
-import { createCanvasRadarState } from "../../../../../src/frontend/create/canvas/radar/state.mjs";
+import { default as createViewChangeListeners } from "../../../../../src/frontend/create/view-change-listeners.mjs";
+import { default as resetCanvasRadarView } from "../../../../../src/frontend/create/canvas/radar/reset.mjs";
+import { default as createCanvasRadarState } from "../../../../../src/frontend/create/canvas/radar/state.mjs";
 
 test("resets range, offsets, rotation, and auto zoom", () => {
   const state = { range: 20, autoZoom: false, offsetX: 8, offsetY: 4, rotation: 1 };

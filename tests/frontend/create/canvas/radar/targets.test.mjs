@@ -1,10 +1,10 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftTrails } from "../../../../../src/frontend/aircraft/trails.mjs";
-import { createAircraftReceiveTimes } from "../../../../../src/frontend/aircraft/receive-times.mjs";
-import { createRadarTargets } from "../../../../../src/frontend/radar/targets.mjs";
-import { updateCanvasRadarTarget } from "../../../../../src/frontend/create/canvas/radar/targets.mjs";
-import { updateCanvasRadarRemoteTargets } from "../../../../../src/frontend/create/canvas/radar/remote-targets.mjs";
-import { listCanvasRadarTargets } from "../../../../../src/frontend/create/canvas/radar/list-targets.mjs";
+import { default as createAircraftTrails } from "../../../../../src/frontend/aircraft/trails.mjs";
+import { default as createAircraftReceiveTimes } from "../../../../../src/frontend/aircraft/receive-times.mjs";
+import { default as createRadarTargets } from "../../../../../src/frontend/radar/targets.mjs";
+import { default as updateCanvasRadarTarget } from "../../../../../src/frontend/create/canvas/radar/targets.mjs";
+import { default as updateCanvasRadarRemoteTargets } from "../../../../../src/frontend/create/canvas/radar/remote-targets.mjs";
+import { default as listCanvasRadarTargets } from "../../../../../src/frontend/create/canvas/radar/list-targets.mjs";
 
 const location = { latitude: 43, longitude: -70 };
 

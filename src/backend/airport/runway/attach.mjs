@@ -1,6 +1,6 @@
-import { groupRunwayEnds } from "./groups.mjs";
+import { default as groupRunwayEnds } from "./groups.mjs";
 
-export function attachAirportRunways(airports, runwayStatement) {
+function attachAirportRunways(airports, runwayStatement) {
   if (!airports.length) return [];
   const runways = groupRunwayEnds(
     runwayStatement.all(JSON.stringify(airports.map(({ faaId }) => faaId))),
@@ -10,3 +10,4 @@ export function attachAirportRunways(airports, runwayStatement) {
     runways: runways.get(airport.faaId) ?? [],
   }));
 }
+export default attachAirportRunways;

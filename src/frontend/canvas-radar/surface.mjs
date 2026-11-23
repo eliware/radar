@@ -1,4 +1,4 @@
-export function createCanvasRadarSurface(container, documentRef) {
+function createCanvasRadarSurface(container, documentRef) {
   const canvas = documentRef.createElement("canvas");
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas 2D is unavailable in this browser.");
@@ -13,3 +13,4 @@ export function createCanvasRadarSurface(container, documentRef) {
     },
   };
 }
+export default createCanvasRadarSurface;

@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { validateScreenshotFile } from "../../../../src/frontend/responsive/screenshot/file-validation.mjs";
+import { default as validateScreenshotFile } from "../../../../src/frontend/responsive/screenshot/file-validation.mjs";
 
 test("accepts screenshot files at the minimum size", async () => {
   await expect(

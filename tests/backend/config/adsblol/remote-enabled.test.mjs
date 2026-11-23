@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseAdsbLolRemoteEnabled } from "../../../../src/backend/config/adsblol/remote-enabled.mjs";
+import { default as parseAdsbLolRemoteEnabled } from "../../../../src/backend/config/adsblol/remote-enabled.mjs";
 
 test.each([undefined, "", " "])("enables ADSB.lol remote by default for %s", (value) => {
   expect(parseAdsbLolRemoteEnabled(value)).toBe(true);

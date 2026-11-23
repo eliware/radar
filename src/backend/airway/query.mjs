@@ -1,8 +1,8 @@
 import { AIRWAY_QUERY } from "./query-rules.mjs";
-import { buildAirways } from "./path-builder.mjs";
-import { pathInRange } from "./range.mjs";
+import { default as buildAirways } from "./path-builder.mjs";
+import { default as pathInRange } from "./range.mjs";
 
-export function createAirwayQuery(database) {
+function createAirwayQuery(database) {
   const statement = database.prepare(AIRWAY_QUERY);
   let rows;
   let paths;
@@ -20,3 +20,4 @@ export function createAirwayQuery(database) {
     return paths.filter((path) => pathInRange(path.points, minRangeNm, maxRangeNm));
   };
 }
+export default createAirwayQuery;

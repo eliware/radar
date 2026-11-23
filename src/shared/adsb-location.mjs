@@ -1,4 +1,4 @@
-export function parseAdsbLocation(latitudeValue, longitudeValue) {
+function parseAdsbLocation(latitudeValue, longitudeValue) {
   const hasLatitude = latitudeValue !== undefined && latitudeValue.trim() !== "";
   const hasLongitude = longitudeValue !== undefined && longitudeValue.trim() !== "";
   if (!hasLatitude && !hasLongitude) return null;
@@ -19,3 +19,4 @@ export function parseAdsbLocation(latitudeValue, longitudeValue) {
   }
   return { latitude, longitude };
 }
+export default parseAdsbLocation;

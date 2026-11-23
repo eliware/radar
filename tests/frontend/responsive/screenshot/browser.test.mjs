@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { launchScreenshotBrowser } from "../../../../src/frontend/responsive/screenshot/browser.mjs";
+import { default as launchScreenshotBrowser } from "../../../../src/frontend/responsive/screenshot/browser.mjs";
 
 test("launches and closes the headless screenshot browser", async () => {
   const browser = { close: jest.fn() };

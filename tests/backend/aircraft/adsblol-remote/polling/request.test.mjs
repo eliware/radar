@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { requestAndApplyAdsbLolCircle } from "../../../../../src/backend/aircraft/adsblol-remote/polling/request.mjs";
+import { default as requestAndApplyAdsbLolCircle } from "../../../../../src/backend/aircraft/adsblol-remote/polling/request.mjs";
 
 const location = { latitude: 43.8, longitude: -70.4 };
 

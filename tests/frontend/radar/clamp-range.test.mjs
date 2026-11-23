@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { clampRadarRange } from "../../../src/frontend/radar/clamp-range.mjs";
+import { default as clampRadarRange } from "../../../src/frontend/radar/clamp-range.mjs";
 
 test("preserves values at supported limits and fractional manual ranges", () => {
   expect(clampRadarRange(1)).toBe(1);

@@ -1,7 +1,7 @@
 const FEET_PER_NAUTICAL_MILE = 6076.12;
 const EARTH_RADIUS_NAUTICAL_MILES = 3440.065;
 
-export function projectAircraftPosition(aircraft, location, elevationFeet) {
+function projectAircraftPosition(aircraft, location, elevationFeet) {
   if (
     !aircraft ||
     !location ||
@@ -24,3 +24,4 @@ export function projectAircraftPosition(aircraft, location, elevationFeet) {
     : 0;
   return { x: east, y: altitude, z: -north };
 }
+export default projectAircraftPosition;

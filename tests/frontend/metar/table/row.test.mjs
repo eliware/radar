@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderMetarTableRow } from "../../../../src/frontend/metar/table/row.mjs";
+import { default as renderMetarTableRow } from "../../../../src/frontend/metar/table/row.mjs";
 
 test("renders and escapes an undecoded report row", () => {
   expect(renderMetarTableRow({ id: "K<XX>", metar: "bad <data>", decoded: null })).toContain(

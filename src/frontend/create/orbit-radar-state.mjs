@@ -1,4 +1,4 @@
-export function createOrbitRadarState(controls, radarCamera) {
+function createOrbitRadarState(controls, radarCamera) {
   return {
     northAngle: () => controls.getAzimuthalAngle?.() ?? 0,
     zoomBy: (factor) => radarCamera.zoomBy(factor),
@@ -20,3 +20,4 @@ export function createOrbitRadarState(controls, radarCamera) {
     range: () => radarCamera.range(),
   };
 }
+export default createOrbitRadarState;

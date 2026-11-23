@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAirportDatabaseGuard } from "../../../src/backend/airport/database-guard.mjs";
+import { default as createAirportDatabaseGuard } from "../../../src/backend/airport/database-guard.mjs";
 
 test("guards every query after closing once", () => {
   const query = jest.fn(() => []);

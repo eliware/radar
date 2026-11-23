@@ -1,4 +1,4 @@
-export function createRadarReferenceViewApplier(cache, scene, location, delay = 80) {
+function createRadarReferenceViewApplier(cache, scene, location, delay = 80) {
   let timer;
   return {
     schedule(bounds) {
@@ -14,3 +14,4 @@ export function createRadarReferenceViewApplier(cache, scene, location, delay = 
     },
   };
 }
+export default createRadarReferenceViewApplier;

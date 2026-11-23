@@ -1,8 +1,8 @@
-import { distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
+import { default as distanceNauticalMiles } from "../../shared/distance-nautical-miles.mjs";
 
 const MAX_PROCEDURE_RANGE_NM = 300;
 
-export function selectProcedurePaths(paths, location, minRangeNm, maxRangeNm) {
+function selectProcedurePaths(paths, location, minRangeNm, maxRangeNm) {
   return paths.flatMap((path) => {
     const airportRangeNm = distanceNauticalMiles(location, {
       latitude: path.airportLatitude,
@@ -41,3 +41,4 @@ function boundaryPoint(previous, point, rangeNm) {
     rangeNm: MAX_PROCEDURE_RANGE_NM,
   };
 }
+export default selectProcedurePaths;

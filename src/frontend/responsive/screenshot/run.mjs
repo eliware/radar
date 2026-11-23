@@ -1,9 +1,9 @@
-import { createScreenshotBrowserSession } from "./browser/session.mjs";
-import { captureScreenshotTargets } from "./capture.mjs";
-import { finalizeScreenshotSession } from "./finalize.mjs";
-import { reportScreenshotResults } from "./report.mjs";
+import { default as createScreenshotBrowserSession } from "./browser/session.mjs";
+import { default as captureScreenshotTargets } from "./capture.mjs";
+import { default as finalizeScreenshotSession } from "./finalize.mjs";
+import { default as reportScreenshotResults } from "./report.mjs";
 
-export async function runScreenshotCapture({
+async function runScreenshotCapture({
   folder,
   baseUrl,
   targets,
@@ -20,3 +20,4 @@ export async function runScreenshotCapture({
   );
   return reportScreenshotResults(report, targets, modes, folder);
 }
+export default runScreenshotCapture;

@@ -1,6 +1,6 @@
-import { createMetarResponse } from "./response.mjs";
+import { default as createMetarResponse } from "./response.mjs";
 
-export function registerMetarRoutes(app, lookup) {
+function registerMetarRoutes(app, lookup) {
   app.get("/api/metar", async (_request, reply) => {
     try {
       const reports = await lookup.get();
@@ -10,3 +10,4 @@ export function registerMetarRoutes(app, lookup) {
     }
   });
 }
+export default registerMetarRoutes;

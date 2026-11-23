@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import * as THREE from "three";
-import { createRadarViewportRadius } from "../../../../../src/frontend/radar/viewport/create/radius.mjs";
+import { default as createRadarViewportRadius } from "../../../../../src/frontend/radar/viewport/create/radius.mjs";
 
 test("creates a live polling radius reader", () => {
   const camera = new THREE.PerspectiveCamera(48, 16 / 9, 0.05, 1000);

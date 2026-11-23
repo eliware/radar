@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { projectAircraftTargetPosition } from "../../../../src/frontend/aircraft/target/position.mjs";
+import { default as projectAircraftTargetPosition } from "../../../../src/frontend/aircraft/target/position.mjs";
 
 test("projects aircraft and measures horizontal distance from home", () => {
   const result = projectAircraftTargetPosition(

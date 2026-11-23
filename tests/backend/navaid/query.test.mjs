@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createNavaidQuery } from "../../../src/backend/navaid/query.mjs";
+import { default as createNavaidQuery } from "../../../src/backend/navaid/query.mjs";
 
 function createQuery(navaids = []) {
   const statement = { all: jest.fn(() => navaids) };

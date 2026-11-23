@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAdsbLolRemoteSource } from "../../../../src/backend/aircraft/adsblol-remote/source.mjs";
+import { default as createAdsbLolRemoteSource } from "../../../../src/backend/aircraft/adsblol-remote/source.mjs";
 
 function setup(overrides = {}) {
   const timers = new Map();

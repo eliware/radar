@@ -1,5 +1,5 @@
-import { selectVisibleReferenceItems } from "./select-visible/items.mjs";
-import { createRadarReferenceViewApplier } from "./view/applier.mjs";
+import { default as selectVisibleReferenceItems } from "./select-visible/items.mjs";
+import { default as createRadarReferenceViewApplier } from "./view/applier.mjs";
 
 const LAYERS = [
   ["airports", "updateAirports", 35, (item) => item.faaId],
@@ -10,7 +10,7 @@ const LAYERS = [
   ["airways", "updateAirways", 0, (item) => item.id],
 ];
 
-export function createRadarReferenceCacheSession(scene, location) {
+function createRadarReferenceCacheSession(scene, location) {
   const cache = LAYERS.map(() => new Map());
   let latestBounds = null;
   const applier = createRadarReferenceViewApplier(
@@ -60,3 +60,4 @@ function applyCollections(scene, collections) {
   if (scene.updateAll) scene.updateAll(collections);
   else LAYERS.forEach(([, update], index) => scene[update](collections[index]));
 }
+export default createRadarReferenceCacheSession;

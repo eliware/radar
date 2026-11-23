@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { createAircraftSceneUpdater } from "../../src/frontend/update-aircraft-scene.mjs";
+import { default as createAircraftSceneUpdater } from "../../src/frontend/update-aircraft-scene.mjs";
 
 function makeUpdater({
   autoZoom = true,

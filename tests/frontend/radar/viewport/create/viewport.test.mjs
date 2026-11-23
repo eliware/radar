@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
 import * as THREE from "three";
-import { createRadarViewport } from "../../../../../src/frontend/radar/viewport/create/viewport.mjs";
+import { default as createRadarViewport } from "../../../../../src/frontend/radar/viewport/create/viewport.mjs";
 
 test("combines polling radius and frustum bounds", () => {
   const camera = new THREE.PerspectiveCamera(48, 16 / 9, 0.05, 1000);

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectAircraftRecordSources } from "../../../../../../src/backend/aircraft/merged/aircraft/source/selection.mjs";
+import { default as selectAircraftRecordSources } from "../../../../../../src/backend/aircraft/merged/aircraft/source/selection.mjs";
 
 test("selects remote-only, fresh-local, and newer-stale-remote sources", () => {
   const remote = { icao: "ABC", lastSeen: 900 };

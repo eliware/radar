@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { predictAircraftPosition } from "../../src/frontend/predict-aircraft-position.mjs";
+import { default as predictAircraftPosition } from "../../src/frontend/predict-aircraft-position.mjs";
 
 test("predicts position for 60 seconds of travel and climb", () => {
   const point = predictAircraftPosition(

@@ -1,7 +1,7 @@
-import { createFlightStripView } from "../flight/strips.mjs";
-import { createDashboardDisplay } from "./display.mjs";
+import { default as createFlightStripView } from "../flight/strips.mjs";
+import { default as createDashboardDisplay } from "./display.mjs";
 
-export function createDashboardDisplaySetup({ document, fetchData, windowRef, onMetarEnabled }) {
+function createDashboardDisplaySetup({ document, fetchData, windowRef, onMetarEnabled }) {
   const flightStrips = createFlightStripView(
     document.querySelector("[data-flight-strips]"),
     windowRef,
@@ -9,3 +9,4 @@ export function createDashboardDisplaySetup({ document, fetchData, windowRef, on
   const display = createDashboardDisplay({ document, fetchData, windowRef, onMetarEnabled });
   return { flightStrips, toggles: display.toggles, startMetarRefresh: display.startMetarRefresh };
 }
+export default createDashboardDisplaySetup;

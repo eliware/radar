@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { updateCanvasRadarAutoZoom } from "../../../../../src/frontend/create/canvas/radar/auto-zoom.mjs";
+import { default as updateCanvasRadarAutoZoom } from "../../../../../src/frontend/create/canvas/radar/auto-zoom.mjs";
 
 test("updates the range from local distances when auto-zoom is enabled", () => {
   const state = { autoZoom: true, defaultRangeNm: 20, range: 10 };
