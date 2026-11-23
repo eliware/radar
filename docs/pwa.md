@@ -4,7 +4,7 @@ Radar can be added to a phone's Home Screen and opened in standalone mode, which
 
 The manifest includes a wide desktop screenshot and a narrow phone screenshot for expanded install prompts. It uses separate ordinary and maskable icons. The maskable artwork leaves the required safety margin around its edges.
 
-Open `https://radar.purinton.us` on the phone and use the browser's **Add to Home Screen** action. Launch Radar from the new Home Screen icon. The app requires a network connection. No `ServiceWorker` is active, and pages or live data are not cached for offline use.
+Open `https://radar.purinton.us` on the phone and use the browser's **Add to Home Screen** action. Launch Radar from the new Home Screen icon. The app requires a network connection. Radar has no background worker, so it does not cache pages or live data for offline use.
 
 Portrait orientation is requested through the manifest. Phone support depends on its browser and operating system. The web app cannot override platforms without orientation locking.
 

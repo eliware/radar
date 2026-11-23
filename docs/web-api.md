@@ -4,39 +4,57 @@ Radar provides a web dashboard, HTTP API, and WebSocket connection. The server r
 
 ## Start the app
 
-From the repository root, run `npm ci` once, then `npm run build` to build browser files. Run `node bin/radar.mjs` to start the server. The default HTTP port is `1390`. The server listens on `0.0.0.0` for local network access. Use `Ctrl+C` to stop it cleanly.
+Use Node.js 26 or later. Run `git lfs install` and `git lfs pull` to retrieve the NASR database. From the repository root, run `npm ci`, then `npm run build`. Run `node bin/radar.mjs` to start the server.
 
-Open `http://localhost:1390` on the server computer. Find its Wi-Fi address with `ipconfig` on Windows. Open `http://<computer-ip>:1390` on a device on the same network.
+The server listens on `0.0.0.0` and uses TCP port `1390` by default. Open `http://localhost:1390` on the server computer. On Windows, use `ipconfig` to find its Wi-Fi address. Open `http://<computer-ip>:1390` on a device on the same network. Push `Ctrl+C` to stop the server.
 
-Set runtime options in `.env` or the process environment. See [Configuration](configuration.md) for defaults, accepted values, and validation rules. The web API has no authentication, so limit access to a trusted network.
-
-Runtime options and home-location requirements for reference-data routes are documented in [Configuration](configuration.md).
+Set runtime options in `.env` or the process environment. See [Configuration](configuration.md) for defaults, accepted values, and validation rules. Radar has no authentication or built-in TLS. Limit access to a trusted network, and use an HTTPS proxy when phone compass access needs TLS.
 
 ## HTTP routes
 
-| Method and path                | Response                                                                                                                                     |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /health`                  | `200` and `{ "status": "ok" }` when the server can answer requests.                                                                          |
-| `GET /ready`                   | `200` and `{ "status": "ready" }` when Radar has an active SBS TCP connection. `503` while disconnected. Aircraft reception is not required. |
-| `GET /api/config`              | Home location, elevation, default range, and heading.                                                                                        |
-| `GET /api/aircraft`            | Current aircraft list.                                                                                                                       |
-| `GET /api/metar`               | Decoded reports for configured airports. `502` if VATSIM data is unavailable.                                                                |
-| `GET /api/airports`            | Airports and runway ends.                                                                                                                    |
-| `GET /api/navaids`             | VOR, VOR/DME, and VORTAC records.                                                                                                            |
-| `GET /api/airspace-boundaries` | FAA ARTCC boundary paths.                                                                                                                    |
-| `GET /api/ils`                 | ILS approaches and matching marker beacons.                                                                                                  |
-| `GET /api/procedures`          | SID and STAR paths.                                                                                                                          |
-| `GET /api/airways`             | RNAV, Jet, and Victor airway paths.                                                                                                          |
-| `POST /api/route-lookups`      | Enables or disables route lookups. JSON body: `{ "enabled": true }` or `{ "enabled": false }`.                                               |
-| `GET /ws`                      | WebSocket aircraft updates and viewport controls.                                                                                            |
+| Method and path                | Response                                                                                                                                                                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /health`                  | `200` and `{ "status": "ok" }` when the server can answer requests.                                                                                                                       |
+| `GET /ready`                   | `200` and `{ "status": "ready" }` when Radar has an active SBS TCP connection. If disconnected, `503` and `{ "status": "not_ready" }`. Aircraft reception is not required.                |
+| `GET /api/config`              | Home location, elevation, default range, and heading.                                                                                                                                     |
+| `GET /api/aircraft`            | Current aircraft list.                                                                                                                                                                    |
+| `GET /api/metar`               | Decoded reports for configured airports. `502` if VATSIM data is unavailable.                                                                                                             |
+| `GET /api/airports`            | Airports and runway ends.                                                                                                                                                                 |
+| `GET /api/navaids`             | VOR, VOR/DME, and VORTAC records.                                                                                                                                                         |
+| `GET /api/airspace-boundaries` | FAA ARTCC boundary paths.                                                                                                                                                                 |
+| `GET /api/ils`                 | ILS approaches and matching marker beacons.                                                                                                                                               |
+| `GET /api/procedures`          | SID and STAR paths.                                                                                                                                                                       |
+| `GET /api/airways`             | RNAV, Jet, and Victor airway paths.                                                                                                                                                       |
+| `POST /api/route-lookups`      | Enables or disables route lookups. Send `{ "enabled": true }` or `{ "enabled": false }` as JSON. Returns `400` for a non-boolean value. Returns `501` when route lookups are unavailable. |
+| `GET /ws`                      | WebSocket aircraft snapshots. Clients send viewport and local-only settings.                                                                                                              |
 
-Each of the six reference-data routes accepts `minRangeNm` and `maxRangeNm` query parameters. `minRangeNm` defaults to `0`, and `maxRangeNm` is required. Set a nonnegative minimum less than the maximum, which is 300 nautical miles at most. Routes return `503` if NASR data or home location values are unavailable. An invalid range returns `400`. See [Configuration](configuration.md) for METAR settings and [Flight strips and weather](#flight-strips-and-weather) for cache behavior.
+The six reference-data routes are `/api/airports`, `/api/navaids`, `/api/airspace-boundaries`, `/api/ils`, `/api/procedures`, and `/api/airways`. Each accepts `minRangeNm` and `maxRangeNm`. The minimum defaults to `0`. The maximum is required. Use a nonnegative minimum less than 300 nautical miles.
 
-The API does not require authentication. Do not expose it to an untrusted network.
+Invalid ranges return `400`. The routes return `503` when the NASR database or home location is unavailable.
+
+`GET /api/config` returns the home location, elevation, default range, and heading. Its location value is `null` when coordinates are not configured. `GET /api/aircraft` returns the current merged aircraft list. `GET /api/metar` returns `{ "stations": [], "reports": [] }` when no stations are configured. It returns `502` when VATSIM data cannot be read.
 
 ## WebSocket
 
-Connect to `ws://localhost:1390/ws` to receive decoded aircraft JSON updates, with lookup fields added when available.
+Connect to `ws://localhost:1390/ws` to receive aircraft snapshots. A snapshot has this shape:
+
+```json
+{
+  "event": "aircraft-snapshot",
+  "aircraft": [],
+  "localFurthestDistanceNm": 0
+}
+```
+
+The `aircraft` value is an array of current local and remote targets. Each target includes an ICAO address, location, and available decoded fields. The server sends snapshots once each second while a browser is connected.
+
+Send a viewport message to set the view radius and source filter:
+
+```json
+{ "type": "viewport", "radiusNm": 20, "localOnly": false }
+```
+
+Set `radiusNm` to the on-screen radius in nautical miles. Radar rounds the value up and limits it to 1 through 300. Set `localOnly` to `true` to omit remote-only targets. The browser sends this message when its view changes and after it reconnects.
 
 While WebSocket clients are connected, Radar polls the ADSB.lol feeder re-api every 15 seconds after success. If a response includes `Retry-After`, Radar follows the server's requested wait. Without a valid header, Radar applies exponential backoff with a five-minute limit. Each browser sends its screen radius. The backend queries to the largest connected radius, capped at 300 nautical miles. Polling stops when all clients disconnect.
 
@@ -50,7 +68,7 @@ Local aircraft types come from ADSB.lol v2 lookup by ICAO address. Departure and
 
 Route data can be inaccurate or missing, especially when callsigns are reused. Unavailable fields stay blank.
 
-The browser reconnects after a WebSocket failure. It waits one second before the first retry. It doubles the interval to a maximum of 30 seconds. After reconnecting, it requests the current aircraft list. The server retries the receiver connection after two seconds.
+The browser reconnects after a WebSocket failure. It waits one second before the first retry, then doubles the interval to a maximum of 30 seconds. After reconnecting, it requests a new snapshot. The server retries the receiver connection after two seconds.
 
 ## Radar view
 
@@ -127,10 +145,21 @@ Connect a WebSocket client to `ws://127.0.0.1:1390/ws` to read live updates.
 
 ## Browser checks
 
-Run `npm run puppeteer` to install Chrome. Start the web app. Run `npm run screenshots` to save viewport images under `artifacts/screenshots/`.
+Run `npm run puppeteer` to install Chrome. Start the web app before taking screenshots. Run `npm run screenshots` to save screenshots under `artifacts/screenshots/`.
 
-Run `npm run screenshots:primary` to capture only the 1280 by 1024 primary monitor view. Run `npm run lighthouse` while the web app runs to save an accessibility report under `artifacts/`.
+The screenshot command checks six viewports: four desktop sizes and two iPhone 12 sizes. It captures above-fold and full-page views by default. Run `npm run screenshots:primary` to capture only the 1280 by 1024 desktop view. Run `npm run lighthouse` while the app runs to save an accessibility report at `artifacts/lighthouse.json`.
+
+Set these variables to select the screenshot target:
+
+| Variable                     | Default                 | Accepted values                                                                                                                                            |
+| ---------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RADAR_SCREENSHOT_URL`       | `http://127.0.0.1:1390` | App URL.                                                                                                                                                   |
+| `RADAR_SCREENSHOT_DIR`       | `artifacts/screenshots` | Output directory.                                                                                                                                          |
+| `RADAR_SCREENSHOT_VIEWPORTS` | `all`                   | `all`, or a comma-separated list of `desktop-primary`, `desktop-1080p`, `desktop-1440p`, `desktop-2160p`, `iphone-12-portrait`, and `iphone-12-landscape`. |
+| `RADAR_SCREENSHOT_MODES`     | `above-fold,full-page`  | `above-fold`, `full-page`, or both as a comma-separated list.                                                                                              |
 
 ## Browser assets
 
-The server serves `/` and `/style.css` from `public/`, the manifest from `/manifest.webmanifest`, approved app icons under `/icons/`, and install-prompt screenshots under `/screenshots/`. Run `npm run build` to create `dist/client.js` and split chunks under `dist/chunks/`. The server exposes them as `/client.js` and `/chunks/<filename>`. Missing build output or public files return `404`. Run the build command again after frontend source changes.
+The Radar server owns these HTTP and WebSocket routes. It serves `/` and `/style.css` from `public/`, the manifest from `/manifest.webmanifest`, approved PNG icons under `/icons/:filename`, and install screenshots under `/screenshots/:filename`.
+
+Run `npm run build` to create `dist/client.js` and split chunks under `dist/chunks/`. Webpack writes chunks with content-hashed names. The server exposes the bundle as `/client.js` and chunks as `/chunks/:filename`. Missing files and unapproved filenames return `404`. Run the build command again after frontend source changes.

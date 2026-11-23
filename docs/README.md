@@ -1,6 +1,6 @@
 # Radar user guides
 
-Radar is a browser-based aircraft tracking app for decoded ADS-B receiver data. It reads SBS/BaseStation streams. It does not decode radio signals. For installation, startup, network access, and shutdown instructions, see the Web API and radar view guide.
+Radar is a browser-based aircraft tracking app for decoded ADS-B receiver data. It reads SBS/BaseStation streams. It does not decode radio signals. These guides cover setup, configuration, receiver data, deployment, and browser use.
 
 ## Guides
 

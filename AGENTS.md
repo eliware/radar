@@ -6,11 +6,15 @@ Maintain @eliware/radar, Eliware's web app for decoded ADS-B data.
 
 ## Scope and boundaries
 
-Apply these instructions to this repository's application, tests, and documentation.
+Apply these instructions to application code, tests, and documentation.
 
 ## Layout
 
-Keep source in `src/`, launchers in `bin/`, tests in `tests/`, fixtures in `test-fixtures/`, docs in `docs/`, and specifications in `specs/`. Keep `webpack.config.mjs` at the repository root. Mirror each `src/` `.mjs` file with one same-path `tests/` `.test.mjs` file.
+Keep source files in `src/` and launchers in `bin/`.
+Keep tests in `tests/` and fixtures in `test-fixtures/`.
+Keep documentation in `docs/` and specifications in `specs/`.
+Keep `webpack.config.mjs` at the repository root.
+Mirror each `src/` `.mjs` file with a same-path `tests/` `.test.mjs` file.
 
 ## Development
 
@@ -18,19 +22,21 @@ Use Node.js 26 or later, npm, and native ESM.
 
 ## Validation
 
-Run `npm test` for aggregate validation. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` for focused checks.
+Run `npm test` for aggregate validation.
+Run `npm run lint` for focused lint checks.
+Run `npm run audit` for dependency checks.
+Run `npm run format` to format files.
+Run `npm run format:check` to check formatting.
 
 ## Security
 
-Keep credentials and private data out of tracked files.
+Keep credentials, private data, and runtime state out of tracked files.
 
 ## Changes
 
 Keep tests and documentation aligned with behavior changes.
 
 ## Application
-
-Validate configuration before opening connections. Make shutdown repeatable.
 
 Run focused tests first during development.
 Run one test file with `npm test -- tests/path/to/example.test.mjs`.
@@ -40,4 +46,5 @@ Run the full `npm test` suite for final validation before a commit, milestone, o
 
 ## Web
 
-Keep public assets in `public/` and build output in `dist/`. Document routes, assets, bundles, build settings, ports, and browser checks.
+Keep public assets in `public/` and build output in `dist/`.
+Document routes, assets, bundles, build settings, ports, and browser checks.

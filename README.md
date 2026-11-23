@@ -27,63 +27,63 @@ Web-based aviation tracking app for decoded ADS-B data.
 
 ## Features
 
-See the [user guides](docs/README.md) for web features and operations.
+Radar displays aircraft from an SBS/BaseStation TCP stream. Read the [user guides](docs/README.md) for installation and app details.
 
 ## Requirements
 
-Use Node.js 26 or later and Git LFS for the FAA database.
+Use Node.js 26 or later for local operation. Use Git LFS to retrieve the FAA NASR database.
 
 ## Setup
 
-Follow [docs/README.md](docs/README.md) to install, configure, and run Radar.
+Run `npm ci` from the repository root. Run `git lfs pull` to retrieve the database. Copy [.env.example](.env.example) when you want custom settings.
 
 ## Usage
 
-Start the [web app](docs/web-api.md). See [release notes](RELEASE_NOTES.md) for released changes.
+Run `npm run build`, then run `node bin/radar.mjs`. Open `http://localhost:1390` by default. Read the [web guide](docs/web-api.md) for setup and controls. See [release notes](RELEASE_NOTES.md) for released changes.
 
 ## Development
 
-Follow [AGENTS.md](AGENTS.md) and the [specifications](specs/README.md) when changing the repository.
+Read [AGENTS.md](AGENTS.md) before changing files. Use [specifications](specs/README.md) and keep the owning guide current.
 
 ## Testing
 
-Run `npm test` for aggregate validation.
+Run `npm test` for aggregate validation. Run `npm test -- tests/shared/sbs-message.test.mjs` for one focused test file.
 
 ## Troubleshooting
 
-Use the [user guides](docs/README.md) to resolve setup and runtime issues.
+Check the [web guide](docs/web-api.md), [configuration guide](docs/configuration.md), or [Compose guide](docs/linux-compose.md) for common setup problems.
 
 ## Security
 
-The web API has no authentication. Limit access to a trusted network.
+The web API has no authentication. Limit access to a trusted network. Keep credentials and private configuration out of Git.
 
 ## Configuration
 
-Set runtime options in `.env` or the process environment. See [.env.example](.env.example) and [configuration guide](docs/configuration.md).
+Set runtime values in `.env` or the process environment. See the [configuration guide](docs/configuration.md) for defaults and validation rules.
 
 ## Operations
 
-Use the [Linux Compose guide](docs/linux-compose.md) or Windows [web task guide](docs/web-service-background.md) and [receiver guide](docs/rtl1090-background.md).
+Use the [Linux Compose guide](docs/linux-compose.md) or the [Windows task guides](docs/README.md#guides) to start and stop Radar.
 
 ## Routes
 
-See the [web guide](docs/web-api.md) for HTTP and WebSocket routes.
+See the [web guide](docs/web-api.md#http-routes) for HTTP routes and the WebSocket endpoint.
 
 ## Assets
 
-The app serves public files from `public/` and built browser files from `dist/`.
+Radar serves app files from `public/` and browser bundles from `dist/`. See the [asset guide](docs/web-api.md#browser-assets) for routes and output names.
 
 ## Development server
 
-Run `npm run build`, then `node bin/radar.mjs`. Open `http://localhost:1390` by default. See the [web guide](docs/web-api.md).
+Run `npm run build`, then run `node bin/radar.mjs`. The server listens on port `1390` by default.
 
 ## Build
 
-Run `npm run build` to write the browser bundle to `dist/`.
+Run `npm run build` to create `dist/client.js` and split chunks under `dist/chunks/`.
 
 ## Deployment
 
-The `dev` target runs `git pull`, `npm ci`, and `npm test`. The `nas` target also runs `npm run deploy:compose` to build and start the containers.
+Deploy with [Docker Compose](docs/linux-compose.md). Use the [Windows task guides](docs/README.md#guides) for scheduled startup.
 
 ## Support
 

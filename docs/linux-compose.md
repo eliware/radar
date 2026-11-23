@@ -1,12 +1,12 @@
 # Linux Compose deployment
 
-This guide runs Radar and readsb together on Linux with RTL-SDR receivers. Docker Compose builds Radar locally, pulls the upstream readsb image, and starts dump978, ADSBX, FlightAware, ADSB.lol, and Flightradar24. The private Compose network carries decoded data. Radar listens on host TCP port `1390`.
+This guide runs Radar and readsb together on Linux with RTL-SDR receivers. Docker Compose builds Radar locally and pulls readsb and feeder images from GitHub Container Registry (GHCR). The private network carries decoded data. Radar listens on host TCP port `1390`.
 
 ## Requirements
 
 - Linux with Docker Engine and the Docker Compose plugin.
 - Node is not required on the host to run the Compose deployment.
-- An RTL-SDR receiver connected to the host. Use a second receiver for UAT at 978 MHz.
+- Two RTL-SDR receivers connected to the host. Use one for 1090 MHz and the second for UAT at 978 MHz.
 - An antenna and received aircraft are not required for the containers to report healthy status.
 - Git LFS to retrieve the NASR SQLite database when cloning the repository.
 
@@ -18,7 +18,7 @@ The ADSBX container reads readsb Beast data at private TCP endpoint `30005`. It 
 
 Radar, ADSBX, and ADSB.lol use these location values. Set `ADSBX_SITENAME` to label the receiver. Create a stable `ADSBX_UUID` with `uuidgen`. This UUID identifies the receiver. It is not an account key.
 
-Compose pulls the readsb and feeder images from GHCR. Radar builds locally. Compose pulls this image at each readsb start.
+The Radar image uses Eliware's CentOS 10 Node.js 26 base. The readsb container uses `ghcr.io/wiedehopf/readsb:latest`. Compose checks GHCR for that `latest` tag when you run `docker compose up`.
 
 The FlightAware PiAware container reads Beast data at private TCP endpoint `30005` and raw UAT from dump978 at `30978`. It receives data through network connections and does not access the receiver hardware. Its assigned `PIAWARE_FEEDER_ID` is in `.env`, keeping the site identity stable. Claim the receiver through FlightAware. Set its location and antenna altitude on the FlightAware stats page.
 
@@ -26,7 +26,7 @@ Flightradar24 uses the readsb Beast endpoint `30005` and dump978 UAT endpoint `3
 
 This command runs the signup tool directly before a sharing key exists.
 
-Save the issued key as `FR24_KEY` in `.env` before starting the stack. Compose includes FR24 by default, and the container needs a configured key before startup. Without one, FR24 does not send data. MLAT is disabled in Compose. Do not enable it while sharing with other networks. Flightradar24 recommends this.
+Set `FR24_KEY` in `.env` to enable Flightradar24 data sharing. The default Flightradar24 container has an empty key and does not share data until you add one. MLAT is disabled in Compose. Keep it disabled while sharing with other networks, as Flightradar24 recommends.
 
 Request a separate UAT sharing key from Flightradar24 with this command:
 
@@ -53,11 +53,11 @@ cd radar
 git lfs pull
 ```
 
-Copy `.env.example` to `.env`. Set `READSB_DEVICE` to the receiver's serial number or device index. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` to its location and elevation. Set `ADSBX_UUID`, `PIAWARE_FEEDER_ID`, and `ADSBLOL_UUID` to stable feeder IDs. Set `FR24_KEY` before starting Flightradar24.
+Copy `.env.example` to `.env`. Set `READSB_DEVICE` and `UAT_SDR_DEVICE` to the receiver serial numbers or device indexes. Set `ADSB_LAT`, `ADSB_LON`, and `ADSB_ALT` to the antenna location and elevation. Set `ADSBX_UUID`, `PIAWARE_FEEDER_ID`, and `ADSBLOL_UUID` to stable feeder IDs. Set `FR24_KEY` to enable Flightradar24 data sharing.
 
 Use `uuidgen` to create UUID values, then keep them stable. Set `ADSBX_SITENAME` to label your receiver. See [Runtime configuration](configuration.md) for all variables.
 
-The default Compose stack starts seven containers: `dump978`, `readsb`, `radar`, `adsbx`, `piaware`, `adsblol`, and `fr24`. Set `UAT_SDR_DEVICE` when the second receiver is attached. Set `FR24_UAT_KEY` only after Flightradar24 issues a UAT key. To run only Radar and readsb, disable the feeder services in `compose.yaml` for that host.
+The default Compose stack starts seven containers: `dump978`, `readsb`, `radar`, `adsbx`, `piaware`, `adsblol`, and `fr24`. Set `FR24_UAT_KEY` only after Flightradar24 issues a UAT key. To run only Radar and readsb, disable the feeder services in `compose.yaml` for that host.
 
 Compose sets `ADSB_HOST=readsb` and `ADSB_PORT=30003`. It does not publish the host input endpoint. Open Radar at `http://<server-ip>:1390` on the LAN.
 
