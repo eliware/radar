@@ -10,10 +10,20 @@
 
 ### Changed
 
-- Update the package version to 15.2.0.
-- Refresh the lockfile with newer transitive dependencies.
-- Document UAT receiver settings and the Compose deployment command.
-- Clarify which deployment targets start the Compose stack.
+- Replace the locally built readsb container with `ghcr.io/wiedehopf/readsb:latest`.
+- Use Eliware's CentOS 10 Node.js 26 image for both Radar Docker stages.
+- Update the package to 15.2.0 and refresh its dependency lockfile.
+- Refactor ESM modules to use one default export and split rendering, setup, and import responsibilities into focused modules.
+- Expand end-user guides for configuration, Compose deployment, HTTP and WebSocket APIs, browser assets, and screenshot checks.
+
+### Fixed
+
+- Cancel pending phone compass permission requests when users tap FOLLOW again.
+- Preserve valid runway ends when NASR contains an invalid opposite end.
+- Join airway segments at ten-unit sequence intervals.
+- Project ARTCC boundaries once for each home location, then skip segments outside the requested range.
+- Open temporary NASR output databases in read-write mode before installing indexes.
+- Apply reference layers after a failed range request succeeds on retry.
 
 ## 15.1.0 — 2026-11-15
 
