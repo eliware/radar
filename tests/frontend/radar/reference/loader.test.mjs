@@ -138,7 +138,8 @@ test("retries a failed range request while the viewport stays stationary", async
   expect(fetchData).toHaveBeenCalledTimes(6);
   await flush(180);
   expect(fetchData).toHaveBeenCalledTimes(12);
-  Object.values(updates).forEach((update) => expect(update).not.toHaveBeenCalled());
+  await flush(80);
+  Object.values(updates).forEach((update) => expect(update).toHaveBeenCalledWith([]));
 });
 
 test("clears references outside the 300 nautical mile limit", () => {

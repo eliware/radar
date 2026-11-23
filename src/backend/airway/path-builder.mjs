@@ -8,7 +8,11 @@ function buildAirways(rows, location) {
     const point = pointAtHome(row, location, cosine);
     const group = groups.get(key) ?? { paths: [], current: null, previous: null };
     if (!point) flush(group);
-    else if (!group.current || group.previous?.nextFix !== row.fix) {
+    else if (
+      !group.current ||
+      group.previous?.nextFix !== row.fix ||
+      group.previous.sequence + 10 !== row.sequence
+    ) {
       flush(group);
       group.current = {
         name: row.name,

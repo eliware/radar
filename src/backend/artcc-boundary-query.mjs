@@ -1,5 +1,5 @@
 import { default as groupBoundaries } from "./artcc-boundary/group.mjs";
-import { default as intersectsRange } from "./artcc-boundary/range.mjs";
+import { default as createArtccBoundaryRangeFilter } from "./artcc-boundary/range.mjs";
 
 export const ARTCC_POINTS = `SELECT LOCATION_ID AS locationId, LOCATION_NAME AS name,
   ALTITUDE AS altitude, TYPE AS type, POINT_SEQ AS sequence,
@@ -10,11 +10,21 @@ export const ARTCC_POINTS = `SELECT LOCATION_ID AS locationId, LOCATION_NAME AS 
 function createArtccBoundaryQuery(database) {
   const points = database.prepare(ARTCC_POINTS);
   let boundaries;
+  let indexedLocation;
+  let rangeFilters;
   return (location, minRangeNm, maxRangeNm) => {
     boundaries ??= groupBoundaries(points.all());
-    return [...boundaries.values()]
-      .filter((boundary) => intersectsRange(boundary.points, location, minRangeNm, maxRangeNm))
-      .map((boundary) => ({
+    const locationKey = `${location.latitude}:${location.longitude}`;
+    if (locationKey !== indexedLocation) {
+      indexedLocation = locationKey;
+      rangeFilters = [...boundaries.values()].map((boundary) => ({
+        boundary,
+        includesRange: createArtccBoundaryRangeFilter(boundary.points, location),
+      }));
+    }
+    return rangeFilters
+      .filter(({ includesRange }) => includesRange(minRangeNm, maxRangeNm))
+      .map(({ boundary }) => ({
         ...boundary,
         id: `${boundary.locationId}:${boundary.altitude}:${boundary.type}`,
       }));
