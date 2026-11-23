@@ -1,4 +1,5 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
+import { default as drawAirwayFixes } from "./airway-fixes.mjs";
 import { default as selectCanvasLabelSize } from "./label-size.mjs";
 const COLORS = { Q: "#31534d", J: "#54394b", V: "#4f4d32" };
 
@@ -16,11 +17,7 @@ function drawAirways(context, airways, project, visibility) {
     const points = airway.points.map((item) => ({ ...item, screen: project(item) }));
     drawSegments(context, airway.name, points, MAX_RADAR_RANGE);
     context.setLineDash([]);
-    for (const point of points) {
-      if (point.viewportCut || point.rangeNm > MAX_RADAR_RANGE || !valid(point.screen)) continue;
-      drawFix(context, point.screen);
-      context.fillText(point.fix, point.screen.x + 7, point.screen.y - 5);
-    }
+    drawAirwayFixes(context, points);
   }
   context.setLineDash([]);
   context.restore();
@@ -44,16 +41,6 @@ function closestRange(from, to) {
   const dz = to.z - from.z;
   const t = Math.max(0, Math.min(1, -(from.x * dx + from.z * dz) / (dx * dx + dz * dz || 1)));
   return Math.hypot(from.x + t * dx, from.z + t * dz);
-}
-
-function drawFix(context, point) {
-  context.beginPath();
-  context.moveTo(point.x, point.y - 3);
-  context.lineTo(point.x + 3, point.y);
-  context.lineTo(point.x, point.y + 3);
-  context.lineTo(point.x - 3, point.y);
-  context.closePath();
-  context.stroke();
 }
 
 function valid(point) {

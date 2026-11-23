@@ -1,22 +1,15 @@
 import { default as selectVisibleReferenceItems } from "./select-visible/items.mjs";
 import { default as createRadarReferenceViewApplier } from "./view/applier.mjs";
-
-const LAYERS = [
-  ["airports", "updateAirports", 35, (item) => item.faaId],
-  ["navaids", "updateNavaids", 1, (item) => `${item.state}:${item.identifier}`],
-  ["boundaries", "updateBoundaries", 0, (item) => item.id],
-  ["ils", "updateIls", 35, (item) => `${item.faaId}:${item.runwayEnd}`],
-  ["procedures", "updateProcedures", 35, (item) => item.id],
-  ["airways", "updateAirways", 0, (item) => item.id],
-];
+import { default as createRadarReferenceLayers } from "./layers.mjs";
 
 function createRadarReferenceCacheSession(scene, location) {
-  const cache = LAYERS.map(() => new Map());
+  const layers = createRadarReferenceLayers();
+  const cache = layers.map(() => new Map());
   let latestBounds = null;
   const applier = createRadarReferenceViewApplier(
     {
       apply(_scene, bounds) {
-        applyCache(scene, cache, bounds, location);
+        applyCache(scene, cache, bounds, location, layers);
       },
     },
     scene,
@@ -29,7 +22,7 @@ function createRadarReferenceCacheSession(scene, location) {
     },
     add(collections) {
       collections.forEach((items, index) => {
-        const identity = LAYERS[index][3];
+        const identity = layers[index][3];
         for (const item of items) cache[index].set(identity(item), item);
       });
       applier.schedule(latestBounds);
@@ -42,22 +35,23 @@ function createRadarReferenceCacheSession(scene, location) {
       applier.cancel();
       applyCollections(
         scene,
-        LAYERS.map(() => []),
+        layers.map(() => []),
+        layers,
       );
     },
   };
 }
 
-function applyCache(scene, cache, bounds, location) {
-  const collections = LAYERS.map(([, , padding], index) => {
+function applyCache(scene, cache, bounds, location, layers) {
+  const collections = layers.map(([, , padding], index) => {
     const items = [...cache[index].values()];
     return bounds ? selectVisibleReferenceItems(items, bounds, location, padding) : items;
   });
-  applyCollections(scene, collections);
+  applyCollections(scene, collections, layers);
 }
 
-function applyCollections(scene, collections) {
+function applyCollections(scene, collections, layers) {
   if (scene.updateAll) scene.updateAll(collections);
-  else LAYERS.forEach(([, update], index) => scene[update](collections[index]));
+  else layers.forEach(([, update], index) => scene[update](collections[index]));
 }
 export default createRadarReferenceCacheSession;

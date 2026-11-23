@@ -1,5 +1,6 @@
 import { MAX_RADAR_RANGE } from "../radar/range.mjs";
 import { default as clipProcedureSegment } from "../clip/procedure-segment.mjs";
+import { default as drawProcedureWaypoints } from "./procedure-waypoints.mjs";
 
 const COLORS = { SID: "#2b3d4d", STAR: "#50402e" };
 
@@ -31,11 +32,7 @@ function drawProcedure(context, procedure, project) {
   const points = procedure.points.map((point) => ({ ...point, screen: project(point) }));
   drawRoute(context, points);
   context.setLineDash([]);
-  for (const point of points) {
-    if (point.viewportCut || point.rangeNm > MAX_RADAR_RANGE || !valid(point.screen)) continue;
-    drawPyramid(context, point.screen);
-    if (point.label) context.fillText(point.fix, point.screen.x, point.screen.y - 6);
-  }
+  drawProcedureWaypoints(context, points);
   context.setLineDash([3, 3]);
 }
 
@@ -51,15 +48,6 @@ function drawRoute(context, points) {
     context.lineTo(segment.to.x, segment.to.y);
     context.stroke();
   }
-}
-
-function drawPyramid(context, point) {
-  context.beginPath();
-  context.moveTo(point.x, point.y - 3);
-  context.lineTo(point.x + 3, point.y + 2);
-  context.lineTo(point.x - 3, point.y + 2);
-  context.closePath();
-  context.stroke();
 }
 
 function valid(point) {

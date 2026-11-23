@@ -20,7 +20,7 @@ function context() {
 
 const point = (fix, x, z, rangeNm = Math.hypot(x, z)) => ({ fix, x, z, rangeNm });
 
-test("draws airway segments, midpoint identifiers, and labeled fix markers", () => {
+test("draws airway segments and midpoint identifiers", () => {
   const ctx = context();
   const airway = {
     id: "V12:0",
@@ -35,8 +35,6 @@ test("draws airway segments, midpoint identifiers, and labeled fix markers", () 
   });
   expect(ctx.strokeStyle).toBe("#4f4d32");
   expect(ctx.fillText).toHaveBeenCalledWith("V12", 0, 0);
-  expect(ctx.fillText).toHaveBeenCalledWith("FIXA", 5, -5);
-  expect(ctx.fillText).toHaveBeenCalledWith("FIXB", 9, -5);
   expect(ctx.lineTo).toHaveBeenCalledWith(2, 0);
 });
 

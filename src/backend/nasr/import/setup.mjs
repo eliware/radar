@@ -1,5 +1,5 @@
 import { default as createNasrImportFiles } from "./files.mjs";
-import { default as selectNasrImportPaths } from "./select-paths.mjs";
+import { default as selectNasrImportPaths } from "./paths.mjs";
 import { default as selectNasrDatabase } from "./sqlite.mjs";
 
 function createNasrImportSetup(inputPath, outputPath, dependencies) {

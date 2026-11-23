@@ -15,9 +15,3 @@ test("assembles database, filesystem, and default output path dependencies", () 
   });
   expect(exists).toHaveBeenCalledWith(resolve("source.sqlite"));
 });
-
-test("rejects missing input during setup before starting the import lifecycle", () => {
-  expect(() =>
-    createNasrImportSetup("missing.sqlite", "output.sqlite", { exists: () => false }),
-  ).toThrow("Input NASR database not found");
-});

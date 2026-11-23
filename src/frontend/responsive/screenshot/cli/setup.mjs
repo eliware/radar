@@ -1,5 +1,5 @@
 import { default as resolveScreenshotCliDependencies } from "./dependencies.mjs";
-import { default as createScreenshotCliCaptureOptions } from "./capture-options.mjs";
+import { default as createScreenshotCliOptions } from "./options.mjs";
 
 function createScreenshotCliSetup({
   args = process.argv.slice(2),
@@ -9,7 +9,10 @@ function createScreenshotCliSetup({
   const { capture, ...captureDependencies } = resolveScreenshotCliDependencies(dependencies);
   return {
     capture,
-    captureOptions: createScreenshotCliCaptureOptions(args, environment, captureDependencies),
+    captureOptions: {
+      ...createScreenshotCliOptions(args, environment),
+      ...captureDependencies,
+    },
   };
 }
 export default createScreenshotCliSetup;

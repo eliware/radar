@@ -28,7 +28,7 @@ const point = (fix, x, rangeNm, label = false) => ({
   longitude: -70,
 });
 
-test("draws separate SID and STAR paths, hollow fix symbols, and selected labels", () => {
+test("draws separate SID and STAR paths", () => {
   const ctx = context();
   const project = (item) => ({ x: item.x, y: item.y });
   drawProcedures(
@@ -40,9 +40,8 @@ test("draws separate SID and STAR paths, hollow fix symbols, and selected labels
     ]),
     project,
   );
-  expect(ctx.stroke).toHaveBeenCalledTimes(6);
-  expect(ctx.fillText.mock.calls.map(([text]) => text)).toEqual(["LBSTA", "ENE"]);
-  expect(ctx.closePath).toHaveBeenCalledTimes(4);
+  expect(ctx.lineTo).toHaveBeenCalledWith(2, 2);
+  expect(ctx.lineTo).toHaveBeenCalledWith(4, 4);
   expect(ctx.save).toHaveBeenCalledTimes(1);
   expect(ctx.restore).toHaveBeenCalledTimes(1);
   expect(ctx.setLineDash).toHaveBeenNthCalledWith(1, [3, 3]);
