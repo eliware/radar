@@ -14,12 +14,14 @@ test("builds extension and base-leg guide points at their required elevations", 
     latitude: (guide.baseLegs[0].latitude + guide.baseLegs[1].latitude) / 2,
     longitude: (guide.baseLegs[0].longitude + guide.baseLegs[1].longitude) / 2,
   };
-  const latitudeDifference = ((midpoint.latitude - guide.extensionEnd.latitude) * Math.PI) / 180;
-  const longitudeDifference = ((midpoint.longitude - guide.extensionEnd.longitude) * Math.PI) / 180;
-  const meanLatitude = ((midpoint.latitude + guide.extensionEnd.latitude) * Math.PI) / 360;
-  const distanceNm =
-    Math.hypot(latitudeDifference, longitudeDifference * Math.cos(meanLatitude)) * 3440.065;
-  expect(distanceNm).toBeCloseTo(10, 1);
+  const distanceNm = (first, second) => {
+    const latitudeDifference = ((first.latitude - second.latitude) * Math.PI) / 180;
+    const longitudeDifference = ((first.longitude - second.longitude) * Math.PI) / 180;
+    const meanLatitude = ((first.latitude + second.latitude) * Math.PI) / 360;
+    return Math.hypot(latitudeDifference, longitudeDifference * Math.cos(meanLatitude)) * 3440.065;
+  };
+  expect(distanceNm(guide.extensionStart, guide.extensionEnd)).toBeCloseTo(10, 1);
+  expect(distanceNm(midpoint, guide.extensionEnd)).toBeCloseTo(0, 2);
 });
 
 test("uses zero feet when the runway end has no finite elevation", () => {
