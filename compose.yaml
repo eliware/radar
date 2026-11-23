@@ -41,7 +41,7 @@ services:
       - "30003"
       - "30005"
     healthcheck:
-      test: ["CMD", "nc", "-z", "127.0.0.1", "30003"]
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/30003"]
       interval: 10s
       timeout: 3s
       retries: 5

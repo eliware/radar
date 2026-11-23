@@ -18,6 +18,7 @@
 
 ### Fixed
 
+- Check the readsb TCP port with Bash because its container image does not include `nc`.
 - Cancel pending phone compass permission requests when users tap FOLLOW again.
 - Preserve valid runway ends when NASR contains an invalid opposite end.
 - Join airway segments at ten-unit sequence intervals.
