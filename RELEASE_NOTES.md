@@ -18,6 +18,7 @@
 
 ### Fixed
 
+- Keep the PiAware health check green when UAT traffic is quiet, while retaining its FlightAware, 1090 MHz, and web server checks.
 - Check the readsb TCP port with Bash because its container image does not include `nc`.
 - Cancel pending phone compass permission requests when users tap FOLLOW again.
 - Preserve valid runway ends when NASR contains an invalid opposite end.

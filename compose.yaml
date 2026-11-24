@@ -96,6 +96,12 @@ services:
       - /var/log
     networks:
       - radar
+    healthcheck:
+      test: ["CMD", "env", "-u", "UAT_RECEIVER_HOST", "bash", "/scripts/healthcheck.sh"]
+      interval: 10m
+      timeout: 30s
+      retries: 3
+      start_period: 2h
 
   adsblol:
     image: ghcr.io/sdr-enthusiasts/docker-adsb-ultrafeeder:latest
