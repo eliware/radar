@@ -1,5 +1,16 @@
 # Release Notes
 
+## 15.2.1 — 2026-11-26
+
+### Changed
+
+- Import the FAA NASR database dated November 26, 2026.
+- Update Puppeteer to 25.19.0.
+
+### Fixed
+
+- Keep the PiAware health check green when UAT traffic is quiet, while retaining its FlightAware, 1090 MHz, and web server checks.
+
 ## 15.2.0 — 2026-11-23
 
 ### Added
@@ -18,7 +29,6 @@
 
 ### Fixed
 
-- Keep the PiAware health check green when UAT traffic is quiet, while retaining its FlightAware, 1090 MHz, and web server checks.
 - Check the readsb TCP port with Bash because its container image does not include `nc`.
 - Cancel pending phone compass permission requests when users tap FOLLOW again.
 - Preserve valid runway ends when NASR contains an invalid opposite end.
